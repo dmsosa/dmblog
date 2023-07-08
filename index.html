@@ -6,18 +6,35 @@
     <title>WhyMath</title>
 </head>
 <body style="margin:0;">
-    <header style="background-color:red; height:25em">
-
+    <header style="background-color:red; height:max-content">
+        <div class="OuterBox" style="border: 1rem black solid; padding: 0.16em">
+            <div class="Rounded" style="border: 0.15rem white solid; border-radius: 0.8em; display: flex;">
+                <div class="logo-container", style="display: flex; width: 80%;">
+                    <img src="./gitignore/img/db.png" style="height: 5.5em;">
+                    <h1 style="margin-top: auto;">Duvi</h1>
+                </div>
+                <div class="menu-nav ", style="display: flex; width: 20%; justify-content: center;">
+                    <div class="search nav-item" style=""><h1>S</h1></div>
+                    <div class="separator" style="width:1em; ;"></div>
+                    <div class="menu nav-item" style="margin: 0, 0.5em;"><h1>P</h1>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <main style="display: flex; flex: content;">
-        <div name="sidebar" style="display: inline-block ;height: 100%; width: 10em; background-color: blue;"></div>
+    <main style="display: flex; flex-direction: row; height: 100%;">
+        <div class="sidebar" style="margin-right: 1rem; display: flex; flex-direction: column; width:10em; background-color: blue; padding: 0.5rem, 0.2rem;">
+            <div class="sidebar-item-2" style="margin: 0.5rem; border: 0.4rem yellow solid; height: 3.5em;"></div>
+            <div class="sidebar-item" style="margin: 0.5rem; border: 0.4rem red solid; height: 10em;"></div>
+            <div class="sidebar-item" style="margin: 0.5rem; border: 0.4rem red solid; height: 10em;"></div>
+            <div class="sidebar-item" style="margin: 0.5rem; border: 0.4rem red solid; height: 10em;"></div>
+        </div>
         <div class="blocks">
             <div class="block"> 
                 <h1>Ein grosses Seite fur meine Projekte</h1>
                 <p>Verflixt! wir kann tolle Dinge schaffen!</p>
             </div>
-            <div class="block"><img src="./img/panda.jpg" style="height: 250px;"/></div>
+            <div class="block"><img src="./gitignore/img/panda.jpg" style="height: 250px;"/></div>
             <div class="block">
             <form>
                 <input placeholder="'write somethin here'">
@@ -25,6 +42,6 @@
             </div>
         </div>
     </main>
-    <footer style="height: 25em; background-color: blueviolet; margin-top: 2.5rem;"></footer>
+    <footer style="height: 25em; background-color: blueviolet; margin-top: 0rem;"></footer>
 </body>
 </html>
