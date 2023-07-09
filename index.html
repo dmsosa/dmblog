@@ -6,42 +6,92 @@
     <title>WhyMath</title>
 </head>
 <body style="margin:0;">
-    <header style="background-color:red; height:max-content">
-        <div class="OuterBox" style="border: 1rem black solid; padding: 0.16em">
-            <div class="Rounded" style="border: 0.15rem white solid; border-radius: 0.8em; display: flex;">
-                <div class="logo-container", style="display: flex; width: 80%;">
-                    <img src="./gitignore/img/db.png" style="height: 5.5em;">
-                    <h1 style="margin-top: auto;">Duvi</h1>
+    <div id="app" style="display: flex; height: 70em; margin:0;">
+        <div id="sidebar" style="display: flex; flex-direction: column; height: 100%; width: 35%">
+            <div class="sidebar-item-2" style="margin: 0.5rem; border: 0.4rem yellow solid; height: 3.5em;">
+                <button style="display: inline-block; margin:0.5rem 0.5rem; height: 0.8rem;"></button>
+                <span>Duvi account</span>
+            </div>
+            <div class="sidebar-item-scroll" style="margin: 0.5rem; border: 0.4rem red solid; height: max-content; overflow: scroll;">
+                <div class="sidebar-item-scroll-1">
+                    <ul style="margin: 0;">
+                        <li>Suchen</li>
+                        <li>Exportieren</li>
+                        <li>Importieren</li>
+                        <li>Mein Points</li>
+                        <li>Geschichte</li>
+                    </ul>
                 </div>
-                <div class="menu-nav ", style="display: flex; width: 20%; justify-content: center;">
-                    <div class="search nav-item" style=""><h1>S</h1></div>
-                    <div class="separator" style="width:1em; ;"></div>
-                    <div class="menu nav-item" style="margin: 0, 0.5em;"><h1>P</h1>
+                <div class="sidebar-item-scroll-2" style="margin: 0.5rem; border: 0.4rem red solid; height: 50%;">
+                    <ul>
+                        <li>Zu beginn</li>
+                        <li>Neue Liste</li>
+                        <li>Woche Plannen</li>
+                        <li>Yoga routinen</li>
+                        <li>Rezepte</li>
+                        <li>Meine buche</li>
+                        <li>Reiseplannen</li>
+                        <li>Jahreziel</li>
+                        <li>Milestones</li>
+                        <li>Deadlines</li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </header>
+        <div id="second-part" style="display: flex; flex-direction: column;">
+            <div class="header" style="height: 10rem; border: 0.5rem black solid;">
+                <div class="Rounded" style="border: 0.15rem white solid; border-radius: 0.8em; display: flex; justify-content: space-between; background-color: red;">
+                    <div class="logo-container", style="display: flex; margin: 0.5rem">
+                        <img src="./img/menu.png" style="display:block; height: 2.5em; margin: auto 0;">
+                        <span style="display: block; margin-top: auto; margin-bottom: auto; font-size: 2rem; padding: 0 0.5rem;">Duvi</span>
+                    </div>
+                    <div class="menu-nav" style="display: flex; justify-content: right; width: 30%;">
+                        <div class="search nav-item" style="padding: 0.5rem;"><h1>S</h1></div>
+                        <div class="menu nav-item" style="margin: 0, 2em; padding: 0.5rem;"><h1>P</h1></div>
+                        <div class="menu nav-item" style="margin: 0, 2em; padding: 0.5rem;"><h1>Q</h1></div>
+                    </div>
+                </div>
+            </div>
+            <div class="main">
+                <div class="blocks" style="height: 62rem;overflow-y: scroll; over">
+                    <div class="block"> 
+                        <h1>Ein grosses Seite fur meine Projekte</h1>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi earum doloribus, sit nihil ab corporis nisi cupiditate modi mollitia dolorum. Dolore ipsa odio exercitationem expedita natus voluptatibus suscipit voluptatum! Non.</p>
+                        <h4>Untertitel</h4>
+                        
+                    </div>
+                    <div class="block" style="float:left"><img src="./img/panda.jpg" style="height: 250px;"/></div>
+                    <div class="block"  style="float:right">
+                    <form>
+                        <input placeholder="'write somethin here'">
+                        <img src="./img/panda.jpg" style="height: 250px;"/>
+                    </form>
+                    </div>
+                    <div class="block"  >
+                        <form>
+                            <input placeholder="'write somethin here'">
+                            <img src="./img/panda.jpg" style="height: 250px;"/>
+                        </form>
+                    </div>
+                    <div class="block"> 
+                        <h1>Ein grosses Seite fur meine Projekte</h1>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi earum doloribus, sit nihil ab corporis nisi cupiditate modi mollitia dolorum. Dolore ipsa odio exercitationem expedita natus voluptatibus suscipit voluptatum! Non.</p>
+                        <h4>Untertitel</h4>
+                        
+                    </div>
+                    <div class="block"> 
+                        <h1>Ein grosses Seite fur meine Projekte</h1>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi earum doloribus, sit nihil ab corporis nisi cupiditate modi mollitia dolorum. Dolore ipsa odio exercitationem expedita natus voluptatibus suscipit voluptatum! Non.</p>
+                        <h4>Untertitel</h4>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <main style="display: flex; flex-direction: row; height: 100%;">
-        <div class="sidebar" style="margin-right: 1rem; display: flex; flex-direction: column; width:10em; background-color: blue; padding: 0.5rem, 0.2rem;">
-            <div class="sidebar-item-2" style="margin: 0.5rem; border: 0.4rem yellow solid; height: 3.5em;"></div>
-            <div class="sidebar-item" style="margin: 0.5rem; border: 0.4rem red solid; height: 10em;"></div>
-            <div class="sidebar-item" style="margin: 0.5rem; border: 0.4rem red solid; height: 10em;"></div>
-            <div class="sidebar-item" style="margin: 0.5rem; border: 0.4rem red solid; height: 10em;"></div>
-        </div>
-        <div class="blocks">
-            <div class="block"> 
-                <h1>Ein grosses Seite fur meine Projekte</h1>
-                <p>Verflixt! wir kann tolle Dinge schaffen!</p>
-            </div>
-            <div class="block"><img src="./gitignore/img/panda.jpg" style="height: 250px;"/></div>
-            <div class="block">
-            <form>
-                <input placeholder="'write somethin here'">
-            </form>
-            </div>
-        </div>
-    </main>
-    <footer style="height: 25em; background-color: blueviolet; margin-top: 0rem;"></footer>
+    <footer style="height: 25em; background-color: blueviolet; margin-top: 0rem;">
+        <h1>Wir keine Fusser haben wir dieses Mal</h1>
+    </footer>
 </body>
 </html>
