@@ -8,22 +8,32 @@
 <body style="margin:0;">
     <div id="app" style="display: flex; height: 70em; margin:0;">
         <div id="sidebar" style="display: flex; flex-direction: column; height: 100%; width: 35%">
-            <div class="sidebar-item-2" style="margin: 0.5rem; border: 0.4rem yellow solid; height: 3.5em;">
-                <button style="display: inline-block; margin:0.5rem 0.5rem; height: 0.8rem;"></button>
+            <div class="sidebar-item-scroll" style="margin: 0; border: 0.4rem yellow solid; height: max-content; padding: 0.5rem">
+                <button style="display: inline-block; height: 0.8rem;"></button>
                 <span>Duvi account</span>
+                <h4 style="margin:0">Documents</h4>
+                <h4 style="margin:0">History</h4>
+                <h4 style="margin:0">Storage</h4>
             </div>
-            <div class="sidebar-item-scroll" style="margin: 0.5rem; border: 0.4rem red solid; height: max-content; overflow: scroll;">
-                <div class="sidebar-item-scroll-1">
-                    <ul style="margin: 0;">
-                        <li>Suchen</li>
-                        <li>Exportieren</li>
-                        <li>Importieren</li>
-                        <li>Mein Points</li>
-                        <li>Geschichte</li>
+            <div class="sidebar-item-scroll" style="margin: 0; border: 0.4rem red solid; height: max-content; overflow: scroll; padding: 0.5rem 0.2rem;">
+                <div class="sidebar-item-scroll-1" style="margin:0;">
+                    <ul style="margin: 0; list-style: none;">
+                        <li id="suchen" style="margin:0.05rem 0; cursor: pointer;">
+                            <p style="margin:0">Suchen</p>
+                            <ul id="ulhidden" style="margin:0.05rem 0; cursor: pointer; position:fixed; list-style: none; display: none;">
+                                <li>By name</li>
+                                <li>By address</li>
+                                <li>By tag</li>
+                            </ul>
+                        </li>
+                        <li style="margin:0.05rem 0">Exportieren</li>
+                        <li style="margin:0.05rem 0">Importieren</li>
+                        <li style="margin:0.05rem 0">Mein Points</li>
+                        <li style="margin:0.05rem 0">Geschichte</li>
                     </ul>
                 </div>
-                <div class="sidebar-item-scroll-2" style="margin: 0.5rem; border: 0.4rem red solid; height: 50%;">
-                    <ul>
+                <div class="sidebar-item-scroll-2" style="margin: 1rem 0; border: 0.4rem red solid; height: max-content; padding: 0.1rem; ">
+                    <ul style="margin:0">
                         <li>Zu beginn</li>
                         <li>Neue Liste</li>
                         <li>Woche Plannen</li>
@@ -53,38 +63,42 @@
                 </div>
             </div>
             <div class="main">
-                <div class="blocks" style="height: 62rem;overflow-y: scroll; over">
-                    <div class="block"> 
+                <div class="blocks" style="height: 62rem; overflow-y: scroll; padding: 0.5rem;">
+                    <div class="block text-block"> 
                         <h1>Ein grosses Seite fur meine Projekte</h1>
                         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi earum doloribus, sit nihil ab corporis nisi cupiditate modi mollitia dolorum. Dolore ipsa odio exercitationem expedita natus voluptatibus suscipit voluptatum! Non.</p>
                         <h4>Untertitel</h4>
-                        
                     </div>
-                    <div class="block" style="float:left"><img src="./img/panda.jpg" style="height: 250px;"/></div>
-                    <div class="block"  style="float:right">
-                    <form>
-                        <input placeholder="'write somethin here'">
-                        <img src="./img/panda.jpg" style="height: 250px;"/>
-                    </form>
-                    </div>
-                    <div class="block"  >
+                    <div class="block img-block" style="float:left"><img src="./img/panda.jpg" style="height: 250px;"/></div>
+                    <div class="block form-block" style="clear: left;">
                         <form>
-                            <input placeholder="'write somethin here'">
-                            <img src="./img/panda.jpg" style="height: 250px;"/>
+                            <input id="username" placeholder="Name">
+                            <button>Send</button>
+                            <button>Restart</button>
+                            <p>Lorem ipsum dolor sit amet consectetur\</p>
+                            <label for="emailAddress">email</label>
+                            <input id="emailAddress" type="email">
+                            <fieldset>
+                                <legend>Are you ready to make great pages?</legend>
+                                <input id="yes" type="radio" value="yes">
+                                <label for="yes">Natturlich</label>
+                                <input id="no" type="radio" value="no">
+                                <label for="yes">Yes</label>
+                            </fieldset>
+                            
+                            <label for="Date">Date</label>
+                            <input id="emailAddress" type="date">
+                            <label for="textArea">Comment</label>
+                            <textarea id="textArea"></textarea>
+                            <input id="newsletter" type="checkbox">go</input>
                         </form>
                     </div>
-                    <div class="block"> 
+                    <div class="block text-block"> 
                         <h1>Ein grosses Seite fur meine Projekte</h1>
                         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi earum doloribus, sit nihil ab corporis nisi cupiditate modi mollitia dolorum. Dolore ipsa odio exercitationem expedita natus voluptatibus suscipit voluptatum! Non.</p>
                         <h4>Untertitel</h4>
-                        
                     </div>
-                    <div class="block"> 
-                        <h1>Ein grosses Seite fur meine Projekte</h1>
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi earum doloribus, sit nihil ab corporis nisi cupiditate modi mollitia dolorum. Dolore ipsa odio exercitationem expedita natus voluptatibus suscipit voluptatum! Non.</p>
-                        <h4>Untertitel</h4>
-                        
-                    </div>
+    
                 </div>
             </div>
         </div>
