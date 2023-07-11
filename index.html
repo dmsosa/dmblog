@@ -3,24 +3,33 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="duvi">
+    <meta content="twitter:title" content="duviduvi!"/>
     <title>WhyMath</title>
+    <link rel="stylesheet" href="./styles.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Kenia&family=PT+Sans&family=Titillium+Web&display=swap" rel="stylesheet">
 </head>
-<body style="margin:0;">
+<body >
     <header style="background-color:red; height:25em">
 
     </header>
 
     <main style="display: flex; flex: content;">
-        <div name="sidebar" style="display: inline-block ;height: 100%; width: 10em; background-color: blue;"></div>
+        <div name="sidebar"></div>
         <div class="blocks">
-            <div class="block"> 
+            <div class="block text-block"> 
                 <h1>Ein grosses Seite fur meine Projekte</h1>
                 <p>Verflixt! wir kann tolle Dinge schaffen!</p>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt perspiciatis molestiae fuga soluta? Unde accusamus</p>
+                <p> id, dolorum ducimus non dolor eligendi, animi excepturi hic, est soluta molestias delectus minus officia?</p>
+                <p>sicing elit. Incidunt perspiciatis molestiae fuga soluta? </p>
             </div>
-            <div class="block"><img src="./img/panda.jpg" style="height: 250px;"/></div>
-            <div class="block">
+            <div class="block img-block"><img src="./img/panda.jpg" class="img"/></div>
+            <div class="block form-block">
             <form>
-                <input placeholder="'write somethin here'">
+                <label for="data">What day today is?</label>
+                <input type="date">
+                <label for="usernme">Username</label>
+                <input id="username" placeholder="for example, 'rex100'">
             </form>
             </div>
         </div>
