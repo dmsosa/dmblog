@@ -11,21 +11,89 @@ main {
     padding: 2rem;
 }
 
+.blocks {
+    background-color: hsl(70, 10%, 99%);
+    padding: 3rem;
+}
 .block {
     padding: 0.5rem;
     color: black; 
-    font-size: 2rem;
+    margin-bottom: 3rem;
+}
+
+.rule {
+    background-color: red;
+    height: 5rem;
+    border: red 3rem solid;
+
+}
+
+.form-block {
+    background-color: hsl(70, 5%, 90%);
+    padding: 1.5rem;
+    padding-bottom: 3.75rem;
+    width: fit-content;
+    float: left;
+    margin-top: 1.5rem;
+}
+
+.text-block {
+    max-width: 70%;
+}
+
+.label {
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: block;
+}
+
+.username {
+    background-color: hsl(0, 30%, 60%);
+    border-radius: 1.5rem;
+}
+
+.message {
+    background-color: hsl(0, 30%, 60%);
+    border-radius: 1.5rem;
+}
+.text-block h1 {
+    display: block;
+    line-height: 2.5rem;
+    margin:0 auto;
+    background-color: red;
+}
+
+.text-block h2 {
+    line-height: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.text-block p {
+    line-height: 2.5rem;
+    margin: 0;
+
+}
+
+
+.date {
+    display: block;
+    width: 100%;
+    border: 0.25rem hsl(0, 60%, 60%) solid;
+    background-color: 0.25rem hsl(0, 80%, 60%) solid;
+    height: 1.5rem;
 }
 .img {
+
     height: 25rem;
     border-radius: 2rem;
-    border: 1rem solid lightgray;
+    border: 1rem solid hsl(70, 10%, 99%);
     padding: 0;
     margin:0;
 
 }
 .img-block {
     float: right;
-
 }
+
+
 
