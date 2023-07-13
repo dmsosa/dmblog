@@ -14,11 +14,22 @@ main {
 .blocks {
     background-color: hsl(70, 10%, 99%);
     padding: 3rem;
+    display: flex;
+}
+.blocks-left, .blocks-right {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.separator {
+    border-left: 0.5rem double blue;
+    padding: 0.5rem;
 }
 .block {
     padding: 0.5rem;
-    color: black; 
-    margin-bottom: 3rem;
+    display: block;
 }
 
 .rule {
@@ -28,39 +39,19 @@ main {
 
 }
 
-.form-block {
-    background-color: hsl(70, 5%, 90%);
-    padding: 1.5rem;
-    padding-bottom: 3.75rem;
-    width: fit-content;
-    float: left;
-    margin-top: 1.5rem;
-}
+
 
 .text-block {
-    max-width: 70%;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
-.label {
-    font-size: 1.5rem;
-    font-weight: bold;
-    display: block;
-}
-
-.username {
-    background-color: hsl(0, 30%, 60%);
-    border-radius: 1.5rem;
-}
-
-.message {
-    background-color: hsl(0, 30%, 60%);
-    border-radius: 1.5rem;
-}
 .text-block h1 {
     display: block;
-    line-height: 2.5rem;
-    margin:0 auto;
-    background-color: red;
+    margin: 0 auto;
+    line-height: 3rem;
+    margin-bottom: 3rem;
+    font-size: 2rem;
 }
 
 .text-block h2 {
@@ -68,32 +59,36 @@ main {
     margin-bottom: 1rem;
 }
 
-.text-block p {
-    line-height: 2.5rem;
+.text-block p{
+    line-height: 1.25rem;
     margin: 0;
 
 }
 
-
-.date {
+.label {
+    font-size: 1rem;
+    font-weight: bold;
     display: block;
-    width: 100%;
-    border: 0.25rem hsl(0, 60%, 60%) solid;
-    background-color: 0.25rem hsl(0, 80%, 60%) solid;
-    height: 1.5rem;
+}
+
+.form-block {
+    background-color: hsl(70, 5%, 90%);
+    padding: 1.5rem;
+    padding-bottom: 3.75rem;
+    width: fit-content;
+    margin: auto;
+    margin-top: 1.5rem;
+}
+.username, .message, .date {
+    background-color: hsl(0, 30%, 60%);
+    border-radius: 1rem;
 }
 .img {
-
-    height: 25rem;
+    height: 12rem;
     border-radius: 2rem;
     border: 1rem solid hsl(70, 10%, 99%);
     padding: 0;
-    margin:0;
-
+    margin:0 auto;
 }
-.img-block {
-    float: right;
-}
-
 
 
