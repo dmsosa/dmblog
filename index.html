@@ -1,68 +1,126 @@
 <html lang="de">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="duvi">
-    <meta content="twitter:title" content="duviduvi!"/>
-    <title>WhyMath</title>
-    <link rel="stylesheet" href="./styles.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Kenia&family=PT+Sans&family=Titillium+Web&display=swap" rel="stylesheet">
-</head>
-<body >
-    <header style="background-color:red; height:25em">
-
-    </header>
-
-    <main style="display: flex; flex: content;">
-        <div name="sidebar"></div>
-        <div class="blocks">
-            <div class="blocks-left">
-                <div class="block text-block"> 
-                    <h1>Ein grosses Seite fur meine Projekte</h1>
-                    <h2>Verflixt! wir kann tolle Dinge schaffen!</h2>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt perspiciatis molestiae fuga soluta? Unde accusamus</p>
-                    <p> id, dolorum ducimus non dolor eligendi, animi excepturi hic, est soluta molestias delectus minus officia?</p>
-                    <h4>sicing elit. Incidunt perspiciatis molestiae fuga soluta? </h4>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="duvi">
+        <meta content="twitter:title" content="duviduvi!"/>
+        <title>WhyMath</title>
+        <link rel="stylesheet" href="./styles.css"/>
+        <link href="https://fonts.googleapis.com/css2?family=Kenia&family=PT+Sans&family=Titillium+Web&display=swap" rel="stylesheet">
+    </head>
+    <body style="margin:0;">        
+        <div id="app" style="display: flex; height: fit-content; margin:0; flex-basis: content;">
+            <div id="sidebar">
+                <div class="sidebar-item-options">
+                    <button style="display: inline-block; height: 0.8rem;"></button>
+                    <span>Duvi account</span>
+                    <h4 style="margin:0">Documents</h4>
+                    <h4 style="margin:0">History</h4>
+                    <h4 style="margin:0">Storage</h4>
                 </div>
-                <div class="block img-block"><img src="./img/panda.jpg" class="img"/></div>
-                <div class="block form-block">
-                    <form>
-                        <label class="label" for="data">What day today is?</label>
-                        <input class="date" type="date">
-                        <label class="label" for="usernme">Username</label>
-                        <input class="username" placeholder="for example, 'rex100'">
-                        <label class="label" for="message">Message!</label>
-                        <textarea class="message" placeholder="Write use some message"></textarea>
-                        <label class="label" for="yes-button">Yes, I know</label>
-                        <input class="radio" type="radio" id="yes-button">
-                        <label class="label" for="no-button" >No, I dunno</label>
-                        <input class="radio" type="radio" id="no-button">
-                        <input class="range" type="range">
-                    </form>
+                <div class="sidebar-item-scroll" style="margin: 0; border: 0.4rem red solid; height: max-content; overflow: scroll; padding: 0.5rem 0.2rem;">
+                    <div class="sidebar-item-scroll-1" style="margin:0;">
+                        <ul style="margin: 0; list-style: none;">
+                            <li id="suchen" style="margin:0.05rem 0; cursor: pointer;">
+                                <p style="margin:0">Suchen</p>
+                                <ul id="ulhidden" style="margin:0.05rem 0; cursor: pointer; position:fixed; list-style: none; display: none;">
+                                    <li>By name</li>
+                                    <li>By address</li>
+                                    <li>By tag</li>
+                                </ul>
+                            </li>
+                            <li style="margin:0.05rem 0">Exportieren</li>
+                            <li style="margin:0.05rem 0">Importieren</li>
+                            <li style="margin:0.05rem 0">Mein Points</li>
+                            <li style="margin:0.05rem 0">Geschichte</li>
+                        </ul>
+                    </div>
+                    <div class="sidebar-item-scroll-2" style="margin: 1rem 0; border: 0.4rem red solid; height: max-content; padding: 0.1rem; ">
+                        <ul style="margin:0">
+                            <li>Zu beginn</li>
+                            <li>Neue Liste</li>
+                            <li>Woche Plannen</li>
+                            <li>Yoga routinen</li>
+                            <li>Rezepte</li>
+                            <li>Meine buche</li>
+                            <li>Reiseplannen</li>
+                            <li>Jahreziel</li>
+                            <li>Milestones</li>
+                            <li>Deadlines</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div class="separator"></div>
-            <div class="blocks-right">
-                <div class="block text-block"> 
-                    <h1>Ein grosses Seite fur meine Projekte</h1>
-                    <p>Verflixt! wir kann tolle Dinge schaffen!</p>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt perspiciatis molestiae fuga soluta? Unde accusamus</p>
-                    <p> id, dolorum ducimus non dolor eligendi, animi excepturi hic, est soluta molestias delectus minus officia?</p>
-                    <p>sicing elit. Incidunt perspiciatis molestiae fuga soluta? </p>
+            <div id="second-part" style="display: flex; flex-direction: column;">
+                <div class="header" style="height: 10rem; border: 0.5rem black solid;">
+                    <div class="Rounded" style="border: 0.15rem white solid; border-radius: 0.8em; display: flex; justify-content: space-between; background-color: red;">
+                        <div class="logo-container", style="display: flex; margin: 0.5rem">
+                            <img src="./img/menu.png" style="display:block; height: 2.5em; margin: auto 0;">
+                            <span style="display: block; margin-top: auto; margin-bottom: auto; font-size: 2rem; padding: 0 0.5rem;">Duvi</span>
+                        </div>
+                        <div class="menu-nav" style="display: flex; justify-content: right; width: 30%;">
+                            <div class="search nav-item" style="padding: 0.5rem;"><h1>S</h1></div>
+                            <div class="menu nav-item" style="margin: 0, 2em; padding: 0.5rem;"><h1>P</h1></div>
+                            <div class="menu nav-item" style="margin: 0, 2em; padding: 0.5rem;"><h1>Q</h1></div>
+                        </div>
+                    </div>
                 </div>
-    
-                <div class="block img-block"><img src="./img/panda.jpg" class="img"/></div>
-    
-                <div class="block text-block"> 
-                    <h1>Ein grosses Seite fur meine Projekte</h1>
-                    <p>Verflixt! wir kann tolle Dinge schaffen!</p>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt perspiciatis molestiae fuga soluta? Unde accusamus</p>
-                    <p> id, dolorum ducimus non dolor eligendi, animi excepturi hic, est soluta molestias delectus minus officia?</p>
-                    <p>sicing elit. Incidunt perspiciatis molestiae fuga soluta? </p>
+                <div class="main">
+                    <div class="blocks">
+                        <div class="blocks-left">
+                            <div class="block text-block"> 
+                                <h1>Ein grosses Seite fur meine Projekte</h1>
+                                <h2>Verflixt! wir kann tolle Dinge schaffen!</h2>
+                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt perspiciatis molestiae fuga soluta? Unde accusamus</p>
+                                <p> id, dolorum ducimus non dolor eligendi, animi excepturi hic, est soluta molestias delectus minus officia?</p>
+                                <h4>sicing elit. Incidunt perspiciatis molestiae fuga soluta? </h4>
+                            </div>
+                            <div class="block img-block"><img src="./img/panda.jpg" class="img"/></div>
+                            <div class="block form-block">
+                                <form>
+                                    <label class="label" for="data">What day today is?</label>
+                                    <input class="date" type="date">
+                                    <label class="label" for="usernme">Username</label>
+                                    <input class="username" placeholder="for example, 'rex100'">
+                                    <label class="label" for="message">Message!</label>
+                                    <textarea class="message" placeholder="Write use some message"></textarea>
+                                    <label class="label" for="yes-button">Yes, I know</label>
+                                    <input class="radio" type="radio" id="yes-button">
+                                    <label class="label" for="no-button" >No, I dunno</label>
+                                    <input class="radio" type="radio" id="no-button">
+                                    <input class="range" type="range">
+                                </form>
+                            </div>
+                        </div>
+                        <div class="separator"></div>
+                        <div class="blocks-right">
+                            <div class="block text-block"> 
+                                <h1>Ein grosses Seite fur meine Projekte</h1>
+                                <p>Verflixt! wir kann tolle Dinge schaffen!</p>
+                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt perspiciatis molestiae fuga soluta? Unde accusamus</p>
+                                <p> id, dolorum ducimus non dolor eligendi, animi excepturi hic, est soluta molestias delectus minus officia?</p>
+                                <p>sicing elit. Incidunt perspiciatis molestiae fuga soluta? </p>
+                            </div>
+                
+                            <div class="block img-block"><img src="./img/panda.jpg" class="img"/></div>
+                
+                            <div class="block text-block"> 
+                                <h1>Ein grosses Seite fur meine Projekte</h1>
+                                <p>Verflixt! wir kann tolle Dinge schaffen!</p>
+                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt perspiciatis molestiae fuga soluta? Unde accusamus</p>
+                                <p> id, dolorum ducimus non dolor eligendi, animi excepturi hic, est soluta molestias delectus minus officia?</p>
+                                <p>sicing elit. Incidunt perspiciatis molestiae fuga soluta? </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </main>
-    <footer style="height: 25em; background-color: blueviolet; margin-top: 2.5rem;"></footer>
-</body>
+        <footer style="display: block; position:static;height: 25em; background-color: blueviolet; margin-top: 0rem; width: 100%;">
+            <h1>Wir keine Fusser haben wir dieses Mal</h1>
+        </footer>
+        <div style="background-color: green; width: 100%; height: 25px;">ee</div>
+    </body>
+
+
 </html>
