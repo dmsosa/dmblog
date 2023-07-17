@@ -11,6 +11,43 @@ main {
     padding: 2rem;
 }
 
+.sidebar_item_options {
+    display: flex;
+    flex-direction: column;
+    border: 0.01rem solid red;
+}
+
+.item_options{
+    padding: 0 0.125rem;
+    margin: 0;
+    border: red solid 0.125rem;
+}
+
+.item_options h4{
+    padding: 0 0.125rem;
+    margin: 0;
+}
+
+.item_options.profile.button{
+    display: inline;
+    height: 1rem;
+    width: 1rem;
+    border: red solid 0.25rem;
+    border-radius: 0.5rem;
+}
+
+
+.item_options.profile.name{
+    vertical-align: middle;
+}
+
+.sidebar-item-scroll {
+    display: flex;
+    border: 0.01rem solid red;
+}
+
+
+
 .blocks {
     background-color: hsl(70, 10%, 99%);
     padding: 3rem;
