@@ -11,41 +11,84 @@ main {
     padding: 2rem;
 }
 
+#sidebar {
+    background-color: lightgray;
+}
 .sidebar_item_options {
     display: flex;
     flex-direction: column;
-    border: 0.01rem solid red;
 }
 
 .item_options{
     padding: 0 0.125rem;
     margin: 0;
-    border: red solid 0.125rem;
+    border: darkgoldenrod solid 0.125rem;
 }
 
-.item_options h4{
+.item_options_icon {
+    display: inline;
+}
+.item_options_icon img {
+    width: 1.5rem;
+}
+
+.item_options_text{
+    display: inline;
     padding: 0 0.125rem;
     margin: 0;
 }
 
-.item_options.profile.button{
+.item_options_button{
     display: inline;
     height: 1rem;
     width: 1rem;
-    border: red solid 0.25rem;
+    background-color: cyan;
+    border: gold solid 0.25rem;
     border-radius: 0.5rem;
+    padding-top: 0.25rem;
 }
 
-
-.item_options.profile.name{
-    vertical-align: middle;
-}
-
-.sidebar-item-scroll {
+.sidebar_item_scroll_1 {
     display: flex;
-    border: 0.01rem solid red;
+    border: 0.1rem solid blue;
 }
 
+.si_it_ul {
+    list-style: none;
+
+}
+.si_it_ul_item p{
+    margin:0;
+    padding: 0;
+
+}
+.si_it_ul_contentor {
+    position: relative;
+    width:1px;
+    top:0;
+    display: none;
+    overflow:visible;
+    border: green solid 0.1rem;
+    background-color: beige;
+    padding: 0.25rem 1.25rem 0.25rem 0.5rem;
+    
+}
+.si_it_ul_hidden {
+    list-style: none;
+    background-color: beige;
+    padding: 0.25rem 1.25rem 0.25rem 0.5rem;
+    display: none;
+}
+.si_it_ul:hover .si_it_ul_hidden {
+    display: block;
+    position: relative;
+}
+.si_it_ul:hover .si_it_ul_contentor  {
+    display: block;
+    position: relative;
+    left: 5rem;
+    top: ;
+}
 
 
 .blocks {
