@@ -48,49 +48,47 @@ main {
     padding-top: 0.25rem;
 }
 
-.sidebar_item_scroll_1 {
+.sidebar_scroll_1 {
     display: flex;
     border: 0.1rem solid blue;
 }
 
-.si_it_ul {
+.si_it_ul_top {
     list-style: none;
 
 }
-.si_it_ul_item p{
-    margin:0;
-    padding: 0;
-
+.si_it_li_top_item {
+    text-decoration: none;
 }
-.si_it_ul_contentor {
-    position: relative;
-    width:1px;
-    top:0;
+.si_it_li_top_item:hover {
+    color:red;
+}
+.si_it_ul_bot {
+    list-style: none;
     display: none;
-    overflow:visible;
-    border: green solid 0.1rem;
-    background-color: beige;
+    margin-left:2rem;
+    padding: 0.25rem;
+    color:white;
+    box-shadow: 10px 110px 0rem darkgreen inset;
+}
+.si_it_li_bot {
+    display: block;
     padding: 0.25rem 1.25rem 0.25rem 0.5rem;
+    background-color: darkolivegreen;
     
 }
-.si_it_ul_hidden {
-    list-style: none;
-    background-color: beige;
-    padding: 0.25rem 1.25rem 0.25rem 0.5rem;
-    display: none;
-}
-.si_it_ul:hover .si_it_ul_hidden {
+
+.si_it_li_top:hover .si_it_ul_bot {
     display: block;
-    position: relative;
-}
-.si_it_ul:hover .si_it_ul_contentor  {
-    display: block;
-    position: relative;
-    left: 5rem;
-    top: ;
+    position: absolute;
 }
 
-
+.seite {
+    text-decoration: none;
+}
+.selectable-content {
+    display: flex;
+}
 .blocks {
     background-color: hsl(70, 10%, 99%);
     padding: 3rem;
