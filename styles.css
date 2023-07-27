@@ -47,10 +47,15 @@ main {
     border-radius: 0.5rem;
     padding-top: 0.25rem;
 }
-
+.sidebar_scroll {
+    
+}
 .sidebar_scroll_1 {
     display: flex;
     border: 0.1rem solid blue;
+    margin: 0;
+    border: red solid 0.05rem;
+    padding:0;
 }
 
 .si_it_ul_top {
@@ -86,8 +91,27 @@ main {
 .seite {
     text-decoration: none;
 }
+.seite:hover {
+    cursor:pointer;
+}
 .selectable-content {
     display: flex;
+    background-color: whitesmoke;
+    border: lightblue solid 0.05rem;
+}
+.selectable:hover {
+    cursor:default;
+}
+.pfeil {
+    color: green;
+    margin-right: 0.5rem;
+}
+.icon {
+    font-weight: bold;
+}
+.titel {
+    margin-left: 0.5rem;
+
 }
 .blocks {
     background-color: hsl(70, 10%, 99%);
