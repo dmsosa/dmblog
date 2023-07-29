@@ -5,24 +5,41 @@ body {
     padding: 0;
 }
 
+#app {
+    display: flex;
+    width: 100%;
+    margin: 0;
+    height: fit-content;
+}
 main {
-    background-color: lightgray;
+    background-color: blue;
     height: max-content;
     padding: 2rem;
 }
 
 #sidebar {
-    background-color: lightgray;
+    background-color: hsl(70, 5%, 95%);
+    width: 20%;
+    min-width: 20%;
+    padding: 0.5rem;
 }
 .sidebar_item_options {
     display: flex;
     flex-direction: column;
+    margin-bottom: 1rem;
 }
 
 .item_options{
     padding: 0 0.125rem;
     margin: 0;
-    border: darkgoldenrod solid 0.125rem;
+    padding: 0.25rem;
+    vertical-align: middle;
+    
+}
+
+.item_options:hover{
+    background-color: lightcyan;
+    cursor: pointer;
 }
 
 .item_options_icon {
@@ -35,24 +52,28 @@ main {
 .item_options_text{
     display: inline;
     padding: 0 0.125rem;
-    margin: 0;
+    margin: 0 0 0 0.5rem;
 }
 
 .item_options_button{
     display: inline;
-    height: 1rem;
-    width: 1rem;
+    height: 1.5rem;
+    width: 1.5rem;
     background-color: cyan;
     border: gold solid 0.25rem;
     border-radius: 0.5rem;
     padding-top: 0.25rem;
 }
+.scroll_divisor {
+    border-top: darkslategray 0.5rem solid ;
+    margin: 1rem 0;
+}
 .sidebar_scroll {
-    
+    background-color: yellow;
 }
 .sidebar_scroll_1 {
     display: flex;
-    border: 0.1rem solid blue;
+    border: 1rem solid green;
     margin: 0;
     border: red solid 0.05rem;
     padding:0;
@@ -60,21 +81,43 @@ main {
 
 .si_it_ul_top {
     list-style: none;
-
+    display: block;
+    width: 100%;
+    margin: 1rem;
+    padding: 0rem;
+    
 }
-.si_it_li_top_item {
-    text-decoration: none;
+.si_it_ul_top span {
+    margin-right:1rem;
+
+    
+}
+
+.si_it_li_top {
+    color:black;
+    font-weight: bold;
+    letter-spacing: 0.05rem;
+    margin: 0.25rem 0 0.25rem 0;
+    width: 100%;
 }
 .si_it_li_top_item:hover {
-    color:red;
+    background-color:lightblue;
+}
+.si_it_li_top_a, .si_it_li_top_a:active {
+    text-decoration: none;
+    color:black;    
+}
+.si_it_li_top_a:active {
+    color:red;    
 }
 .si_it_ul_bot {
     list-style: none;
     display: none;
     margin-left:2rem;
-    padding: 0.25rem;
+    padding: 0rem;
     color:white;
-    box-shadow: 10px 110px 0rem darkgreen inset;
+    border: solid 0.5rem darkgreen;
+    font-weight: lighter;
 }
 .si_it_li_bot {
     display: block;
@@ -87,7 +130,17 @@ main {
     display: block;
     position: absolute;
 }
-
+.hinzufugen {
+    width: 100%;
+    background-color: darkgoldenrod;
+}
+.hinzufugen span{
+    margin: 0 1rem;
+}
+.hinzufugen a {
+    font-weight: bold;
+    font-style: italic;
+}
 .seite {
     text-decoration: none;
 }
