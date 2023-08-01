@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     box-sizing: border-box;
     font-family: 'Titillium Web', sans-serif;
@@ -9,21 +13,42 @@ body {
 #app {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     margin: 0;
-}
-main {
-    padding: 3rem;
+    width: 100%;
 }
 
 #sidebar {
     background-color: hsl(70, 5%, 95%);
-    width: 30%;
+    width: 20%;
 }
-#second-part{
+#second-part {
+    width: 80%;
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
+}
+.main {
+    padding: 1rem;
 }
 
+
+.rounded {
+    background-color: red;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1.6rem;
+    height: 5rem;
+
+}
+.menu-nav {
+    display: flex;
+}
+
+.header {
+    margin-bottom: 1rem;
+    outline: 1px black solid;
+}
 .sidebar_item_options {
     display: flex;
     flex-direction: column;
@@ -172,7 +197,7 @@ main {
 
 }
 .blocks {
-    background-color: hsl(70, 10%, 99%);
+    /* background-color: hsl(70, 10%, 99%); */
     padding: 3rem;
     display: flex;
 }
@@ -245,16 +270,7 @@ main {
     margin:0 auto;
 }
 
-.header {
 
-}
-.rounded {
-    background-color: red;
-    display: flex;
-    border-radius: 1rem;
-    justify-content: space-between;
-    padding: 0 1.6rem;
-}
 .block-content-1 {
     font-weight: bold;
     color: red;
