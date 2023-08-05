@@ -204,7 +204,7 @@ body {
 }
 .blocks {
     /* background-color: hsl(70, 10%, 99%); */
-    padding: 3rem;
+    padding: 1.5rem;
     display: flex;
 }
 .blocks-left, .blocks-right {
@@ -217,10 +217,6 @@ body {
 .separator {
     border-left: 0.5rem double blue;
     padding: 0.5rem;
-}
-.block {
-    padding: 0.5rem;
-    display: block;
 }
 
 .rule {
@@ -279,26 +275,33 @@ body {
 
 .block-content-1 {
     font-weight: bold;
-    color: red;
-    border: red solid 0.5rem;
+    color: black;
     height: fit-content;
     width: 100%;
 }
 
 .block-content-1 h2 {
-    
+    color: hsl(270, 80%, 32%);
     margin: 0;
-    margin-left: 1rem;
-    outline: 1px red solid
+    margin-left: 2rem;
 }
 .block-content-1 h3 {
+    color: hsl(270, 80%, 30%);
     margin: 0;
-    margin-left: 1rem;
-    outline: 1px red solid
+    margin-left: 2rem;
+    margin-top:0.5rem
 }
 
 .block-content-1 p {
     margin: 0;
-    margin-left: 2rem;
-    outline: 1px red solid
+    margin-left: 3rem;
+    line-height: 1.35rem;
+}
+.block-content-1 .zitat {
+    margin-top: 1rem;
+    font-style: italic;
+    border-left: 0.5rem solid black;
+    border-bottom: 0.05rem solid black;
+    padding: 0 1rem;
+    width: fit-content;
 }
