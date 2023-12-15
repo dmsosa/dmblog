@@ -14,19 +14,7 @@ function App() {
         <h1>Das wurde die grosser Duvis Webseite sein</h1>
       </header>
       <main className="main">
-        <ViteLogo/>
-        <div className="card">
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </button>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test HMR
-          </p>
-        </div>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
-        </p>
-        <Container/>
+        <Outlet />
       </main>
       <footer className="footer">
 
