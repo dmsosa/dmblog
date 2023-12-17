@@ -1,0 +1,63 @@
+html {
+    box-sizing: border-box;
+}
+body {
+    margin: 0em;
+    display: block;
+    background-color: antiquewhite;
+}
+
+header {
+
+        margin: 0em;
+        padding: 0em;
+    background-color: yellow;
+}
+.navbar {
+}
+.nav-container {
+    padding: 0;
+    display: flex;
+
+    justify-content: space-between;
+
+}
+
+.navbar-brand {
+    width: fit-content;
+}
+.brand-logo {
+    width: 4em;
+    margin: 0;
+    margin-right: -0.85em;
+}
+.brand-name {
+    text-decoration: none;
+    font: 1.2em sans-serif;
+    font-weight: bold;
+    color: darkcyan;
+    padding: 0;
+    position: relative;
+    top: 0.5em;
+}
+
+
+.navbar-collapse {
+    width: fit-content;
+}
+.navbar-nav {
+    margin-right: 1em;
+}
+.nav-item {
+    margin: 0 1em;
+    padding: 0.5em 1.5em;
+    background-color: red;
+}
+.nav-item.dropdown {
+    margin-left: auto;
+    margin-right: 0;
+}
+.nav-link {
+    margin:0;
+    
+}

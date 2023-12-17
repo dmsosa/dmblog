@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import './index.css'
+import './scss/styles.scss'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import Home from './routes/Home.tsx'
 import AuthProvider from './context/AuthContext.tsx'
