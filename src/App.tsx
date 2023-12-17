@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import React from 'react';
 import Container from './components/Container'
 import ViteLogo from './components/Logos/ViteLogo'
+import Navbar from './components/Navbar/Navbar';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -10,7 +11,7 @@ function App() {
   return (
     <React.Fragment>
       <header className="header">
-        <h1>Das wurde die grosser Duvis Webseite sein</h1>
+        <Navbar/>
       </header>
       <main className="main">
         <Outlet />
