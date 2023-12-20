@@ -4,6 +4,7 @@ import React from 'react';
 import Container from './components/Container'
 import ViteLogo from './components/Logos/ViteLogo'
 import Navbar from './components/Navbar/Navbar';
+import Footer from './components/Footer/Footer';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -17,7 +18,7 @@ function App() {
         <Outlet />
       </main>
       <footer className="footer">
-
+        <Footer/>
       </footer>
       
     </React.Fragment>
