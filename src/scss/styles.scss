@@ -1,57 +1,115 @@
 html {
     box-sizing: border-box;
 }
+
 body {
     margin: 0em;
     display: block;
     background-color: antiquewhite;
 }
 
-header {
-
-        margin: 0em;
-        padding: 0em;
-    background-color: yellow;
+.nonscroll {
+    overflow: hidden;
 }
+
 .navbar {
-}
-.nav-container {
-    padding: 0;
-    display: flex;
-
     justify-content: space-between;
+    background-color: #111927;
+    padding: 0.25em 1em;
+}
+.navbar-nav {
+    list-style: none;
+}
+.nav-main {
+    width: 100%;
+}
+.navbar-toggler {
+    padding: 0.125em 0.25em;
+    border: transparent solid;
+}
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");    
+}
+.nav-main .nav-main-toggle {
+    float: right;
+    z-index: 9999;
+    position: relative;
+}
 
+.nav-main .navbar-collapse-main {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    flex-direction: column;
+    visibility: hidden;
+}
+
+.navbar-collapse-main.show {
+    z-index: 999;
+    opacity: 1;
+    visibility: visible;
+}
+
+.nav-main .navbar-collapse-main>.navbar-nav {
+    display: flex;
+    width: 100%;
+    background-color: #111927;
+    padding: 0.25em 1em;
+}
+
+.nav-menu {
+    height: 100vh;
+    width: 100%;
+}
+.nav-menu-container .navbar {
+    padding: 0;
+}
+.nav-menu .navbar {
+    width: 100%;
+}
+
+.nav-menu .navbar-collapse {
+    flex-direction: column;
+    height: calc(100vh - 82px);
+    max-height: calc(100vh - 82px);
+    width: 100%;
+    overflow: overlay;
+    background-color: white;
+}
+
+.nav-menu .navbar-nav {
+    flex-direction: column;
+    width: 100%;
 }
 
 .navbar-brand {
     width: fit-content;
+    margin: 0;
+    padding: 0;
 }
+
 .brand-logo {
     width: 4em;
-    margin: 0;
     margin-right: -0.85em;
 }
+
 .brand-name {
     text-decoration: none;
     font: 1.2em sans-serif;
     font-weight: bold;
-    color: darkcyan;
-    padding: 0;
+    color: #51FF00;
     position: relative;
     top: 0.5em;
 }
 
-
-.navbar-collapse {
-    width: fit-content;
-}
-.navbar-nav {
-    margin-right: 1em;
-}
 .nav-item {
     margin: 0 1em;
-    padding: 0.5em 1.5em;
-    background-color: red;
+    padding: 1em 1.5em;
+    background-color: white;
 }
 .nav-item.dropdown {
     margin-left: auto;
@@ -60,6 +118,7 @@ header {
 .nav-link {
     margin:0; 
 }
+
 .paragraph-h1 {
     
 }

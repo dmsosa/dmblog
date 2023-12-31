@@ -1,3 +1,6 @@
+import { FcAndroidOs } from "react-icons/fc";
+import NavItem from "../NavItem";
+
 function Footer() {
     return (
         <div className="container">

@@ -1,5 +1,9 @@
 import { Link } from 'react-router-dom';
+import { FcAndroidOs } from "react-icons/fc";
+
+
 import apple from '../../assets/apple.svg';
+import NavItem from '../NavItem';
 
 {/* <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
@@ -24,21 +28,16 @@ function NavbarLarge() {
             bg-dark 
             navbar-expand-lg">
                 <div className="container-fluid nav-container">
-                <Link
-                className="navbar-brand col-2" to="/">
-                    <img 
-                    src={apple}
-                    className="brand-logo"/>
-                    <a className="brand-name" href="/">dmsosa
-                </a> 
-                </Link>
+                    <Link
+                    className="navbar-brand col-2" to="/">
+                            <img 
+                            src={apple}
+                            className="brand-logo"/>
+                            <span className="brand-name">dmsosa</span> 
+                    </Link>
                     <ul className="navbar-nav col-8">
-                        <li className="nav-item">
-                            <a className="nav-link active">Tools</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link active">Foods</a>
-                        </li>
+                        <NavItem text="Search"/>
+                        <NavItem text="Food"/>
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
                             <ul className="dropdown-menu">
@@ -48,7 +47,7 @@ function NavbarLarge() {
                             </ul>
                         </li>
                     </ul>
-                </div>
+                </div>   
                 
             </nav>
         </section>

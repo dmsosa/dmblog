@@ -32,6 +32,22 @@ function Home() {
                 <img className="paragraph-img" src={apple}/>
             </div>
         </div>
+        <div className="container">
+            <div className="paragraph-container">
+                <h1 className="paragraph-h1">Duvi Seite</h1>
+                <h3 className="paragraph-h3">Und warum Lernen ist cool</h3>
+                <p className="paragraph-p">Zum Anderen lehren ist Das beste Weg, um etwas neues zu lernen</p>
+                <img className="paragraph-img" src={apple}/>
+            </div>
+        </div>
+        <div className="container">
+            <div className="paragraph-container">
+                <h1 className="paragraph-h1">Duvi Seite</h1>
+                <h3 className="paragraph-h3">Und warum Lernen ist cool</h3>
+                <p className="paragraph-p">Zum Anderen lehren ist Das beste Weg, um etwas neues zu lernen</p>
+                <img className="paragraph-img" src={apple}/>
+            </div>
+        </div>
         </>
 
     )
