@@ -1,55 +1,22 @@
-import { Link } from 'react-router-dom';
-import { FcAndroidOs } from "react-icons/fc";
+import BrandLogo from "../Logos/BrandLogo";
+import NavMenu from "./NavMenu";
 
-
-import apple from '../../assets/apple.svg';
-import NavItem from '../NavItem';
-
-{/* <nav class="navbar navbar-expand-lg bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="#">Home</a>
-        <a class="nav-link" href="#">Features</a>
-        <a class="nav-link" href="#">Pricing</a>
-        <a class="nav-link disabled">Disabled</a>
-      </div>
-    </div>
-  </div>
-</nav> */}
 function NavbarLarge() {
     return (
-        <section className="nav-menu d-none d-lg-block">
-            <nav className="navbar nav-main 
-            bg-dark 
-            navbar-expand-lg">
-                <div className="container-fluid nav-container">
-                    <Link
-                    className="navbar-brand col-2" to="/">
-                            <img 
-                            src={apple}
-                            className="brand-logo"/>
-                            <span className="brand-name">dmsosa</span> 
-                    </Link>
-                    <ul className="navbar-nav col-8">
-                        <NavItem text="Search"/>
-                        <NavItem text="Food"/>
-                        <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
-                            <ul className="dropdown-menu">
-                                <li><a className="dropdown-item">Login</a></li>
-                                <li><a className="dropdown-item">Logout</a></li>
-                                <li><a className="dropdown-item">Settings</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>   
-                
-            </nav>
+        <section className="nav-menu bg-color-blue-nav d-none d-lg-block">
+                    <div className="nav-menu-container container-lg">
+                        <nav className="navbar navbar-expand-lg px-2 py-0">
+                            <BrandLogo/>
+                            <div className="collapse navbar-collapse initiated" id="navbarMenu">
+                                <ul className="navbar-nav w-100">
+                                    <li className="nav-item ms-auto me-0"><a className="nav-link">God</a></li>
+                                    <li className="nav-item ms-3 me-0" ><a className="nav-link">Blessed</a></li>
+                                    <li className="nav-item ms-3 me-0"><a className="nav-link">Me</a></li>
+                                    <li className="nav-item dropdown ms-auto me-3"><a className="nav-link">MyAccount</a></li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
         </section>
     )
 }

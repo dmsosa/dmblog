@@ -1,3 +1,4 @@
+import NavMenu from "./NavMenu";
 import NavbarLarge from "./NavbarLarge";
 import NavbarSmall from "./NavbarSmall";
 

@@ -4,22 +4,25 @@ html {
 
 body {
     margin: 0em;
-    display: block;
+    font-family: sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
     background-color: antiquewhite;
+}
+
+.bg-color-blue-nav {
+    background-color: #111927;
 }
 
 .nonscroll {
     overflow: hidden;
 }
 
-.navbar {
-    justify-content: space-between;
-    background-color: #111927;
-    padding: 0.25em 1em;
+.nav-menu-container {
+    width: 100%;
 }
-.navbar-nav {
-    list-style: none;
-}
+
 .nav-main {
     width: 100%;
 }
@@ -55,24 +58,24 @@ body {
 }
 
 .nav-main .navbar-collapse-main>.navbar-nav {
-    display: flex;
     width: 100%;
+    display: flex;
     background-color: #111927;
     padding: 0.25em 1em;
 }
 
-.nav-menu {
+
+.navbar-collapse-main .nav-menu {
     height: 100vh;
     width: 100%;
-}
-.nav-menu-container .navbar {
     padding: 0;
 }
-.nav-menu .navbar {
+
+.navbar-collapse-mobile .navbar-nav {
+    flex-direction: column;
     width: 100%;
 }
-
-.nav-menu .navbar-collapse {
+.nav-menu .navbar-collapse-mobile {
     flex-direction: column;
     height: calc(100vh - 82px);
     max-height: calc(100vh - 82px);
@@ -81,10 +84,7 @@ body {
     background-color: white;
 }
 
-.nav-menu .navbar-nav {
-    flex-direction: column;
-    width: 100%;
-}
+
 
 .navbar-brand {
     width: fit-content;
@@ -106,17 +106,24 @@ body {
     top: 0.5em;
 }
 
+
 .nav-item {
-    margin: 0 1em;
-    padding: 1em 1.5em;
-    background-color: white;
+    padding: 0.25em 1em;
+    border-radius: 0.5em;
 }
-.nav-item.dropdown {
-    margin-left: auto;
-    margin-right: 0;
+.nav-item:hover {
+    box-shadow: #51FF00 0px 0px 1px;
 }
+
 .nav-link {
-    margin:0; 
+    margin:0;
+    color: white;
+    font-weight: bold;
+    cursor: pointer; 
+}
+
+.nav-link:hover {
+    color: #51FF00;
 }
 
 .paragraph-h1 {
