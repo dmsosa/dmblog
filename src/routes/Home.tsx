@@ -17,37 +17,117 @@ function Home() {
 
     return(
         <>
-        "Genie ist 1% Inspiration und 99% Transpiration"
-        <h1>
-            Hello {loggedUser?.username}
-        </h1>
-        <button 
-        className="btn btn-primary"
-        onClick={func}>Change me</button>
-        <div className="container">
-            <div className="paragraph-container">
-                <h1 className="paragraph-h1">Duvi Seite</h1>
-                <h3 className="paragraph-h3">Und warum Lernen ist cool</h3>
-                <p className="paragraph-p">Zum Anderen lehren ist Das beste Weg, um etwas neues zu lernen</p>
-                <img className="paragraph-img" src={apple}/>
+        <section className="bg-hero"> 
+
+            "Genie ist 1% Inspiration und 99% Transpiration"
+            <h1>
+                Hello {loggedUser?.username}
+            </h1>
+            <svg width="20" height="20" viewBox="0 0 24 24">
+                <path d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z"/>
+            </svg>
+            <button 
+            className="btn btn-primary"
+            onClick={func}>Change me</button>       
+            <div className="container">
+                <div className="row">
+                    <div className="col">Ja</div>
+                    <div className="col">Genau</div>
+                    <div className="col">Genau</div>
+                </div>
             </div>
-        </div>
-        <div className="container">
-            <div className="paragraph-container">
-                <h1 className="paragraph-h1">Duvi Seite</h1>
-                <h3 className="paragraph-h3">Und warum Lernen ist cool</h3>
-                <p className="paragraph-p">Zum Anderen lehren ist Das beste Weg, um etwas neues zu lernen</p>
-                <img className="paragraph-img" src={apple}/>
+            <div></div>
+            "Genie ist 1% Inspiration und 99% Transpiration"
+            <h1>
+                Hello {loggedUser?.username}
+            </h1>
+            <button 
+            className="btn btn-primary"
+            onClick={func}>Change me</button>       
+            <div className="container">
+                <div className="row">
+                    <div className="col">Ja</div>
+                    <div className="col">Genau</div>
+                    <div className="col">Genau</div>
+                </div>
             </div>
-        </div>
-        <div className="container">
-            <div className="paragraph-container">
-                <h1 className="paragraph-h1">Duvi Seite</h1>
-                <h3 className="paragraph-h3">Und warum Lernen ist cool</h3>
-                <p className="paragraph-p">Zum Anderen lehren ist Das beste Weg, um etwas neues zu lernen</p>
-                <img className="paragraph-img" src={apple}/>
+            <div></div>
+            "Genie ist 1% Inspiration und 99% Transpiration"
+            <h1>
+                Hello {loggedUser?.username}
+            </h1>
+            <button 
+            className="btn btn-primary"
+            onClick={func}>Change me</button>       
+            <div className="container">
+                <div className="row">
+                    <div className="col">Ja</div>
+                    <div className="col">Genau</div>
+                    <div className="col">Genau</div>
+                </div>
             </div>
-        </div>
+            <div></div>
+            "Genie ist 1% Inspiration und 99% Transpiration"
+            <h1>
+                Hello {loggedUser?.username}
+            </h1>
+            <button 
+            className="btn btn-primary"
+            onClick={func}>Change me</button>       
+            <div className="container">
+                <div className="row">
+                    <div className="col">Ja</div>
+                    <div className="col">Genau</div>
+                    <div className="col">Genau</div>
+                </div>
+            </div>
+            <div></div>
+            "Genie ist 1% Inspiration und 99% Transpiration"
+            <h1>
+                Hello {loggedUser?.username}
+            </h1>
+            <button 
+            className="btn btn-primary"
+            onClick={func}>Change me</button>       
+            <div className="container">
+                <div className="row">
+                    <div className="col">Ja</div>
+                    <div className="col">Genau</div>
+                    <div className="col">Genau</div>
+                </div>
+            </div>
+            <div></div>
+            "Genie ist 1% Inspiration und 99% Transpiration"
+            <h1>
+                Hello {loggedUser?.username}
+            </h1>
+            <button 
+            className="btn btn-primary"
+            onClick={func}>Change me</button>       
+            <div className="container">
+                <div className="row">
+                    <div className="col">Ja</div>
+                    <div className="col">Genau</div>
+                    <div className="col">Genau</div>
+                </div>
+            </div>
+            <div></div>
+            "Genie ist 1% Inspiration und 99% Transpiration"
+            <h1>
+                Hello {loggedUser?.username}
+            </h1>
+            <button 
+            className="btn btn-primary"
+            onClick={func}>Change me</button>       
+            <div className="container">
+                <div className="row">
+                    <div className="col">Ja</div>
+                    <div className="col">Genau</div>
+                    <div className="col">Genau</div>
+                </div>
+            </div>
+            
+        </section>
         </>
 
     )

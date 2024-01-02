@@ -3,9 +3,8 @@ import NavMenu from "./NavMenu";
 
 function NavbarLarge() {
     return (
-        <section className="nav-menu bg-color-blue-nav d-none d-lg-block">
-                    <div className="nav-menu-container container-lg">
-                        <nav className="navbar navbar-expand-lg px-2 py-0">
+        <section className="nav-menu bg-color-blue-nav d-none d-lg-block ">
+                        <nav className="navbar navbar-expand-lg px-5 py-0">
                             <BrandLogo/>
                             <div className="collapse navbar-collapse initiated" id="navbarMenu">
                                 <ul className="navbar-nav w-100">
@@ -16,7 +15,6 @@ function NavbarLarge() {
                                 </ul>
                             </div>
                         </nav>
-                    </div>
         </section>
     )
 }

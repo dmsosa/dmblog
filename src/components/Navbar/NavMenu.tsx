@@ -2,7 +2,7 @@ import BrandLogo from "../Logos/BrandLogo";
 
 function NavMenu() {
     return (
-        <section className="nav-menu bg-color-blue-nav d-block d-lg-none">
+        <section className="nav-menu bg-color-white-nav d-block d-lg-none">
                     <div className="nav-menu-container container-lg p-0">
                         <nav className="navbar navbar-expand-lg p-0">
                             <div className="collapse navbar-collapse navbar-collapse-mobile" id="navbarMenu">
