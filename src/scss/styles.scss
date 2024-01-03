@@ -39,11 +39,11 @@ body {
     z-index: 10000;
     transition: 1s ease-in-out;
 }
-.scroll-down .sticky-header {
+.scroll-down {
     transform: translate3d(0, -100%, 0);
 }
 
-.scroll-up .sticky-header {
+.scroll-up {
     transform: none;
 }
 
@@ -171,27 +171,33 @@ body {
 .nav-link:hover {
     color: #51FF00;
 }
+.nav-link:visited {
+    color: #51FF00;
+}
 
 // Content Styles
 
 .main {
     background: linear-gradient(60deg, #112233 10%, #111927 10%, #111927 90%, #112233 90%) no-repeat fixed;
     color: wheat;
-    padding-top: 1em;
-}
-.paragraph-h1 {
-    
-}
-.paragraph-h3 {
-    
-}
-.paragraph-p {
-    font-style: italic;
-}
-.paragraph-img {
-    width: 4em;
+    padding-top: 6em;
 }
 
+.content-quote {
+    background-color: hsl(90, 100%, 60%);
+    width: 70%;
+    margin: 7em auto;
+    text-align: center;
+    border-radius: 0.5em;
+    box-shadow: 10px 10px 0px #EEE;
+
+}
+.content-quote-link {
+    text-decoration: none;
+    color: black;
+    font-size: 2em;
+    font-style: italic;
+}
 // Footer styles
 
 footer {

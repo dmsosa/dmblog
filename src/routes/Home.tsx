@@ -1,8 +1,6 @@
 import { TAuthContext, useAuth } from "../context/AuthContext";
 import { loginUser } from "../service/loginUser";
-import apple from "../assets/apple.svg";
-import NavbarLarge from "../components/Navbar/NavbarLarge";
-import Navbar from "../components/Navbar/Navbar";
+
 
 function Home() {
     const { authState, setAuthState } = useAuth() as TAuthContext;
@@ -18,8 +16,13 @@ function Home() {
     return(
         <>
         <section className="bg-hero"> 
-
-            "Genie ist 1% Inspiration und 99% Transpiration"
+            <div className="container">
+                <div className="row">
+                    <div className="content-quote">
+                        <a className="content-quote-link">"Genie ist 1% Inspiration und 99% Transpiration"</a>
+                    </div>
+                </div>
+            </div>
             <h1>
                 Hello {loggedUser?.username}
             </h1>
@@ -31,9 +34,42 @@ function Home() {
             onClick={func}>Change me</button>       
             <div className="container">
                 <div className="row">
-                    <div className="col">Ja</div>
-                    <div className="col">Genau</div>
-                    <div className="col">Genau</div>
+                    <div className="col">
+                        <div className="container-header">
+                            <h1>Spring</h1>
+                        </div>
+                        <div className="container-content">
+                            <ul className="content-ul">
+                                <li>Was ist das?</li>
+                                <li>Warum wir es nutzen?</li>
+                                <li>Wann wir es nutzen ?</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="container-header">
+                            <h1>Math</h1>
+                        </div>
+                        <div className="container-content">
+                            <ul className="content-ul">
+                                <li>Was ist das?</li>
+                                <li>Warum wir es nutzen?</li>
+                                <li>Wann wir es nutzen ?</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="container-header">
+                            <h1>Science</h1>
+                        </div>
+                        <div className="container-content">
+                            <ul className="content-ul">
+                                <li>Was ist das?</li>
+                                <li>Warum wir es nutzen?</li>
+                                <li>Wann wir es nutzen ?</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div></div>

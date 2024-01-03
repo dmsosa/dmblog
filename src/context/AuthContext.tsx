@@ -2,7 +2,7 @@ import { ReactNode, createContext, useContext, useEffect, useState } from "react
 import { User } from "../types/User";
 import { getUser } from "../service/getUser";
 
-type TAuthState = {
+export type TAuthState = {
     headers: object | null,
     isAuth: boolean,
     loggedUser: User | null

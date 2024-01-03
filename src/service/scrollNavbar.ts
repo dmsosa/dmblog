@@ -1,20 +1,31 @@
-const body = document.body;
-const scrollUp = "scroll-up"
-const scrollDown = "scroll-down"
-var lastScroll = 0;
+function scrollNavbar() {
+    const scrollUp = "scroll-up";
+    const scrollDown = "scroll-down";
+    var lastScroll = 0;
+    const header = document.querySelector("div.sticky-header");
 
-window.addEventListener("scroll", () => {
-    const currentScroll = window.scrollY;
-    if (currentScroll <= 0) {
-        body.classList.remove(scrollUp);
-        return;
-    } else if (
-        currentScroll < lastScroll &&
-        body.classList.contains(scrollDown) 
-    ) {
-        body.classList.remove(scrollDown);
-        body.classList.add(scrollUp);
-    }
-    lastScroll = currentScroll;
+    window.addEventListener("scroll", () => {
+        const currentScroll = window.scrollY;
+        if (currentScroll <= 0) {
+            header?.classList.remove(scrollUp);
+            return;
+        }
+        if (
+            currentScroll > lastScroll &&
+            !header?.classList.contains(scrollDown)
+            ) {
+            header?.classList.remove(scrollUp);
+            header?.classList.add(scrollDown);
+        } else if (
+            currentScroll < lastScroll &&
+            header?.classList.contains(scrollDown)
+            )  {
+                header?.classList.remove(scrollDown);
+                header?.classList.add(scrollUp);
+        }
+        lastScroll = currentScroll;
+        }
+    )
+}
 
-})
+export default scrollNavbar;

@@ -2,16 +2,15 @@ import { useEffect, useState } from "react";
 import NavMenu from "./NavMenu";
 import NavbarLarge from "./NavbarLarge";
 import NavbarSmall from "./NavbarSmall";
+import scrollNavbar from "../../service/scrollNavbar";
 
 function Navbar() {
-    const [scroll, setScroll] = useState(0);
+    
     useEffect(() => {
-        const onScroll = () => setScroll(window.scrollY);
-        window.removeEventListener("scroll", onScroll);
-        window.addEventListener("scroll", onScroll, {passive : true});
-    }, [])
+        scrollNavbar()
+        }, [])
     return (
-        <div className="sticky-header nav-down nav-shadow">
+        <div className="sticky-header nav-shadow">
             <NavbarLarge/>
             <NavbarSmall/>
         </div>
