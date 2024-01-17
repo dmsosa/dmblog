@@ -5,6 +5,7 @@ import './scss/styles.scss'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import Home from './routes/Home.tsx'
 import AuthProvider from './context/AuthContext.tsx'
+import { BlogPage } from './routes/BlogPage.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -14,6 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Route element={<App />}>
               <Route path="/" element={<Home />}>
               </Route>
+              <Route path="/blog" element={<BlogPage />}></Route>
             </Route>
           </Routes>
       </AuthProvider>
