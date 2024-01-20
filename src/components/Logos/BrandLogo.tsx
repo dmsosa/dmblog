@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import apple from '../../assets/apple.svg';
+import apple from '../../assets/img/apple.svg';
 
 function BrandLogo () {
     return (

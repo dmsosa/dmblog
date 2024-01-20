@@ -1,10 +1,10 @@
 import { ReactNode } from "react";
 
-function ContainerRow({ children } : { children: ReactNode | ReactNode[] }) {
+function ContainerRow({ addClass=null, children=null } : { addClass?: string | null, children?: ReactNode | ReactNode[] | null }) {
 
     return(
         <>
-            <div className="container">
+            <div className={`container ${addClass}`}>
                 <div className="row">
                     {children}
                 </div>
