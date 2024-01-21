@@ -49,6 +49,12 @@ body {
     overflow: hidden;
 }
 
+//removing default browser styles
+
+.form-checkbox-label input {
+    opacity: 0;
+}
+
 // Navbar Styles 
 // Von Allgemeinen zu Einzelnen
 //Navbar Container > Navbar Collapse
@@ -202,6 +208,9 @@ body {
 
 // Content Styles
 
+// Allgemeine Stillen - General Styles
+
+
 .main {
     background: linear-gradient(60deg, #112233 10%, #111927 10%, #111927 90%, #112233 90%) no-repeat fixed;
     color: wheat;
@@ -250,6 +259,18 @@ a:hover {
     margin-top: 1em;
     line-height: 1.5em;
 }
+
+//Image Styles
+
+.cont-img-div {
+    border: #34A200 solid 5px;
+    width: fit-content;
+}
+.cont-img {
+    width: 10em;
+}
+
+//Specific Styles (topic container, banner and forms container)
 .topic-btn-cont {
     max-height: 250px;
     overflow: hidden;
@@ -301,16 +322,113 @@ a:hover {
     box-shadow: 5px 5px 1px #34A200;
     padding: 1em;
 }
-.cont-img-div {
-    border: #34A200 solid 5px;
-    width: fit-content;
-}
-.cont-img {
-    width: 10em;
-}
+
 .tech-banner {
     margin: 0 auto;
 }
+
+.cont:has( > form) {
+    background-color: #000D1C;
+    max-width: 50%;
+    margin: 2em auto;
+}
+.cont-form {
+    padding: 2em;
+    padding-bottom: 1em;
+}
+.cont-label-input {
+    margin: auto;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+.form-input:hover {
+    box-shadow: 0.25em 0.25em 0px rgba(153, 255, 51, .7);
+}
+.form-label {
+    background-color: #000D1C;
+    width: 5em;
+    margin-left: 1em;
+    margin-bottom: -0.5em;
+    z-index: 3;
+    cursor: pointer;
+}
+.form-input {
+    background-color: transparent;
+    border: #ccc solid 0.25em;
+    border-radius: 0.5em;
+    box-shadow: 0.25em 0.25em 0px rgba($color: #777, $alpha: .7);
+    padding: 0.25em 1em;
+    z-index: 2;
+    color: white;
+}
+.form-input:focus {
+    outline: none;
+    box-shadow: 0.25em 0.25em 0px rgba(153, 255, 51, 1);
+}
+
+
+.form-checkbox-label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    padding-left: 35px;
+    margin-bottom: 1em;
+    width: fit-content;
+}
+.checkbox-span {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 25px;
+    height: 25px;
+    border: #ccc solid 0.25em;
+    border-radius: 0.5em;
+    box-shadow: 0.125em 0.125em 0px rgba($color: #777, $alpha: .7);
+}
+.form-checkbox-label:hover input ~.checkbox-span {
+    box-shadow: 0.125em 0.125em 0px rgba(153, 255, 51, .7);
+}
+.form-checkbox-label input:checked ~ .checkbox-span {
+    border: #ccc solid 0.25em;
+    box-shadow: 0.125em 0.125em 0px rgba(153, 255, 51, .7);
+    background-color: rgba(153, 255, 51, .7);
+}
+.checkbox-span:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.form-checkbox-label input:checked ~.checkbox-span:after {
+    display: block
+}
+
+.form-checkbox-label .checkbox-span:after {
+    left: 5px;
+    top: 0px;
+    width: 7px;
+    height: 13px;
+    border: solid white;
+    border-width: 0px 3px 3px 0px;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg)
+}
+
+.form-btn {
+    width: 100%;
+    margin: 1em auto;
+}
+.form-footer {
+    margin-top: 1em;
+}
+
+//Button Styles 
+
 .btn-primary {
     @include btn-styles();
 
@@ -327,7 +445,6 @@ a:hover {
         font-size: inherit;
     }
 }
-
 
 
 

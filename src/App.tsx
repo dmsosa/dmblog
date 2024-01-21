@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import React from 'react';
 import Navbar from './components/Navbar/Navbar';
@@ -18,11 +17,10 @@ function App() {
       <footer className="footer">
         <Footer/>
       </footer>
-      
     </React.Fragment>
 
     
   )
 }
 
-export default App
+export default App;

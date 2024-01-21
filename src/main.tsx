@@ -1,24 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import App from './App.tsx'
 import './scss/styles.scss'
-import { HashRouter, Route, Routes } from 'react-router-dom'
-import Home from './routes/Home.tsx'
 import AuthProvider from './context/AuthContext.tsx'
-import { BlogPage } from './routes/BlogPage.tsx'
+import Home from './routes/Home.tsx'
+import  Login  from './routes/Login.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <HashRouter>
+    <BrowserRouter>
       <AuthProvider>
           <Routes>
             <Route element={<App />}>
-              <Route path="/" element={<Home />}>
-              </Route>
-              <Route path="/blog" element={<BlogPage />}></Route>
+              <Route path="/" element={<Home />}></Route>
+              <Route path="login" element={<Login />}/>
             </Route>
           </Routes>
       </AuthProvider>
-    </HashRouter>
+    </BrowserRouter>
   </React.StrictMode>,
 )
