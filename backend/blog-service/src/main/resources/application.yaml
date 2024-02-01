@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: blog-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dmsosa
+    username: postgres
+    password: pepeeselmejor
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          client-one:
+#            provider: spring
+#            client-id: client
+#            client-secret: secret
+#            authorization-grant-type: authorization_code
+#            redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
+#            scope: openid, profile
+#            client-name: client-one
+#        provider:
+#          spring:
+#            issuer-uri: http://localhost:9000
+server:
+  port: 8082
+logging:
+  level:
+    org.springframework.security: TRACE

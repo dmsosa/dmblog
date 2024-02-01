@@ -1,0 +1,21 @@
+server:
+  port: 9000
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:secret}
+  issuer: ${JWT_ISSUER:myessen}
+
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/myessen
+    username: postgres
+    password: pepeeselmejor
+
