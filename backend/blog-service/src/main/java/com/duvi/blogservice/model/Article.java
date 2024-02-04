@@ -1,6 +1,7 @@
 package com.duvi.blogservice.model;
 
 
+import com.duvi.blogservice.model.dto.ArticleDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,5 +26,20 @@ public class Article {
     private String description;
     private String slug;
 
+    public Article(ArticleDTO articleDTO) {
+        this.userId = articleDTO.userId();
+        this.body = articleDTO.body();
+        this.description = articleDTO.description();
+        this.title = articleDTO.title();
+        this.slug = articleDTO.slug();
+    }
 
+    public void update(Article newArticle) {
+        this.id = newArticle.getId();
+        this.userId = newArticle.getUserId();
+        this.title = newArticle.getTitle();
+        this.body = newArticle.getBody();
+        this.description = newArticle.getDescription();
+        this.slug = newArticle.getSlug();
+    }
 }

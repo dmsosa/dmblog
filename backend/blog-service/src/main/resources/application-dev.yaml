@@ -1,0 +1,9 @@
+datasource: postgres
+spring:
+  config:
+    import: optional:classpath:.env[.properties]
+  datasource:
+    url: ${PG_URL}
+    username: ${PG_USER}
+    password: ${PG_PASSWORD}
+
