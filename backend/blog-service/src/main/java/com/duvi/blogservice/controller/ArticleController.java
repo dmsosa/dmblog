@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public class ArticleController {
 
     private ArticleService articleService;
-    
+
 
     @GetMapping("/")
     public ResponseEntity<List<Article>> getAllArticles() throws ArticleDoNotExistsException {

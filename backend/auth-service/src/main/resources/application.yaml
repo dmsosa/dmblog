@@ -15,7 +15,8 @@ spring:
   application:
     name: auth-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/myessen
+    url: jdbc:postgresql://localhost:5432/dmsosa
     username: postgres
     password: pepeeselmejor
+    driver-class-name: org.postgresql.Driver
 

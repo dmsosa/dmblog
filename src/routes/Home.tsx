@@ -9,13 +9,7 @@ import HomeArticles from "./HomeArticles";
 function Home() {
     const { authState, setAuthState } = useAuth() as TAuthContext;
     const loggedUser = authState.loggedUser;
-    const  func = () => {
-            if (setAuthState != null) {
-                loginUser({login: "duvi", password: "123"})
-                .then((response) => setAuthState(response))
-                .catch(() => {console.log("ERROR ")});
-            };
-    }
+
 
 
     return(

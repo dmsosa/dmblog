@@ -13,7 +13,7 @@ public class UserServiceImpl implements UserService{
     UserRepository userRepository;
 
     @Override
-    public User findUserById(String id) {
+    public User findUserById(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
             return null;
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User updateUser(String oldUserId, User updatedUser) {
+    public User updateUser(Long oldUserId, User updatedUser) {
         Optional<User> oldUser = userRepository.findById(oldUserId);
         if (oldUser.isEmpty()) {
             User newUser = userRepository.save(updatedUser);

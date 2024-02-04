@@ -5,7 +5,8 @@ function HomeArticles() {
     return (
         <>
             <ArticlePreview/>
-            <ArticlePagination articlesPerPage={}/>
+            <ArticlePagination 
+            />
         </>
 
     )

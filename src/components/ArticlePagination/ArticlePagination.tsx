@@ -2,10 +2,10 @@ import { useState } from "react";
 import ReactPaginate from "react-paginate";
 import { TAuthState } from "../../context/AuthContext";
 
-function ArticlePagination({ articlesCount, headers, location, username, tagName } : { articlesCount: number, headers: TAuthState, location?: string | null, username?: string | null, tagName?: string | null }) {
+function ArticlePagination({ articlesCount, location, username, tagName, updateArticles } : { articlesCount: number, location?: string | null, username?: string | null, tagName?: string | null, updateArticles: any }) {
 
-    const [pageCount, setPageCount] = useState(0);
-    const [offSet, setOffset] = useState(0);
+    const pageCount = Math.ceil(articlesCount / 3);
+
 
     const handlePageChange = () => {
 
