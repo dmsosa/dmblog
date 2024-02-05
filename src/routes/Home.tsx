@@ -1,14 +1,13 @@
 import { Outlet } from "react-router-dom";
 import BannerContainer from "../components/BannerContainer";
 import { TAuthContext, useAuth } from "../context/AuthContext";
-import { loginUser } from "../service/loginUser";
 import HomeArticles from "./HomeArticles";
 
 
 
 function Home() {
     const { authState, setAuthState } = useAuth() as TAuthContext;
-    const loggedUser = authState.loggedUser;
+    const { loggedUser } = authState;
 
 
 
@@ -21,7 +20,7 @@ function Home() {
                 </div>
             </BannerContainer>
             <a>
-                <span>Hello {loggedUser?.username}</span>
+                <span>Hello {loggedUser.username}</span>
             </a>
             <HomeArticles/>
 

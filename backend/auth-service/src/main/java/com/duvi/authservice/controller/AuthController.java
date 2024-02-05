@@ -53,7 +53,7 @@ public class AuthController {
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody RegisterDTO registerDTO) throws Exception {
+    public ResponseEntity<AuthResponse> registerUser(@RequestBody RegisterDTO registerDTO) throws Exception {
         if (userService.existsByUsername(registerDTO.username())) {
             throw new Exception("exists by Username");
         } else if (userService.existsByEmail(registerDTO.email())) {
@@ -62,6 +62,12 @@ public class AuthController {
         String encryptedPassword = new BCryptPasswordEncoder().encode(registerDTO.password());
         User newUser = new User(registerDTO, encryptedPassword);
         newUser = userService.saveUser(newUser);
-        return new ResponseEntity<>(newUser, HttpStatus.OK);
+
+        //User created, returning response with token
+
+        String token = tokenService.generateToken(newUser);
+        UserDTO userDTO = new UserDTO(newUser.getUsername(), newUser.getEmail(), newUser.getRole());
+        AuthResponse registerResponse = new AuthResponse(token, userDTO);
+        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
     }
 }

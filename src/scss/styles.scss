@@ -205,7 +205,16 @@ body {
 .nav-link:visited {
     color: #51FF00;
 }
+.dropdown-link {
+    color: black;
+}
 
+#navbarMenu .nav-link {
+    color: black;
+}
+#navbarMenu .nav-link:hover {
+    color: #51FF00;
+}
 // Content Styles
 
 // Allgemeine Stillen - General Styles
@@ -369,6 +378,7 @@ a:hover {
     outline: none;
     box-shadow: 0.25em 0.25em 0px rgba(153, 255, 51, 1);
 }
+
 
 
 .form-checkbox-label {

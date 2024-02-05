@@ -1,11 +1,15 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
-import { User } from "../types/User";
-import { getUser } from "../service/getUser";
+import { getUser } from "../service/userUtils";
 
 export type TAuthState = {
     headers: object | null,
     isAuth: boolean,
-    loggedUser: User | null
+    loggedUser: {
+        bio: string | null,
+        email: string,
+        image: string | null,
+        username: string
+    };
 }
 
 export  type TAuthContext = {
@@ -22,7 +26,12 @@ export function useAuth() {
 var authState: TAuthState = {
     headers: null,
     isAuth: false,
-    loggedUser: null
+    loggedUser: {
+        bio: null,
+        email: "",
+        image: null,
+        username: "",
+    }
 };
 
 const loggedIn : string | null = localStorage.getItem("loggedUser");
