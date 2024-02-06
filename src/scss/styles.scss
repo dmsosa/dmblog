@@ -345,7 +345,7 @@ a:hover {
     padding: 2em;
     padding-bottom: 1em;
 }
-.cont-label-input {
+.form-fieldset {
     margin: auto;
     justify-content: center;
     text-align: center;
@@ -359,7 +359,8 @@ a:hover {
 }
 .form-label {
     background-color: #000D1C;
-    width: 5em;
+    width: fit-content;
+    padding: 0 0.5em;
     margin-left: 1em;
     margin-bottom: -0.5em;
     z-index: 3;

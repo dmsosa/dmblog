@@ -13,6 +13,9 @@ public interface ArticleService {
 
     Article createArticle(ArticleDTO articleDTO) throws ArticleAlreadyExistsException;
     List<Article> getArticles() throws ArticleDoNotExistsException;
+    List<Article> getArticlesByFavorite();
+    List<Article> getArticlesByUser();
+    List<Article> getArticlesByTag();
     Article getArticleById(Long id) throws ArticleDoNotExistsException;
     Article getArticleByTitle(String title) throws ArticleDoNotExistsException;
     Article updateArticle(Long articleId, ArticleDTO newArticleDTO);

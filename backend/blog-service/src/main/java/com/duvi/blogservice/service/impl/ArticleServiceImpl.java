@@ -1,10 +1,13 @@
 package com.duvi.blogservice.service.impl;
 
 import com.duvi.blogservice.model.Article;
+import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.ArticleDTO;
 import com.duvi.blogservice.model.exceptions.ArticleAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
+import com.duvi.blogservice.model.exceptions.UserNotFoundException;
 import com.duvi.blogservice.repository.ArticleRepository;
+import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.service.ArticleService;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,7 @@ import java.util.Optional;
 public class ArticleServiceImpl implements ArticleService {
 
     private ArticleRepository articleRepository;
-
+    private UserRepository userRepository;
     public ArticleServiceImpl(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }
@@ -31,6 +34,32 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> getArticles() throws ArticleDoNotExistsException {
+        List<Article> articleList = articleRepository.findAll();
+        if (articleList.isEmpty()) {
+            throw new ArticleDoNotExistsException("No articles found!");
+        }
+        return  articleList;
+    }
+    @Override
+    public List<Article> getArticlesByFavorite() {
+        List<Article> articleList = articleRepository.findAll();
+        if (articleList.isEmpty()) {
+            throw new ArticleDoNotExistsException("No articles found!");
+        }
+        return  articleList;
+    }
+    @Override
+    public List<Article> getArticlesByUser(String username) throws UserNotFoundException {
+        List<Article> articleList = articleRepository.findAll();
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty() ) {
+            throw new UserNotFoundException("User with username: %s does not exist!".formatted(username));
+        }
+
+        return  articleList;
+    }
+    @Override
+    public List<Article> getArticlesByTag() throws ArticleDoNotExistsException {
         List<Article> articleList = articleRepository.findAll();
         if (articleList.isEmpty()) {
             throw new ArticleDoNotExistsException("No articles found!");

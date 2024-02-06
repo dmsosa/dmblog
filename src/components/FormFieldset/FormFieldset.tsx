@@ -2,36 +2,40 @@ import { ReactNode } from "react";
 
 function FormFieldset(
     {
-        autoFocus,
+        autoFocus=false,
         children,
         changeHandler,
         minLength,
         name,
-        normal,
+        title,
+        addClass="",
         placeholder,
-        required,
+        required=false,
         type,
         value,
     }
     : {
-        autoFocus: boolean,
+        autoFocus?: boolean,
         children?: ReactNode | ReactNode[] | null,
         changeHandler: (e:React.ChangeEvent<HTMLInputElement>) => void,
-        minLength: number | undefined,
+        minLength?: number | undefined,
         name: string,
-        normal: boolean,
+        title: string,
+        addClass?: string,
         placeholder: string | undefined,
-        required: boolean,
+        required?: boolean,
         type: string,
         value: string,
     }
 ) {
     return(
         <fieldset
-            className="form-group"
+            className="form-fieldset"
         >
+            <label htmlFor={name} className="form-label">{title}</label>
             <input
-                className={`form-control ${normal? "" : "form-control-lg"}`}
+                id={name}
+                className={`form-input ${addClass.length>1? addClass : ""}`}
                 onChange={changeHandler}
                 minLength={minLength}
                 placeholder={placeholder}

@@ -2,12 +2,13 @@ package com.duvi.authservice.controller;
 
 import com.duvi.authservice.config.TokenService;
 import com.duvi.authservice.model.*;
-import com.duvi.authservice.repository.UserRepository;
+import com.duvi.authservice.model.dto.LoginDTO;
+import com.duvi.authservice.model.dto.RegisterDTO;
+import com.duvi.authservice.model.dto.UserDTO;
 import com.duvi.authservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +24,20 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    @Autowired
-    AuthenticationManager authenticationManager;
-    @Autowired
-    TokenService tokenService;
 
-    @Autowired
-    UserService userService;
+    private AuthenticationManager authenticationManager;
+
+    private TokenService tokenService;
+
+    private UserService userService;
+
+    public AuthController(AuthenticationManager manager,
+                          TokenService tokenService,
+                          UserService userService) {
+        this.authenticationManager = manager;
+        this.tokenService = tokenService;
+        this.userService = userService;
+    }
 
 
     @GetMapping("/login")

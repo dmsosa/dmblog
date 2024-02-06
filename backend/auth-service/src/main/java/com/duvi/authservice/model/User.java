@@ -1,5 +1,6 @@
 package com.duvi.authservice.model;
 
+import com.duvi.authservice.model.dto.RegisterDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

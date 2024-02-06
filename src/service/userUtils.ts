@@ -1,22 +1,15 @@
 import axios, { AxiosError } from "axios"
 import { TAuthState } from "../context/AuthContext";
+import { ApiError, errorHandler } from "./handleError";
 
 let instance = axios.create({
-    baseURL: "api/",
+    baseURL:"/api",
     timeout: 1000,
     headers: {"duvi":"duvivalue"}
 })
 
 
-//Global error handler
-export function errorHandler(error: any) {
-    if (!error.response) {return console.log('Fehler', error)};
-    const { data, status } = error.response;
-    if ([401, 403, 404, 422, 500].includes(status)) {
-        console.log(error.response, data.errors.body[0])
-        throw data.errors.body[0];
-    }
-}
+
 
 
 type TUserData = {
@@ -39,7 +32,7 @@ export async function signUpUser( userData: TUserData, asAdmin:boolean=false): P
         const { data } = await instance.request({
             data: signUpData,
             method: "POST",
-            url:"/auth/register"
+            url:"auth/register"
         })
         const { token, loggedUser } = data;
         const headers = {Authorization: `Bearer ${token}`};
@@ -51,7 +44,7 @@ export async function signUpUser( userData: TUserData, asAdmin:boolean=false): P
 
     } catch (error: any) {
         errorHandler(error);
-        throw(error)
+        throw(error);
     }
     
 }
@@ -59,9 +52,9 @@ export async function signUpUser( userData: TUserData, asAdmin:boolean=false): P
 export async function getUser({ headers } : { headers: object }) {
 
     try {
-        const { data } = await instance.request({
+        const { data } = await axios.request({
             method: "GET",
-            url: "/auth/login", 
+            url: "auth/login", 
             headers
         });
         return data.loggedUser;
@@ -85,20 +78,25 @@ export function logoutUser() {
     }
 }
 
-export async function loginUser({ login, password } : { login: string, password: string }) {
+export async function loginUser({ login, password } : { login: string, password: string }): Promise<TAuthState>  {
 
     try {
         const { data } = await instance.request({
             data: {login: login, password: password},
             method: "POST",
-            url: "/auth/login"
+            url: "auth/login"
         });
-
+        
         const headers = { "Authorization" : "Bearer "+data.token};
         const loggedIn = { headers: headers, isAuth: true, loggedUser: data.loggedUser }
+
         localStorage.setItem("loggedUser", JSON.stringify(loggedIn));
         return data.loggedUser;
-    } catch (error) {
-        console.log("CORS")
+    } catch (error: any) {
+        errorHandler(error);
+        throw(error);
     }
+
 }
+
+

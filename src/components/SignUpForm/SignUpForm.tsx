@@ -1,11 +1,11 @@
 import { FormEvent, useState } from "react";
 import FormFieldset from "../FormFieldset";
 import { useNavigate } from "react-router-dom";
-import { errorHandler, signUpUser } from "../../service/userUtils";
+import { signUpUser } from "../../service/userUtils";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 
 
-function SignUpForm() {
+function SignUpForm( {onError} : {onError: (error: Error) => void} ) {
 
     const { setAuthState } = useAuth() as TAuthContext;
     const navigate = useNavigate();
@@ -34,7 +34,7 @@ function SignUpForm() {
             }
         })
         .catch((error) => {
-            errorHandler(error);
+            onError(error);
         }) 
     }
 
@@ -46,8 +46,8 @@ function SignUpForm() {
     return (
         <form onSubmit={handleSubmit}>
             <FormFieldset
-                normal={true}
                 name="username"
+                title="username"
                 value={username}
                 required={true}
                 type="text"
@@ -57,29 +57,27 @@ function SignUpForm() {
                 minLength={5}
             ></FormFieldset>
             <FormFieldset
-                normal={true}
                 name="email"
+                title="email"
                 value={email}
                 required={true}
                 type="email"
                 placeholder={"An original email"}
-                autoFocus={true}
                 changeHandler={handleInput}
                 minLength={5}
             ></FormFieldset>
             <FormFieldset
-                normal={true}
                 name="password"
+                title="password"
                 value={password}
                 required={true}
                 type="password"
                 placeholder={"An unguessable password"}
-                autoFocus={true}
                 changeHandler={handleInput}
                 minLength={7}
             ></FormFieldset>
-            <button>Sign up</button>
-            <button>Come back</button>
+            <button type="submit" className="btn btn-primary form-btn" >Sign up</button>
+            <button type="submit" className="btn btn-danger form-btn">Come back</button>
         </form>
     )
 }

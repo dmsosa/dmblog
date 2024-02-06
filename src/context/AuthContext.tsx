@@ -1,5 +1,7 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { getUser } from "../service/userUtils";
+import { ApiError, errorHandler } from "../service/handleError";
+import { AxiosError } from "axios";
 
 export type TAuthState = {
     headers: object | null,
@@ -48,7 +50,7 @@ function AuthProvider({ children }: { children : ReactNode[] | ReactNode }) {
             getUser({ headers })
             .then((loggedUser) => 
                 setAuthState((prev) => ({ ...prev, loggedUser }))
-            ); 
+            ).catch((e: AxiosError) => errorHandler(e)); 
         }, [setAuthState])
     return (
         <AuthContext.Provider value={{authState, setAuthState}}>

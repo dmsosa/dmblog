@@ -10,7 +10,7 @@ spring:
     url: jdbc:h2:file:./blog-service/src/main/resources/db/h2/data
     username: sa
     password: password
-    driver-class-name: org.h2.Driver
+    driverClassName: org.h2.Driver
   h2:
     console:
       enabled: true
@@ -21,7 +21,7 @@ logging:
     org.springframework.security: TRACE
 
 ---
-
+datasource: postgres
 spring:
   config:
     activate:
@@ -32,4 +32,6 @@ spring:
     username: ${PG_USER}
     password: ${PG_PASSWORD}
     driverClassName: org.postgresql.Driver
-datasource: postgres
+  h2:
+    console:
+      enabled: false
