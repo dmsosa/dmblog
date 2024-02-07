@@ -1,6 +1,11 @@
 package com.duvi.blogservice.model;
 
+import com.duvi.blogservice.model.dto.UserDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -19,21 +25,37 @@ import java.util.List;
 @AllArgsConstructor
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String username;
+    @NotNull(message = "{email required}")
+    @Pattern(regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$",
+            message = "{invalid.email}")
     private String email;
     private String password;
     private String bio;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE,
+                    CascadeType.DETACH,
+                    CascadeType.REFRESH },
+            mappedBy = "favUsers"
+    )
+    @JsonIgnore
+    private Set<Article> favArticles;
+
     //User methods
-    public User(String username, String email, String password, UserRole role) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
+
+    public User(UserDTO userDTO) {
+        this.username = userDTO.username();
+        this.email = userDTO.email();
+        this.password = userDTO.password();
+        this.role = userDTO.role();
     }
 
     public void updateWithUser(User updatedUser) {

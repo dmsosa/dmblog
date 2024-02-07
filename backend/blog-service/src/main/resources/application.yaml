@@ -14,10 +14,15 @@ spring:
   h2:
     console:
       enabled: true
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
 server:
   port: 8082
 logging:
   level:
+    org.hibernate.sql: TRACE
     org.springframework.security: TRACE
 
 ---
