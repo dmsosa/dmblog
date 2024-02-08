@@ -1,17 +1,12 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
-import { getUser } from "../service/userUtils";
-import { ApiError, errorHandler } from "../service/handleError";
+import { TUser, getUser } from "../service/userService";
+import { errorHandler } from "../service/handleError";
 import { AxiosError } from "axios";
 
 export type TAuthState = {
     headers: object | null,
     isAuth: boolean,
-    loggedUser: {
-        bio: string | null,
-        email: string,
-        image: string | null,
-        username: string
-    };
+    loggedUser: TUser;
 }
 
 export  type TAuthContext = {
@@ -29,10 +24,14 @@ var authState: TAuthState = {
     headers: null,
     isAuth: false,
     loggedUser: {
-        bio: null,
-        email: "",
-        image: null,
+        id: null,
         username: "",
+        email: "",
+        password: null,
+        image: null,
+        bio: null,
+        followersCount: null, 
+        following: null
     }
 };
 

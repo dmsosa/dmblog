@@ -49,6 +49,7 @@ public class User implements UserDetails {
     @JsonIgnore
     private Set<Article> favArticles;
 
+
     //User methods
 
     public User(UserDTO userDTO) {

@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react";
 import FormFieldset from "../FormFieldset";
 import { useNavigate } from "react-router-dom";
-import { signUpUser } from "../../service/userUtils";
+import { signUpUser } from "../../service/userService";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 
 

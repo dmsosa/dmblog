@@ -1,0 +1,1 @@
+ALTER TABLE IF EXISTS articles ADD COLUMN created_at DATE, ADD COLUMN updated_at DATE;

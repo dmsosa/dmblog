@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../../service/userUtils";
+import { loginUser } from "../../service/userService";
 import ColContent from "../ColContent";
 import ContainerRow from "../ContainerRow";
 import { TAuthContext, useAuth } from "../../context/AuthContext";

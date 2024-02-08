@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import BrandLogo from "../Logos/BrandLogo";
-import { logoutUser } from "../../service/userUtils";
+import { logoutUser } from "../../service/userService";
 
 function NavMenu() {
     const navigation = useNavigate();

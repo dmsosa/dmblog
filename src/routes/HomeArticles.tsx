@@ -1,11 +1,12 @@
 import ArticlePagination from "../components/ArticlePagination";
 import ArticlePreview from "../components/ArticlePreview";
 import { TFeedContext, useFeed } from "../context/FeedContext";
+import useArticle from "../hooks/useArticle";
 
 function HomeArticles() {
 
     const {tabName, tagName } = useFeed() as TFeedContext;
-    const { isLoading, articleCount, articles, setArticlesData } = useArticleList(
+    const { isLoading, articleCount, articles, setArticlesData } = useArticle(
         {location: tabName,
         tagName: tagName}
     );
