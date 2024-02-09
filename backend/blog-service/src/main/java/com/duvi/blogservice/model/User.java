@@ -1,5 +1,6 @@
 package com.duvi.blogservice.model;
 
+import com.duvi.blogservice.model.dto.RegisterDTO;
 import com.duvi.blogservice.model.dto.UserDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +22,7 @@ import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,6 +37,7 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private String bio;
+    private String image;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
@@ -48,24 +52,47 @@ public class User implements UserDetails {
     )
     @JsonIgnore
     private Set<Article> favArticles;
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE,
+                    CascadeType.DETACH,
+                    CascadeType.REFRESH
+            }
+    )
+    @JoinTable(
+            name = "followers",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "follower_id")
+    )
+    @JsonIgnore
+    private Set<User> followers;
+
 
 
     //User methods
 
-    public User(UserDTO userDTO) {
+    public User(RegisterDTO userDTO) {
         this.username = userDTO.username();
         this.email = userDTO.email();
         this.password = userDTO.password();
         this.role = userDTO.role();
     }
 
-    public void updateWithUser(User updatedUser) {
-        this.username = updatedUser.username;
-        this.email = updatedUser.email;
-        this.password = updatedUser.password;
-        this.role = updatedUser.role;
+    public void updateUser(String username, String email, String image, String bio) {
+        this.username = username;
+        this.email = email;
+        this.image = image;
+        this.bio = bio;
 
     }
+    public void updatePassword(String password) {
+        this.password = password;
+    };
+    public void updateRole(UserRole role) {
+        this.role = role;
+    };
 
 
     //UserDetails methods

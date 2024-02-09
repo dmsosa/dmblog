@@ -33,8 +33,9 @@ function ArticleMeta({ children, createdAt, author }: { children: ReactNode | Re
                 </Link> 
                 <span className="col article-date">{dateFormatter(createdAt)}</span>
             </div>
+            <div className="col article-fav">{children}</div>
         </ContainerRow>
-
+        
     )
 }
 

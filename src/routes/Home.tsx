@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import BannerContainer from "../components/BannerContainer";
 import { TAuthContext, useAuth } from "../context/AuthContext";
 import HomeArticles from "./HomeArticles";
+import FeedProvider from "../context/FeedContext";
 
 
 
@@ -22,7 +23,10 @@ function Home() {
             <a>
                 <span>Hello {loggedUser.username}</span>
             </a>
-            <HomeArticles/>
+            <FeedProvider>
+                <HomeArticles/>
+            </FeedProvider>
+            
 
 
         </section>

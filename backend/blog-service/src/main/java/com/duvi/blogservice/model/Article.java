@@ -44,8 +44,20 @@ public class Article {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     Set<User> favUsers;
-    @ManyToMany
-    Set<Tag> tags;
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE,
+                    CascadeType.DETACH,
+                    CascadeType.REFRESH }
+    )
+    @JoinTable(
+            name = "cats",
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_name")
+    )
+    private Set<Tag> tags;
 
     public Article(ArticleDTO articleDTO, User user) {
         this.author = user;

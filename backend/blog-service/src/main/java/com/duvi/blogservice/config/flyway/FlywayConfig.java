@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomiz
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.context.annotation.Profile;
 
 
 @Configuration
@@ -23,10 +23,14 @@ public class FlywayConfig {
                 .baselineOnMigrate(true);
     }
 
+    @Profile("dev")
     @Bean
-    FlywayMigrationStrategy strategy() {
-        return flyway -> flyway.migrate();
+    FlywayConfigurationCustomizer devCustomizer() {
+        return configuration -> configuration
+                .locations("classpath:dev/db/migration/%s".formatted(datasource))
+                .baselineOnMigrate(true);
     }
+
 
 
 }

@@ -1,6 +1,7 @@
 import axios, {  AxiosError } from 'axios';
 import { errorHandler } from './handleError';
 import { TArticle } from '../types/Article';
+import { TUser } from '../types/User';
 
 //Axios instance
 let instance = axios.create(
@@ -20,13 +21,19 @@ type TEndpoint = {
     [key: string]: string
 }
 //Get articles
-export async function getArticles({ location, tags, limit=3, offset=0, username, headers } : 
-    { location: string, tags: string[], limit?: number, offset?: number, username: string, headers: object }): Promise<TArticleData> {
-    const endpoint: TEndpoint = {
-        global: `?limit=${limit}&offset=${offset}`,
-        favs: `?limit=${limit}&offset=${offset}&favorited=${username}`,
+export async function getArticles({ location, tagName, limit=3, offset=0, username, headers } : 
+    { location: string, tagName: string, limit?: number, offset?: number, username?: string | null, headers: object | null }): Promise<TArticleData> {
+    
+        if (username === undefined && headers){
+            const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string) as TUser;
+            username = loggedUser.username;
+        }
+    
+        const endpoint: TEndpoint = {
+        global: `/?limit=${limit}&offset=${offset}`,
+        favs: `/?limit=${limit}&offset=${offset}&favorited=${username}`,
         feed: `/feed?limit=${limit}&offset=${offset}`,
-        tags: `?limit=${limit}&offset=${offset}&tags=${tags}`,
+        tags: `?limit=${limit}&offset=${offset}&tags=${tagName}`,
         author: `?limit=${limit}&offset=${offset}&author=${username}`
     }    
     //All articles
@@ -36,7 +43,10 @@ export async function getArticles({ location, tags, limit=3, offset=0, username,
     //Artikeln bei Tag
 
     try {
-        const { data } =  await instance.get(endpoint[location], {headers: headers})
+        if (!headers ) {
+            headers = {};
+        }
+        const { data } =  await instance.get(`/global?limit=${limit}&&offset=${offset}`, {headers: headers})
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);

@@ -2,7 +2,7 @@ import {  useState } from "react"
 import { toggleFavs } from "../../service/articleService"
 import { TAuthContext, useAuth } from "../../context/AuthContext"
 
-function FavButton({ slug, favorited, favCount, handleFav } : { slug: string, favorited: boolean, favCount: number, handleFav: (article: any) => void } ) {
+function FavButton({ slug, favorited=true, favCount=3, handleFav } : { slug: string, favorited: boolean, favCount: number, handleFav: (article: any) => void } ) {
 
     const { authState } = useAuth() as TAuthContext;
     const { headers } = authState;
@@ -26,7 +26,7 @@ function FavButton({ slug, favorited, favCount, handleFav } : { slug: string, fa
     return (
         <button className={`btn btn-fav ${buttonStyle}`} onClick={handleClick} disabled={loading}>
             <i>{innerText}</i>
-            <span>{`favorites ${favCount}`}</span>
+            <span>{` ${favCount}`}</span>
         </button>
     )
 }

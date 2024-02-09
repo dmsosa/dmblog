@@ -3,11 +3,11 @@ package com.duvi.blogservice.controller;
 import com.duvi.blogservice.model.Article;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.ArticleDTO;
+import com.duvi.blogservice.model.dto.ArticleResponseDTO;
 import com.duvi.blogservice.model.exceptions.ArticleAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
 import com.duvi.blogservice.model.exceptions.UserNotFoundException;
 import com.duvi.blogservice.service.ArticleService;
-import org.flywaydb.core.Flyway;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,14 +21,41 @@ import java.util.stream.Stream;
 @RequestMapping("/api/articles")
 public class ArticleController {
 
+//    //CRUD
+//    articles/global get, post
+//    articles/global?slug&id&title get, put, delete;
+//    //for tags
+//    articles/{id}/tags/ get all tags of an article, post a tag
+//    articles/{id}/tags/{tagName} put to edit tag, delete
+//    //for favs
+//    articles/favs?slug= get all favorited Users
+//    articles/favs?slug=&username=? post fav for user, delete fav for user
+//    articles/favs?username=? get favs from user
+//    //for author
+//    articles/author/{username} get all arts from author
+
+
+
+
     private ArticleService articleService;
 
     public ArticleController(ArticleService articleService) {
         this.articleService = articleService;
     }
-    @GetMapping("/")
-    public ResponseEntity<List<Article>> getAllArticles() throws ArticleDoNotExistsException {
-        return new ResponseEntity<>(articleService.getArticles(), HttpStatus.OK);
+    @GetMapping("/global")
+    public ResponseEntity<ArticleResponseDTO> getAllArticles(@RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws ArticleDoNotExistsException {
+        List<Article> articleList = articleService.getArticles();
+        Long articlesCount = (long) articleList.size();
+
+        if (limit != null && offset != null) {
+            Integer initOffset = offset*limit;
+            Integer endOffset = initOffset + limit;
+            List<Article> subList = articleList.subList(initOffset, endOffset);
+            ArticleResponseDTO articleResponse = new ArticleResponseDTO(subList, articlesCount);
+            return new ResponseEntity<>(articleResponse, HttpStatus.OK);
+        }
+        ArticleResponseDTO articleResponse = new ArticleResponseDTO(articleList, articlesCount);
+        return new ResponseEntity<>(articleResponse, HttpStatus.OK);
     }
     @PostMapping("/")
     public ResponseEntity<Article> createArticle(@RequestBody ArticleDTO articleDTO) throws ArticleAlreadyExistsException {
@@ -57,6 +84,10 @@ public class ArticleController {
         return new ResponseEntity<>(article, HttpStatus.OK);
     }
 
+    @GetMapping("/tags/{tagName}")
+    public  ResponseEntity<List<Article>> getArticlesByTag(@PathVariable String tagName) {
+        return new ResponseEntity<>(articleService.getArticlesByTag(tagName), HttpStatus.OK);
+    }
 
 
 

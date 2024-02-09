@@ -29,9 +29,11 @@ public interface ArticleService {
     Set<User> getFavsForArticle(Long articleId) throws ArticleDoNotExistsException;
     //Set a new favorite article for a user
     Article setFavsForUser(Long articleId, String username) throws ArticleDoNotExistsException, UserNotFoundException;
+
+    List<Article> getByAuthor(String username) throws UserNotFoundException;
     //Get all favorite articles of a given user
     List<Article> getFavsByUser(String username) throws UserNotFoundException;
-    List<Article> getArticlesByTag();
+    List<Article> getArticlesByTag(String tagName);
 
 
 }

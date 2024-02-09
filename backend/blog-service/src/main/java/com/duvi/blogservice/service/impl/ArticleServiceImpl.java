@@ -133,17 +133,27 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<Article> getByAuthor(String username) throws UserNotFoundException {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty() ) {
+            throw new UserNotFoundException("User with username: %s does not exist!".formatted(username));
+        }
+
+        return articleRepository.findArticleByAuthor(user.get());
+    }
+    @Override
     public List<Article> getFavsByUser(String username) throws UserNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty() ) {
             throw new UserNotFoundException("User with username: %s does not exist!".formatted(username));
         }
 
-        return articleRepository.findArticleByUserId(user.get().getId());
+        return articleRepository.findArticlesByFavUsersId(user.get().getId());
     }
+
     @Override
-    public List<Article> getArticlesByTag() {
-        List<Article> articleList = articleRepository.findAll();
+    public List<Article> getArticlesByTag(String tagName) {
+        List<Article> articleList = articleRepository.findArticlesByTagsName(tagName);
 
         return  articleList;
     }

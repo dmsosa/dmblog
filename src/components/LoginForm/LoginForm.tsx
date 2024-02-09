@@ -48,7 +48,7 @@ function LoginForm( {onError} : {onError: (error: Error) => void} ) {
                 <FormFieldset
                     name="password"
                     title="password"
-                    value={login}
+                    value={password}
                     placeholder="your hypersecret password"
                     changeHandler={handleChange}
                     type="password">

@@ -6,5 +6,5 @@ export type TUser = {
     image: string | null,
     bio: string | null,
     followersCount: number | null, 
-    following: number | null,
+    followingCount: number | null,
 }

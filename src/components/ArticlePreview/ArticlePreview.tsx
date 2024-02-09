@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import ArticleMeta from "../ArticleMeta";
 import ArticleTags from "../ArticleTags";
@@ -16,8 +15,8 @@ function ArticlePreview({ articles, isLoading, updateArticles } : { articles: TA
         
     }
     
-    return articles.length > 0 ? articles.map((article) => {
-        <div className="article-preview">
+    return articles.length > 0 ? articles.map((article) => 
+        <div className="article-preview" key={article.title}>
             <ArticleMeta createdAt={article.createdAt} author={article.author}>
                 <FavButton
                 slug={article.slug}
@@ -29,10 +28,9 @@ function ArticlePreview({ articles, isLoading, updateArticles } : { articles: TA
                 <h1>{article.title}</h1>
                 <p>{article.description}</p>
                 <span>read more...</span>
-            <ArticleTags tagList={article.tags}></ArticleTags>
             </Link>
         </div>
-    }) : isLoading? (<div className="article-preview"><h5 className="loading">Loading...</h5></div>) 
+    ) : isLoading? (<div className="article-preview"><h5 className="loading">Loading...</h5></div>) 
     : (<div className="article-preview"><h5>No articles available</h5></div>)
 };
 

@@ -4,5 +4,6 @@ CREATE TABLE IF NOT EXISTS users (
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     bio VARCHAR(5000),
+    image TEXT,
     role TEXT NOT NULL
 );
