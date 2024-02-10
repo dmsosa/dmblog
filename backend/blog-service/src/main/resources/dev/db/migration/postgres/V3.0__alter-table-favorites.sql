@@ -1,0 +1,1 @@
+ALTER TABLE IF EXISTS favorites ADD COLUMN marked_at DATE, ADD COLUMN unmarked_at DATE;

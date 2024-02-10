@@ -4,5 +4,5 @@ import com.duvi.blogservice.model.Article;
 
 import java.util.List;
 
-public record ArticleResponseDTO(List<Article> articles, Long articlesCount) {
+public record ArticlesResponseDTO(List<ArticleDTO> articles, Long articlesCount) {
 }

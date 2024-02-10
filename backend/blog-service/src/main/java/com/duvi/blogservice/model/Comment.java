@@ -1,13 +1,12 @@
 package com.duvi.blogservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -18,8 +17,15 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long articleId;
-    private Long userId;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "article_id")
+    private Article article;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
     private String body;
+    private LocalDateTime postedAt;
+    private LocalDateTime updatedAt;
 
 }

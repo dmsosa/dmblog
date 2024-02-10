@@ -1,7 +1,8 @@
 package com.duvi.blogservice.model;
 
 import com.duvi.blogservice.model.dto.RegisterDTO;
-import com.duvi.blogservice.model.dto.UserDTO;
+import com.duvi.blogservice.model.relations.ArticleUser;
+import com.duvi.blogservice.model.relations.UserFollower;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -41,17 +42,22 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @ManyToMany(
+    //Relations
+
+        //FavArticles
+    @OneToMany(
             fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE,
                     CascadeType.DETACH,
                     CascadeType.REFRESH },
-            mappedBy = "favUsers"
+            mappedBy = "article"
     )
     @JsonIgnore
-    private Set<Article> favArticles;
+    private Set<ArticleUser> favArticles;
+
+        //Followers
     @OneToMany(
             fetch = FetchType.LAZY,
             cascade = {
@@ -59,16 +65,15 @@ public class User implements UserDetails {
                     CascadeType.MERGE,
                     CascadeType.DETACH,
                     CascadeType.REFRESH
-            }
-    )
-    @JoinTable(
-            name = "followers",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "follower_id")
+            },
+            mappedBy = "follower"
     )
     @JsonIgnore
-    private Set<User> followers;
+    private Set<UserFollower> followers;
 
+        //Comments
+    @OneToMany(mappedBy = "user")
+    private Set<Comment> comments;
 
 
     //User methods

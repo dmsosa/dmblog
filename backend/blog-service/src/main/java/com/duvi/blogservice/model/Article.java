@@ -2,6 +2,8 @@ package com.duvi.blogservice.model;
 
 
 import com.duvi.blogservice.model.dto.ArticleDTO;
+import com.duvi.blogservice.model.relations.ArticleTag;
+import com.duvi.blogservice.model.relations.ArticleUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Table(name = "articles")
@@ -28,36 +31,36 @@ public class Article {
     private String body;
     private String description;
     private String slug;
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
-    @ManyToMany(
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    //Relations
+        //Users
+    @OneToMany(
             fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE,
                     CascadeType.DETACH,
                     CascadeType.REFRESH }
+            , mappedBy = "user"
     )
-    @JoinTable(
-            name = "favorites",
-            joinColumns = @JoinColumn(name = "article_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    Set<User> favUsers;
-    @ManyToMany(
+    Set<ArticleUser> favUsers;
+
+        //Tags
+    @OneToMany(
             fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE,
                     CascadeType.DETACH,
                     CascadeType.REFRESH }
+            , mappedBy = "tag"
     )
-    @JoinTable(
-            name = "cats",
-            joinColumns = @JoinColumn(name = "article_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_name")
-    )
-    private Set<Tag> tags;
+    private Set<ArticleTag> tags;
+        //Comments
+    @OneToMany(mappedBy = "article")
+    private Set<Comment> comments;
 
     public Article(ArticleDTO articleDTO, User user) {
         this.author = user;
@@ -65,8 +68,8 @@ public class Article {
         this.description = articleDTO.description();
         this.title = articleDTO.title();
         this.slug = articleDTO.slug();
-        this.createdAt = LocalDate.now();
-        this.updatedAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public void update(Article newArticle) {
@@ -76,6 +79,6 @@ public class Article {
         this.body = newArticle.getBody();
         this.description = newArticle.getDescription();
         this.slug = newArticle.getSlug();
-        this.updatedAt = LocalDate.now();
+        this.updatedAt = LocalDateTime.now();
     }
 }

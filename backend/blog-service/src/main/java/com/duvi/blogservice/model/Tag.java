@@ -1,5 +1,7 @@
 package com.duvi.blogservice.model;
 
+import com.duvi.blogservice.model.relations.ArticleTag;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,14 +20,15 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToMany(
+    @OneToMany(
             fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE,
                     CascadeType.DETACH,
                     CascadeType.REFRESH },
-            mappedBy = "tags"
+            mappedBy = "article"
     )
-    Set<Article> articles;
+    @JsonIgnore
+    Set<ArticleTag> articles;
 }

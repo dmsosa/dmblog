@@ -1,72 +1,57 @@
 package com.duvi.blogservice.service.impl;
 
-import com.duvi.blogservice.model.Article;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.RegisterDTO;
 import com.duvi.blogservice.model.dto.UserDTO;
-import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
 import com.duvi.blogservice.model.exceptions.UserAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.UserNotFoundException;
+import com.duvi.blogservice.model.relations.UserFollower;
+import com.duvi.blogservice.model.relations.UserFollowerId;
 import com.duvi.blogservice.repository.UserRepository;
+import com.duvi.blogservice.repository.relations.UserFollowerRepository;
 import com.duvi.blogservice.service.UserService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+    private UserFollowerRepository followersRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserFollowerRepository followersRepository) {
+
         this.userRepository = userRepository;
+        this.followersRepository = followersRepository;
     }
 
+    //Create DTOS
     @Override
     public UserDTO createDTO(User user) {
+        User followingList = userRepository.findById(user.getId()).get();
         Integer followersCount = user.getFollowers().size();
-        Integer followingCount =
+        Integer followingCount = Math.toIntExact(followingList.getId());
+        return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), user.getBio(), user.getImage(), followersCount, followingCount);
     }
+
+    //Basic CRUD
+        //GET
     @Override
     public List<UserDTO> getAllUsers() {
         List<User> userList = userRepository.findAll();
-        List<UserDTO> userDTOS = userList.stream().map((user) -> {})
-
+        List<UserDTO> userDTOS = userList.stream().map(this::createDTO).toList();
+        return userDTOS;
     }
-
-    @Override
-    public UserDTO createUser(RegisterDTO userDTO) throws UserAlreadyExistsException {
-        if (userRepository.existsByUsername(userDTO.username())) {
-            throw new UserAlreadyExistsException("User with username %s already exists!".formatted(userDTO.username()));
-        }
-        User user = new User(userDTO);
-        return userRepository.save(user);
-    }
-
-    @Override
-    public UserDTO editUser(Long oldUserId, UserDTO userDTO) {
-        User oldUser = userRepository.findById(oldUserId).get();
-        oldUser.updateUser(userDTO.username(), userDTO.email(), userDTO.image(), userDTO.bio());
-        return userRepository.save(oldUser);
-    }
-
-    @Override
-    public void deleteUser(Long userId) throws UserNotFoundException {
-        if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException(userId);
-        }
-        userRepository.delete(userRepository.findById(userId).get());
-    }
-
     @Override
     public UserDTO findUserById(Long userId) throws UserNotFoundException {
         if (!userRepository.existsById(userId)) {
             throw new UserNotFoundException(userId);
         }
-        return userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).get();
+        return createDTO(user);
     }
 
     @Override
@@ -75,33 +60,111 @@ public class UserServiceImpl implements UserService {
         if (optUser.isEmpty()) {
             throw new UserNotFoundException("User with username '%s' do not exists!".formatted(username));
         }
-        return optUser.get();
+        return createDTO(optUser.get());
     }
 
     @Override
-    public UserDTO followUser(Long fromId, Long toId) throws UserNotFoundException {
+    public UserDTO findUserByEmail(String email) throws UserNotFoundException {
+        Optional<User> optUser = userRepository.findByEmail(email);
+        if (optUser.isEmpty()) {
+            throw new UserNotFoundException("User with email '%s' do not exists!".formatted(email));
+        }
+        return createDTO(optUser.get());
+    }
+
+    @Override
+    public UserDTO findUserByLogin(String login) throws UserNotFoundException {
+
+        if (!(userRepository.existsByUsername(login) || userRepository.existsByEmail(login))) {
+            throw new UserNotFoundException("User with login '%s' do not exists!".formatted(login));
+        }
+        Optional<User> optUser = userRepository.findByEmail(login);
+        if (optUser.isEmpty()) {
+            optUser = userRepository.findByUsername(login);
+        }
+        return createDTO(optUser.get());
+    }
+
+    @Override
+    public boolean existsByLogin(String login) {
+        return (userRepository.existsByUsername(login) || userRepository.existsByEmail(login));
+    }
+
+    //POST
+    @Override
+    public UserDTO createUser(RegisterDTO userDTO) throws UserAlreadyExistsException {
+        if (userRepository.existsByUsername(userDTO.username())) {
+            throw new UserAlreadyExistsException("User with username %s already exists!".formatted(userDTO.username()));
+        }
+        if (userRepository.existsByEmail(userDTO.email())) {
+            throw new UserAlreadyExistsException("User with email %s already exists!".formatted(userDTO.email()));
+        }
+
+        User user = new User(userDTO);
+        userRepository.save(user);
+        return createDTO(user);
+    }
+        //PUT
+    @Override
+    public UserDTO editUser(Long oldUserId, UserDTO userDTO) {
+        User oldUser = userRepository.findById(oldUserId).get();
+        oldUser.updateUser(userDTO.username(), userDTO.email(), userDTO.image(), userDTO.bio());
+        userRepository.save(oldUser);
+        return createDTO(oldUser);
+    }
+        //DELETE
+    @Override
+    public void deleteUser(Long userId) throws UserNotFoundException {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException(userId);
+        }
+        userRepository.delete(userRepository.findById(userId).get());
+    }
+
+    //Operations with Followers
+    @Override
+    public void followUser(Long fromId, Long toId) throws UserNotFoundException {
         if (!userRepository.existsById(toId)) {
             throw new UserNotFoundException(toId);
-        };
-        User userToFollow = userRepository.findById(toId).get();
-        User userFromFollow = userRepository.findById(fromId).get();
-        Set<User> followers = userToFollow.getFollowers();
-        if (followers.isEmpty()) {
-            Set<User> newFollowers = new HashSet<>();
-            newFollowers.add(userFromFollow);
-            userToFollow.setFollowers(newFollowers);
-        } else {
-            followers.add(userFromFollow);
         }
-        return
+        User userFrom = userRepository.findById(fromId).get();
+        User userTo = userRepository.findById(toId).get();
+        UserFollower newRelation = new UserFollower(userFrom, userTo);
+        followersRepository.save(newRelation);
     }
 
     @Override
-    public UserDTO unfollowUser(Long fromId, Long toId) throws UserNotFoundException {
-        return null;
+    public void unfollowUser(Long fromId, Long toId) throws UserNotFoundException {
+        if (!userRepository.existsById(toId)) {
+            throw new UserNotFoundException(toId);
+        }
+        UserFollowerId relationId = new UserFollowerId(fromId, toId);
+        Optional<UserFollower> relation = followersRepository.findById(relationId);
+        if (relation.isEmpty()) {
+            throw new RuntimeException("This relation follower: %s, following: %s does not exists".formatted(fromId, toId));
+        }
+        LocalDateTime followedAt = relation.get().getFollowedAt();
+
+        if (LocalDateTime.now().isBefore(followedAt.plusMinutes(5L))) {
+            return;
+        };
+        followersRepository.deleteById(relationId);
     }
 
-    public List<UserDTO> findUsersByFollowersId(Long id) {
-        return userRepository.findUserByFollowerId(id);
+    @Override
+    public List<UserDTO> findFollowersOf(Long userId) {
+        List<UserFollower> userFollowerList = followersRepository.findByUserId(userId);
+        List<User> followersList = userFollowerList.stream().map(UserFollower::getFollower).toList();
+        return followersList.stream().map(this::createDTO).toList();
     }
+
+    @Override
+    public List<UserDTO> findFollowingOf(Long userId) {
+        List<UserFollower> userFollowerList = followersRepository.findByFollowerId(userId);
+        List<User> followingList = userFollowerList.stream().map(UserFollower::getUser).toList();
+        return followingList.stream().map(this::createDTO).toList();
+    }
+
+
+
 }

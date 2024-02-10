@@ -13,10 +13,12 @@ import java.util.Set;
 public interface ArticleRepository extends JpaRepository<Article, Long> {
     public boolean existsByTitle(String title);
     public boolean existsById(Long id);
+    public boolean existsBySlug(String articleSlug);
     public Optional<Article> findByTitle(String title);
     public Optional<Article> findBySlug(String slug);
     public List<Article> findArticleByAuthor(User author);
     public List<Article> findArticlesByFavUsersId(Long userId);
 
     public List<Article> findArticlesByTagsName(String tagName);
+    void deleteBySlug(String articleSlug);
 }
