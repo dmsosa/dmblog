@@ -1,10 +1,10 @@
 package com.duvi.blogservice.service.impl;
 
 import com.duvi.blogservice.model.Article;
-import com.duvi.blogservice.model.Comment;
 import com.duvi.blogservice.model.Tag;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.ArticleDTO;
+import com.duvi.blogservice.model.dto.CommentDTO;
 import com.duvi.blogservice.model.dto.UserDTO;
 import com.duvi.blogservice.model.exceptions.ArticleAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
@@ -21,11 +21,14 @@ import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.repository.relations.ArticleTagRepository;
 import com.duvi.blogservice.repository.relations.ArticleUserRepository;
 import com.duvi.blogservice.service.ArticleService;
+import com.duvi.blogservice.service.CommentService;
 import com.duvi.blogservice.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -37,6 +40,7 @@ public class ArticleServiceImpl implements ArticleService {
     private TagRepository tagRepository;
     private CommentRepository commentRepository;
     private UserService userService;
+    private CommentService commentService;
 
     public ArticleServiceImpl(ArticleRepository articleRepository,
                               UserRepository userRepository,
@@ -44,13 +48,16 @@ public class ArticleServiceImpl implements ArticleService {
                               ArticleTagRepository catsRepository,
                               TagRepository tagRepository,
                               CommentRepository commentRepository,
-                              UserService userService) {
+                              UserService userService,
+                              CommentService commentService) {
         this.articleRepository = articleRepository;
         this.userRepository = userRepository;
         this.favsRepository = favsRepository;
         this.catsRepository = catsRepository;
         this.tagRepository = tagRepository;
         this.commentRepository = commentRepository;
+        this.userService = userService;
+        this.commentService = commentService;
     }
 
     //CreateDTO
@@ -256,15 +263,29 @@ public class ArticleServiceImpl implements ArticleService {
             throw new ArticleDoNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
         }
         Article article = articleRepository.findBySlug(slug).get();
-        Tag tag = tagRepository.findByName(tagName).get();
-        ArticleTagId relationId = new ArticleTagId(article.getId(), tagName);
-        Optional<ArticleTag> relation = catsRepository.findById(relationId);
-        if (relation.isPresent()) {
-            relation.get().setTag(tag);
-        } else {
-            ArticleTag newRelation = new ArticleTag(article, tag);
+
+        Optional<Tag> tag = tagRepository.findByName(tagName);
+        if (tag.isPresent()) {
+            ArticleTagId relationId = new ArticleTagId(article.getId(), tagName);
+            Optional<ArticleTag> relation = catsRepository.findById(relationId);
+            //tag exists but is not related to the article yet
+            if (relation.isEmpty()) {
+                ArticleTag newRelation = new ArticleTag(article, tag.get());
+                catsRepository.save(newRelation);
+            }
+        }
+        if (tag.isEmpty()) {
+            //If tag does not exist, neither does the relation so we create a newTag and a new relation
+            Tag newTag = new Tag(tagName);
+            Set<ArticleTag> relations = new HashSet<>();
+            ArticleTag newRelation = new ArticleTag(article, newTag);
+            relations.add(newRelation);
+            newTag.setArticles(relations);
+            tagRepository.save(newTag);
             catsRepository.save(newRelation);
         }
+
+
     }
 
     @Override
@@ -283,12 +304,12 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     @Override
-    public List<Comment> getCommentsOf(String slug) throws ArticleDoNotExistsException {
+    public List<CommentDTO> getCommentsOf(String slug) throws ArticleDoNotExistsException {
         if (!articleRepository.existsBySlug(slug)) {
             throw new ArticleDoNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
         }
         Article article = articleRepository.findBySlug(slug).get();
-        return commentRepository.findByArticleId(article.getId());
+        return commentRepository.findByArticleId(article.getId()).stream().map(comment -> commentService.createDTO(comment)).toList();
     }
 
 

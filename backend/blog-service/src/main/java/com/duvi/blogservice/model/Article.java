@@ -4,6 +4,7 @@ package com.duvi.blogservice.model;
 import com.duvi.blogservice.model.dto.ArticleDTO;
 import com.duvi.blogservice.model.relations.ArticleTag;
 import com.duvi.blogservice.model.relations.ArticleUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,7 +44,7 @@ public class Article {
                     CascadeType.MERGE,
                     CascadeType.DETACH,
                     CascadeType.REFRESH }
-            , mappedBy = "user"
+            , mappedBy = "article"
     )
     Set<ArticleUser> favUsers;
 
@@ -55,7 +56,7 @@ public class Article {
                     CascadeType.MERGE,
                     CascadeType.DETACH,
                     CascadeType.REFRESH }
-            , mappedBy = "tag"
+            , mappedBy = "article"
     )
     private Set<ArticleTag> tags;
         //Comments

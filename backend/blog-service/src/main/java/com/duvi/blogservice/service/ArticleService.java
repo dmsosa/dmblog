@@ -1,10 +1,9 @@
 package com.duvi.blogservice.service;
 
 import com.duvi.blogservice.model.Article;
-import com.duvi.blogservice.model.Comment;
 import com.duvi.blogservice.model.Tag;
-import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.ArticleDTO;
+import com.duvi.blogservice.model.dto.CommentDTO;
 import com.duvi.blogservice.model.dto.UserDTO;
 import com.duvi.blogservice.model.exceptions.ArticleAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
@@ -55,7 +54,7 @@ public interface ArticleService {
     void removeTag(String slug, String tagName) throws ArticleDoNotExistsException;
 
     //Operations related with Comments
-    List<Comment> getCommentsOf(String slug) throws ArticleDoNotExistsException;
+    List<CommentDTO> getCommentsOf(String slug) throws ArticleDoNotExistsException;
 
 
 }

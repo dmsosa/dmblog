@@ -11,14 +11,13 @@ import lombok.Setter;
 import java.util.Set;
 
 @Entity
+@Table(name = "tags")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Tag {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String name;
     @OneToMany(
             fetch = FetchType.LAZY,
@@ -27,8 +26,13 @@ public class Tag {
                     CascadeType.MERGE,
                     CascadeType.DETACH,
                     CascadeType.REFRESH },
-            mappedBy = "article"
+            mappedBy = "tag"
     )
     @JsonIgnore
     Set<ArticleTag> articles;
+
+    public Tag(String tagName) {
+        this.name = tagName;
+        this.articles = null;
+    }
 }

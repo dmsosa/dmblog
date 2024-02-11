@@ -1,1 +1,0 @@
-ALTER TABLE IF EXISTS followers ADD COLUMN followed_at DATE, ADD COLUMN unfollowed_at DATE;

@@ -6,6 +6,7 @@ import com.duvi.blogservice.model.Tag;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.ArticleDTO;
 import com.duvi.blogservice.model.dto.ArticlesResponseDTO;
+import com.duvi.blogservice.model.dto.CommentDTO;
 import com.duvi.blogservice.model.dto.UserDTO;
 import com.duvi.blogservice.model.exceptions.ArticleAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
@@ -124,8 +125,8 @@ public class ArticleController {
     }
 
     @GetMapping("/comments")
-    public ResponseEntity<List<Comment>> getCommentsOf(@RequestParam(required = true) String slug) throws ArticleDoNotExistsException {
-        List<Comment> comments = articleService.getCommentsOf(slug);
+    public ResponseEntity<List<CommentDTO>> getCommentsOf(@RequestParam(required = true) String slug) throws ArticleDoNotExistsException {
+        List<CommentDTO> comments = articleService.getCommentsOf(slug);
         return new ResponseEntity<>(comments, HttpStatus.OK);
 
     }

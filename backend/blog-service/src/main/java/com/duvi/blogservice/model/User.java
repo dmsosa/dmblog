@@ -52,7 +52,7 @@ public class User implements UserDetails {
                     CascadeType.MERGE,
                     CascadeType.DETACH,
                     CascadeType.REFRESH },
-            mappedBy = "article"
+            mappedBy = "user"
     )
     @JsonIgnore
     private Set<ArticleUser> favArticles;

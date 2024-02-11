@@ -17,8 +17,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     public Optional<Article> findByTitle(String title);
     public Optional<Article> findBySlug(String slug);
     public List<Article> findArticleByAuthor(User author);
-    public List<Article> findArticlesByFavUsersId(Long userId);
 
-    public List<Article> findArticlesByTagsName(String tagName);
     void deleteBySlug(String articleSlug);
 }

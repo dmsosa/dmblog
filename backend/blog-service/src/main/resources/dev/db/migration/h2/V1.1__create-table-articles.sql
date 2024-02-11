@@ -4,5 +4,7 @@ CREATE TABLE IF NOT EXISTS articles (
     body TEXT NOT NULL,
     description VARCHAR(2000),
     title VARCHAR(50) NOT NULL UNIQUE,
-    slug TEXT
+    slug TEXT,
+    created_at DATE,
+    updated_at DATE
 );
