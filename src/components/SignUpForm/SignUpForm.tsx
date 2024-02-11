@@ -7,7 +7,7 @@ import { TAuthContext, useAuth } from "../../context/AuthContext";
 
 function SignUpForm( {onError} : {onError: (error: Error) => void} ) {
 
-    const { setAuthState } = useAuth() as TAuthContext;
+    const { authState, setAuthState } = useAuth() as TAuthContext;
     const navigate = useNavigate();
 
     //formState
@@ -26,12 +26,10 @@ function SignUpForm( {onError} : {onError: (error: Error) => void} ) {
 
         const userData = {username: username, email: email, password: password};
         signUpUser(userData)
-        .then((loggedUser) => {
-            if (setAuthState) {
-                setAuthState(loggedUser);
-                navigate("/");
-
-            }
+        .then((loggedState) => {
+            console.log(loggedState);
+            setAuthState(loggedState);
+            console.log(authState.loggedUser.username, "logged");
         })
         .catch((error) => {
             onError(error);
@@ -54,7 +52,7 @@ function SignUpForm( {onError} : {onError: (error: Error) => void} ) {
                 placeholder={"A cool username"}
                 autoFocus={true}
                 changeHandler={handleInput}
-                minLength={5}
+                minLength={3}
             ></FormFieldset>
             <FormFieldset
                 name="email"

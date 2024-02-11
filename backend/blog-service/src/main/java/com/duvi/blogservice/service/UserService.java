@@ -13,6 +13,10 @@ import java.util.List;
 @Service
 public interface UserService {
 
+    //Booleans
+    boolean existsByLogin(String login);
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
 
     //Create DTOS
     UserDTO createDTO(User user);
@@ -25,7 +29,6 @@ public interface UserService {
     UserDTO findUserByEmail(String email) throws UserNotFoundException;
     //Login look for Username and Email at once
     UserDTO findUserByLogin(String login) throws UserNotFoundException;
-    boolean existsByLogin(String login);
     UserDTO editUser(Long oldUserId, UserDTO userDTO);
     void deleteUser(Long userId) throws UserNotFoundException;
 

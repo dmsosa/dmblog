@@ -10,6 +10,7 @@ import com.duvi.blogservice.model.relations.UserFollowerId;
 import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.repository.relations.UserFollowerRepository;
 import com.duvi.blogservice.service.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,9 +32,9 @@ public class UserServiceImpl implements UserService {
     //Create DTOS
     @Override
     public UserDTO createDTO(User user) {
-        User followingList = userRepository.findById(user.getId()).get();
+        List<UserDTO> followingList = this.findFollowingOf(user.getId());
         Integer followersCount = user.getFollowers().size();
-        Integer followingCount = Math.toIntExact(followingList.getId());
+        Integer followingCount = followingList.size();
         return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), user.getBio(), user.getImage(), followersCount, followingCount);
     }
 
@@ -90,6 +91,16 @@ public class UserServiceImpl implements UserService {
         return (userRepository.existsByUsername(login) || userRepository.existsByEmail(login));
     }
 
+    @Override
+    public boolean existsByUsername(String username) {
+        return (userRepository.existsByUsername(username));
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return (userRepository.existsByEmail(email));
+    }
+
     //POST
     @Override
     public UserDTO createUser(RegisterDTO userDTO) throws UserAlreadyExistsException {
@@ -100,9 +111,11 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistsException("User with email %s already exists!".formatted(userDTO.email()));
         }
 
-        User user = new User(userDTO);
-        userRepository.save(user);
-        return createDTO(user);
+        String encryptedPassword = new BCryptPasswordEncoder().encode(userDTO.password());
+        User createdUser = new User(userDTO, encryptedPassword);
+
+        userRepository.save(createdUser);
+        return createDTO(createdUser);
     }
         //PUT
     @Override

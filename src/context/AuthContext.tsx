@@ -1,7 +1,8 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
-import { TUser, getUser } from "../service/userService";
+import { getUser } from "../service/userService";
 import { errorHandler } from "../service/handleError";
 import { AxiosError } from "axios";
+import { TUser } from "../types/User";
 
 export type TAuthState = {
     headers: object | null,
@@ -11,7 +12,7 @@ export type TAuthState = {
 
 export  type TAuthContext = {
     authState: TAuthState,
-    setAuthState: React.Dispatch<React.SetStateAction<TAuthState>> | null
+    setAuthState: React.Dispatch<React.SetStateAction<TAuthState>>
 };
 
 const AuthContext = createContext<TAuthContext | null>(null);
@@ -31,7 +32,7 @@ var authState: TAuthState = {
         image: null,
         bio: null,
         followersCount: null, 
-        following: null
+        followingCount: null
     }
 };
 

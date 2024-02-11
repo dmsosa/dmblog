@@ -1,6 +1,6 @@
 import ArticlePagination from "../components/ArticlePagination";
 import ArticlePreview from "../components/ArticlePreview";
-import { TAuthContext, useAuth } from "../context/AuthContext";
+import {  useAuth } from "../context/AuthContext";
 import { TFeedContext, useFeed } from "../context/FeedContext";
 import useArticle from "../hooks/useArticle";
 

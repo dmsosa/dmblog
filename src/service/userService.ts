@@ -1,11 +1,12 @@
 import axios from "axios";
 import { TAuthState } from "../context/AuthContext";
 import {  errorHandler } from "./handleError";
+import { TUser } from "../types/User";
 
 
 //Axios instance
 let instance = axios.create({
-    baseURL:"/api/auth",
+    baseURL:"/api/users",
     timeout: 1000,
     headers: {"duvi":"duvivalue"}
 })
@@ -36,11 +37,11 @@ export async function signUpUser( userData: TUserData, asAdmin:boolean=false): P
             method: "POST",
             url:"/register"
         })
-        const { token, loggedUser } = data;
+        const { token, loggedUser } : { token: string, loggedUser: TUser }= data;
         const headers = {Authorization: `Bearer ${token}`};
-        const loggedIn = { headers, isAuth: true, loggedUser: loggedUser };
+        const loggedIn = { headers: headers, isAuth: true, loggedUser: loggedUser };
 
-        localStorage.setItem("loggedUser", JSON.stringify(loggedIn));
+        localStorage.setItem("loggedUser", JSON.stringify(loggedUser));
 
         return loggedIn;
 

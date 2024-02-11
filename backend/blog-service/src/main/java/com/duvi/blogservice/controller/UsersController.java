@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,9 +66,11 @@ public class UsersController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDTO> registerUser(@RequestBody RegisterDTO registerDTO) throws UserAlreadyExistsException {
+        //User service will check if username and email are available, and
+        // encrypt the password before storing the new user into the database
         UserDTO createdUser = userService.createUser(registerDTO);
-        var usernamePassword = new UsernamePasswordAuthenticationToken(createdUser.username(), createdUser.password());
-        Authentication auth = authenticationManager.authenticate(usernamePassword);
+        var authToken = new UsernamePasswordAuthenticationToken(createdUser.username(), registerDTO.password());
+        Authentication auth = authenticationManager.authenticate(authToken);
         String token = tokenService.generateToken((User) auth.getPrincipal());
         UserDTO userDTO = userService.createDTO((User) auth.getPrincipal());
         AuthResponseDTO responseDTO = new AuthResponseDTO(token, userDTO);

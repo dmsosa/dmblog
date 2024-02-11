@@ -16,10 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -78,11 +75,16 @@ public class User implements UserDetails {
 
     //User methods
 
-    public User(RegisterDTO userDTO) {
+    public User(RegisterDTO userDTO, String encryptedPassword) {
         this.username = userDTO.username();
         this.email = userDTO.email();
-        this.password = userDTO.password();
+        this.password = encryptedPassword;
         this.role = userDTO.role();
+        this.bio = null;
+        this.image = null;
+        this.favArticles = new HashSet<>();
+        this.followers = new HashSet<>();
+        this.comments = new HashSet<>();
     }
 
     public void updateUser(String username, String email, String image, String bio) {
