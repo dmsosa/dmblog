@@ -8,7 +8,7 @@ export type TArticle = {
     body: string,
     slug: string,
     tags: string[],
-    favorited: boolean,
+    isFav: boolean,
     favoritesCount: number,
     createdAt: Date,
     updatedAt: Date

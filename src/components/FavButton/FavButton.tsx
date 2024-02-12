@@ -1,24 +1,30 @@
-import {  useState } from "react"
+import {  useEffect, useState } from "react"
 import { toggleFavs } from "../../service/articleService"
 import { TAuthContext, useAuth } from "../../context/AuthContext"
 
-function FavButton({ slug, favorited=true, favCount=3, handleFav } : { slug: string, favorited: boolean, favCount: number, handleFav: (article: any) => void } ) {
+function FavButton({ headers, username, slug, favCount, isFav, handleFav } : { 
+    headers: object | null, 
+    username: string | null, 
+    slug: string, 
+    favCount: number, 
+    isFav: boolean,
+    handleFav: (article: any) => void } ) {
 
-    const { authState } = useAuth() as TAuthContext;
-    const { headers } = authState;
+
     
     const [loading, setLoading] = useState(false);
-    const buttonStyle = favorited? "active":"";
-    const innerText = favorited? "Favorite":"";
-
+        
+    
+    const buttonStyle = isFav ? "":"active";
+    const innerText = isFav ? "Favorite":"Mark as favorite";
 
 
     const handleClick = () => {
-        if (!headers) {
+        if (!headers || !username) {
             return alert("You need to login first!");
         }
         setLoading(true);
-        toggleFavs({ headers, slug, favorited})
+        toggleFavs({ headers, username, slug, isFav})
         .then((article) => {handleFav(article)})
         .catch((error) => (console.log(error)))
         .finally(() => setLoading(false))

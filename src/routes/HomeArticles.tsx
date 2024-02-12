@@ -1,23 +1,26 @@
 import ArticlePagination from "../components/ArticlePagination";
 import ArticlePreview from "../components/ArticlePreview";
-import {  useAuth } from "../context/AuthContext";
+import {  TAuthContext, useAuth } from "../context/AuthContext";
 import { TFeedContext, useFeed } from "../context/FeedContext";
 import useArticle from "../hooks/useArticle";
 
 function HomeArticles() {
 
-    const articlesPerPage = 3;
-    const { headers } = useAuth()?.authState || {headers: null} ;
+    const { authState } = useAuth() as TAuthContext;
+    const { headers, loggedUser } = authState;
     const {tabName, tagName } = useFeed() as TFeedContext;
-    const { isLoading, articlesCount, articles, setArticlesData } = useArticle(
+    const { isLoading, articlesCount, articles, favArticles, setArticlesData } = useArticle(
         {location: tabName,
+        headers: headers,
+        username: loggedUser.username,
         tabName,
         tagName}
     );
-
     return isLoading? (<div><em>Is Loading</em></div>) : articles.length > 0 ? (
         <>
             <ArticlePreview
+            headers={headers}
+            username={loggedUser.username}
             articles={articles}
             updateArticles={setArticlesData}
             isLoading={isLoading}

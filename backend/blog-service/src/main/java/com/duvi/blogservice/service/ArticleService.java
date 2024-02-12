@@ -2,6 +2,7 @@ package com.duvi.blogservice.service;
 
 import com.duvi.blogservice.model.Article;
 import com.duvi.blogservice.model.Tag;
+import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.ArticleDTO;
 import com.duvi.blogservice.model.dto.CommentDTO;
 import com.duvi.blogservice.model.dto.UserDTO;
@@ -9,6 +10,8 @@ import com.duvi.blogservice.model.exceptions.ArticleAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
 import com.duvi.blogservice.model.exceptions.TagNotFoundException;
 import com.duvi.blogservice.model.exceptions.UserNotFoundException;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Null;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,9 +41,9 @@ public interface ArticleService {
         //Get all the users that marked a given article as favorite
     List<UserDTO> getFavUsers(String slug) throws ArticleDoNotExistsException;
         //Set a new favorite article for a user
-    void setFavorite(String slug, String username) throws ArticleDoNotExistsException, UserNotFoundException;
+    ArticleDTO setFavorite(String slug, String username) throws ArticleDoNotExistsException, UserNotFoundException;
         //Remove favorite article for a user
-    void removeFavorite(String slug, String username) throws ArticleDoNotExistsException, UserNotFoundException;
+    ArticleDTO removeFavorite(String slug, String username) throws ArticleDoNotExistsException, UserNotFoundException;
 
     boolean isFavorite(String slug, String username) throws ArticleDoNotExistsException;
 
@@ -50,8 +53,8 @@ public interface ArticleService {
     //Operations related with Tags
     List<ArticleDTO> getArticlesByTag(String tagName) throws TagNotFoundException;
     List<Tag> getTagsOf(String slug) throws ArticleDoNotExistsException;
-    void setTag(String slug, String tagName) throws ArticleDoNotExistsException;
-    void removeTag(String slug, String tagName) throws ArticleDoNotExistsException;
+    ArticleDTO setTag(String slug, String tagName) throws ArticleDoNotExistsException;
+    ArticleDTO removeTag(String slug, String tagName) throws ArticleDoNotExistsException;
 
     //Operations related with Comments
     List<CommentDTO> getCommentsOf(String slug) throws ArticleDoNotExistsException;

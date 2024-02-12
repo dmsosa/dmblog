@@ -70,7 +70,8 @@ public class ArticleServiceImpl implements ArticleService {
                 article.getSlug(),
                 article.getCreatedAt(),
                 article.getUpdatedAt(),
-                article.getFavUsers().size());
+                article.getFavUsers().size()
+        );
     }
 
     //Basic CRUD Operations
@@ -186,7 +187,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void setFavorite(String slug, String username) throws ArticleDoNotExistsException, UserNotFoundException {
+    public ArticleDTO setFavorite(String slug, String username) throws ArticleDoNotExistsException, UserNotFoundException {
         if (!articleRepository.existsBySlug(slug)) {
             throw new ArticleDoNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
         }
@@ -197,10 +198,11 @@ public class ArticleServiceImpl implements ArticleService {
         User user = userRepository.findByUsername(username).get();
         ArticleUser relation = new ArticleUser(user, article);
         favsRepository.save(relation);
+        return createDTO(article);
     }
 
     @Override
-    public void removeFavorite(String slug, String username) throws ArticleDoNotExistsException, UserNotFoundException {
+    public ArticleDTO removeFavorite(String slug, String username) throws ArticleDoNotExistsException, UserNotFoundException {
         if (!articleRepository.existsBySlug(slug)) {
             throw new ArticleDoNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
         }
@@ -214,6 +216,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (relation.isPresent()) {
             favsRepository.deleteById(relationId);
         }
+        return createDTO(article);
     }
 
     @Override
@@ -258,7 +261,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void setTag(String slug, String tagName) throws ArticleDoNotExistsException {
+    public ArticleDTO setTag(String slug, String tagName) throws ArticleDoNotExistsException {
         if (!articleRepository.existsBySlug(slug)) {
             throw new ArticleDoNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
         }
@@ -284,12 +287,12 @@ public class ArticleServiceImpl implements ArticleService {
             tagRepository.save(newTag);
             catsRepository.save(newRelation);
         }
-
+        return createDTO(articleRepository.findBySlug(slug).get());
 
     }
 
     @Override
-    public void removeTag(String slug, String tagName) throws ArticleDoNotExistsException {
+    public ArticleDTO removeTag(String slug, String tagName) throws ArticleDoNotExistsException {
         if (!articleRepository.existsBySlug(slug)) {
             throw new ArticleDoNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
         }
@@ -299,6 +302,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (relation.isPresent()) {
             catsRepository.delete(relation.get());
         }
+        return createDTO(articleRepository.findBySlug(slug).get());
     }
 
 

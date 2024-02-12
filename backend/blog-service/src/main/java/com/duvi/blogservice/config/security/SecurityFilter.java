@@ -21,13 +21,18 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
     private AuthenticationService authenticationService;
 
+    public SecurityFilter(TokenService tokenService, AuthenticationService authenticationService) {
+        this.tokenService = tokenService;
+        this.authenticationService = authenticationService;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getToken(request);
         if (token != null) {
             String username = tokenService.validateToken(token);
             UserDetails userDetails = authenticationService.loadUserByUsername(username);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()) ;
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);

@@ -2,6 +2,7 @@ import axios, {  AxiosError } from 'axios';
 import { errorHandler } from './handleError';
 import { TArticle } from '../types/Article';
 import { TUser } from '../types/User';
+import {  TAuthState } from '../context/AuthContext';
 
 //Axios instance
 let instance = axios.create(
@@ -24,10 +25,6 @@ type TEndpoint = {
 export async function getArticles({ location, tagName, limit=3, offset=0, username, headers } : 
     { location: string, tagName: string, limit?: number, offset?: number, username?: string | null, headers: object | null }): Promise<TArticleData> {
     
-        if (username === undefined && headers){
-            const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string) as TUser;
-            username = loggedUser.username;
-        }
     
         const endpoint: TEndpoint = {
         global: `/?limit=${limit}&offset=${offset}`,
@@ -57,18 +54,45 @@ export async function getArticles({ location, tagName, limit=3, offset=0, userna
 
 
 //toggleFavs
-export async function toggleFavs({ headers, slug, favorited } : { headers: object, slug: string, favorited: boolean }) : Promise<void> {
+export async function toggleFavs({ headers, username, slug, isFav } : { 
+    headers: object, 
+    username: string, 
+    slug: string, 
+    isFav: boolean }) : Promise<TArticle> {
     try {    
         
-        const { data } = await instance.request({
+        const { data }: { data: TArticle }= await instance.request({
                 url: `/favs`,
-                method: favorited? "DELETE":"POST",
+                method: isFav? "DELETE":"POST",
                 headers: headers,
-                params: { slug: slug }
+                params: { 
+                    slug: slug,
+                    username: username
+                        }
             })
-        return data.article;
+        data.isFav = !isFav;
+        return data;
     } catch (error) {
         errorHandler(error as AxiosError)
         throw(error);
     } 
+}
+
+//getFavState 
+export async function getFavsOfUser({headers, username} : {
+    headers: object,
+    username: string 
+}) : Promise< TArticleData> {
+    try {
+        console.log(headers);
+        const { data } = await instance.request({
+        method: "GET",
+        url: `/favs/${username}`,
+        headers: headers
+        })
+        return data;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw (error);
+    }
 }

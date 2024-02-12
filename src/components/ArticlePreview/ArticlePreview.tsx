@@ -4,25 +4,34 @@ import ArticleTags from "../ArticleTags";
 import { TArticle } from "../../types/Article";
 import { TArticleData } from "../../service/articleService";
 import FavButton from "../FavButton";
+import { useEffect } from "react";
 
-function ArticlePreview({ articles, isLoading, updateArticles } : { articles: TArticle[], isLoading: boolean, updateArticles: React.Dispatch<React.SetStateAction<TArticleData>> }) {
+function ArticlePreview({ headers, username, articles, isLoading, updateArticles } : { 
+    headers: object | null, 
+    username: string | null, 
+    articles: TArticle[], 
+    isLoading: boolean, 
+    updateArticles: React.Dispatch<React.SetStateAction<TArticleData>> }) {
     
-    
+
     const handleFav = (article: TArticle) => {
         const items = [...articles];
         const updatedArticles = items.map((item) => item.slug === article.slug ? {...item, ...article}: item);
         updateArticles((prev) => ({...prev, articles: updatedArticles}))
         
     }
+
     
     return articles.length > 0 ? articles.map((article) => 
         <div className="article-preview" key={article.title}>
             <ArticleMeta createdAt={article.createdAt} author={article.author}>
                 <FavButton
+                headers={headers}
                 slug={article.slug}
-                favorited={article.favorited}
+                username={username}
                 favCount={article.favoritesCount}
-                handleFav={handleFav}/>
+                handleFav={handleFav}
+                isFav={article.isFav}/>
             </ArticleMeta>
             <Link to={article.slug}>
                 <h1>{article.title}</h1>

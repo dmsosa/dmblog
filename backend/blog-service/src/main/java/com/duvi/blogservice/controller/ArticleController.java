@@ -86,19 +86,22 @@ public class ArticleController {
     }
 
     @PostMapping("/favs")
-    public ResponseEntity<String> setFavsForUser(@RequestParam(required = true) String slug, @RequestParam(required = true) String username) throws ArticleDoNotExistsException, UserNotFoundException {
-        articleService.setFavorite(slug, username);
-        return new ResponseEntity<>("%1$s marked article %2$s as favorite!".formatted(username, slug), HttpStatus.OK);
+    public ResponseEntity<ArticleDTO> setFavsForUser(@RequestParam(required = true) String slug, @RequestParam(required = true) String username) throws ArticleDoNotExistsException, UserNotFoundException {
+        ArticleDTO article = articleService.setFavorite(slug, username);
+        return new ResponseEntity<>(article, HttpStatus.OK);
     }
     @DeleteMapping("/favs")
-    public ResponseEntity<String> removeFavsForUser(@RequestParam(required = true) String slug, @RequestParam(required = true) String username) throws ArticleDoNotExistsException, UserNotFoundException {
-        articleService.removeFavorite(slug, username);
-        return new ResponseEntity<>("%2$s is no longer one of the favorites of %1$s".formatted(username, slug), HttpStatus.OK);
+    public ResponseEntity<ArticleDTO> removeFavsForUser(@RequestParam(required = true) String slug, @RequestParam(required = true) String username) throws ArticleDoNotExistsException, UserNotFoundException {
+        ArticleDTO article = articleService.removeFavorite(slug, username);
+        return new ResponseEntity<>(article, HttpStatus.OK);
     }
 
     @GetMapping("/favs/{username}")
-    public  ResponseEntity<List<ArticleDTO>> getFavsForUser(@PathVariable String username) throws UserNotFoundException {
-        return new ResponseEntity<>(articleService.getFavArticles(username), HttpStatus.OK);
+    public  ResponseEntity<ArticlesResponseDTO> getFavsForUser(@PathVariable String username) throws UserNotFoundException {
+        List<ArticleDTO> articleDTOS = articleService.getFavArticles(username);
+        Long count = (long) articleDTOS.size();
+        ArticlesResponseDTO response = new ArticlesResponseDTO(articleDTOS, count);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     //Operations with Tags
     @GetMapping("/tags/{tagName}")
@@ -114,14 +117,14 @@ public class ArticleController {
 
     }
     @PostMapping("/tags")
-    public ResponseEntity<String> setTagFor(@RequestParam(required = true) String slug, @RequestParam(required = true) String tag) throws ArticleDoNotExistsException {
-        articleService.setTag(slug, tag);
-        return new ResponseEntity<>("tag %2$s added to article %1$s".formatted(slug, tag), HttpStatus.OK);
+    public ResponseEntity<ArticleDTO> setTagFor(@RequestParam(required = true) String slug, @RequestParam(required = true) String tag) throws ArticleDoNotExistsException {
+        ArticleDTO article = articleService.setTag(slug, tag);
+        return new ResponseEntity<>(article, HttpStatus.OK);
     }
     @DeleteMapping("/tags")
-    public ResponseEntity<String> removeTagFor(@RequestParam(required = true) String slug, @RequestParam(required = true) String tag) throws ArticleDoNotExistsException {
-        articleService.removeTag(slug, tag);
-        return new ResponseEntity<>("tag %2$s removed from article %1$s".formatted(slug, tag), HttpStatus.OK);
+    public ResponseEntity<ArticleDTO> removeTagFor(@RequestParam(required = true) String slug, @RequestParam(required = true) String tag) throws ArticleDoNotExistsException {
+        ArticleDTO article = articleService.removeTag(slug, tag);
+        return new ResponseEntity<>(article, HttpStatus.OK);
     }
 
     @GetMapping("/comments")
