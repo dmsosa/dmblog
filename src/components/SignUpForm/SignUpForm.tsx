@@ -27,9 +27,8 @@ function SignUpForm( {onError} : {onError: (error: Error) => void} ) {
         const userData = {username: username, email: email, password: password};
         signUpUser(userData)
         .then((loggedState) => {
-            console.log(loggedState);
             setAuthState(loggedState);
-            console.log(authState.loggedUser.username, "logged");
+            navigate("/");
         })
         .catch((error) => {
             onError(error);

@@ -27,10 +27,10 @@ function LoginForm( {onError} : {onError: (error: Error) => void} ) {
         e.preventDefault();
 
         const loginData = { login: login, password: password};
-        if (setAuthState) {
-            loginUser(loginData).then().catch((e) => {onError(e)});
-            navigation("/");
-        }
+
+        loginUser(loginData).then((state) => setAuthState(state)).catch((e) => {onError(e)});
+        navigation("/");
+        
     }
     return (
         <ContainerRow>

@@ -40,8 +40,8 @@ export async function signUpUser( userData: TUserData, asAdmin:boolean=false): P
         const { token, loggedUser } : { token: string, loggedUser: TUser }= data;
         const headers = {Authorization: `Bearer ${token}`};
         const loggedIn = { headers: headers, isAuth: true, loggedUser: loggedUser };
-
-        localStorage.setItem("loggedUser", JSON.stringify(loggedUser));
+        
+        localStorage.setItem("loggedUser", JSON.stringify(loggedIn));
 
         return loggedIn;
 
@@ -65,7 +65,7 @@ export async function loginUser({ login, password } : { login: string, password:
         const loggedIn = { headers: headers, isAuth: true, loggedUser: data.loggedUser }
 
         localStorage.setItem("loggedUser", JSON.stringify(loggedIn));
-        return data.loggedUser;
+        return loggedIn;
     } catch (error: any) {
         errorHandler(error);
         throw(error);
