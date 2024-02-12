@@ -78,6 +78,18 @@ public class ArticleController {
         List<ArticleDTO> articleDTOS = articleService.getByAuthor(username);
         return new ResponseEntity<>(articleDTOS, HttpStatus.OK);
     }
+
+    //Feed is basically the articles of a given author
+    @GetMapping("/feed/{username}")
+    public ResponseEntity<ArticlesResponseDTO> getFeed(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws UserNotFoundException {
+        List<ArticleDTO> articleDTOS = articleService.getByAuthor(username);
+        Long articlesCount = (long) articleDTOS.size();
+        ArticlesResponseDTO response = new ArticlesResponseDTO(articleDTOS, articlesCount);
+        if (limit != null && offset != null) {
+            
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
     //Operations with Users
     @GetMapping("/favs")
     public ResponseEntity<List<UserDTO>> getFavsForArticle(@RequestParam(required = true, name = "slug") String slug ) throws ArticleDoNotExistsException {

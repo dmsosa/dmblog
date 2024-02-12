@@ -3,6 +3,7 @@ import BannerContainer from "../components/BannerContainer";
 import { TAuthContext, useAuth } from "../context/AuthContext";
 import HomeArticles from "./HomeArticles";
 import FeedProvider from "../context/FeedContext";
+import FeedToggler from "../components/FeedToggler";
 
 
 
@@ -24,6 +25,7 @@ function Home() {
                 <span>Hello {loggedUser.username}</span>
             </a>
             <FeedProvider>
+                <FeedToggler/>
                 <HomeArticles/>
             </FeedProvider>
             

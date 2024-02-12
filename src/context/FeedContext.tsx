@@ -33,7 +33,8 @@ function FeedProvider ({ children }: { children: ReactNode | ReactNode[]}) {
     }, [isAuth]);
 
     const changeFeed = async (e: MouseEvent<HTMLButtonElement>, tabName: string ) => {
-        const tagName = ""
+        const buttonElement = e.target as HTMLElement;
+        const tagName = buttonElement.innerText.trim();
         setFeedState({tabName, tagName});
     }
 
