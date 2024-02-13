@@ -5,6 +5,7 @@ import com.duvi.blogservice.model.Tag;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.ArticleDTO;
 import com.duvi.blogservice.model.dto.CommentDTO;
+import com.duvi.blogservice.model.dto.SetArticleDTO;
 import com.duvi.blogservice.model.dto.UserDTO;
 import com.duvi.blogservice.model.exceptions.ArticleAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
@@ -25,10 +26,7 @@ import com.duvi.blogservice.service.CommentService;
 import com.duvi.blogservice.service.UserService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -63,11 +61,13 @@ public class ArticleServiceImpl implements ArticleService {
     //CreateDTO
     @Override
     public ArticleDTO createDTO(Article article) {
+        List<String> tagList = this.getTagsOf(article.getSlug()).stream().map((tag) -> tag.getName()).toList();
         return new ArticleDTO(article.getAuthor().getId(),
                 article.getTitle(),
                 article.getBody(),
                 article.getDescription(),
                 article.getSlug(),
+                tagList,
                 article.getCreatedAt(),
                 article.getUpdatedAt(),
                 article.getFavUsers().size()
@@ -81,14 +81,18 @@ public class ArticleServiceImpl implements ArticleService {
         if (articleList.isEmpty()) {
             throw new ArticleDoNotExistsException("No articles found!");
         }
-        return  articleList.stream().map(this::createDTO).toList();
+        return articleList.stream().map(this::createDTO).toList();
     }
     @Override
-    public ArticleDTO createArticle(ArticleDTO articleDTO) throws ArticleAlreadyExistsException {
+    public ArticleDTO createArticle(ArticleDTO articleDTO) throws ArticleAlreadyExistsException, ArticleDoNotExistsException {
         if (!articleRepository.existsByTitle(articleDTO.title())) {
             User user = userRepository.findById(articleDTO.userId()).get();
             Article article = new Article(articleDTO, user);
             articleRepository.save(article);
+            for (String tag : articleDTO.tagList()) {
+                this.setTag(articleDTO.slug(), tag);
+            }
+            return createDTO(articleRepository.findBySlug(articleDTO.slug()).get());
         }
         throw new ArticleAlreadyExistsException(articleDTO.title());
     }
@@ -121,16 +125,14 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDTO updateArticle(Long articleId, ArticleDTO newArticleDTO) {
+    public ArticleDTO updateArticle(Long articleId, SetArticleDTO articleDTO) throws ArticleDoNotExistsException {
         Optional<Article> optionalArticle = articleRepository.findById(articleId);
-        User user = userRepository.findById(newArticleDTO.userId()).get();
-        Article newArticle = new Article(newArticleDTO, user);
-        if (optionalArticle.isPresent()) {
-            Article oldArticle = optionalArticle.get();
-            oldArticle.update(newArticle);
-            return createDTO(articleRepository.save(oldArticle));
+        if (optionalArticle.isEmpty()) {
+            throw new ArticleDoNotExistsException(articleId);
         }
-        return createDTO(articleRepository.save(newArticle));
+        Article oldArticle = optionalArticle.get();
+        oldArticle.updateWith(articleDTO);
+        return createDTO(articleRepository.save(oldArticle));
     }
 
     @Override
@@ -141,16 +143,14 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.deleteById(id);
     }
     @Override
-    public ArticleDTO updateArticleBySlug(String articleSlug, ArticleDTO newArticleDTO) {
+    public ArticleDTO updateArticleBySlug(String articleSlug, SetArticleDTO articleDTO) throws ArticleDoNotExistsException {
         Optional<Article> optionalArticle = articleRepository.findBySlug(articleSlug);
-        User user = userRepository.findById(newArticleDTO.userId()).get();
-        Article newArticle = new Article(newArticleDTO, user);
-        if (optionalArticle.isPresent()) {
-            Article oldArticle = optionalArticle.get();
-            oldArticle.update(newArticle);
-            return createDTO(articleRepository.save(oldArticle));
+        if (optionalArticle.isEmpty()) {
+            throw new ArticleDoNotExistsException("Article with slug '%s' do not exists!".formatted(articleSlug));
         }
-        return createDTO(articleRepository.save(newArticle));
+        Article oldArticle = optionalArticle.get();
+        oldArticle.updateWith(articleDTO);
+        return createDTO(articleRepository.save(oldArticle));
     }
 
     @Override
@@ -250,9 +250,9 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<Tag> getTagsOf(String slug) throws ArticleDoNotExistsException {
+    public List<Tag> getTagsOf(String slug) {
         if (!articleRepository.existsBySlug(slug)) {
-            throw new ArticleDoNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
+            return new ArrayList<>();
         }
         Article article = articleRepository.findBySlug(slug).get();
         List<ArticleTag> relations = catsRepository.findByArticleId(article.getId());

@@ -4,6 +4,8 @@ import { TAuthContext, useAuth } from "../context/AuthContext";
 import HomeArticles from "./HomeArticles";
 import FeedProvider from "../context/FeedContext";
 import FeedToggler from "../components/FeedToggler";
+import TagList from "../components/TopicList/TagList";
+import ContainerRow from "../components/ContainerRow";
 
 
 
@@ -24,10 +26,18 @@ function Home() {
             <a>
                 <span>Hello {loggedUser.username}</span>
             </a>
-            <FeedProvider>
-                <FeedToggler/>
-                <HomeArticles/>
-            </FeedProvider>
+            <ContainerRow
+            addClass={"page"}>
+                <FeedProvider>
+                    <div className="col-6">
+                        <FeedToggler/>
+                        <Outlet/>
+                    </div>
+                    
+                    <TagList/>
+                </FeedProvider>
+            </ContainerRow>
+            
             
 
 

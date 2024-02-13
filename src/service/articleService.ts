@@ -3,6 +3,8 @@ import { errorHandler } from './handleError';
 import { TArticle } from '../types/Article';
 import { TUser } from '../types/User';
 import {  TAuthState } from '../context/AuthContext';
+import { slufigy } from '../helpers/helpers';
+
 
 //Axios instance
 let instance = axios.create(
@@ -95,4 +97,22 @@ export async function getFavsOfUser({headers, username} : {
         errorHandler(error as AxiosError);
         throw (error);
     }
+}
+
+//createArticle
+export async function setArticle({title, description, body, slug, tagList, headers } : {
+    title: string,
+    description: string,
+    body: string,
+    slug: string,
+    tagList: string[],
+    headers: object
+}) {
+
+    instance.request({
+        method: slug? "PUT":"POST",
+        url: slug? `/${slug}`:"/global",
+        headers: headers,
+        data: { title, description, body, slug, tagList }
+    })
 }

@@ -2,6 +2,7 @@ package com.duvi.blogservice.model;
 
 
 import com.duvi.blogservice.model.dto.ArticleDTO;
+import com.duvi.blogservice.model.dto.SetArticleDTO;
 import com.duvi.blogservice.model.relations.ArticleTag;
 import com.duvi.blogservice.model.relations.ArticleUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -73,13 +74,11 @@ public class Article {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void update(Article newArticle) {
-        this.id = newArticle.getId();
-        this.author = newArticle.getAuthor();
-        this.title = newArticle.getTitle();
-        this.body = newArticle.getBody();
-        this.description = newArticle.getDescription();
-        this.slug = newArticle.getSlug();
+    public void updateWith(SetArticleDTO newArticle) {
+        this.title = newArticle.title();
+        this.body = newArticle.body();
+        this.description = newArticle.description();
+        this.slug = newArticle.slug();
         this.updatedAt = LocalDateTime.now();
     }
 }

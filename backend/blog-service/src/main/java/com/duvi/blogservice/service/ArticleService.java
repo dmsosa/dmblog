@@ -5,6 +5,7 @@ import com.duvi.blogservice.model.Tag;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.ArticleDTO;
 import com.duvi.blogservice.model.dto.CommentDTO;
+import com.duvi.blogservice.model.dto.SetArticleDTO;
 import com.duvi.blogservice.model.dto.UserDTO;
 import com.duvi.blogservice.model.exceptions.ArticleAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
@@ -25,13 +26,13 @@ public interface ArticleService {
 
     //Basic CRUD Operations
     List<ArticleDTO> getArticles() throws ArticleDoNotExistsException;
-    ArticleDTO createArticle(ArticleDTO articleDTO) throws ArticleAlreadyExistsException;
+    ArticleDTO createArticle(ArticleDTO articleDTO) throws ArticleAlreadyExistsException, ArticleDoNotExistsException;
     ArticleDTO getArticleBySlug(String slug) throws ArticleDoNotExistsException;
     ArticleDTO getArticleById(Long id) throws ArticleDoNotExistsException;
     ArticleDTO getArticleByTitle(String title) throws ArticleDoNotExistsException;
-    ArticleDTO updateArticle(Long articleId, ArticleDTO newArticleDTO);
+    ArticleDTO updateArticle(Long articleId, SetArticleDTO newArticleDTO) throws ArticleDoNotExistsException;
     void deleteArticle(Long id) throws ArticleDoNotExistsException;
-    ArticleDTO updateArticleBySlug(String articleSlug, ArticleDTO newArticleDTO);
+    ArticleDTO updateArticleBySlug(String articleSlug, SetArticleDTO newArticleDTO) throws ArticleDoNotExistsException;
     void deleteArticleBySlug(String articleSlug) throws ArticleDoNotExistsException;
 
     //Operations related with Author
@@ -52,7 +53,7 @@ public interface ArticleService {
 
     //Operations related with Tags
     List<ArticleDTO> getArticlesByTag(String tagName) throws TagNotFoundException;
-    List<Tag> getTagsOf(String slug) throws ArticleDoNotExistsException;
+    List<Tag> getTagsOf(String slug);
     ArticleDTO setTag(String slug, String tagName) throws ArticleDoNotExistsException;
     ArticleDTO removeTag(String slug, String tagName) throws ArticleDoNotExistsException;
 

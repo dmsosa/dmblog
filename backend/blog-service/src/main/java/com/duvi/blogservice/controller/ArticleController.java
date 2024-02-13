@@ -1,24 +1,22 @@
 package com.duvi.blogservice.controller;
 
-import com.duvi.blogservice.model.Article;
-import com.duvi.blogservice.model.Comment;
+import com.duvi.blogservice.config.security.TokenService;
 import com.duvi.blogservice.model.Tag;
 import com.duvi.blogservice.model.User;
-import com.duvi.blogservice.model.dto.ArticleDTO;
-import com.duvi.blogservice.model.dto.ArticlesResponseDTO;
-import com.duvi.blogservice.model.dto.CommentDTO;
-import com.duvi.blogservice.model.dto.UserDTO;
+import com.duvi.blogservice.model.dto.*;
 import com.duvi.blogservice.model.exceptions.ArticleAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
 import com.duvi.blogservice.model.exceptions.TagNotFoundException;
 import com.duvi.blogservice.model.exceptions.UserNotFoundException;
+import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.service.ArticleService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/articles")
@@ -30,9 +28,15 @@ public class ArticleController {
 
 
     private ArticleService articleService;
+    private TokenService tokenService;
+    private UserRepository userRepository;
 
-    public ArticleController(ArticleService articleService) {
+
+    public ArticleController(ArticleService articleService, TokenService tokenService, UserRepository userRepository) {
+
         this.articleService = articleService;
+        this.tokenService = tokenService;
+        this.userRepository = userRepository;
     }
 
     //Basic CRUD
@@ -52,8 +56,25 @@ public class ArticleController {
         return new ResponseEntity<>(articleResponse, HttpStatus.OK);
     }
     @PostMapping("/global")
-    public ResponseEntity<ArticleDTO> createArticle(@RequestBody ArticleDTO articleDTO) throws ArticleAlreadyExistsException {
+    public ResponseEntity<ArticleDTO> createArticle(@RequestBody SetArticleDTO createArticleDTO, @RequestHeader HttpHeaders headers) throws ArticleAlreadyExistsException, ArticleDoNotExistsException {
+
+        String token = headers.getFirst("Authorization").replace("Bearer ", "");
+        String username = tokenService.validateToken(token);
+        User user = userRepository.findByUsername(username).get();
+
+        ArticleDTO articleDTO = new ArticleDTO(
+                user.getId(),
+                createArticleDTO.title(),
+                createArticleDTO.body(),
+                createArticleDTO.description(),
+                createArticleDTO.slug(),
+                createArticleDTO.tagList(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                0);
+
         ArticleDTO article = articleService.createArticle(articleDTO);
+        
         return new ResponseEntity<>(article, HttpStatus.CREATED);
     }
     @GetMapping("/{articleSlug}")
@@ -62,8 +83,8 @@ public class ArticleController {
     }
 
     @PutMapping("/{articleSlug}")
-    public ResponseEntity<ArticleDTO> editArticle(@PathVariable String articleSlug, @RequestBody ArticleDTO articleDTO) {
-        return new ResponseEntity<>(articleService.updateArticleBySlug(articleSlug, articleDTO), HttpStatus.OK);
+    public ResponseEntity<ArticleDTO> editArticle(@PathVariable String articleSlug, @RequestBody SetArticleDTO setArticleDTO) throws ArticleDoNotExistsException {
+        return new ResponseEntity<>(articleService.updateArticleBySlug(articleSlug, setArticleDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/{articleSlug}")
