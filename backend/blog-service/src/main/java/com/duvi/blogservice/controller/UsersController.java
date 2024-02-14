@@ -82,6 +82,12 @@ public class UsersController {
         List<UserDTO> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) throws UserNotFoundException {
+        UserDTO userDTO = userService.findUserByUsername(username);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
     @GetMapping("/followers/{userId}")
     public ResponseEntity<List<UserDTO>> getFollowersOf(@PathVariable Long userId) {
         List<UserDTO> followers = userService.findFollowersOf(userId);

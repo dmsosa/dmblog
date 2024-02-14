@@ -74,7 +74,7 @@ public class ArticleController {
                 0);
 
         ArticleDTO article = articleService.createArticle(articleDTO);
-        
+
         return new ResponseEntity<>(article, HttpStatus.CREATED);
     }
     @GetMapping("/{articleSlug}")

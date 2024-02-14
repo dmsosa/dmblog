@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {  AxiosError } from "axios";
 import { TAuthState } from "../context/AuthContext";
 import {  errorHandler } from "./handleError";
 import { TUser } from "../types/User";
@@ -90,17 +90,36 @@ export function logoutUser() {
 
 
 //Get current User
-export async function getUser({ headers } : { headers: object }) {
+export async function getUser({ headers } : { headers: object }) : Promise<TUser> {
 
     try {
         const { data } = await axios.request({
             method: "GET",
             url: "/login", 
-            headers
+            headers: headers
         });
         return data.loggedUser;
     } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
+}
 
+//Get  User By Username
+export async function getUserByUsername({ headers, username } : { 
+    headers: object, 
+    username: string }) : Promise<TUser> {
+
+    try {
+        const { data } = await axios.request({
+            method: "GET",
+            url: `/${username}`, 
+            headers: headers
+        });
+        return data;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
     }
 }
 

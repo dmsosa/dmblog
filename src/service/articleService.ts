@@ -4,6 +4,7 @@ import { TArticle } from '../types/Article';
 import { TUser } from '../types/User';
 import {  TAuthState } from '../context/AuthContext';
 import { slufigy } from '../helpers/helpers';
+import { getUser, getUserByUsername } from './userService';
 
 
 //Axios instance
@@ -100,19 +101,45 @@ export async function getFavsOfUser({headers, username} : {
 }
 
 //createArticle
-export async function setArticle({title, description, body, slug, tagList, headers } : {
+export async function setArticle({title, description, body, artSlug, tagList, headers } : {
     title: string,
     description: string,
     body: string,
-    slug: string,
+    artSlug: string | null,
     tagList: string[],
-    headers: object
-}) {
+    headers: object | null
+}) : Promise<TArticle> {
 
-    instance.request({
-        method: slug? "PUT":"POST",
-        url: slug? `/${slug}`:"/global",
-        headers: headers,
-        data: { title, description, body, slug, tagList }
-    })
+    try {
+        const { data } = await instance.request({
+            method: artSlug? "PUT":"POST",
+            url: artSlug? `/${artSlug}`:"/global",
+            headers: headers || {},
+            data: artSlug? { title, description, body, slug: artSlug, tagList } : 
+            { title, description, body, slug: slufigy(title), tagList }
+        })
+        return data;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw (error)
+    }
+
+}
+
+//Get article by slug
+export async function getArticleBySlug({slug, headers, username} : {slug: string, headers: object | null, username: string}) {
+    try {
+        if (!headers) { headers = {} };
+        const { data } = await instance.get(`/${slug}`, { headers: headers});
+
+        let article = data as TArticle;
+
+        getUserByUsername({headers, username})
+        .then((user) => article.author = user)
+        .catch((error) => console.log(error))
+        return article;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
 }
