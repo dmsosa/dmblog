@@ -35,7 +35,10 @@ public interface UserService {
     //Operations with Followers
     void followUser(Long fromId, Long toId) throws UserNotFoundException;
     void unfollowUser(Long fromId, Long toId) throws UserNotFoundException;
+    public Integer findFollowersCount(Long userId);
+
     public List<UserDTO> findFollowersOf(Long userId);
+    public Integer findFollowingCount(Long userId);
     public List<UserDTO> findFollowingOf(Long userId);
 
 }

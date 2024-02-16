@@ -1,22 +1,19 @@
-import { MouseEvent, useState } from "react";
 import ReactPaginate from "react-paginate";
-import { TAuthContext, TAuthState, useAuth } from "../../context/AuthContext";
-import { TArticleData, getArticles } from "../../service/articleService";
-import { TArticle } from "../../types/Article";
-import { end } from "@popperjs/core";
+
+import { TArticleData, getArticles } from "../../../service/articleService";
 
 function ArticlePagination({ 
   headers,
   articlesCount, 
   username, 
   tagName, 
-  tabName,
+  location,
   updateArticles } : { 
     headers: object | null,
     articlesCount: number,
     username?: string | null, 
     tagName?: string | null, 
-    tabName?: string | null,
+    location: string,
     updateArticles: React.Dispatch<React.SetStateAction<TArticleData>> }) {
 
     const pageCount = Math.ceil(articlesCount / 3);
@@ -26,9 +23,8 @@ function ArticlePagination({
 
     const handlePageChange = (event: any) => {
       const page = event.selected;
-      const tab = tabName || "";
-      const tag = tagName || "";
-      getArticles({headers, location: tab, offset: page, username, tagName: tag})
+
+      getArticles({headers, location, offset: page, username, tagName})
       .then((articleData: TArticleData) => {updateArticles(articleData)})
       .catch((error) => (console.error(error)))
 

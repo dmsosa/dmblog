@@ -5,5 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
     password TEXT NOT NULL,
     bio VARCHAR(5000),
     image TEXT,
-    role TEXT NOT NULL
+    role TEXT NOT NULL,
+    created_at DATE,
+    updated_at DATE
 );

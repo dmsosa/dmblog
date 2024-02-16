@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import ContainerRow from "../ContainerRow";
-import Avatar from "../Avatar";
-import { dateFormatter } from "../../helpers/helpers";
-import { TUser } from "../../types/User";
+import ContainerRow from "../../ContainerRow";
+import Avatar from "../../Avatar";
+import { dateFormatter } from "../../../helpers/helpers";
+import { TUser } from "../../../types/User";
 import { ReactNode } from "react";
 
 
-function ArticleMeta({ children, createdAt, author }: { children: ReactNode | ReactNode[] ,createdAt: Date, author: TUser }) {
+function ArticleMeta({ children, createdAt, author }: { children: ReactNode | ReactNode[] ,createdAt: Date | null, author: TUser }) {
 
     const { bio, followersCount, followingCount, image, username } = author || {};
 

@@ -1,5 +1,5 @@
-import ArticlePagination from "../components/ArticlePagination";
-import ArticlePreview from "../components/ArticlePreview";
+import ArticlePagination from "../components/Article/ArticlePagination";
+import ArticlePreview from "../components/Article/ArticlePreview";
 import {  TAuthContext, useAuth } from "../context/AuthContext";
 import { TFeedContext, useFeed } from "../context/FeedContext";
 import useArticle from "../hooks/useArticle";
@@ -9,7 +9,7 @@ function HomeArticles() {
     const { authState } = useAuth() as TAuthContext;
     const { headers, loggedUser } = authState;
     const {tabName, tagName } = useFeed() as TFeedContext;
-    const { isLoading, articlesCount, articles, favArticles, setArticlesData } = useArticle(
+    const { isLoading, articlesCount, articles, setArticlesData } = useArticle(
         {location: tabName,
         headers: headers,
         username: loggedUser.username,
@@ -28,7 +28,7 @@ function HomeArticles() {
             <ArticlePagination
             headers={headers}
             articlesCount={articlesCount}
-            tabName={tabName}
+            location={tabName}
             tagName={tagName}
             updateArticles={setArticlesData}
             />

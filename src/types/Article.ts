@@ -1,15 +1,16 @@
 import { TUser } from "./User"
 
 export type TArticle = {
-    id: number,
+    id: number | null,
+    userId: number | null,
     title: string,
     author: TUser,
     description: string,
     body: string,
     slug: string,
-    tags: string[],
+    tagList: string[],
     isFav: boolean,
     favoritesCount: number,
-    createdAt: Date,
-    updatedAt: Date
+    createdAt: Date | null,
+    updatedAt: Date | null
 }

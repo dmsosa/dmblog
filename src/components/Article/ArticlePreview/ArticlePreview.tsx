@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import ArticleMeta from "../ArticleMeta";
 import ArticleTags from "../ArticleTags";
-import { TArticle } from "../../types/Article";
-import { TArticleData } from "../../service/articleService";
-import FavButton from "../FavButton";
+import { TArticle } from "../../../types/Article";
+import { TArticleData } from "../../../service/articleService";
+import FavButton from "../../Buttons/FavButton";
 import { useEffect } from "react";
 
 function ArticlePreview({ headers, username, articles, isLoading, updateArticles } : { 
@@ -29,7 +29,7 @@ function ArticlePreview({ headers, username, articles, isLoading, updateArticles
                 headers={headers}
                 slug={article.slug}
                 username={username}
-                favCount={article.favoritesCount}
+                favoritesCount={article.favoritesCount}
                 handleFav={handleFav}
                 isFav={article.isFav}/>
             </ArticleMeta>

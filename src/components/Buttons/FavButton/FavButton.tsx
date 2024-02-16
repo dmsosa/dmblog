@@ -1,12 +1,11 @@
-import {  useEffect, useState } from "react"
-import { toggleFavs } from "../../service/articleService"
-import { TAuthContext, useAuth } from "../../context/AuthContext"
+import {  useState } from "react"
+import { toggleFavs } from "../../../service/articleService"
 
-function FavButton({ headers, username, slug, favCount, isFav, handleFav } : { 
+function FavButton({ headers, username, slug, favoritesCount, isFav, handleFav } : { 
     headers: object | null, 
     username: string | null, 
     slug: string, 
-    favCount: number, 
+    favoritesCount: number, 
     isFav: boolean,
     handleFav: (article: any) => void } ) {
 
@@ -32,7 +31,7 @@ function FavButton({ headers, username, slug, favCount, isFav, handleFav } : {
     return (
         <button className={`btn btn-fav ${buttonStyle}`} onClick={handleClick} disabled={loading}>
             <i>{innerText}</i>
-            <span>{` ${favCount}`}</span>
+            <span>{` ${favoritesCount}`}</span>
         </button>
     )
 }

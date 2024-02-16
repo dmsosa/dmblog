@@ -16,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -38,6 +39,8 @@ public class User implements UserDetails {
     private String image;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     //Relations
 
@@ -70,6 +73,7 @@ public class User implements UserDetails {
 
         //Comments
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<Comment> comments;
 
 
@@ -85,6 +89,8 @@ public class User implements UserDetails {
         this.favArticles = new HashSet<>();
         this.followers = new HashSet<>();
         this.comments = new HashSet<>();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public void updateUser(String username, String email, String image, String bio) {
@@ -92,7 +98,7 @@ public class User implements UserDetails {
         this.email = email;
         this.image = image;
         this.bio = bio;
-
+        this.updatedAt = LocalDateTime.now();
     }
     public void updatePassword(String password) {
         this.password = password;

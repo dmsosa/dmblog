@@ -32,10 +32,13 @@ public class UserServiceImpl implements UserService {
     //Create DTOS
     @Override
     public UserDTO createDTO(User user) {
-        List<UserDTO> followingList = this.findFollowingOf(user.getId());
-        Integer followersCount = user.getFollowers().size();
-        Integer followingCount = followingList.size();
-        return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), user.getBio(), user.getImage(), followersCount, followingCount);
+        Integer followingCount = this.findFollowingCount(user.getId());
+        Integer followersCount = this.findFollowersCount(user.getId());
+        return new UserDTO(user.getId(), user.getUsername(),
+                user.getEmail(), user.getPassword(),
+                user.getBio(), user.getImage(),
+                followersCount, followingCount,
+                user.getCreatedAt(), user.getUpdatedAt());
     }
 
     //Basic CRUD
@@ -163,6 +166,10 @@ public class UserServiceImpl implements UserService {
         };
         followersRepository.deleteById(relationId);
     }
+    @Override
+    public Integer findFollowersCount(Long userId) {
+        return  followersRepository.findByUserId(userId).size();
+    }
 
     @Override
     public List<UserDTO> findFollowersOf(Long userId) {
@@ -172,11 +179,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Integer findFollowingCount(Long userId) {
+        return  followersRepository.findByFollowerId(userId).size();
+    }
+    @Override
     public List<UserDTO> findFollowingOf(Long userId) {
         List<UserFollower> userFollowerList = followersRepository.findByFollowerId(userId);
         List<User> followingList = userFollowerList.stream().map(UserFollower::getUser).toList();
         return followingList.stream().map(this::createDTO).toList();
     }
+
 
 
 

@@ -4,7 +4,8 @@ import { TArticle } from '../types/Article';
 import { TUser } from '../types/User';
 import {  TAuthState } from '../context/AuthContext';
 import { slufigy } from '../helpers/helpers';
-import { getUser, getUserByUsername } from './userService';
+import { getUser, getUserById, getUserByUsername } from './userService';
+import { getTagsOf } from './tagService';
 
 
 //Axios instance
@@ -26,7 +27,12 @@ type TEndpoint = {
 }
 //Get articles
 export async function getArticles({ location, tagName, limit=3, offset=0, username, headers } : 
-    { location: string, tagName: string, limit?: number, offset?: number, username?: string | null, headers: object | null }): Promise<TArticleData> {
+    {   location: string, 
+        tagName?: string | null, 
+        limit?: number, 
+        offset?: number, 
+        username?: string | null, 
+        headers: object | null }): Promise<TArticleData> {
     
     
         const endpoint: TEndpoint = {
@@ -46,7 +52,7 @@ export async function getArticles({ location, tagName, limit=3, offset=0, userna
         if (!headers ) {
             headers = {};
         }
-        const { data } =  await instance.get(`/global?limit=${limit}&&offset=${offset}`, {headers: headers})
+        const { data } =  await instance.get(endpoint[location], {headers: headers})
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);
@@ -127,19 +133,43 @@ export async function setArticle({title, description, body, artSlug, tagList, he
 }
 
 //Get article by slug
-export async function getArticleBySlug({slug, headers, username} : {slug: string, headers: object | null, username: string}) {
+export async function getArticleBySlug({slug, headers } : {slug: string, headers: object | null}) {
     try {
         if (!headers) { headers = {} };
-        const { data } = await instance.get(`/${slug}`, { headers: headers});
+        const { data } : { data:TArticle } = await instance.get(`/${slug}`, { headers: headers});
 
-        let article = data as TArticle;
-
-        getUserByUsername({headers, username})
-        .then((user) => article.author = user)
+        getUserById({ headers, userId: data.userId  })
+        .then((user) => { 
+            data.author = user})
         .catch((error) => console.log(error))
-        return article;
+
+        getTagsOf({headers, slug})
+        .then((tagList) => data.tagList = tagList)
+        .catch((error) => console.log(error))
+        return data;
     } catch (error) {
         errorHandler(error as AxiosError);
         throw(error);
     }
+}
+
+export async function deleteArticleBySlug({slug, headers} : {slug: string, headers: object | null }) : Promise<String> {
+
+    if (!headers) { 
+        headers = {} 
+    };
+    try {    
+        const { data } = await instance.request(
+            {
+                url: `/${slug}`,
+                method: "DELETE",
+                headers: headers
+            })
+        return data;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
+
+
 }

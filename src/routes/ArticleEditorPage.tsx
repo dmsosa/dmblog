@@ -1,4 +1,4 @@
-import ArticleEditor from "../components/ArticleEditor.tsx/ArticleEditor";
+import ArticleEditor from "../components/Article/ArticleEditor.tsx/ArticleEditor";
 import ContainerRow from "../components/ContainerRow";
 
 function ArticleEditorPage() {

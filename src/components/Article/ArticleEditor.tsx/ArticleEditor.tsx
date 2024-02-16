@@ -1,11 +1,11 @@
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
-import FormFieldset from "../FormFieldset";
-import ContainerRow from "../ContainerRow";
-import { getArticleBySlug, setArticle } from "../../service/articleService";
+import FormFieldset from "../../FormFieldset";
+import ContainerRow from "../../ContainerRow";
+import { getArticleBySlug, setArticle } from "../../../service/articleService";
 import { redirect, useLocation, useNavigate, useParams } from "react-router-dom";
-import { TAuthContext, useAuth } from "../../context/AuthContext";
+import { TAuthContext, useAuth } from "../../../context/AuthContext";
 import { AxiosError } from "axios";
-import { TArticle } from "../../types/Article";
+import { TArticle } from "../../../types/Article";
 
 type TForm = {
     title: string,

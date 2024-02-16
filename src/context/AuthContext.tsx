@@ -28,11 +28,15 @@ var authState: TAuthState = {
         id: null,
         username: "",
         email: "",
-        password: null,
+        password: "",
         image: null,
         bio: null,
         followersCount: null, 
-        followingCount: null
+        followingCount: null,
+        followers: [],
+        following: [],
+        createdAt: null,
+        updatedAt: null
     }
 };
 
@@ -48,9 +52,10 @@ function AuthProvider({ children }: { children : ReactNode[] | ReactNode }) {
         () => {
             if (headers === null ) { return };
             getUser({ headers })
-            .then((loggedUser) => 
+            .then((loggedUser) => {
                 setAuthState((prev) => ({ ...prev, loggedUser }))
-            ).catch((e: AxiosError) => errorHandler(e)); 
+            })
+            .catch((e: AxiosError) => errorHandler(e)); 
         }, [setAuthState])
     return (
         <AuthContext.Provider value={{authState, setAuthState}}>

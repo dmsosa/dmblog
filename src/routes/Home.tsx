@@ -4,7 +4,7 @@ import { TAuthContext, useAuth } from "../context/AuthContext";
 import HomeArticles from "./HomeArticles";
 import FeedProvider from "../context/FeedContext";
 import FeedToggler from "../components/FeedToggler";
-import TagList from "../components/TopicList/TagList";
+import TagList from "../components/TagList/TagList";
 import ContainerRow from "../components/ContainerRow";
 
 

@@ -19,6 +19,21 @@ type TUserData = {
 }
 
 
+const faultResponse = {
+    id: null,
+    username: "",
+    email: "",
+    password: "",
+    image: null,
+    bio: null,
+    followersCount: null, 
+    followingCount: null,
+    followers: [],
+    following: [],
+    createdAt: null,
+    updatedAt: null
+}
+
 
 //Sign Up User
 export async function signUpUser( userData: TUserData, asAdmin:boolean=false): Promise<TAuthState> {
@@ -39,6 +54,17 @@ export async function signUpUser( userData: TUserData, asAdmin:boolean=false): P
         })
         const { token, loggedUser } : { token: string, loggedUser: TUser }= data;
         const headers = {Authorization: `Bearer ${token}`};
+        const { id } = loggedUser;
+
+        getFollowersOf({ headers, userId: id })
+        .then( (followersList) => loggedUser.followers = followersList)
+        .catch((error) => console.log(error))
+
+        getFollowingOf({ headers, userId: id })
+        .then( (followingList) => loggedUser.following = followingList)
+        .catch((error) => console.log(error))
+
+
         const loggedIn = { headers: headers, isAuth: true, loggedUser: loggedUser };
         
         localStorage.setItem("loggedUser", JSON.stringify(loggedIn));
@@ -116,6 +142,87 @@ export async function getUserByUsername({ headers, username } : {
             url: `/${username}`, 
             headers: headers
         });
+        return data;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
+}
+
+//Get  User By Id
+export async function getUserById({ headers, userId } : { 
+    headers: object, 
+    userId: number | null }) : Promise<TUser> {
+    
+    if (!userId) return faultResponse;
+    try {
+        const { data } = await instance.request({
+            method: "GET",
+            url: `/find/${userId}`, 
+            headers: headers
+        });
+        return data;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
+}
+
+//Toggle Follow
+export async function toggleFollow({ headers, username, isFollowing} : {
+    headers: object | null,
+    username: string,
+    isFollowing: boolean
+}) {
+    if (!headers) {
+        headers = {};
+    }
+    try {    
+        const { data } = await instance.request(
+            {
+                url: `/follow${username}`,
+                method: isFollowing ? "DELETE":"POST",
+                headers: headers
+            }
+        )
+        return data;    
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
+}
+
+async function getFollowersOf({ headers, userId } : {
+    headers: object,
+    userId: number | null
+}) : Promise<TUser[]> {
+    try {
+        const { data } = await instance.request(
+            {
+                method: "GET",
+                url: `/followers/${userId}`,
+                headers: headers
+            }
+        )
+        return data;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
+}
+
+async function getFollowingOf({ headers, userId } : {
+    headers: object,
+    userId: number | null
+}) : Promise<TUser[]> {
+    try {
+        const { data } = await instance.request(
+            {
+                method: "GET",
+                url: `/following/${userId}`,
+                headers: headers
+            }
+        )
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);

@@ -82,6 +82,11 @@ public class UsersController {
         List<UserDTO> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+    @GetMapping("/find/{userId}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) throws UserNotFoundException {
+        UserDTO user = userService.findUserById(userId);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
     @GetMapping("/{username}")
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) throws UserNotFoundException {
@@ -98,4 +103,24 @@ public class UsersController {
         List<UserDTO> followers = userService.findFollowingOf(userId);
         return new ResponseEntity<>(followers, HttpStatus.OK);
     }
+
+    @PostMapping("/follow/{username}")
+    public ResponseEntity<String> followUser(@PathVariable String username, @RequestHeader HttpHeaders headers) throws UserNotFoundException {
+        String token = headers.getFirst("Authorization").replace("Bearer ", "");
+        String fromUsername = tokenService.validateToken(token);
+        UserDTO fromUser = userService.findUserByUsername(fromUsername);
+        UserDTO toUser = userService.findUserByUsername(username);
+        userService.followUser(fromUser.id(), toUser.id());
+        return new ResponseEntity<>("User %1$s now follows user %2$s".formatted(fromUsername, username), HttpStatus.OK);
+    }
+    @DeleteMapping("/follow/{username}")
+    public ResponseEntity<String> unfollowUser(@PathVariable String username, @RequestHeader HttpHeaders headers) throws UserNotFoundException {
+        String token = headers.getFirst("Authorization").replace("Bearer ", "");
+        String fromUsername = tokenService.validateToken(token);
+        UserDTO fromUser = userService.findUserByUsername(fromUsername);
+        UserDTO toUser = userService.findUserByUsername(username);
+        userService.unfollowUser(fromUser.id(), toUser.id());
+        return new ResponseEntity<>("User %1$s now follows user %2$s".formatted(fromUsername, username), HttpStatus.OK);
+    }
+
 }

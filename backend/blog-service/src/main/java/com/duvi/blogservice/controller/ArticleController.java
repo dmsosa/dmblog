@@ -10,6 +10,7 @@ import com.duvi.blogservice.model.exceptions.TagNotFoundException;
 import com.duvi.blogservice.model.exceptions.UserNotFoundException;
 import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.service.ArticleService;
+import com.duvi.blogservice.service.TagService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +29,15 @@ public class ArticleController {
 
 
     private ArticleService articleService;
+    private TagService tagService;
     private TokenService tokenService;
     private UserRepository userRepository;
 
 
-    public ArticleController(ArticleService articleService, TokenService tokenService, UserRepository userRepository) {
+    public ArticleController(ArticleService articleService, TagService tagService, TokenService tokenService, UserRepository userRepository) {
 
         this.articleService = articleService;
+        this.tagService = tagService;
         this.tokenService = tokenService;
         this.userRepository = userRepository;
     }
@@ -144,6 +147,12 @@ public class ArticleController {
     }
 
     @GetMapping("/tags")
+    public ResponseEntity<List<Tag>> getAllTags() {
+        List<Tag> tags = tagService.getAllTags();
+        return new ResponseEntity<>(tags, HttpStatus.OK);
+
+    }
+    @GetMapping("/tags/find")
     public ResponseEntity<List<Tag>> getTagsOf(@RequestParam(required = true) String slug) throws ArticleDoNotExistsException {
         List<Tag> tags = articleService.getTagsOf(slug);
         return new ResponseEntity<>(tags, HttpStatus.OK);
