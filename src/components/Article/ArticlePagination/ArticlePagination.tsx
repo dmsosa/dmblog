@@ -1,15 +1,14 @@
 import ReactPaginate from "react-paginate";
 
 import { TArticleData, getArticles } from "../../../service/articleService";
+import { TAuthContext, useAuth } from "../../../context/AuthContext";
 
 function ArticlePagination({ 
-  headers,
   articlesCount, 
   username, 
   tagName, 
   location,
   updateArticles } : { 
-    headers: object | null,
     articlesCount: number,
     username?: string | null, 
     tagName?: string | null, 
@@ -17,10 +16,9 @@ function ArticlePagination({
     updateArticles: React.Dispatch<React.SetStateAction<TArticleData>> }) {
 
     const pageCount = Math.ceil(articlesCount / 3);
-
-
+    const { authState } = useAuth() as TAuthContext;
+    const { headers } = authState;
     
-
     const handlePageChange = (event: any) => {
       const page = event.selected;
 

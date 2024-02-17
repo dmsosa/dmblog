@@ -2,6 +2,7 @@ package com.duvi.blogservice.service.impl;
 
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.RegisterDTO;
+import com.duvi.blogservice.model.dto.SetUserDTO;
 import com.duvi.blogservice.model.dto.UserDTO;
 import com.duvi.blogservice.model.exceptions.UserAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.UserNotFoundException;
@@ -122,9 +123,10 @@ public class UserServiceImpl implements UserService {
     }
         //PUT
     @Override
-    public UserDTO editUser(Long oldUserId, UserDTO userDTO) {
-        User oldUser = userRepository.findById(oldUserId).get();
-        oldUser.updateUser(userDTO.username(), userDTO.email(), userDTO.image(), userDTO.bio());
+    public UserDTO updateUser(String oldUsername, SetUserDTO userDTO) {
+        User oldUser = userRepository.findByUsername(oldUsername).get();
+        String encryptedPassword = new BCryptPasswordEncoder().encode(userDTO.password());
+        oldUser.updateUser(userDTO.username(), userDTO.email(), userDTO.image(), userDTO.bio(), userDTO.password());
         userRepository.save(oldUser);
         return createDTO(oldUser);
     }

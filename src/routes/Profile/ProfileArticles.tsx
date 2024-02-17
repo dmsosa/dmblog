@@ -1,33 +1,28 @@
 import { useState } from "react";
 import ArticlePagination from "../../components/Article/ArticlePagination";
 import ArticlePreview from "../../components/Article/ArticlePreview";
-import { TArticle } from "../../types/Article";
+import useArticle from "../../hooks/useArticle";
+import { useParams } from "react-router-dom";
 
-function ProfileArticles({ headers, username, articles, articlesCount, setArticles, isLoading } : {
-    headers: object | null,
-    username: string, 
-    articles: TArticle[],
-    articlesCount: number,
-    setArticles: any,
-    isLoading: boolean }) {
+function ProfileArticles() {
 
-    const 
+    const { username } = useParams();
+    const [ tagName, setTagName ] = useState("");
+    const { articles, articlesCount, isLoading, setArticlesData} = useArticle(
+        {location: "profile", username, tagName });
 
     return (
         <div className="fav-arts">
             <ArticlePreview 
-            headers={headers}
             isLoading={isLoading}
-            username={username}
             articles={articles}
-            updateArticles={setArticles}
+            updateArticles={setArticlesData}
             ></ArticlePreview>
             <ArticlePagination
-            headers={headers}
             username={username}
             articlesCount={articlesCount}
             location="profile"
-            updateArticles={setArticles}
+            updateArticles={setArticlesData}
             ></ArticlePagination>
         </div>
     );

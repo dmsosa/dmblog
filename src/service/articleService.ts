@@ -36,23 +36,18 @@ export async function getArticles({ location, tagName, limit=3, offset=0, userna
     
     
         const endpoint: TEndpoint = {
-        global: `/?limit=${limit}&offset=${offset}`,
-        favs: `/?limit=${limit}&offset=${offset}&favorited=${username}`,
+        global: `/global?limit=${limit}&offset=${offset}`,
+        favs: `/favs/users/${username}?limit=${limit}&offset=${offset}&favorited=${username}`,
         feed: `/feed?limit=${limit}&offset=${offset}`,
-        tags: `?limit=${limit}&offset=${offset}&tags=${tagName}`,
-        author: `?limit=${limit}&offset=${offset}&author=${username}`
+        tags: `/tags?limit=${limit}&offset=${offset}&tag=${tagName}`,
+        profile: `/author/${username}?limit=${limit}&offset=${offset}`,
+        favList: `/favs/users/logged`
     }    
-    //All articles
-    //Articles by author
-    //Was ist feed?
-    //Favs from user
-    //Artikeln bei Tag
-
     try {
         if (!headers ) {
             headers = {};
         }
-        const { data } =  await instance.get(endpoint[location], {headers: headers})
+        const { data } =  await instance.get(endpoint[location], { headers: headers })
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);
@@ -63,21 +58,16 @@ export async function getArticles({ location, tagName, limit=3, offset=0, userna
 
 
 //toggleFavs
-export async function toggleFavs({ headers, username, slug, isFav } : { 
+export async function toggleFavs({ headers, slug, isFav } : { 
     headers: object, 
-    username: string, 
     slug: string, 
     isFav: boolean }) : Promise<TArticle> {
     try {    
         
         const { data }: { data: TArticle }= await instance.request({
-                url: `/favs`,
+                url: `/favs/${slug}`,
                 method: isFav? "DELETE":"POST",
-                headers: headers,
-                params: { 
-                    slug: slug,
-                    username: username
-                        }
+                headers: headers
             })
         data.isFav = !isFav;
         return data;
@@ -87,24 +77,7 @@ export async function toggleFavs({ headers, username, slug, isFav } : {
     } 
 }
 
-//getFavState 
-export async function getFavsOfUser({headers, username} : {
-    headers: object,
-    username: string 
-}) : Promise< TArticleData> {
-    try {
-        console.log(headers);
-        const { data } = await instance.request({
-        method: "GET",
-        url: `/favs/${username}`,
-        headers: headers
-        })
-        return data;
-    } catch (error) {
-        errorHandler(error as AxiosError);
-        throw (error);
-    }
-}
+
 
 //createArticle
 export async function setArticle({title, description, body, artSlug, tagList, headers } : {

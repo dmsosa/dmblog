@@ -45,8 +45,10 @@ public class ArticleController {
     //Basic CRUD
     @GetMapping("/global")
     public ResponseEntity<ArticlesResponseDTO> getAllArticles(@RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws ArticleDoNotExistsException {
+
         List<ArticleDTO> articleList = articleService.getArticles();
         Long articlesCount = (long) articleList.size();
+
 
         if (limit != null && offset != null) {
             Integer initOffset = offset*limit;
@@ -98,9 +100,18 @@ public class ArticleController {
 
     //Operations with Author
     @GetMapping("/author/{username}")
-    public ResponseEntity<List<ArticleDTO>> getArticlesFromAuthor(@PathVariable String username) throws UserNotFoundException {
+    public ResponseEntity<ArticlesResponseDTO> getArticlesFromAuthor(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws UserNotFoundException {
         List<ArticleDTO> articleDTOS = articleService.getByAuthor(username);
-        return new ResponseEntity<>(articleDTOS, HttpStatus.OK);
+        Long count = (long) articleDTOS.size();
+        if (limit != null && offset != null) {
+            Integer initOffset = offset*limit;
+            Integer endOffset = initOffset + limit;
+            List<ArticleDTO> articleList = articleDTOS.subList(initOffset, endOffset);
+            ArticlesResponseDTO response = new ArticlesResponseDTO(articleList, count);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        ArticlesResponseDTO response = new ArticlesResponseDTO(articleDTOS, count);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //Feed is basically the articles of a given author
@@ -115,45 +126,74 @@ public class ArticleController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     //Operations with Users
-    @GetMapping("/favs")
-    public ResponseEntity<List<UserDTO>> getFavsForArticle(@RequestParam(required = true, name = "slug") String slug ) throws ArticleDoNotExistsException {
+    @GetMapping("/favs/{slug}")
+    public ResponseEntity<List<UserDTO>> getFavsForArticle(@PathVariable String slug ) throws ArticleDoNotExistsException {
         List<UserDTO> favUsers = articleService.getFavUsers(slug);
         return new ResponseEntity<>(favUsers, HttpStatus.OK);
     }
 
-    @PostMapping("/favs")
-    public ResponseEntity<ArticleDTO> setFavsForUser(@RequestParam(required = true) String slug, @RequestParam(required = true) String username) throws ArticleDoNotExistsException, UserNotFoundException {
+    @PostMapping("/favs/{slug}")
+    public ResponseEntity<ArticleDTO> setFavsForUser(@PathVariable String slug, @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException, UserNotFoundException {
+        String token = headers.getFirst("Authorization").replace("Bearer ", "");
+        String username = tokenService.validateToken(token);
         ArticleDTO article = articleService.setFavorite(slug, username);
         return new ResponseEntity<>(article, HttpStatus.OK);
     }
-    @DeleteMapping("/favs")
-    public ResponseEntity<ArticleDTO> removeFavsForUser(@RequestParam(required = true) String slug, @RequestParam(required = true) String username) throws ArticleDoNotExistsException, UserNotFoundException {
+    @DeleteMapping("/favs/{slug}")
+    public ResponseEntity<ArticleDTO> removeFavsForUser(@PathVariable String slug, @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException, UserNotFoundException {
+        String token = headers.getFirst("Authorization").replace("Bearer ", "");
+        String username = tokenService.validateToken(token);
         ArticleDTO article = articleService.removeFavorite(slug, username);
         return new ResponseEntity<>(article, HttpStatus.OK);
     }
 
-    @GetMapping("/favs/{username}")
-    public  ResponseEntity<ArticlesResponseDTO> getFavsForUser(@PathVariable String username) throws UserNotFoundException {
+    @GetMapping("/favs/users/{username}")
+    public  ResponseEntity<ArticlesResponseDTO> getFavsForUser(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws UserNotFoundException {
+        List<ArticleDTO> articleDTOS = articleService.getFavArticles(username);
+        Long count = (long) articleDTOS.size();
+        if (limit != null && offset != null) {
+            Integer initOffset = offset*limit;
+            Integer endOffset = initOffset + limit;
+            List<ArticleDTO> articleList = articleDTOS.subList(initOffset, endOffset);
+            ArticlesResponseDTO response = new ArticlesResponseDTO(articleList, count);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        ArticlesResponseDTO response = new ArticlesResponseDTO(articleDTOS, count);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/favs/users/logged")
+    public ResponseEntity<ArticlesResponseDTO> getFavsOfLoggedUser(@RequestHeader HttpHeaders headers) throws UserNotFoundException {
+        String token = headers.getFirst("Authorization").replace("Bearer ", "");
+        String username = tokenService.validateToken(token);
         List<ArticleDTO> articleDTOS = articleService.getFavArticles(username);
         Long count = (long) articleDTOS.size();
         ArticlesResponseDTO response = new ArticlesResponseDTO(articleDTOS, count);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     //Operations with Tags
-    @GetMapping("/tags/{tagName}")
-    public  ResponseEntity<List<ArticleDTO>> getArticlesByTag(@PathVariable String tagName) throws TagNotFoundException {
-        List<ArticleDTO> articleDTOS = articleService.getArticlesByTag(tagName);
-        return new ResponseEntity<>(articleDTOS, HttpStatus.OK);
+    @GetMapping("/tags")
+    public  ResponseEntity<ArticlesResponseDTO> getArticlesByTag(@RequestParam(required = true) String tag, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws TagNotFoundException {
+        List<ArticleDTO> articleDTOS = articleService.getArticlesByTag(tag);
+        Long count = (long) articleDTOS.size();
+        if (limit != null && offset != null) {
+            Integer initOffset = offset*limit;
+            Integer endOffset = initOffset + limit;
+            List<ArticleDTO> articleList = articleDTOS.subList(initOffset, endOffset);
+            ArticlesResponseDTO response = new ArticlesResponseDTO(articleList, count);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        ArticlesResponseDTO response = new ArticlesResponseDTO(articleDTOS, count);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/tags")
+    @GetMapping("/global/tags")
     public ResponseEntity<List<Tag>> getAllTags() {
         List<Tag> tags = tagService.getAllTags();
         return new ResponseEntity<>(tags, HttpStatus.OK);
 
     }
-    @GetMapping("/tags/find")
-    public ResponseEntity<List<Tag>> getTagsOf(@RequestParam(required = true) String slug) throws ArticleDoNotExistsException {
+    @GetMapping("/tags/{slug}")
+    public ResponseEntity<List<Tag>> getTagsOf(@PathVariable String slug) throws ArticleDoNotExistsException {
         List<Tag> tags = articleService.getTagsOf(slug);
         return new ResponseEntity<>(tags, HttpStatus.OK);
 

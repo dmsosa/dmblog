@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
-import { TArticleData, getArticles, getFavsOfUser } from "../service/articleService";
+import { TArticleData, getArticles } from "../service/articleService";
 import { TAuthContext, useAuth } from "../context/AuthContext";
 import { errorHandler } from "../service/handleError";
-import { TArticle } from "../types/Article";
 
-function useArticle({location, username = null, headers, tagName, tabName } : { 
+function useArticle({location, username = null, tagName } : { 
     location: string, 
-    username: string | null, 
-    headers: object | null, 
-    tagName: string, 
-    tabName: string
+    username?: string | null, 
+    tagName: string
 }) {
     var [ { articles, articlesCount }, setArticlesData] = useState<TArticleData>(
         { articles: [], articlesCount: 0}
@@ -20,12 +17,14 @@ function useArticle({location, username = null, headers, tagName, tabName } : {
     const [ favArticles, setFavArticles ] = useState<TArticleData>(
         { articles: [], articlesCount: 0}
         );
+    const { authState } = useAuth() as TAuthContext;
+    const { headers } = authState;
 
     useEffect( () => {
-        if (!headers && tabName === "Feed") return;
+        if (!headers && location === "Feed") return;
 
         setLoading(true);
-        //get global articles
+        //get articles
         getArticles({location, tagName, headers, username })
         .then((articleData) => {
             setArticlesData(articleData)
@@ -33,18 +32,18 @@ function useArticle({location, username = null, headers, tagName, tabName } : {
         .catch((error) => {errorHandler(error)})
         .finally(() => {setLoading(false)});
 
-        //get favs articles of user
-        if (username && headers) {
-            getFavsOfUser({ headers, username })
-            .then((favArticles: TArticleData) => { 
-                setFavArticles(favArticles);
-                articles = articles.map((art) => {
-                    art.isFav = favArticles.articles.includes(art); 
-                    return art});
-            }).catch((error) => console.error(error)) 
-        };
+        if (headers) {
+            getArticles({location:"favList", headers})
+            .then((articleData) => (setFavArticles(articleData)))
+            .catch((error) => {errorHandler(error)})
+        }
 
-    }, [headers, tabName, tagName, username])
+        articles = articles.map((art) => {
+            art.isFav = favArticles.articles.includes(art);
+            return art;
+        })
+
+    }, [headers, location, tagName, username])
 
     return { articles, articlesCount, setArticlesData,
              favArticles, isLoading };

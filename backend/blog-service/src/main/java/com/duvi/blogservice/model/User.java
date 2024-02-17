@@ -93,11 +93,12 @@ public class User implements UserDetails {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void updateUser(String username, String email, String image, String bio) {
+    public void updateUser(String username, String email, String image, String bio, String password) {
         this.username = username;
         this.email = email;
         this.image = image;
         this.bio = bio;
+        this.password = password;
         this.updatedAt = LocalDateTime.now();
     }
     public void updatePassword(String password) {

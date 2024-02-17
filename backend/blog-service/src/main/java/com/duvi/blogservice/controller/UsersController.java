@@ -3,10 +3,7 @@ package com.duvi.blogservice.controller;
 
 import com.duvi.blogservice.config.security.TokenService;
 import com.duvi.blogservice.model.User;
-import com.duvi.blogservice.model.dto.AuthResponseDTO;
-import com.duvi.blogservice.model.dto.LoginDTO;
-import com.duvi.blogservice.model.dto.RegisterDTO;
-import com.duvi.blogservice.model.dto.UserDTO;
+import com.duvi.blogservice.model.dto.*;
 import com.duvi.blogservice.model.exceptions.UserAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.UserNotFoundException;
 import com.duvi.blogservice.model.relations.UserFollower;
@@ -91,6 +88,11 @@ public class UsersController {
     @GetMapping("/{username}")
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) throws UserNotFoundException {
         UserDTO userDTO = userService.findUserByUsername(username);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+    @PutMapping("/{username}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable String username, @RequestBody SetUserDTO newUserDTO ) {
+        UserDTO userDTO = userService.updateUser(username, newUserDTO);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
     @GetMapping("/followers/{userId}")

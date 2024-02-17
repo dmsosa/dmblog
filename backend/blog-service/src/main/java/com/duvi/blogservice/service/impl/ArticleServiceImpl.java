@@ -24,6 +24,7 @@ import com.duvi.blogservice.repository.relations.ArticleUserRepository;
 import com.duvi.blogservice.service.ArticleService;
 import com.duvi.blogservice.service.CommentService;
 import com.duvi.blogservice.service.UserService;
+import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -61,6 +62,9 @@ public class ArticleServiceImpl implements ArticleService {
     //CreateDTO
     @Override
     public ArticleDTO createDTO(Article article) {
+
+
+
         List<String> tagList = this.getTagsOf(article.getSlug()).stream().map((tag) -> tag.getName()).toList();
         return new ArticleDTO(article.getAuthor().getId(),
                 article.getTitle(),

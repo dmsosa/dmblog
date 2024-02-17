@@ -105,11 +105,18 @@ export function logoutUser() {
         headers: null,
         isAuth: false,
         loggedUser: {
-            bio: null,
-            email: "",
-            image: null,
-            token: "",
+            id: null,
             username: "",
+            email: "",
+            password: "",
+            image: null,
+            bio: null,
+            followersCount: null, 
+            followingCount: null,
+            followers: [],
+            following: [],
+            createdAt: null,
+            updatedAt: null
         }
     }
 }
@@ -161,6 +168,32 @@ export async function getUserById({ headers, userId } : {
             url: `/find/${userId}`, 
             headers: headers
         });
+        return data;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
+}
+
+export async function updateUser({ headers, username, email, image, bio, password } : {
+    headers: object | null,
+    username: string,
+    email: string,
+    image: string | null,
+    bio: string | null,
+    password: string
+    }
+) : Promise<TUser> {
+    try {
+        if (!headers) { 
+            headers = {} 
+        }
+        const { data } =  await instance.request({
+            url:`/${username}`,
+            headers: headers,
+            method: "PUT",
+            data: { username, email, image, bio, password }
+        })
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);

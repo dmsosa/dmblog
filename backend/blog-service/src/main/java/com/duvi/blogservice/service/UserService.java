@@ -2,6 +2,7 @@ package com.duvi.blogservice.service;
 
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.RegisterDTO;
+import com.duvi.blogservice.model.dto.SetUserDTO;
 import com.duvi.blogservice.model.dto.UserDTO;
 import com.duvi.blogservice.model.exceptions.UserAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.UserNotFoundException;
@@ -29,7 +30,7 @@ public interface UserService {
     UserDTO findUserByEmail(String email) throws UserNotFoundException;
     //Login look for Username and Email at once
     UserDTO findUserByLogin(String login) throws UserNotFoundException;
-    UserDTO editUser(Long oldUserId, UserDTO userDTO);
+    UserDTO updateUser(String oldUsername, SetUserDTO userDTO);
     void deleteUser(Long userId) throws UserNotFoundException;
 
     //Operations with Followers

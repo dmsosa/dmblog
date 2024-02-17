@@ -6,7 +6,16 @@ import com.duvi.blogservice.model.User;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ArticleDTO(Long userId, String title, String body, String description, String slug, List<String> tagList, LocalDateTime createdAt, LocalDateTime updatedAt, Integer favoritesCount) {
+public record ArticleDTO(
+        Long userId,
+        String title,
+        String body,
+        String description,
+        String slug,
+        List<String> tagList,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt,
+        Integer favoritesCount) {
 
 
 }

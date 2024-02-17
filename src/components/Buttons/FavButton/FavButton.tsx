@@ -1,9 +1,8 @@
 import {  useState } from "react"
 import { toggleFavs } from "../../../service/articleService"
+import { TAuthContext, useAuth } from "../../../context/AuthContext";
 
-function FavButton({ headers, username, slug, favoritesCount, isFav, handleFav } : { 
-    headers: object | null, 
-    username: string | null, 
+function FavButton({  slug, favoritesCount, isFav, handleFav } : { 
     slug: string, 
     favoritesCount: number, 
     isFav: boolean,
@@ -12,18 +11,19 @@ function FavButton({ headers, username, slug, favoritesCount, isFav, handleFav }
 
     
     const [loading, setLoading] = useState(false);
-        
+    const { authState } = useAuth() as TAuthContext;
+    const { headers } = authState;
     
     const buttonStyle = isFav ? "":"active";
     const innerText = isFav ? "Favorite":"Mark as favorite";
 
 
     const handleClick = () => {
-        if (!headers || !username) {
+        if (!headers) {
             return alert("You need to login first!");
         }
         setLoading(true);
-        toggleFavs({ headers, username, slug, isFav})
+        toggleFavs({ headers, slug, isFav})
         .then((article) => {handleFav(article)})
         .catch((error) => (console.log(error)))
         .finally(() => setLoading(false))

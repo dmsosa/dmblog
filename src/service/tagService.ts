@@ -10,7 +10,7 @@ let instance = axios.create({
 })
 export async function getTags(): Promise<string[]> {
     try {
-        const { data } = await instance.get("/tags");
+        const { data } = await instance.get("/global/tags");
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);
@@ -25,10 +25,9 @@ export async function getTagsOf({ headers, slug }: {
     
     if (!headers) { headers = {} };
     try {
-        const { data } : { data: TTag[] } = await instance.get("/tags/find", 
+        const { data } : { data: TTag[] } = await instance.get(`/tags/${slug}`, 
         { 
-            headers: headers, 
-            params: { slug: slug }
+            headers: headers
         })
 
         const tagList = data.map((tag) => { return tag.name });

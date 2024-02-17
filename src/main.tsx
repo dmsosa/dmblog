@@ -12,6 +12,10 @@ import ArticleEditor from './components/Article/ArticleEditor.tsx/ArticleEditor.
 import CommentSection from './routes/Article/CommentSection.tsx'
 import Article from './routes/Article/Article.tsx'
 import NotFound from './routes/NotFound.tsx'
+import ProfileArticles from './routes/Profile/ProfileArticles.tsx'
+import ProfileFavArticles from './routes/Profile/ProfileFavArticles.tsx'
+import Profile from './routes/Profile/Profile.tsx'
+import Settings from './routes/Settings.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -30,6 +34,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               <Route path="article/:slug" element={<Article />}>
                 <Route index element={<CommentSection />}/>
               </Route>
+              <Route path="profile/:username" element={<Profile />}>
+                <Route index element={<ProfileArticles />} />
+                <Route path="favorites" element={<ProfileFavArticles />} />
+              </Route>
+              <Route path="settings" element={<Settings />}></Route>
             </Route>
             <Route path="*" element={<NotFound />}></Route>
           </Routes>

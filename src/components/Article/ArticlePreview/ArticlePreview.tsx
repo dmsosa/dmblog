@@ -1,14 +1,10 @@
 import { Link } from "react-router-dom";
 import ArticleMeta from "../ArticleMeta";
-import ArticleTags from "../ArticleTags";
 import { TArticle } from "../../../types/Article";
 import { TArticleData } from "../../../service/articleService";
 import FavButton from "../../Buttons/FavButton";
-import { useEffect } from "react";
 
-function ArticlePreview({ headers, username, articles, isLoading, updateArticles } : { 
-    headers: object | null, 
-    username: string | null, 
+function ArticlePreview({  articles, isLoading, updateArticles } : { 
     articles: TArticle[], 
     isLoading: boolean, 
     updateArticles: React.Dispatch<React.SetStateAction<TArticleData>> }) {
@@ -26,9 +22,7 @@ function ArticlePreview({ headers, username, articles, isLoading, updateArticles
         <div className="article-preview" key={article.title}>
             <ArticleMeta createdAt={article.createdAt} author={article.author}>
                 <FavButton
-                headers={headers}
                 slug={article.slug}
-                username={username}
                 favoritesCount={article.favoritesCount}
                 handleFav={handleFav}
                 isFav={article.isFav}/>
