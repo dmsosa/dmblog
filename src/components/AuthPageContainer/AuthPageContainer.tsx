@@ -1,5 +1,4 @@
-import { ReactNode, ReactNodeArray } from "react";
-import ContainerRow from "../ContainerRow";
+import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 function AuthPageContainer({children, error, title, path, message} : 
@@ -12,18 +11,19 @@ function AuthPageContainer({children, error, title, path, message} :
 
     
     return (
-        <div className="auth-page-cont">
-            <ContainerRow>
-                <h1 className="auth-cont-title">{title}</h1>
-                {children}
-                {error.length>1 && 
-                <ul className="error-messages">
-                    <li>{error}</li>
-                </ul>}
-                <p className="auth-cont-message">
-                    <Link to={path}>{message}</Link>
-                </p>
-            </ContainerRow>
+        <div className="container auth-cont">
+            <div className="row">
+                <div className="col">
+                    <h1 className="auth-cont-title">{title}</h1>
+                    {children}
+                    {error && <p className="error-message">{error}</p>}
+                </div>
+                <div className="col">
+                    <p className="auth-cont-message">
+                        <Link to={path}>{message}</Link>
+                    </p>
+                </div>
+            </div>
         </div>   
     )
 }    

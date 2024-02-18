@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../service/userService";
-import ColContent from "../ColContent";
-import ContainerRow from "../ContainerRow";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import { ChangeEvent, FormEvent, useState } from "react";
 import FormFieldset from "../FormFieldset";
@@ -30,12 +28,16 @@ function LoginForm( {onError} : {onError: (error: Error) => void} ) {
 
         loginUser(loginData).then((state) => setAuthState(state)).catch((e) => {onError(e)});
         navigation("/");
-        
+
+    }
+
+    const comeBack = () => {
+        navigate("/")
     }
     return (
-        <ContainerRow>
-        <ColContent>
-            <form className="cont-form" onSubmit={handleSubmit}>
+        <div className="row">
+        <div className="col">
+            <form className="form-cont" onSubmit={handleSubmit}>
                 <FormFieldset
                     name="login"
                     title="username or email"
@@ -59,12 +61,13 @@ function LoginForm( {onError} : {onError: (error: Error) => void} ) {
                     <span className="checkbox-span checkmark"></span>
                 </label>
                 <button type="submit" className="btn btn-primary form-btn">Login</button>
+                <button className="btn form-btn" onClick={comeBack}>Come back</button>
                 <div className="form-footer">
                     <a className="form-footer-link">I forgot my password</a>
                 </div>
             </form>
-        </ColContent>
-    </ContainerRow>
+        </div>
+    </div>
     );
 }
 

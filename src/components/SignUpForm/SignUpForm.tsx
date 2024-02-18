@@ -7,7 +7,7 @@ import { TAuthContext, useAuth } from "../../context/AuthContext";
 
 function SignUpForm( {onError} : {onError: (error: Error) => void} ) {
 
-    const { authState, setAuthState } = useAuth() as TAuthContext;
+    const { setAuthState } = useAuth() as TAuthContext;
     const navigate = useNavigate();
 
     //formState
@@ -40,42 +40,51 @@ function SignUpForm( {onError} : {onError: (error: Error) => void} ) {
         const value = e.target.value;
         setFormState((prev) => ({...prev, [name]: value}));
     }
+
+    const comeBack = () => {
+        navigate("/")
+    }
     return (
-        <form onSubmit={handleSubmit}>
-            <FormFieldset
-                name="username"
-                title="username"
-                value={username}
-                required={true}
-                type="text"
-                placeholder={"A cool username"}
-                autoFocus={true}
-                changeHandler={handleInput}
-                minLength={3}
-            ></FormFieldset>
-            <FormFieldset
-                name="email"
-                title="email"
-                value={email}
-                required={true}
-                type="email"
-                placeholder={"An original email"}
-                changeHandler={handleInput}
-                minLength={5}
-            ></FormFieldset>
-            <FormFieldset
-                name="password"
-                title="password"
-                value={password}
-                required={true}
-                type="password"
-                placeholder={"An unguessable password"}
-                changeHandler={handleInput}
-                minLength={7}
-            ></FormFieldset>
-            <button type="submit" className="btn btn-primary form-btn" >Sign up</button>
-            <button type="submit" className="btn btn-danger form-btn">Come back</button>
-        </form>
+        <div className="row">
+            <div className="col">
+                <form onSubmit={handleSubmit}>
+                    <FormFieldset
+                        name="username"
+                        title="username"
+                        value={username}
+                        required={true}
+                        type="text"
+                        placeholder={"A cool username"}
+                        autoFocus={true}
+                        changeHandler={handleInput}
+                        minLength={3}
+                    ></FormFieldset>
+                    <FormFieldset
+                        name="email"
+                        title="email"
+                        value={email}
+                        required={true}
+                        type="email"
+                        placeholder={"An original email"}
+                        changeHandler={handleInput}
+                        minLength={5}
+                    ></FormFieldset>
+                    <FormFieldset
+                        name="password"
+                        title="password"
+                        value={password}
+                        required={true}
+                        type="password"
+                        placeholder={"An unguessable password"}
+                        changeHandler={handleInput}
+                        minLength={7}
+                    ></FormFieldset>
+                    <button type="submit" className="btn btn-primary form-btn" >Sign up</button>
+                    <button className="btn form-btn" onClick={comeBack}>Come back</button>
+                </form>
+            </div>
+        </div>
+        
     )
 }
 

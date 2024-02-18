@@ -38,7 +38,7 @@ function FormFieldset(
                 className={`form-input ${addClass.length>1? addClass : ""}`}
                 onChange={changeHandler}
                 minLength={minLength}
-                placeholder={placeholder}
+                placeholder={placeholder || ""}
                 name={name}
                 autoFocus={autoFocus}
                 required={required}

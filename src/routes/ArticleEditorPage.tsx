@@ -5,9 +5,7 @@ function ArticleEditorPage() {
     return(
         <div className="editor-page">
             <ContainerRow >
-                <div className="col">
                     <ArticleEditor/>
-                </div>
             </ContainerRow>
         </div>
 

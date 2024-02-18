@@ -66,7 +66,14 @@ function ArticleEditor() {
         setErrorMessage(message);
     }
     return (
-                
+        <>
+            
+                {errorMessage && 
+                    <div className="col">
+                        <h1>Error!</h1>
+                        <p className="error-message">{errorMessage}</p>
+                    </div>}
+            <div className="col">
                 <form className="article-form" onSubmit={handleSubmit}> 
                     <fieldset>
                             {errorMessage && <h1>{errorMessage}</h1>}
@@ -114,7 +121,9 @@ function ArticleEditor() {
                             </button>
                     </fieldset>
                 </form> 
-
+            </div>
+        </>
+                
         
     )
 }
