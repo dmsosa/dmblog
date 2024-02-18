@@ -18,14 +18,19 @@ type TUserData = {
     password: string
 }
 
+type TAuthResponse = {
+    token: string,
+    loggedUser: TUser
+}
+
 
 const faultResponse = {
     id: null,
     username: "",
     email: "",
     password: "",
-    image: null,
-    bio: null,
+    image: "",
+    bio: "",
     followersCount: null, 
     followingCount: null,
     followers: [],
@@ -87,7 +92,7 @@ export async function loginUser({ login, password } : { login: string, password:
             url: "/login"
         });
         
-        const headers = { "Authorization" : "Bearer "+data.token};
+        const headers = { Authorization : "Bearer "+data.token};
         const loggedIn = { headers: headers, isAuth: true, loggedUser: data.loggedUser }
 
         localStorage.setItem("loggedUser", JSON.stringify(loggedIn));
@@ -109,8 +114,8 @@ export function logoutUser() {
             username: "",
             email: "",
             password: "",
-            image: null,
-            bio: null,
+            image: "",
+            bio: "",
             followersCount: null, 
             followingCount: null,
             followers: [],
@@ -183,18 +188,25 @@ export async function updateUser({ headers, username, email, image, bio, passwor
     bio: string | null,
     password: string
     }
-) : Promise<TUser> {
+) : Promise<TAuthState> {
     try {
         if (!headers) { 
             headers = {} 
         }
-        const { data } =  await instance.request({
-            url:`/${username}`,
+        const { data } : { data: TAuthResponse } =  await instance.request({
+            url:"/",
             headers: headers,
             method: "PUT",
             data: { username, email, image, bio, password }
         })
-        return data;
+        const { token, loggedUser } = data;
+        const newHeaders = { Authorization: `Bearer ${token}`};
+
+
+        const loggedIn = { headers: newHeaders, isAuth: true, loggedUser: data.loggedUser};
+        localStorage.setItem("loggedUser", JSON.stringify(loggedIn));
+
+        return loggedIn;
     } catch (error) {
         errorHandler(error as AxiosError);
         throw(error);

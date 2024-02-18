@@ -2,14 +2,16 @@ import { useNavigate } from "react-router-dom";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 import { logoutUser } from "../../service/userService";
+import { LoggedOptions } from "./LoggedOptions";
+import { NotLoggedOptions } from "./NotLoggedOptions";
 
 function DropdownItem() {
     const navigation = useNavigate();
     const { authState, setAuthState } =  useAuth() as TAuthContext;
-    const { isAuth } = authState;
+    const { isAuth, loggedUser } = authState;
 
     const [dropdown, setDropdown] = useState(false);
-    const logout = () => {
+    const handleLogout = () => {
         if (setAuthState) {
             setAuthState(logoutUser);
             navigation("/");
@@ -34,18 +36,11 @@ function DropdownItem() {
                 className="dropdown-menu" 
                 style={{display: dropdown ? "block" : "none"}}
                 onMouseLeave={handleClick} >
-                    <li className="dropdown-item">
-                        <a className="dropdown-link" href={isAuth? "#":"login"}>{isAuth? "Mein Profil":"Login"}</a>
-                    </li>
-                    <li className="dropdown-item">
-                        <a className="dropdown-link" href={isAuth? "#":"sign-up"}>{isAuth? "Search":"Sign Up"}</a>
-                    </li>
-                    <li className="dropdown-item">
-                        <a className="dropdown-link" href="#">Einstellungen</a>
-                    </li>
-                    { isAuth && <li className="dropdown-item">
-                        <a className="dropdown-link" href="#" role="button" onClick={logout}>Logout</a>
-                    </li> }
+                    {isAuth ? 
+                    <LoggedOptions 
+                    username={loggedUser.username}
+                    handleLogout={handleLogout}
+                    /> : <NotLoggedOptions />}
                 </ul>
         </li>
     )

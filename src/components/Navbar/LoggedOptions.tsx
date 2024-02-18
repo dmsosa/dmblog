@@ -3,10 +3,14 @@ import { FiArrowDownCircle } from "react-icons/fi"
 import { FaBeer } from "react-icons/fa"
 import NavItem from "../NavItem";
 
-export function LoggedOptions() {
+export function LoggedOptions({ username, handleLogout } : { username: string, handleLogout: () => void }) {
     return (
-        <div>
-            <NavItem icon="bi-globe" text="My account" url="/"/>
-        </div>
+        <>
+            <NavItem icon="bi-globe" text="Profile" url={`profile/${username}`}/>
+            <NavItem icon="bi-globe" text="New Article" url="/editor"/>
+            <NavItem icon="bi-globe" text="Settings" url="/settings"/>
+            <li className="nav-item"><a role="button" onClick={handleLogout}>Logout</a></li>
+
+        </>
     )
 }

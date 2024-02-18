@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO updateUser(String oldUsername, SetUserDTO userDTO) {
         User oldUser = userRepository.findByUsername(oldUsername).get();
         String encryptedPassword = new BCryptPasswordEncoder().encode(userDTO.password());
-        oldUser.updateUser(userDTO.username(), userDTO.email(), userDTO.image(), userDTO.bio(), userDTO.password());
+        oldUser.updateUser(userDTO.username(), userDTO.email(), userDTO.image(), userDTO.bio(), encryptedPassword);
         userRepository.save(oldUser);
         return createDTO(oldUser);
     }
