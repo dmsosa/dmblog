@@ -21,7 +21,7 @@ const emptyForm = {
 }
 function ArticleEditor() {
     const { state } = useLocation();
-    const [{title, description, body, tagList }, setForm ] = useState(state || emptyForm); 
+    const [{title, description, body, tagList }, setForm ] = useState<TForm>(state || emptyForm); 
     const [errorMessage, setErrorMessage ] = useState("");
     const { authState } = useAuth() as TAuthContext;
     const { headers, isAuth, loggedUser } = authState;
@@ -36,9 +36,9 @@ function ArticleEditor() {
         getArticleBySlug({slug, headers})
         .then((article: TArticle) => {
             
-            const { id, title, description, body, tags } = article;
+            const { id, title, description, body, tagList } = article;
             if (loggedUser.id !== id) redirect();
-            setForm({ title, description, body, tags });
+            setForm({ title, description, body, tagList });
         })
         .catch((error) => {handleError(error as AxiosError)})
         
@@ -48,11 +48,11 @@ function ArticleEditor() {
 
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> ) => {
         const name = e.target.name;
-        const value = e.target.innerText;
+        const value = e.target.value;
         setForm((prev: TForm) =>  ({...prev, [name]:value})); 
     }
     const handleTagInput = (e: ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.innerText;
+        const value = e.target.value;
         setForm((prev: TForm) =>  ({...prev, tagList: value.split(/, | /)})); 
     }
     const handleSubmit = (e: MouseEvent<HTMLFormElement> ) => {

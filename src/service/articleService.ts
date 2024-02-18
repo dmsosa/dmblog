@@ -1,8 +1,6 @@
 import axios, {  AxiosError } from 'axios';
 import { errorHandler } from './handleError';
 import { TArticle } from '../types/Article';
-import { TUser } from '../types/User';
-import {  TAuthState } from '../context/AuthContext';
 import { slufigy } from '../helpers/helpers';
 import { getUser, getUserById, getUserByUsername } from './userService';
 import { getTagsOf } from './tagService';
@@ -119,6 +117,10 @@ export async function getArticleBySlug({slug, headers } : {slug: string, headers
         getTagsOf({headers, slug})
         .then((tagList) => data.tagList = tagList)
         .catch((error) => console.log(error))
+
+        //setFav is default setted to false
+        data.isFav = false;
+
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);

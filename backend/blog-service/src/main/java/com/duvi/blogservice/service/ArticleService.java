@@ -26,7 +26,7 @@ public interface ArticleService {
 
     //Basic CRUD Operations
     List<ArticleDTO> getArticles() throws ArticleDoNotExistsException;
-    ArticleDTO createArticle(ArticleDTO articleDTO) throws ArticleAlreadyExistsException, ArticleDoNotExistsException;
+    ArticleDTO createArticle(SetArticleDTO articleDTO) throws ArticleAlreadyExistsException, ArticleDoNotExistsException;
     ArticleDTO getArticleBySlug(String slug) throws ArticleDoNotExistsException;
     ArticleDTO getArticleById(Long id) throws ArticleDoNotExistsException;
     ArticleDTO getArticleByTitle(String title) throws ArticleDoNotExistsException;

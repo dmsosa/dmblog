@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record ArticleDTO(
+        Long id,
         Long userId,
         String title,
         String body,

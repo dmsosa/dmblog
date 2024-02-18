@@ -67,18 +67,8 @@ public class ArticleController {
         String username = tokenService.validateToken(token);
         User user = userRepository.findByUsername(username).get();
 
-        ArticleDTO articleDTO = new ArticleDTO(
-                user.getId(),
-                createArticleDTO.title(),
-                createArticleDTO.body(),
-                createArticleDTO.description(),
-                createArticleDTO.slug(),
-                createArticleDTO.tagList(),
-                LocalDateTime.now(),
-                LocalDateTime.now(),
-                0);
 
-        ArticleDTO article = articleService.createArticle(articleDTO);
+        ArticleDTO article = articleService.createArticle(createArticleDTO);
 
         return new ResponseEntity<>(article, HttpStatus.CREATED);
     }

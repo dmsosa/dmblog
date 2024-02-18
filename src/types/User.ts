@@ -7,8 +7,6 @@ export type TUser = {
     bio: string,
     followersCount: number | null, 
     followingCount: number | null,
-    followers: TUser[],
-    following: TUser[],
     createdAt: Date | null,
     updatedAt: Date | null
 }

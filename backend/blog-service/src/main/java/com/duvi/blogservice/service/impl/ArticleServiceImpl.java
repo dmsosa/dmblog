@@ -63,10 +63,16 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleDTO createDTO(Article article) {
 
-
-
         List<String> tagList = this.getTagsOf(article.getSlug()).stream().map((tag) -> tag.getName()).toList();
-        return new ArticleDTO(article.getAuthor().getId(),
+        Integer favsCount = 0;
+        if (article.getFavUsers() != null) {
+            favsCount = article.getFavUsers().size();
+        }
+
+
+        return new ArticleDTO(
+                article.getId(),
+                article.getAuthor().getId(),
                 article.getTitle(),
                 article.getBody(),
                 article.getDescription(),
@@ -74,7 +80,7 @@ public class ArticleServiceImpl implements ArticleService {
                 tagList,
                 article.getCreatedAt(),
                 article.getUpdatedAt(),
-                article.getFavUsers().size()
+                favsCount
         );
     }
 
@@ -88,7 +94,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleList.stream().map(this::createDTO).toList();
     }
     @Override
-    public ArticleDTO createArticle(ArticleDTO articleDTO) throws ArticleAlreadyExistsException, ArticleDoNotExistsException {
+    public ArticleDTO createArticle(SetArticleDTO articleDTO) throws ArticleAlreadyExistsException, ArticleDoNotExistsException {
         if (!articleRepository.existsByTitle(articleDTO.title())) {
             User user = userRepository.findById(articleDTO.userId()).get();
             Article article = new Article(articleDTO, user);

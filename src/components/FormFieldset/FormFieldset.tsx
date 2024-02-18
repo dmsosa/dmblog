@@ -17,7 +17,7 @@ function FormFieldset(
     : {
         autoFocus?: boolean,
         children?: ReactNode | ReactNode[] | null,
-        changeHandler: (e:React.ChangeEvent<HTMLInputElement>) => void,
+        changeHandler:(e:React.ChangeEvent<HTMLInputElement>) => void | ((e: React.ChangeEvent<HTMLTextAreaElement>) => void),
         minLength?: number | undefined,
         name: string,
         title: string,

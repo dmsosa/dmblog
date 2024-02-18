@@ -33,8 +33,6 @@ const faultResponse = {
     bio: "",
     followersCount: null, 
     followingCount: null,
-    followers: [],
-    following: [],
     createdAt: null,
     updatedAt: null
 }
@@ -59,15 +57,6 @@ export async function signUpUser( userData: TUserData, asAdmin:boolean=false): P
         })
         const { token, loggedUser } : { token: string, loggedUser: TUser }= data;
         const headers = {Authorization: `Bearer ${token}`};
-        const { id } = loggedUser;
-
-        getFollowersOf({ headers, userId: id })
-        .then( (followersList) => loggedUser.followers = followersList)
-        .catch((error) => console.log(error))
-
-        getFollowingOf({ headers, userId: id })
-        .then( (followingList) => loggedUser.following = followingList)
-        .catch((error) => console.log(error))
 
 
         const loggedIn = { headers: headers, isAuth: true, loggedUser: loggedUser };
@@ -173,6 +162,9 @@ export async function getUserById({ headers, userId } : {
             url: `/find/${userId}`, 
             headers: headers
         });
+
+
+
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);
@@ -199,7 +191,7 @@ export async function updateUser({ headers, username, email, image, bio, passwor
             method: "PUT",
             data: { username, email, image, bio, password }
         })
-        const { token, loggedUser } = data;
+        const { token } = data;
         const newHeaders = { Authorization: `Bearer ${token}`};
 
 

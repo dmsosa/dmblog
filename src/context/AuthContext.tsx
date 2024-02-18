@@ -33,8 +33,6 @@ var authState: TAuthState = {
         bio: "",
         followersCount: null, 
         followingCount: null,
-        followers: [],
-        following: [],
         createdAt: null,
         updatedAt: null
     }

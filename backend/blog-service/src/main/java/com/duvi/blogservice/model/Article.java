@@ -64,7 +64,7 @@ public class Article {
     @OneToMany(mappedBy = "article")
     private Set<Comment> comments;
 
-    public Article(ArticleDTO articleDTO, User user) {
+    public Article(SetArticleDTO articleDTO, User user) {
         this.author = user;
         this.body = articleDTO.body();
         this.description = articleDTO.description();
