@@ -5,14 +5,17 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.duvi.blogservice.model.User;
+import org.antlr.v4.runtime.Token;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Date;
 
 @Service
 public class TokenService {
@@ -47,13 +50,30 @@ public class TokenService {
                     .build();
             DecodedJWT decodedJWT = verifier.verify(token);
             return decodedJWT.getSubject();
-        } catch (JWTVerificationException e) {
-            return "";
+        }
+        catch (JWTVerificationException e) {
+            throw(e);
         }
 
     }
 
+    public Date getExpirationDate(String token) {
+        Algorithm algorithm = Algorithm.HMAC256(secret);
+        try {
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer(issuer)
+                    .build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            return decodedJWT.getExpiresAt();
+        }
+        catch (JWTVerificationException e) {
+            throw(e);
+        }
+    }
     private Instant generateExpirationDate() {
         return LocalDateTime.now().plusHours(10).toInstant(ZoneOffset.of("+00:00"));
     }
+
+
+
 }
