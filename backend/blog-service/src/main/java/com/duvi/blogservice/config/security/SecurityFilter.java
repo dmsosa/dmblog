@@ -9,6 +9,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,12 +33,14 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private TokenService tokenService;
     private AuthenticationService authenticationService;
-    private GlobalExceptionHandler globalExceptionHandler;
 
-    public SecurityFilter(TokenService tokenService, AuthenticationService authenticationService, GlobalExceptionHandler globalExceptionHandler) {
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver resolver;
+
+    public SecurityFilter(TokenService tokenService, AuthenticationService authenticationService,     @Qualifier("handlerExceptionResolver")  HandlerExceptionResolver resolver) {
         this.tokenService = tokenService;
         this.authenticationService = authenticationService;
-        this.globalExceptionHandler = globalExceptionHandler;
+        this.resolver = resolver;
     }
 
     @Override
@@ -48,12 +52,11 @@ public class SecurityFilter extends OncePerRequestFilter {
                 UserDetails userDetails = authenticationService.loadUserByUsername(username);
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                filterChain.doFilter(request, response);
             } catch (TokenExpiredException tee) {
-
-
+                resolver.resolveException(request, response, null, tee);
             }
         }
-        filterChain.doFilter(request, response);
     }
 
     private String getToken(HttpServletRequest request) {

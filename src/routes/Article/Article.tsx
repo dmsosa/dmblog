@@ -74,10 +74,10 @@ function Article() {
 
     const { state } = useLocation();
     const navigate = useNavigate();
-    const [ article, setArticle ] = useState<TArticle>(state || initArticle);
+    const [ article, setArticle ] = useState(initArticle);
     const { title, description, body, createdAt, author, tagList } = article || {};
     const { authState } = useAuth() as TAuthContext;
-    const { headers, isAuth } = authState;
+    const { headers, isAuth, loggedUser } = authState;
     const { slug } = useParams();
 
     useEffect(() => {
@@ -85,12 +85,14 @@ function Article() {
         if (state) return;
         getArticleBySlug({slug: slug || "", headers: headers })
         .then((articleData) => {
-            console.log("artData", articleData)
-            setArticle(articleData)})
+            setArticle(articleData)
+            ;}
+            )
         .catch((error) => {
             console.error(error);
             navigate("/not-found", { replace:true })
         });
+        
 
     }, [slug, headers, isAuth, state, navigate])
 
@@ -103,7 +105,8 @@ function Article() {
             <ArticleMeta
                 createdAt={createdAt}
                 author={author}>
-                <ArticleButtons article={article}  setArticle={setArticle}/>
+                {!!article && <ArticleButtons article={article}  setArticle={setArticle}/>}
+                {!article && <h1>Loading buttons...</h1>}
             </ArticleMeta>
             <ContainerRow addClass={"articlecont"}>
                 {body && <Markdown options={{ forceBlock:true }}>{body}</Markdown>}
@@ -112,7 +115,8 @@ function Article() {
                     <ArticleMeta
                     createdAt={createdAt}
                     author={author}>
-                        <ArticleButtons article={article} setArticle={setArticle}/>
+                        {!!article && <ArticleButtons article={article}  setArticle={setArticle}/>}
+                        {!article && <h1>Loading buttons...</h1>}
                     </ArticleMeta>
                 </div>
             </ContainerRow>

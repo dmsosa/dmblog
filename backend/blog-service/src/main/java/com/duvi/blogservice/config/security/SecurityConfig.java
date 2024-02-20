@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/articles/global/tags").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/articles/tags").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/articles/favs/users/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

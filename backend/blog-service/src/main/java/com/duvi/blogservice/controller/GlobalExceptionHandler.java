@@ -2,19 +2,40 @@ package com.duvi.blogservice.controller;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.duvi.blogservice.model.exceptions.ApiError;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.util.WebUtils;
 
+import java.io.IOException;
 import java.util.Collections;
+import java.util.Enumeration;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+@Controller
+public class GlobalExceptionHandler implements ErrorController {
+
+    public String getErrorPath() {
+        return "/error";
+    }
+    @GetMapping("/error")
+    public ResponseEntity<String> errorHandler(HttpServletRequest request, HttpServletResponse response) throws Throwable {
+
+
+        if (request.getAttribute(RequestDispatcher.ERROR_EXCEPTION) != null) {
+            throw (Throwable) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+        }
+        return new ResponseEntity<>("Unexpected error occurred and you were redirected to the /error endpoint, please check the logs for more information \n", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler
     public ResponseEntity<ApiError> exceptionHandler(Exception exception, WebRequest request) {

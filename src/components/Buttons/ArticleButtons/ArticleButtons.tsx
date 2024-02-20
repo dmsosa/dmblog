@@ -36,7 +36,7 @@ const initArticle: TArticle = {
     updatedAt: null
 }
 
-function ArticleButtons({ article = initArticle, setArticle } : {
+function ArticleButtons({ article, setArticle } : {
     article: TArticle,
     setArticle: React.Dispatch<SetStateAction<TArticle>>
 }) {
