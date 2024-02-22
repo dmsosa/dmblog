@@ -27,7 +27,7 @@ function ArticlePreview({  articles, isLoading, updateArticles } : {
                 handleFav={handleFav}
                 isFav={article.isFav}/>
             </ArticleMeta>
-            <Link to={article.slug}>
+            <Link to={article.slug} state={article}>
                 <h1>{article.title}</h1>
                 <p>{article.description}</p>
                 <span>read more...</span>

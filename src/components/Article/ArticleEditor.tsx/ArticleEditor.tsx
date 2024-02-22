@@ -2,7 +2,7 @@ import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import FormFieldset from "../../FormFieldset";
 import ContainerRow from "../../ContainerRow";
 import { getArticleBySlug, setArticle } from "../../../service/articleService";
-import { redirect, useLocation, useNavigate, useParams } from "react-router-dom";
+import {  useLocation, useNavigate, useParams } from "react-router-dom";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
 import { AxiosError } from "axios";
 import { TArticle } from "../../../types/Article";
@@ -57,7 +57,7 @@ function ArticleEditor() {
     }
     const handleSubmit = (e: MouseEvent<HTMLFormElement> ) => {
         e.preventDefault();
-        setArticle({title, description, body, artSlug: slug || null, tagList, headers })
+        setArticle({ userId: loggedUser.id, title, description, body, artSlug: slug || null, tagList, headers })
         .then((article: TArticle) => {navigate(`/article/${article.slug}`)})
         .catch((error: AxiosError) => { handleError(error) })
     }

@@ -21,7 +21,7 @@ function useArticle({location, username = null, tagName } : {
     const { headers } = authState;
 
     useEffect( () => {
-        if (!headers && location === "Feed") return;
+        if (!headers) { setLoading(false); return };
 
         setLoading(true);
         //get articles

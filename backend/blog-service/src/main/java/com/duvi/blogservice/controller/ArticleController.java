@@ -60,6 +60,25 @@ public class ArticleController {
         ArticlesResponseDTO articleResponse = new ArticlesResponseDTO(articleList, articlesCount);
         return new ResponseEntity<>(articleResponse, HttpStatus.OK);
     }
+
+    @GetMapping("/feed")
+    public ResponseEntity<ArticlesResponseDTO> getFeedArticles(@RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws ArticleDoNotExistsException {
+
+        List<ArticleDTO> articleList = articleService.getArticles();
+        Long articlesCount = (long) articleList.size();
+
+
+        if (limit != null && offset != null) {
+            Integer initOffset = offset*limit;
+            Integer endOffset = initOffset + limit;
+            List<ArticleDTO> subList = articleList.subList(initOffset, endOffset);
+            ArticlesResponseDTO articleResponse = new ArticlesResponseDTO(subList, articlesCount);
+            return new ResponseEntity<>(articleResponse, HttpStatus.OK);
+        }
+        ArticlesResponseDTO articleResponse = new ArticlesResponseDTO(articleList, articlesCount);
+        return new ResponseEntity<>(articleResponse, HttpStatus.OK);
+    }
+
     @PostMapping("/global")
     public ResponseEntity<ArticleDTO> createArticle(@RequestBody SetArticleDTO createArticleDTO, @RequestHeader HttpHeaders headers) throws ArticleAlreadyExistsException, ArticleDoNotExistsException {
 
@@ -67,22 +86,21 @@ public class ArticleController {
         String username = tokenService.validateToken(token);
         User user = userRepository.findByUsername(username).get();
 
-
         ArticleDTO article = articleService.createArticle(createArticleDTO);
 
         return new ResponseEntity<>(article, HttpStatus.CREATED);
     }
-    @GetMapping("/{articleSlug}")
+    @GetMapping("/slug/{articleSlug}")
     public ResponseEntity<ArticleDTO> getArticleBySlug(@PathVariable String articleSlug) throws ArticleDoNotExistsException {
         return new ResponseEntity<>(articleService.getArticleBySlug(articleSlug), HttpStatus.OK);
     }
 
-    @PutMapping("/{articleSlug}")
+    @PutMapping("/slug/{articleSlug}")
     public ResponseEntity<ArticleDTO> editArticle(@PathVariable String articleSlug, @RequestBody SetArticleDTO setArticleDTO) throws ArticleDoNotExistsException {
         return new ResponseEntity<>(articleService.updateArticleBySlug(articleSlug, setArticleDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{articleSlug}")
+    @DeleteMapping("/slug/{articleSlug}")
     public ResponseEntity<String> deleteArticleBySlug(@PathVariable String articleSlug) throws ArticleDoNotExistsException {
         articleService.deleteArticleBySlug(articleSlug);
         return new ResponseEntity<>("Article with slug %s successfully deleted".formatted(articleSlug), HttpStatus.OK);

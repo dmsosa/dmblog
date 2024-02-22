@@ -24,18 +24,7 @@ type TAuthResponse = {
 }
 
 
-const faultResponse = {
-    id: null,
-    username: "",
-    email: "",
-    password: "",
-    image: "",
-    bio: "",
-    followersCount: null, 
-    followingCount: null,
-    createdAt: null,
-    updatedAt: null
-}
+
 
 
 //Sign Up User
@@ -155,7 +144,6 @@ export async function getUserById({ headers, userId } : {
     headers: object, 
     userId: number | null }) : Promise<TUser> {
     
-    if (!userId) return faultResponse;
     try {
         const { data } = await instance.request({
             method: "GET",
@@ -217,7 +205,7 @@ export async function toggleFollow({ headers, username, isFollowing} : {
     try {    
         const { data } = await instance.request(
             {
-                url: `/follow${username}`,
+                url: `/follow/${username}`,
                 method: isFollowing ? "DELETE":"POST",
                 headers: headers
             }
@@ -229,7 +217,7 @@ export async function toggleFollow({ headers, username, isFollowing} : {
     }
 }
 
-async function getFollowersOf({ headers, userId } : {
+export async function getFollowersOf({ headers, userId } : {
     headers: object,
     userId: number | null
 }) : Promise<TUser[]> {
@@ -248,7 +236,7 @@ async function getFollowersOf({ headers, userId } : {
     }
 }
 
-async function getFollowingOf({ headers, userId } : {
+export async function getFollowingOf({ headers, userId } : {
     headers: object,
     userId: number | null
 }) : Promise<TUser[]> {
@@ -257,6 +245,25 @@ async function getFollowingOf({ headers, userId } : {
             {
                 method: "GET",
                 url: `/following/${userId}`,
+                headers: headers
+            }
+        )
+        return data;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
+}
+
+export async function getFollowingIdsOf({ headers, userId } : {
+    headers: object,
+    userId: number | null
+}) : Promise<number[]> {
+    try {
+        const { data } = await instance.request(
+            {
+                method: "GET",
+                url: `/followingId/${userId}`,
                 headers: headers
             }
         )

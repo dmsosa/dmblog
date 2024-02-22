@@ -1,40 +1,14 @@
-import { SetStateAction } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { TArticle } from "../../../types/Article";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
 import { useParams } from "react-router-dom";
 import AuthorButtons from "../AuthorButtons/AuthorButtons";
 import FavButton from "../FavButton";
 import FollowButton from "../FollowButton/FollowButton";
-import { TUser } from "../../../types/User";
-
-const initAuthor: TUser = {
-    id: null,
-    username: "author",
-    email: "",
-    password: "",
-    image: "",
-    bio: "",
-    followersCount: 0, 
-    followingCount: 0,
-    createdAt: null,
-    updatedAt: null
-}
+import { getFollowingIdsOf, getFollowingOf } from "../../../service/userService";
+import { errorHandler } from "../../../service/handleError";
 
 
-const initArticle: TArticle = {
-    id: null,
-    userId: null,
-    title: "title",
-    author: initAuthor,
-    description: "",
-    body: "<h1>Hello arti</h1>",
-    slug: "",
-    tagList: [],
-    isFav: false,
-    favoritesCount: 0,
-    createdAt: null,
-    updatedAt: null
-}
 
 function ArticleButtons({ article, setArticle } : {
     article: TArticle,
@@ -42,24 +16,36 @@ function ArticleButtons({ article, setArticle } : {
 }) {
     const { author } = article;
     const { authState } = useAuth() as TAuthContext;
-    const { loggedUser } = authState;
+    const { loggedUser, headers } = authState;
     const { slug } = useParams();
+    const [ followingIds, setFollowingIds ] = useState<number[]>([]);
 
+    useEffect(() => {
+        if (!headers) return;
+        getFollowingIdsOf({ headers, userId: loggedUser.id})
+        .then((followingIds) => setFollowingIds(followingIds))
+        .catch((error) => errorHandler(error))
+    }, [])
     const checkFollow = (authorId: number | null) => {
         if (!authorId) return false;
-        return false;
+        return followingIds.filter((followingId) => authorId === followingId ).length > 0;
     }
-    const handleFollow = (author: TUser) => {
-        setArticle((prev) => ({...prev, author}))
+    const handleFollow = (isCurrentlyFollowing: boolean) => {
+        if (!author.followingCount) return;
+        const newFollowingCount = isCurrentlyFollowing ? author.followingCount+1 : author.followingCount-1;
+        setArticle((prevArticle) => (
+            {...prevArticle, 
+                author: {...author, followingCount: newFollowingCount}
+            }))
     };
     const handleFav = (article: TArticle) => {
-        setArticle((prev) => ({...prev, article}))
+        setArticle((prevArticle) => ({...prevArticle, favoritesCount: article.favoritesCount, isFav: article.isFav}))
     }
     return loggedUser.username === author.username ? (
         <AuthorButtons {...article } slug={slug}/>
     ) : (
         <div className="article-buttons">        
-            <FollowButton isFollowing={checkFollow(author.id) } {...author} handler={handleFollow}/>
+            <FollowButton isFollowing={checkFollow(author.id)} {...author} handleFollow={handleFollow}/>
             <FavButton {...article} handleFav={handleFav}/>
         </div>
 

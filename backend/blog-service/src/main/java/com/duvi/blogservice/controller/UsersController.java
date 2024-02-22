@@ -111,6 +111,11 @@ public class UsersController {
         List<UserDTO> followers = userService.findFollowingOf(userId);
         return new ResponseEntity<>(followers, HttpStatus.OK);
     }
+    @GetMapping("/followingId/{userId}")
+    public ResponseEntity<List<Long>> getFollowingIdOf(@PathVariable Long userId) throws UserNotFoundException {
+        List<Long> followingsId = userService.findFollowingIdsOf(userId);
+        return new ResponseEntity<>(followingsId, HttpStatus.OK);
+    }
 
     @PostMapping("/follow/{username}")
     public ResponseEntity<String> followUser(@PathVariable String username, @RequestHeader HttpHeaders headers) throws UserNotFoundException {

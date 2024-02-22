@@ -1,7 +1,7 @@
 import axios, {  AxiosError } from 'axios';
-import { errorHandler } from './handleError';
+import { ApiError, errorHandler } from './handleError';
 import { TArticle } from '../types/Article';
-import { slufigy } from '../helpers/helpers';
+import { slugify } from '../helpers/helpers';
 import { getUser, getUserById, getUserByUsername } from './userService';
 import { getTagsOf } from './tagService';
 
@@ -78,7 +78,8 @@ export async function toggleFavs({ headers, slug, isFav } : {
 
 
 //createArticle
-export async function setArticle({title, description, body, artSlug, tagList, headers } : {
+export async function setArticle({userId, title, description, body, artSlug, tagList, headers } : {
+    userId: number | null,
     title: string,
     description: string,
     body: string,
@@ -90,10 +91,10 @@ export async function setArticle({title, description, body, artSlug, tagList, he
     try {
         const { data } = await instance.request({
             method: artSlug? "PUT":"POST",
-            url: artSlug? `/${artSlug}`:"/global",
+            url: artSlug? `/slug/${artSlug}`:"/global",
             headers: headers || {},
-            data: artSlug? { title, description, body, slug: artSlug, tagList } : 
-            { title, description, body, slug: slufigy(title), tagList }
+            data: artSlug? { userId, title, description, body, slug: slugify(title), tagList } : 
+            { userId, title, description, body, slug: slugify(title), tagList }
         })
         return data;
     } catch (error) {
@@ -104,15 +105,10 @@ export async function setArticle({title, description, body, artSlug, tagList, he
 }
 
 //Get article by slug
-export async function getArticleBySlug({slug, headers } : {slug: string, headers: object | null}) {
+export async function getArticleBySlug({slug, headers } : {slug: string, headers: object | null}) : Promise<TArticle> {
     try {
         if (!headers) { headers = {} };
-        const { data } : { data:TArticle } = await instance.get(`/${slug}`, { headers: headers});
-
-        getUserById({ headers, userId: data.userId  })
-        .then((user) => { 
-            data.author = user})
-        .catch((error) => console.log(error))
+        const { data } : { data:TArticle  } = await instance.get(`/slug/${slug}`, { headers: headers});
 
         getTagsOf({headers, slug})
         .then((tagList) => data.tagList = tagList)
@@ -136,7 +132,7 @@ export async function deleteArticleBySlug({slug, headers} : {slug: string, heade
     try {    
         const { data } = await instance.request(
             {
-                url: `/${slug}`,
+                url: `/slug/${slug}`,
                 method: "DELETE",
                 headers: headers
             })

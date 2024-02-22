@@ -3,6 +3,7 @@ import { getUser, logoutUser } from "../service/userService";
 import { errorHandler } from "../service/handleError";
 import { AxiosError } from "axios";
 import { TUser } from "../types/User";
+import { useLocation } from "react-router-dom";
 
 export type TAuthState = {
     headers: object | null,
@@ -33,6 +34,8 @@ var authState: TAuthState = {
         bio: "",
         followersCount: null, 
         followingCount: null,
+        followers: null,
+        following: null,
         createdAt: null,
         updatedAt: null
     }
@@ -58,12 +61,12 @@ function AuthProvider({ children }: { children : ReactNode[] | ReactNode }) {
             })
             .catch((e: AxiosError) => {
                 errorHandler(e)
-                setAuthState(logoutUser);
+                setAuthState(logoutUser());
             } 
 ); 
 
 
-        }, [authState, setAuthState])
+        }, [authState, setAuthState ])
     return (
         <AuthContext.Provider value={{authState, setAuthState}}>
             {children}

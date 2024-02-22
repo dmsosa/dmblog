@@ -6,6 +6,7 @@ import FeedProvider from "../context/FeedContext";
 import FeedToggler from "../components/FeedToggler";
 import TagList from "../components/TagList/TagList";
 import ContainerRow from "../components/ContainerRow";
+import { logoutUser } from "../service/userService";
 
 
 
@@ -14,7 +15,13 @@ function Home() {
     const { loggedUser } = authState;
 
 
-
+    const handleClick  = () => {
+        console.log(loggedUser)
+        console.log(authState);
+        console.log(localStorage.getItem("loggedUser"));
+        
+        
+    }
     return(
         <>
         <section className="bg-hero"> 
@@ -24,8 +31,9 @@ function Home() {
                 </div>
             </BannerContainer>
             <a>
-                <span>Hello {loggedUser.username}</span>
+                {loggedUser && <span>Hello {loggedUser.username}</span>}
             </a>
+            <button onClick={handleClick}>lick</button>
             <ContainerRow
             addClass={"page"}>
                 <FeedProvider>

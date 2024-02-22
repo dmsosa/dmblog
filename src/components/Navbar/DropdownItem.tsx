@@ -36,7 +36,7 @@ function DropdownItem() {
                 className="dropdown-menu" 
                 style={{display: dropdown ? "block" : "none"}}
                 onMouseLeave={handleClick} >
-                    {isAuth ? 
+                    {isAuth && loggedUser ? 
                     <LoggedOptions 
                     username={loggedUser.username}
                     handleLogout={handleLogout}

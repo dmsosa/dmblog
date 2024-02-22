@@ -41,5 +41,6 @@ public interface UserService {
     public List<UserDTO> findFollowersOf(Long userId);
     public Integer findFollowingCount(Long userId);
     public List<UserDTO> findFollowingOf(Long userId);
+    public List<Long> findFollowingIdsOf(Long userId) throws UserNotFoundException;
 
 }

@@ -67,6 +67,7 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
+    height: 82px;
     z-index: 10000;
     transition: 1s ease-in-out;
 }
@@ -80,6 +81,7 @@ body {
 
 .nav-menu-container {
     width: 100%;
+    max-height: 82px;
 }
 
 .nav-main {
@@ -223,7 +225,7 @@ body {
 .main {
     background: linear-gradient(60deg, #112233 10%, #111927 10%, #111927 90%, #112233 90%) no-repeat fixed;
     color: wheat;
-    padding-top: 6em;
+    padding-top: 82px;
 }
 
 
@@ -439,16 +441,57 @@ a:hover {
     width: 100%;
     margin: 1em auto;
 }
-.form-footer {
-    margin-top: 1em;
+
+
+//footer styles
+
+footer {
+    margin: 0;
+    padding: 0;
+    background-color: #000D1C;
+    color: whitesmoke;
+    height: 250px;
 }
 
+.form-footer .form-input {
+    margin: 0 auto;
+    width: 70%;
+}
+.form-footer .form-label {
+    margin: 0 auto;
+    background-color: transparent;
+    text-align: center;
+}
+.socialmedia-ul {
+    margin:  0 auto;
+    display: flex;
+    flex: 0 0 10%;
+    list-style: none;
+}
+.socialmedia-li {
+    margin: 0 1em;
+    padding: 0.25em;
+    width: 5em;
+    text-align: center;
+
+}
+
+.socialmedia-a  {
+    margin: 0 auto;
+}
+
+footer ul {
+    display: flex;
+    justify-content: space-between;
+}
 //Button Styles 
 
 .btn-primary {
     @include btn-styles();
 
 }
+
+
 
 @keyframes hop {
     0% {
@@ -462,12 +505,13 @@ a:hover {
     }
 }
 
+// Others
 
-
-// Footer styles
-
-footer {
-    background-color: gray;
+.loading-truck {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    height: calc(100vh - 332px);
 }
 
 

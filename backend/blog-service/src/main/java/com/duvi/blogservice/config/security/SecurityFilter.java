@@ -46,17 +46,15 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getToken(request);
-        if (token != null) {
-            try {
+        if (token != null ) {
                 String username = tokenService.validateToken(token);
                 UserDetails userDetails = authenticationService.loadUserByUsername(username);
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                filterChain.doFilter(request, response);
-            } catch (TokenExpiredException tee) {
-                resolver.resolveException(request, response, null, tee);
             }
-        }
+
+        filterChain.doFilter(request, response);
+
     }
 
     private String getToken(HttpServletRequest request) {
@@ -67,11 +65,5 @@ public class SecurityFilter extends OncePerRequestFilter {
         return token.replace("Bearer ", "");
     }
 
-    private String convertObjectToJson(Object object) throws JsonProcessingException {
-        if (object == null) {
-            return null;
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
-    }
+
 }

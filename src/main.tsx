@@ -17,6 +17,7 @@ import ProfileFavArticles from './routes/Profile/ProfileFavArticles.tsx'
 import Profile from './routes/Profile/Profile.tsx'
 import Settings from './routes/Settings.tsx'
 
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>

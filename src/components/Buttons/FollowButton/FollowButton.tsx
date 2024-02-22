@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { toggleFollow } from "../../../service/userService";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
-import { TUser } from "../../../types/User";
 
-function FollowButton({ username, isFollowing, followersCount, handler } : { 
+function FollowButton({ username, isFollowing, followersCount, handleFollow } : { 
     username: string,
     isFollowing: boolean,
     followersCount: number | null,
-    handler: (author: TUser) => void}) {
+    handleFollow: (isFollowing: boolean) => void}) {
     
     const [ loading, setLoading ] = useState(false);
     const { authState } = useAuth() as TAuthContext;
@@ -20,7 +19,7 @@ function FollowButton({ username, isFollowing, followersCount, handler } : {
         if (!isAuth) return alert("You need to login first!");
         setLoading(true);
         toggleFollow({headers, username, isFollowing})
-        .then((userData) => handler(userData))
+        .then((userData) => handleFollow(userData))
         .catch((error) => console.log(error))
         .finally(() => setLoading(false));
     }

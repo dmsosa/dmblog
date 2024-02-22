@@ -26,13 +26,19 @@ function LoginForm( {onError} : {onError: (error: Error) => void} ) {
 
         const loginData = { login: login, password: password};
 
-        loginUser(loginData).then((state) => setAuthState(state)).catch((e) => {onError(e)});
-        navigation("/");
+        loginUser(loginData)
+        .then((state) => { 
+            setAuthState(state);
+        })
+        .catch((e) => {onError(e)})
+        .finally(() => {             
+            navigation("/");
+        });
 
     }
 
     const comeBack = () => {
-        navigate("/")
+        navigation("/")
     }
     return (
         <div className="row">

@@ -23,13 +23,13 @@ function FeedProvider ({ children }: { children: ReactNode | ReactNode[]}) {
     const { isAuth } = authState;
     const [{ tabName, tagName }, setFeedState] = useState<TFeedState>(
         {
-            tabName: isAuth? 'Feed' : 'Global', 
+            tabName: isAuth? 'feed' : 'global', 
             tagName: ''
         }
     );
 
     useEffect(() => {
-        setFeedState((prev) => ({...prev, tabName: isAuth? 'Feed' : 'Global'}))
+        setFeedState((prev) => ({...prev, tabName: isAuth? 'feed' : 'global'}))
     }, [isAuth]);
 
     const changeFeed = async (e: MouseEvent<HTMLButtonElement>, tabName: string ) => {

@@ -22,7 +22,7 @@ function NavMenu() {
                         <nav className="navbar navbar-expand-lg p-0">
                             <div className="collapse navbar-collapse navbar-collapse-mobile" id="navbarMenu">
                                 <ul className="navbar-nav">
-                                    {isAuth ? 
+                                    {isAuth && loggedUser ? 
                                     <LoggedOptions 
                                     username={loggedUser.username}
                                     handleLogout={handleLogout}

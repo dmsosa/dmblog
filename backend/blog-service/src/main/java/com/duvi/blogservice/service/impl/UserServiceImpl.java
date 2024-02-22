@@ -191,6 +191,15 @@ public class UserServiceImpl implements UserService {
         return followingList.stream().map(this::createDTO).toList();
     }
 
+    @Override
+    public List<Long> findFollowingIdsOf(Long userId) throws UserNotFoundException {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException(userId);
+        }
+        List<UserFollower> userFollowerList = followersRepository.findByFollowerId(userId);
+        List<Long> followingIdList = userFollowerList.stream().map((relation) -> relation.getUser().getId()).toList();
+        return followingIdList;
+    }
 
 
 
