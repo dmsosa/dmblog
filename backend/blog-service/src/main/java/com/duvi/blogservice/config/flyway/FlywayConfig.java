@@ -31,10 +31,6 @@ public class FlywayConfig {
                 .baselineOnMigrate(true);
     }
 
-    @Bean
-    FlywayMigrationStrategy migrationStrategy() {
-        return flyway -> flyway.migrate();
-    }
 
 
 

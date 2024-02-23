@@ -1,0 +1,19 @@
+dist: trusty
+jobs:
+  include:
+    - language: java
+      addons:
+        apt:
+          packages:
+            - openjdk-21-jdk
+      jdk: openjdk21
+      before_install: 
+        - echo ${TRAVIS_COMMIT} && echo ${TRAVIS_BRANCH}
+        - cd backend
+        - chmod +x .mvnw
+      after_failure:
+        - echo ${TRAVIS_TEST_RESULT}
+  include:
+    - language: node_js
+      node_js: 21
+      
