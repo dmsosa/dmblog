@@ -1,6 +1,8 @@
 dist: trusty
 jobs:
   include:
+    - stage: test
+    - name: "testing java"
     - language: java
       addons:
         apt:
@@ -14,6 +16,8 @@ jobs:
       after_failure:
         - echo ${TRAVIS_TEST_RESULT}
   include:
+    - stage: test
+    - name: "testing node"
     - language: node_js
       node_js: 21
       
