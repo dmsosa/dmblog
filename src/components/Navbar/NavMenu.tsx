@@ -17,22 +17,15 @@ function NavMenu() {
         }
     };
     return (
-        <section className="nav-menu bg-color-white-nav d-block d-lg-none">
-                    <div className="nav-menu-container container-lg p-0">
-                        <nav className="navbar navbar-expand-lg p-0">
-                            <div className="collapse navbar-collapse navbar-collapse-mobile" id="navbarMenu">
-                                <ul className="navbar-nav">
-                                    {isAuth && loggedUser ? 
-                                    <LoggedOptions 
-                                    username={loggedUser.username}
-                                    handleLogout={handleLogout}
-                                    /> : <NotLoggedOptions />}
-                                </ul>
-                            </div>
-                        </nav>
-                    </div>
-        </section>
-    )
+            <ul className="navbar-nav">
+                {isAuth && loggedUser ? 
+                <LoggedOptions 
+                username={loggedUser.username}
+                handleLogout={handleLogout}
+                /> : <NotLoggedOptions />}
+            </ul>
+
+)
 }
 
 export default NavMenu;

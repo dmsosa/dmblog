@@ -9,7 +9,7 @@ export function LoggedOptions({ username, handleLogout } : { username: string, h
             <NavItem icon="bi-globe" text="Profile" url={`profile/${username}`}/>
             <NavItem icon="bi-globe" text="New Article" url="/editor"/>
             <NavItem icon="bi-globe" text="Settings" url="/settings"/>
-            <li className="nav-item"><a role="button" onClick={handleLogout}>Logout</a></li>
+            <li className="nav-item"><a className="nav-link" role="button" href="" onClick={handleLogout}>Logout</a></li>
 
         </>
     )

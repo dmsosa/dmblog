@@ -35,13 +35,11 @@ body {
     line-height: 1.5;
 }
 
-// .bg-hero {
-//     background: linear-gradient(60deg, #112233 10%, #111927 10%, #111927 90%, #112233 90%);
-// }
-.bg-color-blue-nav {
+
+.bg-color-blue-nav, .bg-color-blue-nav .navbar {
     background-color: #111927;
 }
-.bg-color-white-nav {
+.bg-color-white-nav, .bg-color-white-nav .navbar {
     background-color: #EEE;
 }
 
@@ -56,13 +54,16 @@ body {
 }
 
 // Navbar Styles 
-// Von Allgemeinen zu Einzelnen
-//Navbar Container > Navbar Collapse
+// Structure
 
+
+//some shadow
 
 .nav-shadow {
     box-shadow: 0 9px 15px -12px black;
 }
+
+//sticky and scroll effects
 .sticky-header {
     position: fixed;
     top: 0;
@@ -71,6 +72,8 @@ body {
     z-index: 10000;
     transition: 1s ease-in-out;
 }
+
+
 .scroll-down {
     transform: translate3d(0, -100%, 0);
 }
@@ -79,14 +82,19 @@ body {
     transform: none;
 }
 
-.nav-menu-container {
-    width: 100%;
-    max-height: 82px;
+//navbar styles
+.nav-menu .navbar, .nav-menu .navbar-nav  {
+    height: 82px;
 }
 
-.nav-main {
-    width: 100%;
+.navbar-collapse .navbar-nav {
+    vertical-align: middle;
+    padding: 1em;
 }
+
+
+//mobile nav a.k.a navbar small
+
 .navbar-toggler {
     padding: 0.125em 0.25em;
     border: transparent solid;
@@ -94,54 +102,32 @@ body {
 .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");    
 }
-.nav-main .nav-main-toggle {
-    z-index: 9999;
+.nav-mobile-toggle {
+    z-index: 1000;
 }
 
-.nav-main .navbar-collapse-main {
+.navbar-mobile .navbar-collapse-mobile {
     margin: 0;
+    height: 100vh;
+    background-color: whitesmoke;
     position: absolute;
     top: 0;
     right: 0;
     left: 0;
-    height: 100vh;
-    width: 100%;
-    flex-direction: column;
-    visibility: hidden;
+    flex-direction: row;
+    visibility:hidden;
 }
-
-.navbar-collapse-main.show {
-    z-index: 999;
-    opacity: 1;
+.navbar-collapse-mobile.show {
     visibility: visible;
 }
-
-.nav-main .navbar-collapse-main>.navbar-nav {
-    width: 100%;
-    display: flex;
-    background-color: #111927;
-    padding: 0.25em 1em;
-}
-
-
-.navbar-collapse-main .nav-menu {
-    height: 100vh;
+.navbar-collapse-mobile .navbar-nav {
+    flex-direction: column;
+    flex-grow: 1;
+    height: calc(100vh - 82px);
     width: 100%;
     padding: 0;
 }
 
-.navbar-collapse-mobile .navbar-nav {
-    flex-direction: column;
-    width: 100%;
-}
-.show .navbar-collapse-mobile {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 82px);
-    max-height: calc(100vh - 82px);
-    width: 100%;
-    overflow: overlay;
-}
 
 // Navbar Elements 
 // Navbar-brand, Nav-item und Nav-link
@@ -151,22 +137,18 @@ body {
     margin: 0;
     padding: 0;
 }
-
 .brand-logo {
-    width: 4em;
-    margin-right: -0.85em;
+    height: 3em;
+    margin-right: -0.50em;
 }
-
 .brand-name {
     text-decoration: none;
     font: 1.2em sans-serif;
     font-weight: bold;
     color: #51FF00;
     position: relative;
-    top: 0.5em;
+    top: 0.25em;
 }
-
-
 .nav-item {
     padding: 0.25em 1em;
     border-radius: 0.5em;
@@ -174,49 +156,27 @@ body {
 .nav-item:hover {
     box-shadow: #51FF00 0px 0px 1px;
 }
-
 .nav-link {
     margin:0;
     color: white;
     font-weight: bold;
     cursor: pointer; 
 }
-
 .navbar-collapse-mobile .nav-item:hover {
     box-shadow: #51FF00 0px 0px 1px;
 }
-
-.navbar-collapse-mobile .nav-link {
-    margin:0;
-    color: black;
-    font-weight: bold;
-    cursor: pointer; 
-}
-
-.navbar-collapse-mobile .nav-link:hover {
+.navbar-collapse-mobile .nav-link, .dropdown-menu .nav-link {
     color: black;
 }
-.navbar-collapse-mobile .nav-link:active {
-    color: #51FF00;
-}
-
 
 .nav-link:hover {
     color: #51FF00;
 }
-.nav-link:visited {
-    color: #51FF00;
-}
+
 .dropdown-link {
     color: black;
 }
 
-#navbarMenu .nav-link {
-    color: black;
-}
-#navbarMenu .nav-link:hover {
-    color: #51FF00;
-}
 // Content Styles
 
 // Allgemeine Stillen - General Styles
@@ -224,8 +184,8 @@ body {
 
 .main {
     background: linear-gradient(60deg, #112233 10%, #111927 10%, #111927 90%, #112233 90%) no-repeat fixed;
-    color: wheat;
     padding-top: 82px;
+    color: wheat;
 }
 
 
@@ -514,4 +474,6 @@ footer ul {
     height: calc(100vh - 332px);
 }
 
-
+.not-found-page  {
+    height: calc(100vh - 332px);
+}

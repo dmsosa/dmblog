@@ -40,8 +40,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 <Route path="favorites" element={<ProfileFavArticles />} />
               </Route>
               <Route path="settings" element={<Settings />}></Route>
+              <Route path="*" element={<NotFound />}></Route>
             </Route>
-            <Route path="*" element={<NotFound />}></Route>
           </Routes>
       </AuthProvider>
     </BrowserRouter>

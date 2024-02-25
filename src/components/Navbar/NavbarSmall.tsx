@@ -5,11 +5,10 @@ function NavbarSmall() {
         document.body.classList.toggle("nonscroll");
     }
     return (
-        <section className="bg-color-blue-nav">
-            <div className="container-lg p-0 d-lg-none" id="mainNavContainer">
-                <nav className="navbar navbar-expand-lg nav-main px-3" id="mainNav">
+        <section className="nav-menu bg-color-blue-nav p-0 d-lg-none">
+                <nav className="navbar navbar-expand-lg px-3 navbar-mobile">
                     <BrandLogo />
-                    <div className="nav-main-toggle">
+                    <div className="nav-mobile-toggle">
                         <button 
                         className="navbar-toggler nav-main-collapse d-inline-flex" 
                         type="button" data-bs-toggle="collapse" 
@@ -20,14 +19,13 @@ function NavbarSmall() {
                             <span className="navbar-toggler-icon"></span>
                         </button>
                     </div>
-                    <div className="collapse navbar-collapse navbar-collapse-main" id="navbarSupportedContent">
-                        <ul className="navbar-nav nav-main-links">
+                    <div className="collapse navbar-collapse navbar-collapse-mobile" id="navbarSupportedContent">
+                        <nav className="navbar">
                             <BrandLogo/>
-                        </ul>
+                        </nav>
                         <NavMenu />
                     </div>
                 </nav>
-            </div>
         </section>
     )
 }

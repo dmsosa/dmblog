@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import NavMenu from "./NavMenu";
 import NavbarLarge from "./NavbarLarge";
 import NavbarSmall from "./NavbarSmall";
 import scrollNavbar from "../../service/scrollNavbar";
