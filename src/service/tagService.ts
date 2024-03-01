@@ -18,17 +18,12 @@ export async function getTags(): Promise<string[]> {
     }
 }
 
-export async function getTagsOf({ headers, slug }: { 
-    headers: object | null, 
+export async function getTagsOf({ slug }: {  
     slug: string
 }) : Promise<string[]> {
     
-    if (!headers) { headers = {} };
     try {
-        const { data } : { data: TTag[] } = await instance.get(`/tags/${slug}`, 
-        { 
-            headers: headers
-        })
+        const { data } : { data: TTag[] } = await instance.get(`/tags/${slug}`)
 
         const tagList = data.map((tag) => { return tag.name });
         return tagList;

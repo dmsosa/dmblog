@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 
+
 type TErrorData = {
     objectName: string,
     defaultMessage: string
@@ -9,17 +10,18 @@ type TApiError = {
 }
 export class ApiError {
     private error: AxiosError;
-    private message;
+    public message;
+    private statusCode;
     private _globallyHandled: boolean = false;
     constructor(error: AxiosError) {
         this.error = error;
-        const statusCode = error.response? error.response.status : null;
+        this.statusCode = error.response? error.response.status : null;
         const errorData: TApiError | null = error.response? error.response.data as TApiError : null;
         if (errorData) {
             const { objectName, defaultMessage } = errorData.errors[0];
             this.message = `${objectName} due to ${defaultMessage}`;
         } else {
-            switch (statusCode) {
+            switch (this.statusCode) {
                 case 404:
                     this.message = "Resource not found";
                     break;
@@ -32,11 +34,13 @@ export class ApiError {
                 case 409:
                     this.message = "Resource conflict";
                     break;
+                case 406:
+                    this.message = "Token expired";
+                    break;
                 default:
                     this.message = "An exception ocurred while making the request"
             }
         }
-        
     }
     public getMessage(): string {
         return this.message;
@@ -44,10 +48,14 @@ export class ApiError {
     public getError(): AxiosError {
         return this.error;
     }
+    public getStatusCode(): number | null {
+        return this.statusCode;
+    }
     public handleGlobally(): void {
         if (this._globallyHandled) {return};
         this._globallyHandled = true;
-        console.log(this.error, this.message);
+        console.log(this.error + "\n - - -   - - -   - - - \n" + this.message + "\n - - -    - - -    - - -\n");
+        
     }
 }
 

@@ -1,16 +1,21 @@
+import AuthorInfo from "../../components/AuthorInfo";
 import ContainerRow from "../../components/ContainerRow";
 import NavItem from "../../components/NavItem";
-import {  Outlet, useLocation } from "react-router-dom";
+import {  Outlet, useLocation, useParams } from "react-router-dom";
 
 function Profile() {
     const { state } = useLocation();
+    const { username } = useParams();
+
+
 
 
     return (
+        !!username &&
     <div className="profile-cont">
         <div className="profile-info">
             <ContainerRow>
-                <div className="col">UserInfo</div>
+                <AuthorInfo username={username}/>
             </ContainerRow>
         </div>
         <ContainerRow>

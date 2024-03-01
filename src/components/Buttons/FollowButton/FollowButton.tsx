@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { toggleFollow } from "../../../service/userService";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
+import { TUser } from "../../../types/User";
 
 function FollowButton({ username, isFollowing, followersCount, handleFollow } : { 
     username: string,
     isFollowing: boolean,
     followersCount: number | null,
-    handleFollow: (isFollowing: boolean) => void}) {
+    handleFollow: (userData: TUser) => void}) {
     
     const [ loading, setLoading ] = useState(false);
     const { authState } = useAuth() as TAuthContext;

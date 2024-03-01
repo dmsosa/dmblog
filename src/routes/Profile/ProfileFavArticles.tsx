@@ -1,7 +1,6 @@
 import { useState } from "react";
 import ArticlePagination from "../../components/Article/ArticlePagination";
 import ArticlePreview from "../../components/Article/ArticlePreview";
-import { TArticle } from "../../types/Article";
 import { useParams } from "react-router-dom";
 import useArticle from "../../hooks/useArticle";
 

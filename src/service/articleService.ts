@@ -105,12 +105,12 @@ export async function setArticle({userId, title, description, body, artSlug, tag
 }
 
 //Get article by slug
-export async function getArticleBySlug({slug, headers } : {slug: string, headers: object | null}) : Promise<TArticle> {
+export async function getArticleBySlug({slug } : {slug: string }) : Promise<TArticle> {
     try {
-        if (!headers) { headers = {} };
-        const { data } : { data:TArticle  } = await instance.get(`/slug/${slug}`, { headers: headers});
 
-        getTagsOf({headers, slug})
+        const { data } : { data:TArticle  } = await instance.get(`/slug/${slug}`);
+
+        getTagsOf({slug})
         .then((tagList) => data.tagList = tagList)
         .catch((error) => console.log(error))
 
@@ -139,7 +139,7 @@ export async function deleteArticleBySlug({slug, headers} : {slug: string, heade
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);
-        throw(error);
+        throw(error)
     }
 
 

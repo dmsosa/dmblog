@@ -15,5 +15,9 @@ jobs:
         - chmod +x .mvnw
       after_failure:
         - echo ${TRAVIS_TEST_RESULT}
-
+  include:
+    - stage: test
+    - name: "testing node"
+    - language: node_js
+      node_js: 21
       

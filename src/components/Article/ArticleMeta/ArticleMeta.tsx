@@ -3,12 +3,16 @@ import ContainerRow from "../../ContainerRow";
 import Avatar from "../../Avatar";
 import { dateFormatter } from "../../../helpers/helpers";
 import { TUser } from "../../../types/User";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 
-function ArticleMeta({ children, createdAt, author }: { children: ReactNode | ReactNode[] ,createdAt: Date | null, author: TUser }) {
+function ArticleMeta({ children, createdAt, author }: { 
+    children: ReactNode | ReactNode[],
+    createdAt: Date | null, 
+    author: TUser }) {
 
-    const { bio, followersCount, followingCount, image, username } = author || {};
+    const { bio, followersCount, followingCount, image, username } = author;
+
 
     return (
         <ContainerRow

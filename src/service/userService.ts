@@ -122,15 +122,13 @@ export async function getUser({ headers } : { headers: object }) : Promise<TUser
 }
 
 //Get  User By Username
-export async function getUserByUsername({ headers, username } : { 
-    headers: object, 
+export async function getUserByUsername({ username } : {  
     username: string }) : Promise<TUser> {
 
     try {
         const { data } = await axios.request({
             method: "GET",
-            url: `/${username}`, 
-            headers: headers
+            url: `/${username}`
         });
         return data;
     } catch (error) {
@@ -140,15 +138,14 @@ export async function getUserByUsername({ headers, username } : {
 }
 
 //Get  User By Id
-export async function getUserById({ headers, userId } : { 
-    headers: object, 
+export async function getUserById({  userId } : { 
+ 
     userId: number | null }) : Promise<TUser> {
     
     try {
         const { data } = await instance.request({
             method: "GET",
-            url: `/find/${userId}`, 
-            headers: headers
+            url: `/find/${userId}`
         });
 
 

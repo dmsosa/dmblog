@@ -1,6 +1,6 @@
 import apple from "../../assets/img/apple.svg";
 
-function Avatar({ alt, src, addClass="" } : {alt: string | null, src: string | null, addClass?: string} ) {
+function Avatar({ alt, src, addClass="" } : {alt?: string | null, src: string | null, addClass?: string} ) {
 
 
     return (

@@ -303,6 +303,8 @@ a:hover {
     margin: 0 auto;
 }
 
+//Form styles
+
 .cont:has( > form) {
     background-color: #000D1C;
     max-width: 50%;
@@ -402,6 +404,15 @@ a:hover {
     margin: 1em auto;
 }
 
+//Article styles
+
+//Comment styles
+
+
+
+.col {
+    border: red solid 1px;
+}
 
 //footer styles
 

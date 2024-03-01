@@ -248,6 +248,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleList.stream().map(this::createDTO).toList();
     }
 
+    //Operations with tags
     @Override
     public List<ArticleDTO> getArticlesByTag(String tagName) throws TagNotFoundException {
         if (!tagRepository.existsByName(tagName)) {
@@ -316,15 +317,6 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
 
-
-    @Override
-    public List<CommentDTO> getCommentsOf(String slug) throws ArticleDoNotExistsException {
-        if (!articleRepository.existsBySlug(slug)) {
-            throw new ArticleDoNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
-        }
-        Article article = articleRepository.findBySlug(slug).get();
-        return commentRepository.findByArticleId(article.getId()).stream().map(comment -> commentService.createDTO(comment)).toList();
-    }
 
 
 }

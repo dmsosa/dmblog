@@ -7,6 +7,7 @@ import ArticleButtons from "../../components/Buttons/ArticleButtons";
 import Markdown from "markdown-to-jsx";
 import useArticleBySlug from "../../hooks/useArticleBySlug";
 import LoadingPage  from "../../components/LoadingPage";
+import { useEffect } from "react";
 
 
 function Article() {
@@ -15,9 +16,11 @@ function Article() {
     const { slug } = useParams();
     const { loading, article, setArticle } = useArticleBySlug({slug, state});
     const { title, description, body, tagList, createdAt, author } = article;
+    useEffect(() => {
 
+    }, [article])
     return (
-        loading ? <LoadingPage/> :
+        loading ? <LoadingPage/> : article && author ?
         <div className="article-page">
             <BannerContainer>
                 <h1>{title}</h1>
@@ -39,7 +42,7 @@ function Article() {
                 </div>
             </ContainerRow>
             <Outlet/>
-        </div>
+        </div> : <LoadingPage />
     );
 }
 export default Article;

@@ -10,6 +10,7 @@ import com.duvi.blogservice.model.exceptions.TagNotFoundException;
 import com.duvi.blogservice.model.exceptions.UserNotFoundException;
 import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.service.ArticleService;
+import com.duvi.blogservice.service.CommentService;
 import com.duvi.blogservice.service.TagService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,14 +31,16 @@ public class ArticleController {
 
     private ArticleService articleService;
     private TagService tagService;
+    private CommentService commentService;
     private TokenService tokenService;
     private UserRepository userRepository;
 
 
-    public ArticleController(ArticleService articleService, TagService tagService, TokenService tokenService, UserRepository userRepository) {
+    public ArticleController(ArticleService articleService, TagService tagService, CommentService commentService, TokenService tokenService, UserRepository userRepository) {
 
         this.articleService = articleService;
         this.tagService = tagService;
+        this.commentService = commentService;
         this.tokenService = tokenService;
         this.userRepository = userRepository;
     }
@@ -159,10 +162,11 @@ public class ArticleController {
     public  ResponseEntity<ArticlesResponseDTO> getFavsForUser(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws UserNotFoundException {
         List<ArticleDTO> articleDTOS = articleService.getFavArticles(username);
         Long count = (long) articleDTOS.size();
-        if (limit != null && offset != null) {
+        if (limit != null && offset != null ) {
             Integer initOffset = offset*limit;
             Integer endOffset = initOffset + limit;
-            List<ArticleDTO> articleList = articleDTOS.subList(initOffset, endOffset);
+
+            List<ArticleDTO> articleList = articleDTOS.subList(initOffset, endOffset > articleDTOS.size() ? articleDTOS.size() : endOffset);
             ArticlesResponseDTO response = new ArticlesResponseDTO(articleList, count);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
@@ -217,10 +221,14 @@ public class ArticleController {
         return new ResponseEntity<>(article, HttpStatus.OK);
     }
 
+    //Operations with Comments
+
     @GetMapping("/comments")
-    public ResponseEntity<List<CommentDTO>> getCommentsOf(@RequestParam(required = true) String slug) throws ArticleDoNotExistsException {
-        List<CommentDTO> comments = articleService.getCommentsOf(slug);
-        return new ResponseEntity<>(comments, HttpStatus.OK);
+    public ResponseEntity<CommentResponseDTO> getCommentsOfArticle(@RequestParam(required = true) String slug) throws ArticleDoNotExistsException {
+        List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
+        Long commentsCount = (long) comments.size();
+        CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comments, commentsCount);
+        return new ResponseEntity<>(commentResponseDTO, HttpStatus.OK);
 
     }
 

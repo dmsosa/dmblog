@@ -57,8 +57,7 @@ public interface ArticleService {
     ArticleDTO setTag(String slug, String tagName) throws ArticleDoNotExistsException;
     ArticleDTO removeTag(String slug, String tagName) throws ArticleDoNotExistsException;
 
-    //Operations related with Comments
-    List<CommentDTO> getCommentsOf(String slug) throws ArticleDoNotExistsException;
+
 
 
 }
