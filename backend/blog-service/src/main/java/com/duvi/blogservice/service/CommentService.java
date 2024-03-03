@@ -2,6 +2,7 @@ package com.duvi.blogservice.service;
 
 import com.duvi.blogservice.model.Comment;
 import com.duvi.blogservice.model.dto.CommentDTO;
+import com.duvi.blogservice.model.dto.SetCommentDTO;
 import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
 import com.duvi.blogservice.model.exceptions.CommentNotFoundException;
 import com.duvi.blogservice.model.exceptions.UserNotFoundException;
@@ -15,10 +16,10 @@ public interface CommentService {
     //Create DTO
     CommentDTO createDTO(Comment comment);
     //Basic CRUD
-    CommentDTO createComment(CommentDTO commentDTO) throws UserNotFoundException, ArticleDoNotExistsException;
+    CommentDTO createComment(String body, String username, String slug) throws UserNotFoundException, ArticleDoNotExistsException;
     List<CommentDTO> getComments();
     CommentDTO getCommentById(Long id) throws CommentNotFoundException;
-    CommentDTO updateComment(Long commentId, CommentDTO newCommentDTO) throws UserNotFoundException, ArticleDoNotExistsException;
+    CommentDTO updateComment(Long commentId, SetCommentDTO newCommentDTO) throws UserNotFoundException, ArticleDoNotExistsException;
     void deleteComment(Long id) throws CommentNotFoundException;
 
     //Operations with Users

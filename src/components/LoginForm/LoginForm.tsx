@@ -32,7 +32,6 @@ function LoginForm( {onError} : {onError: (error: Error) => void} ) {
         })
         .catch((e) => {onError(e)})
         .finally(() => {             
-            navigation("/");
         });
 
     }

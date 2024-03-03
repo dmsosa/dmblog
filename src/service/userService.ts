@@ -99,14 +99,15 @@ export function logoutUser() {
             followers: [],
             following: [],
             createdAt: null,
-            updatedAt: null
+            updatedAt: null,
+            isFollowing: false
         }
     }
 }
 
 
 //Get current User
-export async function getUser({ headers } : { headers: object }) : Promise<TUser> {
+export async function getUser({ headers } : { headers: object  }) : Promise<TUser> {
 
     try {
         const { data } = await axios.request({
@@ -122,13 +123,16 @@ export async function getUser({ headers } : { headers: object }) : Promise<TUser
 }
 
 //Get  User By Username
-export async function getUserByUsername({ username } : {  
+export async function getUserByUsername({ headers, username } : {  
+    headers?: object | null,
     username: string }) : Promise<TUser> {
 
     try {
-        const { data } = await axios.request({
+        if (!headers) { headers = {}}
+        const { data } = await instance.request({
             method: "GET",
-            url: `/${username}`
+            url: `/${username}`,
+            headers: headers
         });
         return data;
     } catch (error) {
@@ -138,14 +142,16 @@ export async function getUserByUsername({ username } : {
 }
 
 //Get  User By Id
-export async function getUserById({  userId } : { 
- 
+export async function getUserById({  headers, userId } : { 
+    headers?: object | null,
     userId: number | null }) : Promise<TUser> {
     
     try {
+        if (!headers) { headers = {}};
         const { data } = await instance.request({
             method: "GET",
-            url: `/find/${userId}`
+            url: `/find/${userId}`,
+            headers: headers
         });
 
 
@@ -158,7 +164,7 @@ export async function getUserById({  userId } : {
 }
 
 export async function updateUser({ headers, username, email, image, bio, password } : {
-    headers: object | null,
+    headers: object,
     username: string,
     email: string,
     image: string | null,
@@ -192,13 +198,11 @@ export async function updateUser({ headers, username, email, image, bio, passwor
 
 //Toggle Follow
 export async function toggleFollow({ headers, username, isFollowing} : {
-    headers: object | null,
+    headers: object,
     username: string,
     isFollowing: boolean
 }) {
-    if (!headers) {
-        headers = {};
-    }
+
     try {    
         const { data } = await instance.request(
             {
@@ -215,10 +219,11 @@ export async function toggleFollow({ headers, username, isFollowing} : {
 }
 
 export async function getFollowersOf({ headers, userId } : {
-    headers: object,
+    headers: object | null,
     userId: number | null
 }) : Promise<TUser[]> {
     try {
+        if (!headers) { headers = {} };
         const { data } = await instance.request(
             {
                 method: "GET",
@@ -234,33 +239,16 @@ export async function getFollowersOf({ headers, userId } : {
 }
 
 export async function getFollowingOf({ headers, userId } : {
-    headers: object,
+    headers: object | null,
     userId: number | null
 }) : Promise<TUser[]> {
     try {
+        if (!headers) { headers = {} };
+
         const { data } = await instance.request(
             {
                 method: "GET",
                 url: `/following/${userId}`,
-                headers: headers
-            }
-        )
-        return data;
-    } catch (error) {
-        errorHandler(error as AxiosError);
-        throw(error);
-    }
-}
-
-export async function getFollowingIdsOf({ headers, userId } : {
-    headers: object,
-    userId: number | null
-}) : Promise<number[]> {
-    try {
-        const { data } = await instance.request(
-            {
-                method: "GET",
-                url: `/followingId/${userId}`,
                 headers: headers
             }
         )

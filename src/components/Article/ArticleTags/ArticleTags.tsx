@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 function ArticleTags({tagList}: {tagList: string[]}) {
     return (
+        tagList &&
         tagList.length > 0 && 
         (
             <ul className="tag-list">

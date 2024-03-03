@@ -4,5 +4,5 @@ import jakarta.annotation.Nullable;
 
 import java.time.LocalDateTime;
 
-public record CommentDTO(Long articleId, Long userId, String body, @Nullable LocalDateTime postedAt, @Nullable LocalDateTime updatedAt) {
+public record CommentDTO(Long articleId, String image, String username, String body, @Nullable LocalDateTime postedAt, @Nullable LocalDateTime updatedAt) {
 }

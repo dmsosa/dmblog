@@ -5,8 +5,7 @@ import { useParams } from "react-router-dom";
 import AuthorButtons from "../AuthorButtons/AuthorButtons";
 import FavButton from "../FavButton";
 import FollowButton from "../FollowButton/FollowButton";
-import { getFollowingIdsOf, getFollowingOf } from "../../../service/userService";
-import { errorHandler } from "../../../service/handleError";
+import { TUser } from "../../../types/User";
 
 
 
@@ -16,36 +15,21 @@ function ArticleButtons({ article, setArticle } : {
 }) {
     const { author } = article;
     const { authState } = useAuth() as TAuthContext;
-    const { loggedUser, headers } = authState;
+    const { loggedUser } = authState;
     const { slug } = useParams();
-    const [ followingIds, setFollowingIds ] = useState<number[]>([]);
 
-    useEffect(() => {
-        if (!headers) return;
-        getFollowingIdsOf({ headers, userId: loggedUser.id})
-        .then((followingIds) => setFollowingIds(followingIds))
-        .catch((error) => errorHandler(error))
-    }, [])
-    const checkFollow = (authorId: number | null) => {
-        if (!authorId) return false;
-        return followingIds.filter((followingId) => authorId === followingId ).length > 0;
-    }
-    const handleFollow = (isCurrentlyFollowing: boolean) => {
-        if (!author.followingCount) return;
-        const newFollowingCount = isCurrentlyFollowing ? author.followingCount+1 : author.followingCount-1;
-        setArticle((prevArticle) => (
-            {...prevArticle, 
-                author: {...author, followingCount: newFollowingCount}
-            }))
+
+    const handleFollow = (author: TUser) => {
+        setArticle((prevArticle) => ({...prevArticle, author}))
     };
     const handleFav = (article: TArticle) => {
         setArticle((prevArticle) => ({...prevArticle, favoritesCount: article.favoritesCount, isFav: article.isFav}))
     }
-    return loggedUser.username === author.username ? (
+    return !!article && !!author && loggedUser.username === author.username ? (
         <AuthorButtons {...article } slug={slug}/>
     ) : (
         <div className="article-buttons">        
-            <FollowButton isFollowing={checkFollow(author.id)} {...author} handleFollow={handleFollow}/>
+            <FollowButton {...author} handleFollow={handleFollow}/>
             <FavButton {...article} handleFav={handleFav}/>
         </div>
 

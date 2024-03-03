@@ -36,7 +36,8 @@ var authState: TAuthState = {
         followers: null,
         following: null,
         createdAt: null,
-        updatedAt: null
+        updatedAt: null,
+        isFollowing: false
     }
 };
 

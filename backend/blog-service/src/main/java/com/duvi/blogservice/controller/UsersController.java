@@ -43,6 +43,7 @@ public class UsersController {
         String token = bearerToken.replace("Bearer ", "");
         String username = tokenService.validateToken(token);
         UserDTO user = userService.findUserByUsername(username);
+        user = user.withFollowing(userService.isFollowing(user.id(), username));
         AuthResponseDTO response = new AuthResponseDTO(token, user);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -75,19 +76,42 @@ public class UsersController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
+    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestHeader HttpHeaders headers) {
+        String token = headers.getFirst("Authorization");
         List<UserDTO> users = userService.getAllUsers();
+
+        if (token != null) {
+            token = token.replace("Bearer ", "");
+            String loggedUsername = tokenService.validateToken(token);
+            users = users.stream().map(
+                    userDTO -> userDTO.withFollowing(userService.isFollowing(userDTO.id(), loggedUsername))
+            ).toList();
+        };
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
     @GetMapping("/find/{userId}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) throws UserNotFoundException {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId, @RequestHeader HttpHeaders headers) throws UserNotFoundException {
+        String token = headers.getFirst("Authorization");
         UserDTO user = userService.findUserById(userId);
+
+        if (token != null) {
+            token = token.replace("Bearer ", "");
+            String loggedUsername = tokenService.validateToken(token);
+            user = user.withFollowing(userService.isFollowing(user.id(), loggedUsername));
+        }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) throws UserNotFoundException {
+    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username, @RequestHeader HttpHeaders headers) throws UserNotFoundException {
+        String token = headers.getFirst("Authorization");
         UserDTO userDTO = userService.findUserByUsername(username);
+
+        if (token != null) {
+            token = token.replace("Bearer ", "");
+            String loggedUsername = tokenService.validateToken(token);
+            userDTO = userDTO.withFollowing(userService.isFollowing(userDTO.id(), loggedUsername));
+        }
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
     @PutMapping("/")
@@ -102,38 +126,47 @@ public class UsersController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/followers/{userId}")
-    public ResponseEntity<List<UserDTO>> getFollowersOf(@PathVariable Long userId) {
+    public ResponseEntity<List<UserDTO>> getFollowersOf(@PathVariable Long userId, @RequestHeader HttpHeaders headers) {
+        String token = headers.getFirst("Authorization");
         List<UserDTO> followers = userService.findFollowersOf(userId);
+
+        if (token != null) {
+            token = token.replace("Bearer ", "");
+            String loggedUsername = tokenService.validateToken(token);
+            followers = followers.stream().map( follower ->
+                    follower.withFollowing(userService.isFollowing(follower.id(), loggedUsername))).toList();
+        }
+
         return new ResponseEntity<>(followers, HttpStatus.OK);
     }
     @GetMapping("/following/{userId}")
-    public ResponseEntity<List<UserDTO>> getFollowingOf(@PathVariable Long userId) {
-        List<UserDTO> followers = userService.findFollowingOf(userId);
-        return new ResponseEntity<>(followers, HttpStatus.OK);
-    }
-    @GetMapping("/followingId/{userId}")
-    public ResponseEntity<List<Long>> getFollowingIdOf(@PathVariable Long userId) throws UserNotFoundException {
-        List<Long> followingsId = userService.findFollowingIdsOf(userId);
-        return new ResponseEntity<>(followingsId, HttpStatus.OK);
+    public ResponseEntity<List<UserDTO>> getFollowingOf(@PathVariable Long userId, @RequestHeader HttpHeaders headers) {
+        String token = headers.getFirst("Authorization");
+        List<UserDTO> following = userService.findFollowingOf(userId);
+        if (token != null) {
+            token = token.replace("Bearer ", "");
+            String loggedUsername = tokenService.validateToken(token);
+            following = following.stream().map( follow ->
+                    follow.withFollowing(userService.isFollowing(follow.id(), loggedUsername))).toList();
+        }
+
+        return new ResponseEntity<>(following, HttpStatus.OK);
     }
 
+
     @PostMapping("/follow/{username}")
-    public ResponseEntity<String> followUser(@PathVariable String username, @RequestHeader HttpHeaders headers) throws UserNotFoundException {
+    public ResponseEntity<UserDTO> followUser(@PathVariable String username, @RequestHeader HttpHeaders headers) throws UserNotFoundException {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String fromUsername = tokenService.validateToken(token);
-        UserDTO fromUser = userService.findUserByUsername(fromUsername);
-        UserDTO toUser = userService.findUserByUsername(username);
-        userService.followUser(fromUser.id(), toUser.id());
-        return new ResponseEntity<>("User %1$s now follows user %2$s".formatted(fromUsername, username), HttpStatus.OK);
+        UserDTO toUser = userService.followUser(fromUsername, username);
+        return new ResponseEntity<>(toUser, HttpStatus.OK);
     }
     @DeleteMapping("/follow/{username}")
-    public ResponseEntity<String> unfollowUser(@PathVariable String username, @RequestHeader HttpHeaders headers) throws UserNotFoundException {
+    public ResponseEntity<UserDTO> unfollowUser(@PathVariable String username, @RequestHeader HttpHeaders headers) throws UserNotFoundException {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String fromUsername = tokenService.validateToken(token);
-        UserDTO fromUser = userService.findUserByUsername(fromUsername);
-        UserDTO toUser = userService.findUserByUsername(username);
-        userService.unfollowUser(fromUser.id(), toUser.id());
-        return new ResponseEntity<>("User %1$s now follows user %2$s".formatted(fromUsername, username), HttpStatus.OK);
+        UserDTO toUser = userService.unfollowUser(fromUsername, username);
+        return new ResponseEntity<>(toUser, HttpStatus.OK);
     }
 
 }

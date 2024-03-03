@@ -8,7 +8,7 @@ import java.util.List;
 
 public record ArticleDTO(
         Long id,
-        Long userId,
+        User author,
         String title,
         String body,
         String description,
@@ -16,7 +16,13 @@ public record ArticleDTO(
         List<String> tagList,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        Integer favoritesCount) {
+        Integer favoritesCount,
+        Boolean isFav
+) {
 
+    public ArticleDTO withFav(Boolean isFav) {
+        return new ArticleDTO(id(), author(), title(), body(), description(), slug(), tagList(),
+                createdAt(), updatedAt(), favoritesCount(), isFav);
+    }
 
 }

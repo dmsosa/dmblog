@@ -18,6 +18,7 @@ public interface UserService {
     boolean existsByLogin(String login);
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
+    boolean isFollowing(Long userId, String loggedUsername);
 
     //Create DTOS
     UserDTO createDTO(User user);
@@ -34,13 +35,12 @@ public interface UserService {
     void deleteUser(Long userId) throws UserNotFoundException;
 
     //Operations with Followers
-    void followUser(Long fromId, Long toId) throws UserNotFoundException;
-    void unfollowUser(Long fromId, Long toId) throws UserNotFoundException;
+    UserDTO followUser(String fromUsername, String toUsername) throws UserNotFoundException;
+    UserDTO unfollowUser(String fromUsername, String toUsername) throws UserNotFoundException;
     public Integer findFollowersCount(Long userId);
 
     public List<UserDTO> findFollowersOf(Long userId);
     public Integer findFollowingCount(Long userId);
     public List<UserDTO> findFollowingOf(Long userId);
-    public List<Long> findFollowingIdsOf(Long userId) throws UserNotFoundException;
 
 }

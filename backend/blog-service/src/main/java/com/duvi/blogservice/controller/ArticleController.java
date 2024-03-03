@@ -47,12 +47,27 @@ public class ArticleController {
 
     //Basic CRUD
     @GetMapping("/global")
-    public ResponseEntity<ArticlesResponseDTO> getAllArticles(@RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws ArticleDoNotExistsException {
+    public ResponseEntity<ArticlesResponseDTO> getAllArticles(
+            @RequestParam(required = false) Integer limit,
+            @RequestParam(required = false) Integer offset,
+            @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException {
+
 
         List<ArticleDTO> articleList = articleService.getArticles();
+
+        //if there is loggedUser, get favs
+        String token = headers.getFirst("Authorization");
+        if (token != null ) {
+            token = token.replace("Bearer ","");
+            String loggedUsername = tokenService.validateToken(token);
+            articleList = articleList.stream().map( article ->
+                    article.withFav(articleService.checkFav(article.id(), loggedUsername))
+            ).toList();
+        }
+
         Long articlesCount = (long) articleList.size();
 
-
+        //if there is offset
         if (limit != null && offset != null) {
             Integer initOffset = offset*limit;
             Integer endOffset = initOffset + limit;
@@ -65,12 +80,23 @@ public class ArticleController {
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<ArticlesResponseDTO> getFeedArticles(@RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws ArticleDoNotExistsException {
+    public ResponseEntity<ArticlesResponseDTO> getFeedArticles(
+            @RequestParam(required = false) Integer limit,
+            @RequestParam(required = false) Integer offset,
+            @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException {
 
+        //if there is loggedUser, we get favs
+        String token = headers.getFirst("Authorization");
         List<ArticleDTO> articleList = articleService.getArticles();
+        if (token != null) {
+            token = token.replace("Bearer ", "");
+            String loggedUsername = tokenService.validateToken(token);
+            articleList = articleList.stream().map( article ->
+                    article.withFav(articleService.checkFav(article.id(), loggedUsername))
+            ).toList();
+        }
+
         Long articlesCount = (long) articleList.size();
-
-
         if (limit != null && offset != null) {
             Integer initOffset = offset*limit;
             Integer endOffset = initOffset + limit;
@@ -125,17 +151,7 @@ public class ArticleController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    //Feed is basically the articles of a given author
-    @GetMapping("/feed/{username}")
-    public ResponseEntity<ArticlesResponseDTO> getFeed(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws UserNotFoundException {
-        List<ArticleDTO> articleDTOS = articleService.getByAuthor(username);
-        Long articlesCount = (long) articleDTOS.size();
-        ArticlesResponseDTO response = new ArticlesResponseDTO(articleDTOS, articlesCount);
-        if (limit != null && offset != null) {
-            
-        }
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+
     //Operations with Users
     @GetMapping("/favs/{slug}")
     public ResponseEntity<List<UserDTO>> getFavsForArticle(@PathVariable String slug ) throws ArticleDoNotExistsException {
@@ -225,6 +241,17 @@ public class ArticleController {
 
     @GetMapping("/comments")
     public ResponseEntity<CommentResponseDTO> getCommentsOfArticle(@RequestParam(required = true) String slug) throws ArticleDoNotExistsException {
+        List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
+        Long commentsCount = (long) comments.size();
+        CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comments, commentsCount);
+        return new ResponseEntity<>(commentResponseDTO, HttpStatus.OK);
+
+    }
+    @PostMapping("/comments")
+    public ResponseEntity<CommentResponseDTO> postComment(@RequestBody SetCommentDTO commentDTO, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException, UserNotFoundException {
+        String token = headers.getFirst("Authorization").replace("Bearer ", "");
+        String username = tokenService.validateToken(token);
+        CommentDTO comment = commentService.createComment(commentDTO.body(), username, slug);
         List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
         Long commentsCount = (long) comments.size();
         CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comments, commentsCount);

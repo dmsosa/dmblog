@@ -19,19 +19,23 @@ function ArticlePreview({  articles, isLoading, updateArticles } : {
 
     
     return articles.length > 0 ? articles.map((article) => 
-        <div className="article-preview" key={article.title}>
-            <ArticleMeta createdAt={article.createdAt} author={article.author}>
-                <FavButton
-                slug={article.slug}
-                favoritesCount={article.favoritesCount}
-                handleFav={handleFav}
-                isFav={article.isFav}/>
-            </ArticleMeta>
-            <Link to={`/article/${article.slug}`} state={article}>
-                <h1>{article.title}</h1>
-                <p>{article.description}</p>
-                <span>read more...</span>
-            </Link>
+        <div className="article-preview container" key={article.title}>
+            <div className="row">
+                <ArticleMeta createdAt={article.createdAt} author={article.author}>
+                    <FavButton
+                    slug={article.slug}
+                    favoritesCount={article.favoritesCount}
+                    handleFav={handleFav}
+                    isFav={article.isFav}/>
+                </ArticleMeta>
+                <div className="col article-link">
+                    <Link to={`/article/${article.slug}`} state={article}>
+                        <h1>{article.title}</h1>
+                        <p>{article.description}</p>
+                        <span>read more...</span>
+                    </Link>
+                </div>
+            </div>
         </div>
     ) : isLoading? (<div className="article-preview"><h5 className="loading">Loading...</h5></div>) 
     : (<div className="article-preview"><h5>No articles available</h5></div>)

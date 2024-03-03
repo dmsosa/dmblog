@@ -37,9 +37,7 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleUserRepository favsRepository;
     private ArticleTagRepository catsRepository;
     private TagRepository tagRepository;
-    private CommentRepository commentRepository;
     private UserService userService;
-    private CommentService commentService;
 
     public ArticleServiceImpl(ArticleRepository articleRepository,
                               UserRepository userRepository,
@@ -54,9 +52,7 @@ public class ArticleServiceImpl implements ArticleService {
         this.favsRepository = favsRepository;
         this.catsRepository = catsRepository;
         this.tagRepository = tagRepository;
-        this.commentRepository = commentRepository;
         this.userService = userService;
-        this.commentService = commentService;
     }
 
     //CreateDTO
@@ -65,14 +61,15 @@ public class ArticleServiceImpl implements ArticleService {
 
         List<String> tagList = this.getTagsOf(article.getSlug()).stream().map((tag) -> tag.getName()).toList();
         Integer favsCount = 0;
+        Boolean isFav = false;
+
         if (article.getFavUsers() != null) {
             favsCount = article.getFavUsers().size();
         }
 
-
         return new ArticleDTO(
                 article.getId(),
-                article.getAuthor().getId(),
+                article.getAuthor(),
                 article.getTitle(),
                 article.getBody(),
                 article.getDescription(),
@@ -80,10 +77,18 @@ public class ArticleServiceImpl implements ArticleService {
                 tagList,
                 article.getCreatedAt(),
                 article.getUpdatedAt(),
-                favsCount
+                favsCount,
+                isFav
         );
     }
 
+    public Boolean checkFav(Long articleId, String loggedUsername) {
+        User user = userRepository.findByUsername(loggedUsername).get();
+        List<ArticleUser> favArticles = favsRepository.findByUserId(user.getId());
+        return !favArticles.stream().filter(rel -> rel.getArticle().getId() == articleId)
+                .toList()
+                .isEmpty();
+    }
     //Basic CRUD Operations
     @Override
     public List<ArticleDTO> getArticles() throws ArticleDoNotExistsException {
@@ -91,7 +96,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (articleList.isEmpty()) {
             throw new ArticleDoNotExistsException("No articles found!");
         }
-        return articleList.stream().map(this::createDTO).toList();
+        return articleList.stream().map(article -> createDTO(article)).toList();
     }
     @Override
     public ArticleDTO createArticle(SetArticleDTO articleDTO) throws ArticleAlreadyExistsException, ArticleDoNotExistsException {

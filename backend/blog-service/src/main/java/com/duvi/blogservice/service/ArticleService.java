@@ -24,6 +24,10 @@ public interface ArticleService {
     //createDTO
     ArticleDTO createDTO(Article article) throws ArticleDoNotExistsException;
 
+    //checkFav
+
+    Boolean checkFav(Long articleId, String loggedUsername);
+
     //Basic CRUD Operations
     List<ArticleDTO> getArticles() throws ArticleDoNotExistsException;
     ArticleDTO createArticle(SetArticleDTO articleDTO) throws ArticleAlreadyExistsException, ArticleDoNotExistsException;

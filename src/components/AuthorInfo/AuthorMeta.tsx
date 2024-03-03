@@ -2,26 +2,27 @@ import Avatar from "../Avatar";
 import FollowButton from "../Buttons/FollowButton/FollowButton";
 import { TUser } from "../../types/User";
 
-function AuthorMeta({ author, loading, following, handleFollow } : {
-    author: TUser | undefined
+function AuthorMeta({ username, image, followersCount, isFollowing, loading, handleFollow } : {
+    username: string,
+    image: string,
+    followersCount: number, 
+    isFollowing: boolean, 
     loading: boolean,
-    following: boolean,
     handleFollow: (author: TUser) => void
 }) {
     
 
-    return loading ? ( <div>Loading</div>) : ( !!author &&
+    return loading ? ( <div>Loading</div>) : ( 
         <>
-
-            <div className="col">
-                <Avatar src={author.image} addClass="author-avatar"/>
-                <a href={`profile/${author.username}`} className="author-username">{author.username}</a>
+            <div className="col col-6">
+                <Avatar src={image} addClass="author-avatar"/>
+                <a href="" className="author-username">{username}</a>
             </div>
-            <div className="col">
+            <div className="col col-6">
                 <FollowButton 
-                username={author.username}
-                followersCount={author.followersCount}
-                isFollowing={following}
+                username={username}
+                followersCount={followersCount}
+                isFollowing={isFollowing}
                 handleFollow={handleFollow}
                 >
 

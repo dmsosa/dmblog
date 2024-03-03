@@ -15,6 +15,10 @@ public record UserDTO(Long id,
                       Integer followersCount,
                       Integer followingCount,
                       LocalDateTime createdAt,
-                      LocalDateTime updatedAt) {
-
+                      LocalDateTime updatedAt,
+                      Boolean isFollowing ) {
+    public UserDTO withFollowing(Boolean isFollowing) {
+        return new UserDTO(id(), username(), email(), password(), bio(), image(), followersCount(),
+                followingCount(), createdAt(), updatedAt(), isFollowing);
+    }
 }

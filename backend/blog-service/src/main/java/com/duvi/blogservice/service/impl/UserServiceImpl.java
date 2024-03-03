@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -30,7 +31,14 @@ public class UserServiceImpl implements UserService {
         this.followersRepository = followersRepository;
     }
 
-    //Create DTOS
+    //Check following
+    public boolean isFollowing(Long userId, String loggedUsername) {
+        List<UserFollower> relations = followersRepository.findByUserId(userId);
+        return !relations.stream().filter( follower -> Objects.equals(follower.getFollower().getUsername(), loggedUsername))
+                .toList().isEmpty();
+    };
+
+    //Create DTOS, by default isFollowing is set to false
     @Override
     public UserDTO createDTO(User user) {
         Integer followingCount = this.findFollowingCount(user.getId());
@@ -39,7 +47,7 @@ public class UserServiceImpl implements UserService {
                 user.getEmail(), user.getPassword(),
                 user.getBio(), user.getImage(),
                 followersCount, followingCount,
-                user.getCreatedAt(), user.getUpdatedAt());
+                user.getCreatedAt(), user.getUpdatedAt(), false);
     }
 
     //Basic CRUD
@@ -141,32 +149,31 @@ public class UserServiceImpl implements UserService {
 
     //Operations with Followers
     @Override
-    public void followUser(Long fromId, Long toId) throws UserNotFoundException {
-        if (!userRepository.existsById(toId)) {
-            throw new UserNotFoundException(toId);
+    public UserDTO followUser(String fromUsername, String toUsername) throws UserNotFoundException {
+        if (!userRepository.existsByUsername(toUsername)) {
+            throw new UserNotFoundException("User with username %s do not exists!".formatted(toUsername));
         }
-        User userFrom = userRepository.findById(fromId).get();
-        User userTo = userRepository.findById(toId).get();
-        UserFollower newRelation = new UserFollower(userFrom, userTo);
+        User userFrom = userRepository.findByUsername(fromUsername).get();
+        User userTo = userRepository.findByUsername(toUsername).get();
+        UserFollower newRelation = new UserFollower(userTo, userFrom);
         followersRepository.save(newRelation);
+        return createDTO(userRepository.findByUsername(toUsername).get()).withFollowing(isFollowing(userTo.getId(), fromUsername));
     }
 
     @Override
-    public void unfollowUser(Long fromId, Long toId) throws UserNotFoundException {
-        if (!userRepository.existsById(toId)) {
-            throw new UserNotFoundException(toId);
+    public UserDTO unfollowUser(String fromUsername, String toUsername) throws UserNotFoundException {
+        if (!userRepository.existsByUsername(toUsername)) {
+            throw new UserNotFoundException("User with username %s do not exists!".formatted(toUsername));
         }
-        UserFollowerId relationId = new UserFollowerId(fromId, toId);
-        Optional<UserFollower> relation = followersRepository.findById(relationId);
-        if (relation.isEmpty()) {
-            throw new RuntimeException("This relation follower: %s, following: %s does not exists".formatted(fromId, toId));
-        }
-        LocalDateTime followedAt = relation.get().getFollowedAt();
+        User userTo = userRepository.findByUsername(toUsername).get();
+        List<UserFollower> relations = followersRepository.findByUserId(userTo.getId());
+        List<UserFollower> relation = relations.stream().filter(rel ->
+                Objects.equals(rel.getFollower().getUsername(), fromUsername)).toList();
 
-        if (LocalDateTime.now().isBefore(followedAt.plusMinutes(5L))) {
-            return;
-        };
-        followersRepository.deleteById(relationId);
+        if (!relation.isEmpty()) {
+            followersRepository.delete(relation.getFirst());
+        }
+        return createDTO(userRepository.findByUsername(toUsername).get()).withFollowing(isFollowing(userTo.getId(), fromUsername));
     }
     @Override
     public Integer findFollowersCount(Long userId) {
@@ -191,15 +198,6 @@ public class UserServiceImpl implements UserService {
         return followingList.stream().map(this::createDTO).toList();
     }
 
-    @Override
-    public List<Long> findFollowingIdsOf(Long userId) throws UserNotFoundException {
-        if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException(userId);
-        }
-        List<UserFollower> userFollowerList = followersRepository.findByFollowerId(userId);
-        List<Long> followingIdList = userFollowerList.stream().map((relation) -> relation.getUser().getId()).toList();
-        return followingIdList;
-    }
 
 
 

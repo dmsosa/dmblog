@@ -10,5 +10,6 @@ export type TUser = {
     followers: TUser[] | null,
     following: TUser[] | null,
     createdAt: Date | null,
-    updatedAt: Date | null
+    updatedAt: Date | null,
+    isFollowing: boolean
 }

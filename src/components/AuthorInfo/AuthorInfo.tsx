@@ -1,26 +1,60 @@
-import { useUser } from "../../hooks/useUser";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { TUser } from "../../types/User";
 import AuthorMeta from "./AuthorMeta";
+import { useEffect, useState } from "react";
+import { TAuthContext, useAuth } from "../../context/AuthContext";
+import { getUserByUsername } from "../../service/userService";
+import { errorHandler } from "../../service/handleError";
+import Markdown from "markdown-to-jsx";
 
-function AuthorInfo({ username } : {
-    username: string ;
-}) {
+function AuthorInfo() {
 
-    const { loading, author, following, setAuthor } = useUser({ username });
+    const { state } = useLocation();
+    const { username } = useParams();
+    const navigate = useNavigate();
+
+    const { authState } = useAuth() as TAuthContext;
+    const { headers, loggedUser } = authState;
+    const [ loading, setLoading ] = useState(false);
+    const [ author, setAuthor ] = useState( state || {} )
+    const { image, bio, isFollowing, followersCount } = author;
+
+    useEffect(() => {
+        if (!username) return;
+        getUserByUsername({ headers, username })
+        .then((author) => setAuthor(author))
+        .catch((error) => {
+            errorHandler(error)
+            navigate("/not-found");
+        })
+        .finally(() => setLoading(false))
+    }, []);
 
     const handleFollow = (author: TUser) => {
+        console.log(author, "changed")
         setAuthor(author)
     }
 
     return (
-        <>
+        loading ? <div> Loading author info . . . </div> :
+        <div className="row row-cols-2">
             <AuthorMeta 
-            author={author}
+            username={username || ""}
             loading={loading}
-            following={following}
+            image={image}
+            followersCount={followersCount}
+            isFollowing={isFollowing}
             handleFollow={handleFollow}/>
-            
-        </>
+            <div className="col col-12">
+                { bio && <Markdown options={{forceBlock: true}}>{bio}</Markdown>}
+            </div>
+            { loggedUser.username === username ? 
+            <div className="col col-12">
+                <Link to={"/settings"}> Edit profile</Link>
+            </div> : 
+            <div className="col col-12">Report</div>
+            }
+        </div>
     )
 }
 

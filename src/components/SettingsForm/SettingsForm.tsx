@@ -32,8 +32,7 @@ function SettingsForm() {
 
     const handleSubmit = (e: MouseEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        if (!active) return;
+        if (!active || !headers ) return;
 
         updateUser({headers, username, email, image, bio, password })
         .then((loggedIn) => {setAuthState(loggedIn);})

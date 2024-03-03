@@ -3,22 +3,20 @@ import ContainerRow from "../../ContainerRow";
 import Avatar from "../../Avatar";
 import { dateFormatter } from "../../../helpers/helpers";
 import { TUser } from "../../../types/User";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
 
 
 function ArticleMeta({ children, createdAt, author }: { 
     children: ReactNode | ReactNode[],
-    createdAt: Date | null, 
+    createdAt?: Date | null, 
     author: TUser }) {
 
-    const { bio, followersCount, followingCount, image, username } = author;
-
+    const { bio, followersCount, followingCount, image, username } = author || {};
 
     return (
-        <ContainerRow
-        addClass={"article-meta"}>
+        <div className="article-meta row row-cols-2">
             <Link
-                className="col article-author"
+                className="col-4 article-author"
                 state={{bio, followersCount, followingCount, image }}
                 to={`/profile/${username}`}
             >
@@ -26,20 +24,12 @@ function ArticleMeta({ children, createdAt, author }: {
                     alt={username ? `Author: ${username}` : null}
                     src={image? image : null }
                 />
+                <a>{username}</a>
+                <span>{dateFormatter(createdAt)}</span>
             </Link>
-            <div className="col article-info">
-                <Link
-                    className="col article-author"
-                    state={{bio, followersCount, followingCount, image }}
-                    to={`/profile/${username}`}
-                >
-                    {username}
-                </Link> 
-                <span className="col article-date">{dateFormatter(createdAt)}</span>
-            </div>
-            <div className="col article-fav">{children}</div>
-        </ContainerRow>
+            <div className="col-8 article-fav">{children}</div>
         
+        </div> 
     )
 }
 

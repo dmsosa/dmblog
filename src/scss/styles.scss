@@ -36,6 +36,11 @@ body {
 }
 
 
+.col {
+    border: red solid 1px;
+}
+
+
 .bg-color-blue-nav, .bg-color-blue-nav .navbar {
     background-color: #111927;
 }
@@ -197,24 +202,22 @@ a {
     color: white;
 }
 a:hover {
-    animation: hop .5s ease;
     color: rgba(153, 255, 51, 1);
 }
+
 .cont {
     background-color: #000D1C;
-    margin: 0 0.25em 2.5em;
     padding: 0;
 }
-.cont-topic .cont-header {
-    background-color: red;
-    width: 100%;
-}
+
+
 .cont-header {
     color: gold;
     padding: 0 1em;
 }
 .cont-content {
     line-height: 1.75em;
+    margin: 0 1em;
     padding: 1em;
 }
 .cont-row {
@@ -247,20 +250,101 @@ a:hover {
 }
 
 //Specific Styles (topic container, banner and forms container)
+
+// Feed container
+
+.page-feed {
+    max-height: 850px;
+}
+
+.cont-feed {
+    color: white;
+}
+
+.cont-feed ul {
+    justify-content: left;
+    display: flex;
+    padding: 0;
+    color: white;
+}
+.cont-feed li {
+    color: white;
+    border: #34A200 solid 2.5px;
+    border-radius: 0.5em;
+    margin: 0;
+    margin-right: 10px;
+}
+.cont-feed button {
+    color: white
+}
+.cont-feed button:hover {
+    background-color: #33ff0054;
+}
+
+
+// Tag container
+.cont-tags {
+    color: red;
+    max-height: inherit;
+    margin: 0;
+}
+
+.cont-tags>.cont-header {
+    font-variant: small-caps;
+    font-style: italic;
+    color: white;
+    border-bottom: #34A200 solid 2.5px;
+    height: 35px;
+}
+
 .topic-btn-cont {
-    max-height: 250px;
-    overflow: hidden;
+    max-height: 500px;
+    padding: 0 1em;
+    margin: 0;
+    overflow-x: hidden;
 }
 .topic-btn {
     display: block;
     border: #34A200 solid 2.5px;
     border-radius: 0.5em;
-    margin-top: 5px;
+    margin-top: 10px;
     background-color: transparent;
     color: whitesmoke;
-    padding: 0 1em;
+    padding: 0 0.5em;
 }
 
+//Article preview
+
+.article-preview {
+    background-color: #000D1C;
+    margin-bottom: 3em;
+    padding: 1em;
+    border: #051d46 5px solid;
+}
+.article-author {
+    width: fit-content;
+    padding: 0;
+    
+}
+.article-author img {
+    border-radius: 50%;
+    width: 2.5em;
+}
+.article-author a {
+    margin-left: 5px;
+}
+.article-author span {
+    margin-left: 5px;
+    border-bottom: #34A200 5px solid;
+}
+.article-fav {
+    padding: 0;
+    margin-left: auto;
+    margin-right: 0;
+}
+.article-link {
+    margin-top: 1em;
+}
 .cont.tech-banner-cont {
     align-items: center;
     text-align: center;
@@ -286,7 +370,7 @@ a:hover {
     box-shadow: 10px 10px 0px #EEE;
 
 }
-.banner-quote-link {
+.banner-quote h1 {
     text-decoration: none;
     color: black;
     font-size: 2em;
@@ -410,9 +494,6 @@ a:hover {
 
 
 
-.col {
-    border: red solid 1px;
-}
 
 //footer styles
 

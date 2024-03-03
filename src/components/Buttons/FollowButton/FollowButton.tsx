@@ -11,16 +11,16 @@ function FollowButton({ username, isFollowing, followersCount, handleFollow } : 
     
     const [ loading, setLoading ] = useState(false);
     const { authState } = useAuth() as TAuthContext;
-    const { headers, isAuth } = authState;
+    const { headers } = authState;
 
     const classN = isFollowing ? "btn-unfollow" : "btn-follow"
     const text = isFollowing ? "Unfollow" : "Follow"
     const handleClick = () => {
 
-        if (!isAuth) return alert("You need to login first!");
+        if (!headers) return alert("You need to login first!");
         setLoading(true);
         toggleFollow({headers, username, isFollowing})
-        .then((userData) => handleFollow(userData))
+        .then((author) => handleFollow(author))
         .catch((error) => console.log(error))
         .finally(() => setLoading(false));
     }

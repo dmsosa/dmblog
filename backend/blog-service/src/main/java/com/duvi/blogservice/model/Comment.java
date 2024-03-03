@@ -39,11 +39,6 @@ public class Comment {
         this.postedAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
-    public void updateWith(Comment comment) {
-        this.user = comment.getUser();
-        this.article = comment.getArticle();
-        this.body = comment.getBody();
-        this.updatedAt = LocalDateTime.now();
-    }
+
 
 }

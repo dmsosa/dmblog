@@ -114,9 +114,6 @@ export async function getArticleBySlug({slug } : {slug: string }) : Promise<TArt
         .then((tagList) => data.tagList = tagList)
         .catch((error) => console.log(error))
 
-        //setFav is default setted to false
-        data.isFav = false;
-
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);

@@ -22,25 +22,22 @@ function Home() {
     return(
         <>
         <section className="bg-hero"> 
-            <BannerContainer>
+            <ContainerRow>
                 <div className="banner-quote">
-                    <a className="banner-quote-link">"Genie ist 1% Inspiration und 99% Transpiration"</a>
+                    <h1>"Genie ist 1% Inspiration und 99% Transpiration"</h1>
                 </div>
-            </BannerContainer>
-            <a>
-                {loggedUser && <span>Hello {loggedUser.username}</span>}
-            </a>
-            <button onClick={handleClick}>lick</button>
+            </ContainerRow>
             <ContainerRow
             addClass={"page"}>
-                <FeedProvider>
-                    <div className="col-6">
-                        <FeedToggler/>
-                        <Outlet/>
-                    </div>
-                    
-                    <TagList/>
-                </FeedProvider>
+                <div className="row row-cols-2 page-feed">
+                    <FeedProvider>
+                        <div className="col-8 cont-feed">
+                            <FeedToggler/>
+                            <Outlet/>
+                        </div>
+                        <TagList/>
+                    </FeedProvider>
+                </div>
             </ContainerRow>
             
             

@@ -3,7 +3,8 @@ import { TUser } from "./User"
 export type TComment = {
     articleId: number, 
     userId: number,
-    author: TUser | null,
+    image: string, 
+    username: string, 
     id: number,
     body: string,
     postedAt: Date,

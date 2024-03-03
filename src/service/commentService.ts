@@ -12,15 +12,39 @@ let instance = axios.create({
     baseURL:"/api/articles/comments",
     timeout: 1000
 });
+
 export async function getCommentsOfArticle({ slug } : {
     slug: string
 }) : Promise<TCommentData> {
 
     try {
-        const { data }: { data: TCommentData } = await instance.get("", { params: { slug: slug }});
-        data.comments = data.comments.map((comment) => { comment.author = null; return comment });
+        const { data }: { data: TCommentData } = await instance.request({
+             method: "GET",
+             params: { slug: slug }
+            });
         return data;
 
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
+}
+
+export async function postComment({ body, headers, slug } : {
+    body: string,
+    headers: object,
+    slug: string | undefined
+}) : Promise<TCommentData> {
+    try {
+
+        const { data } = await instance.request({
+            method: "POST",
+            headers: headers,
+            params: { slug: slug },
+            data: { body: body }
+        })
+
+        return data;
     } catch (error) {
         errorHandler(error as AxiosError);
         throw(error);
