@@ -1,15 +1,22 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import apple from '../../assets/img/apple.svg';
 
 function BrandLogo () {
+
+    const navigate = useNavigate();
+    const goHome = () => {
+        navigate("/");
+    }
+
     return (
-        <Link 
+        <a 
         className="navbar-brand"
-        to="/">
+         role="button" 
+         onClick={goHome}>
             <img src={apple}
             className="brand-logo"/>
             <span className="brand-name">dmsosa</span> 
-        </Link>
+        </a>
     )
 }
 

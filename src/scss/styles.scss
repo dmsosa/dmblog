@@ -190,7 +190,7 @@ body {
 .main {
     background: linear-gradient(60deg, #112233 10%, #111927 10%, #111927 90%, #112233 90%) no-repeat fixed;
     padding-top: 82px;
-    color: wheat;
+    color: white;
 }
 
 
@@ -212,7 +212,6 @@ a:hover {
 
 
 .cont-header {
-    color: gold;
     padding: 0 1em;
 }
 .cont-content {
@@ -499,7 +498,7 @@ a:hover {
 
 footer {
     margin: 0;
-    padding: 0;
+    padding:1em;
     background-color: #000D1C;
     color: whitesmoke;
     height: 250px;
@@ -536,6 +535,7 @@ footer ul {
     display: flex;
     justify-content: space-between;
 }
+
 //Button Styles 
 
 .btn-primary {
@@ -560,6 +560,7 @@ footer ul {
 // Others
 
 .loading-truck {
+
     display: block;
     margin: 0 auto;
     text-align: center;
