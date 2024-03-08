@@ -6,15 +6,17 @@ import { TUser } from "../../../types/User";
 import { ReactNode } from "react";
 
 
-function ArticleMeta({ children, createdAt, author }: { 
+function ArticleMeta({ children, createdAt, author, bottom=false }: { 
     children: ReactNode | ReactNode[],
     createdAt?: Date | null, 
-    author: TUser }) {
+    author: TUser,
+    bottom?: boolean
+}) {
 
     const { bio, followersCount, followingCount, image, username } = author || {};
 
     return (
-        <div className="article-meta row row-cols-2">
+        <div className={`article-meta row row-cols-2 ${bottom ? "bottom": ""}`}>
             <Link
                 className="col-4 article-author"
                 state={{bio, followersCount, followingCount, image }}
@@ -27,7 +29,7 @@ function ArticleMeta({ children, createdAt, author }: {
                 <a>{username}</a>
                 <span>{dateFormatter(createdAt)}</span>
             </Link>
-            <div className="col-8 article-fav">{children}</div>
+            <div className="col-8 article-buttons">{children}</div>
         
         </div> 
     )

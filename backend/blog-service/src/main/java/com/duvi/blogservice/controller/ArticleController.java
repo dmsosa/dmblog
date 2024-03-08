@@ -1,6 +1,7 @@
 package com.duvi.blogservice.controller;
 
 import com.duvi.blogservice.config.security.TokenService;
+import com.duvi.blogservice.model.Article;
 import com.duvi.blogservice.model.Tag;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.*;
@@ -12,6 +13,7 @@ import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.service.ArticleService;
 import com.duvi.blogservice.service.CommentService;
 import com.duvi.blogservice.service.TagService;
+import com.duvi.blogservice.service.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,16 +35,20 @@ public class ArticleController {
     private TagService tagService;
     private CommentService commentService;
     private TokenService tokenService;
-    private UserRepository userRepository;
+    private UserService userService;
 
 
-    public ArticleController(ArticleService articleService, TagService tagService, CommentService commentService, TokenService tokenService, UserRepository userRepository) {
+    public ArticleController(ArticleService articleService,
+                             TagService tagService,
+                             CommentService commentService,
+                             TokenService tokenService,
+                             UserService userService) {
 
         this.articleService = articleService;
         this.tagService = tagService;
         this.commentService = commentService;
         this.tokenService = tokenService;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     //Basic CRUD
@@ -52,30 +58,38 @@ public class ArticleController {
             @RequestParam(required = false) Integer offset,
             @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException {
 
-
+        String token = headers.getFirst("Authorization");
+        String loggedUsername;
         List<ArticleDTO> articleList = articleService.getArticles();
+        Long articlesCount = (long) articleList.size();
+        ArticlesResponseDTO articleResponse;
 
         //if there is loggedUser, get favs
-        String token = headers.getFirst("Authorization");
         if (token != null ) {
             token = token.replace("Bearer ","");
-            String loggedUsername = tokenService.validateToken(token);
+            loggedUsername = tokenService.validateToken(token);
             articleList = articleList.stream().map( article ->
                     article.withFav(articleService.checkFav(article.id(), loggedUsername))
             ).toList();
+        } else {
+            loggedUsername = "";
         }
 
-        Long articlesCount = (long) articleList.size();
-
-        //if there is offset
+        //if there is offset, the lists of articles is shorter
         if (limit != null && offset != null) {
             Integer initOffset = offset*limit;
             Integer endOffset = initOffset + limit;
-            List<ArticleDTO> subList = articleList.subList(initOffset, endOffset);
-            ArticlesResponseDTO articleResponse = new ArticlesResponseDTO(subList, articlesCount);
-            return new ResponseEntity<>(articleResponse, HttpStatus.OK);
+            articleList = articleList.subList(initOffset, endOffset);
         }
-        ArticlesResponseDTO articleResponse = new ArticlesResponseDTO(articleList, articlesCount);
+
+        //All userDTO's are created with 'isFollowing' field as false by default,
+        //so we find out if the current loggedUser is following the author of the article
+        articleList = articleList.stream().map(
+                article ->
+                        article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
+        ).toList();
+
+        articleResponse = new ArticlesResponseDTO(articleList, articlesCount);
         return new ResponseEntity<>(articleResponse, HttpStatus.OK);
     }
 
@@ -87,25 +101,34 @@ public class ArticleController {
 
         //if there is loggedUser, we get favs
         String token = headers.getFirst("Authorization");
+        String loggedUsername;
+        ArticlesResponseDTO response;
         List<ArticleDTO> articleList = articleService.getArticles();
+        Long articlesCount = (long) articleList.size();
+
         if (token != null) {
             token = token.replace("Bearer ", "");
-            String loggedUsername = tokenService.validateToken(token);
+            loggedUsername = tokenService.validateToken(token);
             articleList = articleList.stream().map( article ->
                     article.withFav(articleService.checkFav(article.id(), loggedUsername))
             ).toList();
+        } else {
+            loggedUsername = "";
         }
 
-        Long articlesCount = (long) articleList.size();
         if (limit != null && offset != null) {
             Integer initOffset = offset*limit;
             Integer endOffset = initOffset + limit;
-            List<ArticleDTO> subList = articleList.subList(initOffset, endOffset);
-            ArticlesResponseDTO articleResponse = new ArticlesResponseDTO(subList, articlesCount);
-            return new ResponseEntity<>(articleResponse, HttpStatus.OK);
+            articleList = articleList.subList(initOffset, endOffset);
         }
-        ArticlesResponseDTO articleResponse = new ArticlesResponseDTO(articleList, articlesCount);
-        return new ResponseEntity<>(articleResponse, HttpStatus.OK);
+
+        articleList = articleList.stream().map(
+                article ->
+                        article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
+        ).toList();
+
+        response = new ArticlesResponseDTO(articleList, articlesCount);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/global")
@@ -113,15 +136,24 @@ public class ArticleController {
 
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String username = tokenService.validateToken(token);
-        User user = userRepository.findByUsername(username).get();
 
         ArticleDTO article = articleService.createArticle(createArticleDTO);
 
         return new ResponseEntity<>(article, HttpStatus.CREATED);
     }
     @GetMapping("/slug/{articleSlug}")
-    public ResponseEntity<ArticleDTO> getArticleBySlug(@PathVariable String articleSlug) throws ArticleDoNotExistsException {
-        return new ResponseEntity<>(articleService.getArticleBySlug(articleSlug), HttpStatus.OK);
+    public ResponseEntity<ArticleDTO> getArticleBySlug(@PathVariable String articleSlug, @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException {
+        String token = headers.getFirst("Authorization");
+        String loggedUsername;
+        if (token != null ) {
+            token = token.replace("Bearer ","");
+            loggedUsername = tokenService.validateToken(token);
+        } else {
+            loggedUsername = "";
+        }
+        ArticleDTO articleDTO = articleService.getArticleBySlug(articleSlug);
+        articleDTO = articleDTO.withAuthor(articleDTO.author().withFollowing(userService.isFollowing(articleDTO.author().id(), loggedUsername)));
+        return new ResponseEntity<>(articleDTO, HttpStatus.OK);
     }
 
     @PutMapping("/slug/{articleSlug}")
@@ -137,17 +169,29 @@ public class ArticleController {
 
     //Operations with Author
     @GetMapping("/author/{username}")
-    public ResponseEntity<ArticlesResponseDTO> getArticlesFromAuthor(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws UserNotFoundException {
+    public ResponseEntity<ArticlesResponseDTO> getArticlesFromAuthor(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset, @RequestHeader HttpHeaders headers) throws UserNotFoundException {
+        String token = headers.getFirst("Authorization");
+        String loggedUsername;
+        if (token != null ) {
+            token = token.replace("Bearer ","");
+            loggedUsername = tokenService.validateToken(token);
+        } else {
+            loggedUsername = "";
+        }
+
         List<ArticleDTO> articleDTOS = articleService.getByAuthor(username);
+        ArticlesResponseDTO response;
         Long count = (long) articleDTOS.size();
         if (limit != null && offset != null) {
             Integer initOffset = offset*limit;
             Integer endOffset = initOffset + limit;
-            List<ArticleDTO> articleList = articleDTOS.subList(initOffset, endOffset);
-            ArticlesResponseDTO response = new ArticlesResponseDTO(articleList, count);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            articleDTOS = articleDTOS.subList(initOffset, endOffset);
         }
-        ArticlesResponseDTO response = new ArticlesResponseDTO(articleDTOS, count);
+
+        articleDTOS = articleDTOS.stream().map( article ->
+                article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
+        ).toList();
+        response = new ArticlesResponseDTO(articleDTOS, count);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -175,42 +219,76 @@ public class ArticleController {
     }
 
     @GetMapping("/favs/users/{username}")
-    public  ResponseEntity<ArticlesResponseDTO> getFavsForUser(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws UserNotFoundException {
+    public  ResponseEntity<ArticlesResponseDTO> getFavsForUser(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset, @RequestHeader HttpHeaders headers) throws UserNotFoundException {
+
         List<ArticleDTO> articleDTOS = articleService.getFavArticles(username);
         Long count = (long) articleDTOS.size();
+        ArticlesResponseDTO response;
+        String token = headers.getFirst("Authorization");
+        String loggedUsername;
+        if (token != null ) {
+            token = token.replace("Bearer ","");
+            loggedUsername = tokenService.validateToken(token);
+        } else {
+            loggedUsername = "";
+        }
+
         if (limit != null && offset != null ) {
             Integer initOffset = offset*limit;
             Integer endOffset = initOffset + limit;
-
-            List<ArticleDTO> articleList = articleDTOS.subList(initOffset, endOffset > articleDTOS.size() ? articleDTOS.size() : endOffset);
-            ArticlesResponseDTO response = new ArticlesResponseDTO(articleList, count);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            articleDTOS = articleDTOS.subList(initOffset, endOffset > articleDTOS.size() ? articleDTOS.size() : endOffset);
         }
-        ArticlesResponseDTO response = new ArticlesResponseDTO(articleDTOS, count);
+        articleDTOS = articleDTOS.stream().map( article ->
+                article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
+        ).toList();
+        response = new ArticlesResponseDTO(articleDTOS, count);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/favs/users/logged")
     public ResponseEntity<ArticlesResponseDTO> getFavsOfLoggedUser(@RequestHeader HttpHeaders headers) throws UserNotFoundException {
-        String token = headers.getFirst("Authorization").replace("Bearer ", "");
-        String username = tokenService.validateToken(token);
-        List<ArticleDTO> articleDTOS = articleService.getFavArticles(username);
+
+        String token = headers.getFirst("Authorization");
+        String loggedUsername;
+        if (token != null ) {
+            token = token.replace("Bearer ","");
+            loggedUsername = tokenService.validateToken(token);
+        } else {
+            loggedUsername = "";
+        }
+        List<ArticleDTO> articleDTOS = articleService.getFavArticles(loggedUsername);
         Long count = (long) articleDTOS.size();
-        ArticlesResponseDTO response = new ArticlesResponseDTO(articleDTOS, count);
+        ArticlesResponseDTO response;
+
+        articleDTOS = articleDTOS.stream().map( article ->
+                article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
+        ).toList();
+
+        response = new ArticlesResponseDTO(articleDTOS, count);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     //Operations with Tags
     @GetMapping("/tags")
-    public  ResponseEntity<ArticlesResponseDTO> getArticlesByTag(@RequestParam(required = true) String tag, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) throws TagNotFoundException {
+    public  ResponseEntity<ArticlesResponseDTO> getArticlesByTag(@RequestParam(required = true) String tag, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset, @RequestHeader HttpHeaders headers) throws TagNotFoundException {
+        ArticlesResponseDTO response;
         List<ArticleDTO> articleDTOS = articleService.getArticlesByTag(tag);
         Long count = (long) articleDTOS.size();
+        String token = headers.getFirst("Authorization");
+        String loggedUsername;
+        if (token != null ) {
+            token = token.replace("Bearer ","");
+            loggedUsername = tokenService.validateToken(token);
+        } else {
+            loggedUsername = "";
+        }
         if (limit != null && offset != null) {
             Integer initOffset = offset*limit;
             Integer endOffset = initOffset + limit;
-            List<ArticleDTO> articleList = articleDTOS.subList(initOffset, endOffset);
-            ArticlesResponseDTO response = new ArticlesResponseDTO(articleList, count);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            articleDTOS = articleDTOS.subList(initOffset, endOffset);
         }
-        ArticlesResponseDTO response = new ArticlesResponseDTO(articleDTOS, count);
+        articleDTOS = articleDTOS.stream().map( article ->
+                article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
+        ).toList();
+        response = new ArticlesResponseDTO(articleDTOS, count);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

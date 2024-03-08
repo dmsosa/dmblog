@@ -5,17 +5,20 @@ function ArticleTags({tagList}: {tagList: string[]}) {
         tagList &&
         tagList.length > 0 && 
         (
-            <ul className="tag-list">
-                { tagList.map( (tag) => (
-                        <li key={tag} className="tag-li">
-                            <Link to={`tags/${tag}`}>
-                                <p>{tag}</p>
-                            </Link>
-                        </li>
+            <div className="tag-list">
+                <span>Tags</span>
+                <ul>
+                    { tagList.map( (tag) => (
+                            <li key={tag} className="tag-li">
+                                <Link to={`tags/${tag}`}>
+                                    {tag}
+                                </Link>
+                            </li>
+                            )
                         )
-                    )
-                }
-            </ul>
+                    }
+                </ul>
+            </div>
         )
         
         

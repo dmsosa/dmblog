@@ -22,7 +22,7 @@ import java.util.Set;
 public interface ArticleService {
 
     //createDTO
-    ArticleDTO createDTO(Article article) throws ArticleDoNotExistsException;
+    ArticleDTO createDTO(Article article);
 
     //checkFav
 

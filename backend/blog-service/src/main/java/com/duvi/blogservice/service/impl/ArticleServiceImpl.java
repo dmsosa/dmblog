@@ -62,14 +62,19 @@ public class ArticleServiceImpl implements ArticleService {
         List<String> tagList = this.getTagsOf(article.getSlug()).stream().map((tag) -> tag.getName()).toList();
         Integer favsCount = 0;
         Boolean isFav = false;
+        UserDTO author = null;
 
         if (article.getFavUsers() != null) {
             favsCount = article.getFavUsers().size();
         }
+        try {
+            author = userService.findUserById(article.getAuthor().getId());
+        } catch (UserNotFoundException unfe) {
+        }
 
         return new ArticleDTO(
                 article.getId(),
-                article.getAuthor(),
+                author,
                 article.getTitle(),
                 article.getBody(),
                 article.getDescription(),

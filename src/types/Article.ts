@@ -2,7 +2,6 @@ import { TUser } from "./User"
 
 export type TArticle = {
     id: number | null,
-    userId: number | null,
     title: string,
     author: TUser,
     description: string,

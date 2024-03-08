@@ -13,7 +13,7 @@ function FollowButton({ username, isFollowing, followersCount, handleFollow } : 
     const { authState } = useAuth() as TAuthContext;
     const { headers } = authState;
 
-    const classN = isFollowing ? "btn-unfollow" : "btn-follow"
+    const classN = isFollowing ? "btn-danger" : "btn-primary"
     const text = isFollowing ? "Unfollow" : "Follow"
     const handleClick = () => {
 
@@ -31,7 +31,7 @@ function FollowButton({ username, isFollowing, followersCount, handleFollow } : 
         <p>Loading...</p> :
         <button className={`btn ${classN}`} onClick={handleClick}>
             {text}
-            <span>Followers: {followersCount}</span>
+            <span>{followersCount}</span>
         </button>
     )
 }

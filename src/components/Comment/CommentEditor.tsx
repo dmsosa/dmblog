@@ -30,8 +30,8 @@ function CommentEditor({ setCommentData } : {
 
 
     return isAuth ?
-        <div className="col col-12">
-            <form className="comment-card comment-form" onSubmit={handleSubmit}>
+        <div className="row col-12">
+            <form className="comment-form" onSubmit={handleSubmit}>
                 <div className="comment-cont">
                     <label>Leave a comment</label>
                     <textarea
@@ -48,14 +48,16 @@ function CommentEditor({ setCommentData } : {
                 </div>
             </form>            
         </div> : 
-        <div className="col col-12">
-            <h5>You need an account to leave a comment</h5>
-            <div className="col-6">
+        <div className="row comment-unlogged">
+            <div className="col-12">
+                <h5>You need an account to leave a comment</h5>            
+            </div>
+            <div className="col-3 comment-link">
                 <Link to={"/login"}>
                     Log into your account
                 </Link>
             </div>
-            <div className="col-6">
+            <div className="col-3 comment-link">
                 <Link to={"/signin"}>
                     Sign in to create an account
                 </Link>

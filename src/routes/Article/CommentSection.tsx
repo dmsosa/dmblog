@@ -25,7 +25,7 @@ function CommentSection() {
     return (
         loading ? <div>is Loading</div> : 
         <div className="row row-cols-3 comment-row">
-            <div className="col col-12">Comments Count: {commentsCount}</div>
+            <div className="col col-12 comment-count">Comments Count: {commentsCount}</div>
             <CommentEditor setCommentData={setCommentData}/>
             <CommentList comments={comments}/>
         </div>

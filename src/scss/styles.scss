@@ -1,6 +1,6 @@
-@mixin btn-styles {
+@mixin btn-styles($background-color, $bgvalue) {
     &:not(:disabled) {
-        background-color: rgba(153, 255, 51, 1);
+        #{$background-color}: $bgvalue;
         border: none;
         color: #000D1C;
         padding: 0.5em 1em;
@@ -56,6 +56,35 @@ body {
 
 .form-checkbox-label input {
     opacity: 0;
+}
+
+//Button Styles 
+
+.btn {
+    @include btn-styles(background-color, rgba(246, 248, 244, 0.591));
+}
+
+.btn-primary {
+    @include btn-styles(background-color, rgba(153, 255, 51, 1));
+}
+.btn-danger {
+    @include btn-styles(background-color, rgba(255, 29, 4, 0.58) )
+}
+.btn-info {
+    @include btn-styles(background-color, rgba(255, 219, 40, 0.957) )
+}
+
+
+@keyframes hop {
+    0% {
+        font-size: inherit;
+    }
+    50%{
+        font-size: 18px;
+    }
+    100% {
+        font-size: inherit;
+    }
 }
 
 // Navbar Styles 
@@ -320,10 +349,19 @@ a:hover {
     padding: 1em;
     border: #051d46 5px solid;
 }
+.article-meta {
+    margin: 0 auto;
+    padding: 0.7em 1.6em;
+    background-color: #000D1C;
+}
+.article-meta.bottom {
+    border-radius: 1em;
+    max-width: 80%;
+    margin: 0;
+}
 .article-author {
     width: fit-content;
     padding: 0;
-    
 }
 .article-author img {
     border-radius: 50%;
@@ -331,19 +369,60 @@ a:hover {
 }
 .article-author a {
     margin-left: 5px;
+    margin-right: 1em;
 }
 .article-author span {
     margin-left: 5px;
-    border-bottom: #34A200 5px solid;
+    border-bottom: #51FF00 5px solid;
 }
-.article-fav {
-    padding: 0;
-    margin-left: auto;
-    margin-right: 0;
+.article-buttons {
+    border-left: 0.5em solid #51FF00;
 }
+.article-buttons .btn {
+    margin-right: 1em;
+}
+.article-buttons .btn-fav {
+    background-color: yellow;
+}
+
 .article-link {
     margin-top: 1em;
 }
+
+.article-cont {
+    padding: 2em 0;
+}
+.tag-list {
+    padding: 0;
+    border-radius: 1em;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    background-color: #000D1C;
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+
+.tag-list span {
+    display: block;
+    margin: 0;
+    padding: 0 1em;
+    width: 100%;
+    background-color: #112233;
+}
+.tag-list ul {
+    padding: 0.5em 1.6em;
+    margin: 0;
+    display: flex;
+    list-style: none;
+}
+.tag-list li {
+    background-color: #000D1C;
+    padding: 0 1em;
+    outline: yellowgreen 1px solid;
+    border-radius: 1em;
+    text-align: center;
+}
+
 .cont.tech-banner-cont {
     align-items: center;
     text-align: center;
@@ -487,13 +566,70 @@ a:hover {
     margin: 1em auto;
 }
 
-//Article styles
+//Article page
+
+.container.article-page {
+    max-width: 100%;
+    padding: 0;
+    width: 100%;
+    margin: 0 auto;
+}
+.container.banner-container {
+    max-width: 100%;
+    padding-top: 3em;
+    padding-bottom: 1em;
+    background-color: rgba(153, 255, 51, 1);
+    text-align: center;
+    color: #000D1C;
+}
 
 //Comment styles
 
+.comment-count {
+    background-color: #000D1C;
+    padding: 0 1.6em;
+}
+.comment-unlogged {
+    background-color: #000D1C;
+    width: 100%;
+    padding: 1em;
+    padding-left: 2em;
+    padding-bottom: 2em;
+    border-bottom: solid rgba(153, 255, 51, 1) 0.5em;
 
+}
 
+.comment-card {
+    background-color: #000D1C;
+    width: 100%;
+    padding: 2em;
+    padding-bottom: 2em;
+}
 
+.comment-author {
+    border-radius: 1em;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: #000D1C;
+    width: 100%;
+    width: fit-content;
+    padding: 0 0.5em;
+    padding-bottom: 0.5em;
+}
+.comment-author img {
+    border-radius: 50%;
+    width: 2.5em;
+}
+.comment-author span {
+    margin-left: 0.5em;    
+}
+.comment-cont {
+    background-color: #112233;
+    padding: 1em;
+}
+.comment-footer {
+    padding-top: 1em;
+}
 //footer styles
 
 footer {
@@ -536,26 +672,7 @@ footer ul {
     justify-content: space-between;
 }
 
-//Button Styles 
 
-.btn-primary {
-    @include btn-styles();
-
-}
-
-
-
-@keyframes hop {
-    0% {
-        font-size: inherit;
-    }
-    50%{
-        font-size: 18px;
-    }
-    100% {
-        font-size: inherit;
-    }
-}
 
 // Others
 

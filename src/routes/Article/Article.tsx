@@ -53,14 +53,15 @@ function Article() {
                 navigate("/not-found", { replace: true })
             }
         })
-        .finally(() => { setLoading(false); 
+        .finally(() => { setLoading(false); console.log(article.author);
+        
          })
     
         
     },[slug, headers])
     return (
         loading ? <LoadingPage/> : !!article &&
-        <div className="article-page">
+        <div className="container article-page">
             <BannerContainer>
                 <h1>{title}</h1>
             </BannerContainer>
@@ -69,11 +70,16 @@ function Article() {
                 author={article.author}>
                 <ArticleButtons article={article}  setArticle={setArticle}/>
             </ArticleMeta>
-            <ContainerRow addClass={"articlecont"}>
-                {body && <Markdown options={{ forceBlock:true }}>{body}</Markdown>}
-                <ArticleTags tagList={article.tagList}/>
-                <div className="row">
+            <ContainerRow addClass={"article-cont"}>
+                <div className="col-12 article-body">
+                    {body && <Markdown options={{ forceBlock:true }}>{body}</Markdown>}
+                </div>
+                <div className="col-12">
+                    <ArticleTags tagList={article.tagList}/>
+                </div>
+                <div className="col-12">
                     <ArticleMeta
+                    bottom={true}
                     createdAt={createdAt}
                     author={article.author}>
                         <ArticleButtons article={article}  setArticle={setArticle}/>
