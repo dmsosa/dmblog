@@ -14,8 +14,8 @@ function FavButton({  slug, favoritesCount, isFav, handleFav } : {
     const { authState } = useAuth() as TAuthContext;
     const { headers } = authState;
     
-    const buttonStyle = isFav ? "":"active";
-    const innerText = isFav ? "Favorite":"Mark as favorite";
+    const buttonStyle = isFav ? "active":"";
+    const innerText = isFav ? "Unfavored":"Favorite";
 
 
     const handleClick = () => {
@@ -29,7 +29,7 @@ function FavButton({  slug, favoritesCount, isFav, handleFav } : {
         .finally(() => setLoading(false))
     }
     return (
-        <button className={`btn btn-fav ${buttonStyle}`} onClick={handleClick} disabled={loading}>
+        <button className={`btn btn-info ${buttonStyle}`} onClick={handleClick} disabled={loading}>
             <i>{innerText}</i>
             <span>{` ${favoritesCount}`}</span>
         </button>

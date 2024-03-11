@@ -1,11 +1,12 @@
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { TUser } from "../../types/User";
 import AuthorMeta from "./AuthorMeta";
+import ReactMarkdown from "react-markdown";
 import { useEffect, useState } from "react";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import { getUserByUsername } from "../../service/userService";
 import { errorHandler } from "../../service/handleError";
-import Markdown from "markdown-to-jsx";
+import MDEditor from "@uiw/react-md-editor";
 
 function AuthorInfo() {
 
@@ -46,7 +47,7 @@ function AuthorInfo() {
             isFollowing={isFollowing}
             handleFollow={handleFollow}/>
             <div className="col col-12">
-                { bio && <Markdown options={{forceBlock: true}}>{bio}</Markdown>}
+                { bio && <p>{bio}</p>}
             </div>
             { loggedUser.username === username ? 
             <div className="col col-12">

@@ -20,6 +20,7 @@ function DropdownItem() {
 
     const handleClick = () => {
         setDropdown(!dropdown);
+        console.log(dropdown)
     }
 
     return (
@@ -28,17 +29,17 @@ function DropdownItem() {
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
-            onClick={handleClick}
-            onMouseLeave={handleClick}>
+            onClick={handleClick}>
                 {isAuth? "Mein Konto":"Optionen"}
             </a>
                 <ul 
                 className="dropdown-menu" 
                 style={{display: dropdown ? "block" : "none"}}
-                onMouseLeave={handleClick} >
+                 >
                     {isAuth && loggedUser ? 
                     <LoggedOptions 
                     username={loggedUser.username}
+                    handleClick={handleClick}
                     handleLogout={handleLogout}
                     /> : <NotLoggedOptions />}
                 </ul>

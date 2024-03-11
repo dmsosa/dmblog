@@ -1,5 +1,7 @@
 package com.duvi.blogservice.controller;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.duvi.blogservice.config.security.TokenService;
 import com.duvi.blogservice.model.Article;
 import com.duvi.blogservice.model.Tag;
@@ -14,13 +16,18 @@ import com.duvi.blogservice.service.ArticleService;
 import com.duvi.blogservice.service.CommentService;
 import com.duvi.blogservice.service.TagService;
 import com.duvi.blogservice.service.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/articles")
@@ -29,7 +36,8 @@ public class ArticleController {
 
 
 
-
+    @Value("${cloudinaryUrl}")
+    private String cloudinaryUrl;
 
     private ArticleService articleService;
     private TagService tagService;
@@ -334,7 +342,15 @@ public class ArticleController {
         Long commentsCount = (long) comments.size();
         CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comments, commentsCount);
         return new ResponseEntity<>(commentResponseDTO, HttpStatus.OK);
+    }
 
+    @PostMapping("/images/upload")
+    public ResponseEntity<String> uploadImage(@RequestBody SetImage setImage) throws IOException {
+        File file = new File(setImage.path());
+        Cloudinary cloudinary = new Cloudinary(cloudinaryUrl);
+        Map uploaded = cloudinary.uploader().upload(file, ObjectUtils.asMap("public_id", setImage.fileName()));
+        System.out.println(uploaded);
+        return new ResponseEntity<>("uplod", HttpStatus.CREATED);
     }
 
 }

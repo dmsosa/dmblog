@@ -16,11 +16,17 @@ function NavMenu() {
             navigation("/");
         }
     };
+
+    const onClick = () => {
+        document.getElementById("navbarSupportedContent")?.classList.toggle("show");
+    };
+
     return (
             <ul className="navbar-nav">
                 {isAuth && loggedUser ? 
                 <LoggedOptions 
                 username={loggedUser.username}
+                handleClick={onClick}
                 handleLogout={handleLogout}
                 /> : <NotLoggedOptions />}
             </ul>

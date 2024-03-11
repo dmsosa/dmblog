@@ -1,11 +1,13 @@
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import FormFieldset from "../../FormFieldset";
-import ContainerRow from "../../ContainerRow";
+import ReactAvatarEditor from "react-avatar-editor";
+
 import { getArticleBySlug, setArticle } from "../../../service/articleService";
 import {  useLocation, useNavigate, useParams } from "react-router-dom";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
 import { AxiosError } from "axios";
 import { TArticle } from "../../../types/Article";
+import MarkdownEditor from "./MarkdownEditor";
 
 type TForm = {
     title: string,
@@ -22,6 +24,7 @@ const emptyForm = {
 function ArticleEditor() {
     const { state } = useLocation();
     const [{title, description, body, tagList }, setForm ] = useState<TForm>(state || emptyForm); 
+    const [file, setFile] = useState<File[]>([]);
     const [errorMessage, setErrorMessage ] = useState("");
     const { authState } = useAuth() as TAuthContext;
     const { headers, isAuth, loggedUser } = authState;
@@ -33,7 +36,7 @@ function ArticleEditor() {
         if (!isAuth) return redirect();
         if (state || !slug) return;
 
-        getArticleBySlug({slug, headers})
+        getArticleBySlug({slug})
         .then((article: TArticle) => {
             
             const { id, title, description, body, tagList } = article;
@@ -96,18 +99,9 @@ function ArticleEditor() {
                             minLength={10}
                             title="Article description"/>
                             
-                            <fieldset className="form-group">
-                                <label htmlFor="body">Article body</label>
-                                <textarea
-                                value={body}
-                                onChange={handleChange}
-                                name="body"
-                                className="form-control"
-                                required
-                                placeholder="Write the content of your body, it can be written in Markdown Language !"
-                                rows={8}>
-                                </textarea>
-                            </fieldset>
+                            <MarkdownEditor body={body} handleChange={handleChange}>
+                            </MarkdownEditor>
+                            {/* <ImageUploader onFilesSelected={setFile}/> */}
                             <FormFieldset
                             type="text"
                             name="tags"

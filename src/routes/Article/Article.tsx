@@ -4,7 +4,6 @@ import BannerContainer from "../../components/BannerContainer";
 import ArticleMeta from "../../components/Article/ArticleMeta";
 import ArticleTags from "../../components/Article/ArticleTags";
 import ArticleButtons from "../../components/Buttons/ArticleButtons";
-import Markdown from "markdown-to-jsx";
 import LoadingPage  from "../../components/LoadingPage";
 import { useEffect, useState } from "react";
 import { TArticle } from "../../types/Article";
@@ -12,6 +11,7 @@ import { TAuthContext, useAuth } from "../../context/AuthContext";
 import { getArticleBySlug } from "../../service/articleService";
 import { errorHandler } from "../../service/handleError";
 import { logoutUser } from "../../service/userService";
+import MDEditor from "@uiw/react-md-editor";
 
 
 function Article() {
@@ -72,7 +72,7 @@ function Article() {
             </ArticleMeta>
             <ContainerRow addClass={"article-cont"}>
                 <div className="col-12 article-body">
-                    {body && <Markdown options={{ forceBlock:true }}>{body}</Markdown>}
+                    {body && <MDEditor.Markdown source={body}/>}
                 </div>
                 <div className="col-12">
                     <ArticleTags tagList={article.tagList}/>

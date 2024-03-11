@@ -31,6 +31,7 @@ logging:
     org.springframework.security: TRACE
 
 ---
+
 datasource: postgres
 spring:
   config:
@@ -45,3 +46,4 @@ spring:
   h2:
     console:
       enabled: false
+cloudinaryUrl: ${CLOUDINARY_URL}
