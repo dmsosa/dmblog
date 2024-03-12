@@ -15,7 +15,7 @@ function AuthorInfo() {
     const navigate = useNavigate();
 
     const { authState } = useAuth() as TAuthContext;
-    const { headers, loggedUser } = authState;
+    const { headers } = authState;
     const [ loading, setLoading ] = useState(false);
     const [ author, setAuthor ] = useState( state || {} )
     const { image, bio, isFollowing, followersCount } = author;
@@ -38,7 +38,7 @@ function AuthorInfo() {
 
     return (
         loading ? <div> Loading author info . . . </div> :
-        <div className="row row-cols-2">
+        <div className="author-info row row-cols-2">
             <AuthorMeta 
             username={username || ""}
             loading={loading}
@@ -46,15 +46,12 @@ function AuthorInfo() {
             followersCount={followersCount}
             isFollowing={isFollowing}
             handleFollow={handleFollow}/>
-            <div className="col col-12">
-                { bio && <p>{bio}</p>}
-            </div>
-            { loggedUser.username === username ? 
-            <div className="col col-12">
-                <Link to={"/settings"}> Edit profile</Link>
-            </div> : 
-            <div className="col col-12">Report</div>
-            }
+            { bio && 
+                <div className="author-bio col col-12">
+                    <h1>Biography</h1>
+                    <p>{bio}</p>
+                </div>}
+
         </div>
     )
 }

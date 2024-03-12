@@ -350,7 +350,7 @@ public class ArticleController {
         Cloudinary cloudinary = new Cloudinary(cloudinaryUrl);
         Map uploaded = cloudinary.uploader().upload(file, ObjectUtils.asMap("public_id", setImage.fileName()));
         System.out.println(uploaded);
-        return new ResponseEntity<>("uplod", HttpStatus.CREATED);
+        return new ResponseEntity<>("upload", HttpStatus.CREATED);
     }
 
 }

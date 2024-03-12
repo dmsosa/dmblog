@@ -5,6 +5,7 @@ export async function onImagePasted({ dataTransfer, onChange } : {
     dataTransfer: DataTransfer,
     onChange: (name?: string | undefined, e?: React.ChangeEvent<HTMLTextAreaElement> | undefined, state?: ContextStore | undefined) => void
 }) {
+    const reader = new FileReader();
     const files: File[] = []
     for (let index = 0; index < dataTransfer.items.length ; index++)  {
         const file = dataTransfer.files.item(index);
@@ -14,12 +15,18 @@ export async function onImagePasted({ dataTransfer, onChange } : {
     }
     await Promise.all(
         files.map( (file) => {
-            const url = "cloudinary";
-            const insertedMarkdown = insertIntoTextArea(`![](${url})`);
-            if (!insertedMarkdown) {
-                return;
+            console.log(file);
+            reader.onload = function(){
+                var dataURL = reader.result;
+                const insertedMarkdown = insertIntoTextArea(`![](${dataURL})`);
+                if (!insertedMarkdown) {
+                    return;
+                }
+                onChange(insertedMarkdown);
             }
-            onChange(insertedMarkdown);
+            reader.readAsDataURL(file);
+            const url = "cloudinary";
+
         })
     );
 }
