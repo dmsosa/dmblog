@@ -1,22 +1,20 @@
-import { DiReact, DiGithubBadge, DiDjango, DiAws } from "react-icons/di";
-
+import { DiGithubAlt } from "react-icons/di";
+import { FaInstagram, FaLinkedin  } from "react-icons/fa";
 
 function SocialMedia() {
     return (
-        <ul className="socialmedia-ul">
-            <li className="socialmedia-li">
-                <a className="socialmedia-a"><DiAws size={70}/></a>
-            </li>
-            <li className="socialmedia-li">
-                <a className="socialmedia-a"><DiDjango size={70}/></a>
-            </li>
-            <li className="socialmedia-li">
-                <a className="socialmedia-a"><DiReact size={70}/></a>
-            </li>
-            <li className="socialmedia-li">
-                <a className="socialmedia-a"><DiGithubBadge size={70}/></a>
-            </li>
-        </ul>
+        <div className="footer-col col-12 socialmedia">
+            <ul>
+                <li>
+                    <a><DiGithubAlt size={40}/></a>
+                </li>
+                <li>
+                    <a><FaInstagram size={40}/></a>
+                </li>                <li>
+                    <a><FaLinkedin size={40}/></a>
+                </li>
+            </ul>
+        </div>
     )
 }
 

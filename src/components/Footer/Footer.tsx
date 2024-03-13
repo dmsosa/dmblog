@@ -7,18 +7,16 @@ function Footer() {
     return (
         <div className="container footer-cont">
             <div className="row">
-                <div className="col-12"><SocialMedia/></div>
-                <div className="col-12"><FooterForm/></div>
-                <div className="col-12">
+                <SocialMedia/>
+                <FooterForm/>
+                <div className="footer-col col-12">
                     <ul>
-                        <li><a>Terms</a></li>
-                        <li><a>Locense</a></li>
-                        <li><a>Credits</a></li>
-                        <li><a>Agreements</a></li>
-                        <li><a>More</a></li>
+                        <NavItem text="Who I am"/>
+                        <NavItem text="More learning"/>
+                        <NavItem text="You would like"/>
                     </ul>
                 </div>
-                <div className="col-12 text-center"><h5>Copyright</h5></div>
+                <div className="col-12 text-center"><h5>&#169; 2024 dmsosa </h5></div>
             </div>
         </div>
     )
