@@ -82,7 +82,6 @@ function Article() {
                     bottom={true}
                     createdAt={createdAt}
                     author={article.author}>
-                        <ArticleButtons article={article}  setArticle={setArticle}/>
                     </ArticleMeta>
                 </div>
             </ContainerRow>

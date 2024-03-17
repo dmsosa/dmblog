@@ -12,7 +12,7 @@ function HomeArticles() {
         tagName}
     );
     return isLoading? (<div><em>Is Loading</em></div>) : articles.length > 0 ? (
-        <>
+        <div className="article-box">
             <ArticlePreview
             articles={articles}
             updateArticles={setArticlesData}
@@ -24,7 +24,7 @@ function HomeArticles() {
             tagName={tagName}
             updateArticles={setArticlesData}
             />
-        </> ) : (<div><em>No articles found</em></div>);
+        </div> ) : (<div><em>No articles found</em></div>);
     
 }
 

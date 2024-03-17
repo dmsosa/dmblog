@@ -16,7 +16,7 @@ function ProfileFavArticles() {
     });
 
     return (
-        <div className="fav-arts">
+        <div className="article-box">
             <ArticlePreview 
             isLoading={isLoading}
             articles={articles}

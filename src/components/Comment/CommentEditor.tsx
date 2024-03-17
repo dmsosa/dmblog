@@ -32,19 +32,18 @@ function CommentEditor({ setCommentData } : {
     return isAuth ?
         <div className="row col-12">
             <form className="comment-form" onSubmit={handleSubmit}>
-                <div className="comment-cont">
-                    <label>Leave a comment</label>
-                    <textarea
-                    rows={4}
-                    placeholder="What do you have to comment?..."
-                    onChange={handleChange}
-                    value={body}
-                    name="body">
-                    </textarea>
-                </div>
+                <label htmlFor="comment">Leave a comment</label>
+                <textarea
+                id="comment"
+                rows={4}
+                placeholder="What do you have to comment?..."
+                onChange={handleChange}
+                value={body}
+                name="body">
+                </textarea>
                 <div className="comment-footer">
                     <CommentAuthor image={loggedUser.image} username={loggedUser.username}/>
-                    <button>Post comment</button>
+                    <button className="btn btn-primary">Post comment</button>
                 </div>
             </form>            
         </div> : 

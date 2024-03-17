@@ -21,10 +21,8 @@ function MarkdownEditor({ body, handleChange } : {
     }
    
     return (
-        <div className='dr-dr'>
+        <div className='markdown-editor'>
             <MDEditor 
-        
-            style={{ height: "500px" }} 
             value={body} 
             onChange={onChange}
             onDrop={(e) => onImagePasted({dataTransfer: e.dataTransfer, onChange})}

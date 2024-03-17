@@ -7,7 +7,7 @@ import { ReactNode } from "react";
 
 
 function ArticleMeta({ children, createdAt, author, bottom=false }: { 
-    children: ReactNode | ReactNode[],
+    children?: ReactNode | ReactNode[],
     createdAt?: Date | null, 
     author: TUser,
     bottom?: boolean

@@ -1,4 +1,6 @@
 import ReactPaginate from "react-paginate";
+import { FaArrowAltCircleRight } from "react-icons/fa";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
 
 import { TArticleData, getArticles } from "../../../service/articleService";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
@@ -35,14 +37,14 @@ function ArticlePagination({
         breakLinkClassName="page-link"  
         containerClassName="pagination pagination-sm"
         nextClassName="page-item"
-        nextLabel={<i className="ion-arrow-right-b"></i>}
+        nextLabel={<FaArrowAltCircleRight/>}
         nextLinkClassName="page-link"
         onPageChange={handlePageChange}
         pageClassName="page-item"
         pageCount={pageCount}
         pageLinkClassName="page-link"
         previousClassName="page-item"
-        previousLabel={<i className="ion-arrow-left-b"></i>}
+        previousLabel={<FaArrowAltCircleLeft/>}
         previousLinkClassName="page-link"
         renderOnZeroPageCount={null}
       />

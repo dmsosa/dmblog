@@ -53,7 +53,8 @@ public class UsersController {
         if (!userService.existsByLogin(loginDTO.login())) {
             throw new UserNotFoundException("User with login '%s' do not exists!".formatted(loginDTO.login()));
         }
-        var usernamePassword = new UsernamePasswordAuthenticationToken(loginDTO.login(), loginDTO.password());
+        UserDTO loggedUser = userService.findUserByLogin(loginDTO.login());
+        var usernamePassword = new UsernamePasswordAuthenticationToken(loggedUser.username(), loginDTO.password());
         Authentication auth = authenticationManager.authenticate(usernamePassword);
         User user = (User) auth.getPrincipal();
         String token = tokenService.generateToken(user);

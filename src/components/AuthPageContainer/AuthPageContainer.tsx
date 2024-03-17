@@ -19,7 +19,7 @@ function AuthPageContainer({children, error, title, path, message} :
                     {error && <p className="error-message">{error}</p>}
                 </div>
                 <div className="col col-12">
-                    <button className="btn">
+                    <button className="btn btn-info">
                         <Link to={path}>{message}</Link>
                     </button>
                 </div>

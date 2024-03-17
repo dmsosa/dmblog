@@ -283,28 +283,37 @@ a:hover {
 }
 
 .cont-feed {
-    color: white;
+    ul {
+        justify-content: left;
+        display: flex;
+        padding: 0;
+    }
+    li {
+        border: #34A200 solid 3px;
+        border-radius: 0.5em;
+        margin: 0;
+        margin-right: 10px;
+        &.active {
+            .btn {
+                color: black;
+                background-color: #51FF00;
+            }
+        }
+    }
+    .btn {
+        color: white;
+        background-color: transparent;
+        &:active {
+            background-color: #51FF00;
+            color: black;
+        }
+        &:focus {
+            box-shadow: 0px 0px 10px #51FF00        ;
+        }   
+
+    }
 }
 
-.cont-feed ul {
-    justify-content: left;
-    display: flex;
-    padding: 0;
-    color: white;
-}
-.cont-feed li {
-    color: white;
-    border: #34A200 solid 2.5px;
-    border-radius: 0.5em;
-    margin: 0;
-    margin-right: 10px;
-}
-.cont-feed button {
-    color: white
-}
-.cont-feed button:hover {
-    background-color: #33ff0054;
-}
 
 
 // Tag container
@@ -340,12 +349,34 @@ a:hover {
 
 //Article preview
 
+.article-box {
+    .page-item {
+        background-color: #000D1C;
+        
+        &.active {
+
+            .page-link{
+                color:hsl(90, 100%, 60%);
+            }
+        }
+    }
+    .page-link {
+        color: gray;
+        background-color: transparent;
+        border: none;
+        &:focus {
+            box-shadow: 0px 0px 10px #51FF00;
+        }
+    }
+    
+}
 .article-preview {
     background-color: #000D1C;
     margin-bottom: 3em;
     padding: 1em;
     border: #051d46 5px solid;
 }
+
 .article-meta {
     margin: 0 auto;
     padding: 0.7em 1.6em;
@@ -353,8 +384,9 @@ a:hover {
 }
 .article-meta.bottom {
     border-radius: 1em;
-    max-width: 80%;
+    max-width: 100;
     margin: 0;
+    margin-bottom:8em;
 }
 .article-author {
     width: fit-content;
@@ -382,9 +414,7 @@ a:hover {
 .article-link {
     margin-top: 1em;
 }
-.article-cont {
-    padding: 2em 0;
-}
+
 .tag-list {
     padding: 0;
     border-radius: 1em;
@@ -552,14 +582,17 @@ a:hover {
 
 //Form styles
 
-.cont:has( > form) {
-    background-color: #000D1C;
-    max-width: 50%;
-    margin: 2em auto;
-}
-.cont-form {
-    padding: 2em;
-    padding-bottom: 1em;
+.auth-page {
+
+    .col {
+        margin-bottom: 0.25em;
+    }
+    .btn-info {
+        a {
+            color: black;
+        }
+        margin-left: 1em;
+    }
 }
 .form-cont {
     padding: 1em;
@@ -569,10 +602,20 @@ a:hover {
 }
 .article-form {
     padding: 2em;
+    .markdown-editor {
+        .wmde-markdown-var.w-md-editor.w-md-editor-show-live {
+            min-height: 200px;
+            height: fit-content !important;
+        }
+        .w-md-editor-area.w-md-editor-input {
+            min-height: inherit;
+        }
+        .w-md-editor-preview {
+            min-height: inherit;
+        }
+    }
 }
-.auth-page .col {
-    margin-bottom: 0.25em;
-}
+
 
 .form-fieldset {
     margin: auto;
@@ -682,13 +725,56 @@ a:hover {
     text-align: center;
     color: #000D1C;
 }
+.container.article-cont {
+    max-width: 100%;
+    margin: 0 auto;
+}
+.article-body {
+    padding: 0;
+    .wmde-markdown.wmde-markdown-color {
+        padding: 2em 5em;
+    } 
+}
 
 //Comment styles
 
+.comment-row {
+    hr {
+        height: 10px;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: yellow;
+    }
+}
 .comment-count {
-    background-color: #000D1C;
+    color: #112233;
+    background-color: #51FF00;
     padding: 0 1.6em;
 }
+.comment-form {
+    padding: 0em 2em 1em 2em;
+    background-color: #000D1C;
+    label {
+        text-transform: uppercase;
+        display: block;
+        margin: 2em 0 2em 1em;
+    }
+    textarea {
+        background-color: #000D1C;
+        color: white;
+        width: 100%;
+        height: fit-content;
+    }
+    .comment-footer {
+        padding-top: 1em;
+        display: flex;
+    }
+    .btn {
+        margin-left: 2em;
+    }
+}
+
 .comment-unlogged {
     background-color: #000D1C;
     width: 100%;
@@ -727,9 +813,7 @@ a:hover {
     background-color: #112233;
     padding: 1em;
 }
-.comment-footer {
-    padding-top: 1em;
-}
+
 
 //footer styles
 
