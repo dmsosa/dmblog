@@ -1,6 +1,5 @@
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import FormFieldset from "../../FormFieldset";
-import ReactAvatarEditor from "react-avatar-editor";
 
 import { getArticleBySlug, setArticle } from "../../../service/articleService";
 import {  useLocation, useNavigate, useParams } from "react-router-dom";
@@ -33,7 +32,10 @@ function ArticleEditor() {
 
     useEffect(() => {
         const redirect = () => {navigate("/", {replace: true, state: null})}
-        if (!isAuth) return redirect();
+        if (!isAuth) {
+            alert("You need to login first!")
+            return redirect()
+        };
         if (state || !slug) return;
 
         getArticleBySlug({slug})

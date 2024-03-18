@@ -1,6 +1,3 @@
-import { Link } from "react-router-dom";
-import { FiArrowDownCircle } from "react-icons/fi"
-import { FaBeer } from "react-icons/fa"
 import NavItem from "../NavItem";
 
 export function LoggedOptions({ username, handleLogout, handleClick } : { username: string, handleLogout: () => void, handleClick?: () => void }) {

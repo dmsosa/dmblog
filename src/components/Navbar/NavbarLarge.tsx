@@ -1,8 +1,13 @@
 import BrandLogo from "../Logos/BrandLogo";
+import NavItem from "../NavItem";
 import DropdownItem from "./DropdownItem";
 
 function NavbarLarge() {
 
+    const handleClick =  () => {
+        const dropdownMenu = document.querySelector(".dropdown-menu");
+        dropdownMenu?.classList.toggle("show");
+    }
     return (
         <section className="nav-menu bg-color-blue-nav d-none d-lg-block ">
                         <nav className="navbar navbar-expand-lg px-5 py-0">
@@ -13,11 +18,9 @@ function NavbarLarge() {
                                         <a className="nav-link">God</a>
                                     </li>
                                     <li className="nav-item ms-3 me-0" >
-                                        <a className="nav-link">Blessed</a>
+                                        <a className="nav-link" onClick={handleClick}>Blessed</a>
                                     </li>
-                                    <li className="nav-item ms-3 me-0">
-                                        <a className="nav-link">Me</a>
-                                    </li>
+                                    <NavItem text="New Article"  url="/editor" onClick={handleClick}/>
                                     <DropdownItem/>
                                 </ul>
                             </div>
