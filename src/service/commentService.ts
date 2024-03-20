@@ -50,3 +50,22 @@ export async function postComment({ body, headers, slug } : {
         throw(error);
     }
 }
+
+export async function editComment({ headers, commentId } : {
+    headers: object,
+    commentId: number
+}) : Promise<TComment> {
+    try {
+        const { data } = await instance.request({
+            method: "PUT",
+            url: `/${commentId}`,
+            headers: headers
+        })
+
+        return data;
+
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
+}

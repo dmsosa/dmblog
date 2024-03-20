@@ -8,8 +8,13 @@ type TErrorData = {
 type TApiError = {
     errors: TErrorData[]
 }
+export class CustomError extends Error {
+    constructor(message: string) {
+        super(message);
+    }
+}
 export class ApiError {
-    private error: AxiosError;
+    private error: AxiosError | null;
     public message;
     private statusCode;
     private _globallyHandled: boolean = false;
@@ -45,7 +50,7 @@ export class ApiError {
     public getMessage(): string {
         return this.message;
     }
-    public getError(): AxiosError {
+    public getError(): AxiosError | null {
         return this.error;
     }
     public getStatusCode(): number | null {

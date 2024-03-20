@@ -1,17 +1,18 @@
 import { TComment } from "../../types/Comment";
 import { dateFormatter } from "../../helpers/helpers";
 import CommentAuthor from "./CommentAuthor";
-import { MouseEvent } from "react";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import AuthorButtons from "./AuthorButtons";
+import { TCommentData } from "../../service/commentService";
+import CommentCard from "./CommentCard";
 
 
 
-function CommentList({ comments } : {
-    comments: TComment[]
+function CommentList({ comments, setCommentData } : {
+    comments: TComment[],
+    setCommentData: React.Dispatch<React.SetStateAction<TCommentData>>
 
 }) {
-
     const { authState } = useAuth() as TAuthContext;
     const { loggedUser } = authState;
     
@@ -19,18 +20,7 @@ function CommentList({ comments } : {
     return comments.length > 0 ? 
     ( comments.map((comment) => { 
         return (
-        <div className="col-12 comment-card" key={comment.id}>
-            <CommentAuthor image={comment.image} username={comment.username} />
-            <div className="comment-cont">
-                <p>{comment.body}</p>
-                <span>{dateFormatter(comment.updatedAt)}</span>
-            </div>
-            <div className="comment-footer">
-                {loggedUser.username == comment.username && 
-                <AuthorButtons id={comment.id} />}
-                <button>Like</button>
-            </div>
-        </div>
+            <CommentCard comment={comment} setCommentData={setCommentData}/>
     )
 })
     

@@ -14,9 +14,9 @@ function AuthPageContainer({children, error, title, path, message} :
         <div className="container auth-page">
             <div className="row">
                 <div className="col col-12">
-                    <h1 className="auth-cont-title">{title}</h1>
+                    <h1>{title}</h1>
+                    <p className={`error-message ${error ? "active":""}`}>{error}</p>
                     {children}
-                    {error && <p className="error-message">{error}</p>}
                 </div>
                 <div className="col col-12">
                     <button className="btn btn-info">

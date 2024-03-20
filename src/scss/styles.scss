@@ -63,12 +63,11 @@ body {
     @include btn-styles(background-color, rgba(153, 255, 51, 1));
 }
 .btn-danger {
-    @include btn-styles(background-color, rgba(255, 29, 4, 0.58) );
+    @include btn-styles(background-color, rgba(255, 29, 4, 0.772) );
 }
 .btn-info {
     @include btn-styles(background-color, rgba(255, 219, 40, 0.957) );
     &.active {
-        color: red;
         @include btn-styles(background-color, rgba(28, 248, 164, 0.957) );
     }
 }
@@ -83,6 +82,24 @@ body {
     }
     100% {
         font-size: inherit;
+    }
+}
+
+@keyframes rotation {
+    0% {
+        height: 0;
+    }
+    25% {
+        height: 15px;
+    }
+    50% {
+        height: 25px;
+    }
+    75% {
+        height: 45px;
+    }
+    100% {
+        height: fit-content;
     }
 }
 
@@ -183,26 +200,30 @@ body {
     z-index: 1000;
 }
 
-.navbar-mobile .navbar-collapse-mobile {
+.navbar-collapse-mobile {
     margin: 0;
     height: 100vh;
-    background-color: whitesmoke;
+    background-color: #000D1C;
     position: absolute;
     top: 0;
     right: 0;
     left: 0;
     flex-direction: row;
     visibility:hidden;
-}
-.navbar-collapse-mobile.show {
-    visibility: visible;
-}
-.navbar-collapse-mobile .navbar-nav {
-    flex-direction: column;
-    flex-grow: 1;
-    height: calc(100vh - 82px);
-    width: 100%;
-    padding: 0;
+    &.show {
+        visibility: visible;
+    }
+    .navbar-nav {
+        flex-direction: column;
+        flex-grow: 1;
+        height: calc(100vh - 82px);
+        width: 100%;
+        li.nav-item {
+            border-radius: 0;
+        }
+    }
+    
+
 }
 
 
@@ -319,7 +340,7 @@ a:hover {
             }
         }
     }
-    .btn {
+    .btn-feed {
         color: white;
         background-color: transparent;
         &:active {
@@ -423,9 +444,19 @@ a:hover {
 
 .article-buttons {
     border-left: 0.5em solid #51FF00;
-
+    padding: 0 4em;
+    max-width: 50%;
     .btn {
         margin-right: 1em;
+    }
+    .btn.btn-info {
+        max-width: 7em;
+    }
+    .follow-row {
+        span {
+            display: block;
+            text-align: center;
+        }
     }
 
 }
@@ -518,12 +549,12 @@ a:hover {
     padding-top: 2em;
 }
 
-.author-info {
+.profile-info {
     .btn-follow>span {
         display: block;
     }
 }
-.author-avatar {
+.profile-avatar {
     display: block;
     text-align: left;
     img {
@@ -540,7 +571,7 @@ a:hover {
     }
 }
 
-.author-bio {
+.profile-bio {
     padding: 0.5em 1em;
     margin: 1em auto;
     border: #051d46 10px solid;
@@ -550,13 +581,17 @@ a:hover {
         line-height: 1em;
     }
 }
-.author-buttons {
+.profile-buttons {
     display: flex;
     margin: 1em auto;
     width: fit-content;
     .follow-row {
         margin: 0 1em;
-        width: 7em;
+        width: auto;
+        .btn.btn-primary {
+            background-color: skyblue;
+        }
+
     }
     .btn {
         margin: 0 0.5em;
@@ -567,10 +602,29 @@ a:hover {
         }
     }
     span {
+        text-align: center;
+        height: 2.5em;
         width: 100%;
         display: block;
         font-style: bold;
         margin: 0 auto;
+    }
+    .col-12 {
+        margin-bottom: 0.5em;
+    }
+}
+.author-buttons {
+    max-width: 50%;
+    .btn.btn-primary {
+        &:active {
+            a {
+                color: white;
+            }
+            background-color: transparent;
+        }
+        a {
+            color: #000D1C;
+        }
     }
 }
 
@@ -583,7 +637,8 @@ a:hover {
     }
     li.nav-item {
         margin: 0 0.5em;
-        padding: 0 0.5em;
+        padding: 0 1em;
+        border-radius: 0.5em;
         transition: ease-out 0.1s outline;
         outline: 0;
         &:hover {
@@ -603,6 +658,10 @@ a:hover {
 
 .auth-page {
 
+    h1 {
+        text-align: center;
+        text-transform: uppercase;
+    }
     .col {
         margin-bottom: 0.25em;
     }
@@ -611,6 +670,26 @@ a:hover {
             color: black;
         }
         margin-left: 1em;
+    }
+    .error-message {
+        transition: visibility .1s;
+        transition:  margin 0.2s;
+        height: 0;
+        visibility: hidden;
+        margin-top: -4em;
+        background-color: hsl(0, 100%, 40%);
+        padding: 0.5em 1em;
+        border: hsl(0, 100%, 15%) solid 5px;
+        &.active {
+            margin: 0;
+            height: fit-content;
+            visibility: visible;
+        }
+        &::after {
+            margin-left: 0.5em;
+            font-size: large;
+            content: "!"
+        }
     }
 }
 .form-cont {
@@ -758,12 +837,18 @@ a:hover {
 //Comment styles
 
 .comment-row {
+    width: 100%;
+    margin:0;
     hr {
+        width: 100%; 
         height: 10px;
+        padding: 0;
+        background-color: hsl(90, 100%, 30%);
+    }
+    .row.col-12{
+        background-color: #000D1C;
         width: 100%;
         margin: 0;
-        padding: 0;
-        background-color: yellow;
     }
 }
 .comment-count {
@@ -772,6 +857,8 @@ a:hover {
     padding: 0 1.6em;
 }
 .comment-form {
+    margin: 0;
+    width: 100%;
     padding: 0em 2em 1em 2em;
     background-color: #000D1C;
     label {
@@ -796,7 +883,6 @@ a:hover {
 
 .comment-unlogged {
     background-color: #000D1C;
-    width: 100%;
     padding: 1em;
     padding-left: 2em;
     padding-bottom: 2em;
@@ -805,10 +891,12 @@ a:hover {
 }
 
 .comment-card {
+    max-width: 100%;
+    margin: 0 auto;
     background-color: #000D1C;
-    width: 100%;
     padding: 2em;
     padding-bottom: 2em;
+    border-bottom: #051d46 solid 0.25em;
 }
 
 .comment-author {
@@ -831,12 +919,71 @@ a:hover {
 .comment-cont {
     background-color: #112233;
     padding: 1em;
+    span {
+        color: lightgray;
+        display: block;
+        padding-top: 1em;
+        &::before {
+            content: "Published at: ";
+        }
+    }
+}
+.comment-footer {
+    .btn.btn-info {
+        margin: 0.5em auto;
+        min-width: 7em;
+    }
+    .comment-dropbtn {
+        border: 0.15em solid white;
+        background-color: transparent;
+        border-radius: 15%;
+        transition: background-color ease-in 0.2s;
+        transition: border ease-in 0.2s;
+        &:hover {
+            background-color: gray;
+        }
+        &:active {
+            border:#51FF00 solid 0.10em;
+        }
+    }
+    .comment-dropdown-content {
+        position: absolute;
+        opacity: 0;
+        background-color: #112233;
+        max-width: 12em;
+        border: #111927 solid 0.4em;
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0em;
+        }
+        li {
+            padding-left: 1em;
+            padding-top: 0.25em;
+            padding-bottom: 0.25em;
+            border-bottom: solid 0.2em #111927;
+        }
+        a {
+            &:hover {
+                color:#51FF00;
+                animation: hop .25s;
+            }
+        }
+        &.show {
+            position: relative;
+            opacity: 1;
+            animation: rotation 0.1s;
+        }
+
+    }
 }
 
 
 //footer styles
 
 footer {
+    width: 100%;
+    margin: 0;
     padding: 1em;
     background-color: #000D1C;
     color: whitesmoke;

@@ -28,10 +28,10 @@ function ArticleButtons({ article, setArticle } : {
     return !!article && !!author && loggedUser.username === author.username ? (
         <AuthorButtons {...article } slug={slug}/>
     ) : (
-        <>        
-            <FollowButton {...author}  handleFollow={handleFollow}/>
+        <div className="row row-cols-2">      
             <FavButton {...article} handleFav={handleFav}/>
-        </>
+            <FollowButton {...author}  handleFollow={handleFollow}/>
+        </div>
 
     )
 }

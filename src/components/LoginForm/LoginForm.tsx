@@ -29,11 +29,10 @@ function LoginForm( {onError} : {onError: (error: Error) => void} ) {
         loginUser(loginData)
         .then((state) => { 
             setAuthState(state);
+            navigation("/");
+            window.location.reload(); 
         })
-        .catch((e) => {onError(e)})
-        .finally(() => {             
-        });
-
+        .catch((e) => {onError(e)});
     }
 
     const comeBack = () => {

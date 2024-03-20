@@ -1,6 +1,6 @@
 import axios, {  AxiosError } from "axios";
 import { TAuthState } from "../context/AuthContext";
-import {  errorHandler } from "./handleError";
+import {  CustomError, errorHandler } from "./handleError";
 import { TUser } from "../types/User";
 
 
@@ -63,7 +63,11 @@ export async function signUpUser( userData: TUserData, asAdmin:boolean=false): P
 //Login User
 export async function loginUser({ login, password } : { login: string, password: string }): Promise<TAuthState>  {
 
+
     try {
+        if ( login.length < 1 || password.length < 1 ) {
+            throw new CustomError("You must indicate your login credentials!");
+        }
         const { data } = await instance.request({
             data: {login: login, password: password},
             method: "POST",

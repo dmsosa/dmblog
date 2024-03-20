@@ -33,7 +33,9 @@ function FollowButton({ username, isFollowing, followersCount, handleFollow } : 
         <button className={`col-12 btn-follow btn ${classN}`} onClick={handleClick}>
             {text}
         </button>
-        <span className="col-12">Followers: {followersCount}</span>
+        <div className="col-12">
+            <span>Followers: {followersCount}</span>
+        </div>
         </div>
 
         

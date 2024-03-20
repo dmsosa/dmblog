@@ -38,7 +38,7 @@ function AuthorInfo() {
 
     return (
         loading ? <div> Loading author info . . . </div> :
-        <div className="author-info row row-cols-2">
+        <div className="profile-info row row-cols-2">
             <AuthorMeta 
             username={username || ""}
             loading={loading}
@@ -47,7 +47,7 @@ function AuthorInfo() {
             isFollowing={isFollowing}
             handleFollow={handleFollow}/>
             { bio && 
-                <div className="author-bio col col-12">
+                <div className="profile-bio col col-12">
                     <h1>Biography</h1>
                     <p>{bio}</p>
                 </div>}

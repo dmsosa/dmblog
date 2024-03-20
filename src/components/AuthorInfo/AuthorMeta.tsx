@@ -17,11 +17,11 @@ function AuthorMeta({ username, image, followersCount, isFollowing, loading, han
     const { loggedUser } = authState;
     return loading ? ( <div>Loading</div>) : ( 
         <>
-            <div className="author-avatar col col-md-6 col-12">
-                <Avatar src={image} addClass="author-avatar"/>
-                <a href="" className="author-username">{username}</a>
+            <div className="profile-avatar col col-md-6 col-12">
+                <Avatar src={image} addClass="profile-avatar"/>
+                <a href="" className="profile-username">{username}</a>
             </div>
-            <div className="author-buttons col col-md-6 col-12 ">
+            <div className="profile-buttons col col-md-6 col-12 ">
                 <FollowButton 
                 username={username}
                 followersCount={followersCount}
@@ -30,9 +30,14 @@ function AuthorMeta({ username, image, followersCount, isFollowing, loading, han
                 >
                 </FollowButton>
                 { loggedUser.username === username ? 
-                <button className="btn btn-info">
-                    <Link to={"/settings"}> Edit profile</Link>
-                </button> : 
+                <div className="author-buttons row">
+                    <button className="col col-12 btn btn-primary">
+                        <Link to={"/editor"}>New Article</Link>
+                    </button>
+                    <button className="col col-12 btn btn-info">
+                        <Link to={"/settings"}> Edit profile</Link>
+                    </button>
+                </div> : 
                 <button className="btn btn-danger">Report</button>
             }
             </div>

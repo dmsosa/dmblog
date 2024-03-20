@@ -28,7 +28,7 @@ function CommentSection() {
             <div className="col col-12 comment-count">Comments Count: {commentsCount}</div>
             <CommentEditor setCommentData={setCommentData}/>
             <hr></hr>
-            <CommentList comments={comments}/>
+            <CommentList comments={comments} setCommentData={setCommentData}/>
         </div>
     )
 }
