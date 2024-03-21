@@ -4,29 +4,55 @@ import { dateFormatter } from "../../helpers/helpers";
 import { TComment } from "../../types/Comment";
 import AuthorButtons from "./AuthorButtons";
 import CommentAuthor from "./CommentAuthor";
-import { TCommentData, editComment } from "../../service/commentService";
+import { TCommentData, deleteComment, editComment } from "../../service/commentService";
+import { AxiosError } from "axios";
+import { useParams } from "react-router-dom";
 
 function CommentCard({ comment, setCommentData } : {
     comment: TComment,
     setCommentData: React.Dispatch<React.SetStateAction<TCommentData>>
 }) {
+    const { slug } = useParams();
     const [ edit, setEdit ] = useState(false);
-    const [ form, setForm ] = useState(comment.body);
+    const [ errorMessage, setErrorMessage ] = useState("");
+    const [ commentBody, setCommentBody ] = useState(comment.body);
     const { authState } = useAuth() as TAuthContext;
     const { headers, loggedUser } = authState;
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement> ) => {
         e.preventDefault();
-        setForm(e.target.value);
+        setCommentBody(e.target.value);
     }
     const handleSubmit = (e: React.MouseEvent<HTMLFormElement> ) => {
         e.preventDefault();
+        if (!slug) return;
         if (!headers) {
             alert("You need to login first!");
             return;
         }
-        editComment({ headers, commentId: comment.id })
-        .then()
+        console.log(comment);
+
+        editComment({ headers, commentId: comment.id, slug, body: commentBody })
+        .then((commentData) => setCommentData(commentData))
+        .catch((error: AxiosError) => {
+            console.log(error);
+            setErrorMessage(error.message)
+        } )
+        .finally(() => setEdit(!edit));
+    }
+
+    const handleDelete = () => {
+        if (!slug) return;
+        if (!headers) {             
+            alert("You need to login first!");
+            return; 
+        }
+        deleteComment({ headers, commentId: comment.id, slug })
+        .then((commentData) => setCommentData(commentData))
+        .catch((error: AxiosError) => {
+            console.log(error);
+            setErrorMessage(error.message)
+        } );
     }
     return (
         <div className="col-12 comment-card" key={comment.id}>
@@ -38,7 +64,7 @@ function CommentCard({ comment, setCommentData } : {
                         <textarea
                         name="body"
                         rows={3}
-                        value={form}
+                        value={commentBody}
                         onChange={handleChange}
                         ></textarea>
                         <button className="btn btn-primary">Save changes</button>
@@ -49,13 +75,14 @@ function CommentCard({ comment, setCommentData } : {
                     <p>{comment.body}</p>
                     <span>{dateFormatter(comment.updatedAt)}</span>
                 </>
-                            }
+                }
 
             </div>
             <div className="comment-footer">
+                {errorMessage.length > 0 && <p className="error-message">{errorMessage}</p>}
             <button className="btn btn-info">Like</button>
                 {loggedUser.username == comment.username && 
-                <AuthorButtons edit={edit} setEdit={setEdit} handleDelete={setCommentData} />}
+                <AuthorButtons edit={edit} setEdit={setEdit} handleDelete={handleDelete} />}
             </div>
         </div>
     )

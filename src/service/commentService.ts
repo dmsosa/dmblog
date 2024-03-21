@@ -51,19 +51,44 @@ export async function postComment({ body, headers, slug } : {
     }
 }
 
-export async function editComment({ headers, commentId } : {
+export async function editComment({ headers, commentId, slug, body } : {
     headers: object,
-    commentId: number
-}) : Promise<TComment> {
+    commentId: number,
+    slug: string,
+    body: string
+
+}) : Promise<TCommentData> {
     try {
         const { data } = await instance.request({
             method: "PUT",
             url: `/${commentId}`,
+            params: { slug: slug },
+            data: { body: body },
             headers: headers
         })
 
         return data;
 
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
+}
+
+export async function deleteComment({ headers, commentId, slug } : {
+    headers: object,
+    commentId: number, 
+    slug: string
+}) : Promise<TCommentData> {
+    try {
+        const { data } = await instance.request({
+            method: "DELETE",
+            url: `/${commentId}`,
+            params: { slug: slug },
+            headers: headers
+        })
+
+        return data;
     } catch (error) {
         errorHandler(error as AxiosError);
         throw(error);

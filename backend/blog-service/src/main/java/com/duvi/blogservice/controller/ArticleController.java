@@ -7,10 +7,7 @@ import com.duvi.blogservice.model.Article;
 import com.duvi.blogservice.model.Tag;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.*;
-import com.duvi.blogservice.model.exceptions.ArticleAlreadyExistsException;
-import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
-import com.duvi.blogservice.model.exceptions.TagNotFoundException;
-import com.duvi.blogservice.model.exceptions.UserNotFoundException;
+import com.duvi.blogservice.model.exceptions.*;
 import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.service.ArticleService;
 import com.duvi.blogservice.service.CommentService;
@@ -338,6 +335,22 @@ public class ArticleController {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String username = tokenService.validateToken(token);
         CommentDTO comment = commentService.createComment(commentDTO.body(), username, slug);
+        List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
+        Long commentsCount = (long) comments.size();
+        CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comments, commentsCount);
+        return new ResponseEntity<>(commentResponseDTO, HttpStatus.OK);
+    }
+    @PutMapping("/comments/{commentId}")
+    public ResponseEntity<CommentResponseDTO> editComment(@PathVariable Long commentId, @RequestBody SetCommentDTO commentDTO, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException {
+        CommentDTO comment = commentService.updateComment(commentId, commentDTO);
+        List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
+        Long commentsCount = (long) comments.size();
+        CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comments, commentsCount);
+        return new ResponseEntity<>(commentResponseDTO, HttpStatus.OK);
+    }
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<CommentResponseDTO> deleteComment(@PathVariable Long commentId, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException, CommentNotFoundException {
+        commentService.deleteComment(commentId);
         List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
         Long commentsCount = (long) comments.size();
         CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comments, commentsCount);

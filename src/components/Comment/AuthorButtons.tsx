@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 
-function AuthorButtons({id} : {
-    id: number 
+function AuthorButtons({edit, setEdit, handleDelete } : {
+    edit: boolean,
+    setEdit: React.Dispatch<React.SetStateAction<boolean>>,
+    handleDelete: () => void
 } ) {
     const [ dropdown, setDropdown ] = useState(false);
-    const handleEdit = (id: number) => {
-
-    }
-    const handleDelete = (id: number) => {
-
+    const handleEdit = () => {
+        setEdit(!edit)
     }
 
     const handleClick = () => {

@@ -19,7 +19,7 @@ public interface CommentService {
     CommentDTO createComment(String body, String username, String slug) throws UserNotFoundException, ArticleDoNotExistsException;
     List<CommentDTO> getComments();
     CommentDTO getCommentById(Long id) throws CommentNotFoundException;
-    CommentDTO updateComment(Long commentId, SetCommentDTO newCommentDTO) throws UserNotFoundException, ArticleDoNotExistsException;
+    CommentDTO updateComment(Long commentId, SetCommentDTO newCommentDTO);
     void deleteComment(Long id) throws CommentNotFoundException;
 
     //Operations with Users

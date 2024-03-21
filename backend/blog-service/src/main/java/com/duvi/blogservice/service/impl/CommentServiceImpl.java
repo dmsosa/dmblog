@@ -36,6 +36,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDTO createDTO(Comment comment) {
         return new CommentDTO(
+                comment.getId(),
                 comment.getArticle().getId(),
                 comment.getUser().getImage(),
                 comment.getUser().getUsername(),
@@ -70,7 +71,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDTO updateComment(Long commentId, SetCommentDTO newCommentDTO) throws UserNotFoundException, ArticleDoNotExistsException {
+    public CommentDTO updateComment(Long commentId, SetCommentDTO newCommentDTO) {
         Comment oldComment = commentRepository.findById(commentId).get();
         oldComment.setBody(newCommentDTO.body());
         oldComment.setUpdatedAt(LocalDateTime.now());

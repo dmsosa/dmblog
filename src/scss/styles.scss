@@ -924,7 +924,7 @@ a:hover {
         display: block;
         padding-top: 1em;
         &::before {
-            content: "Published at: ";
+            content: "Last updated at: ";
         }
     }
 }

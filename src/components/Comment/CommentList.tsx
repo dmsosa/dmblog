@@ -13,10 +13,7 @@ function CommentList({ comments, setCommentData } : {
     setCommentData: React.Dispatch<React.SetStateAction<TCommentData>>
 
 }) {
-    const { authState } = useAuth() as TAuthContext;
-    const { loggedUser } = authState;
     
-
     return comments.length > 0 ? 
     ( comments.map((comment) => { 
         return (
