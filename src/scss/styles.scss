@@ -163,17 +163,21 @@ body {
 
 
 .nav-item.dropdown {
-    text-align: right;
-    .dropdown-toggler+ul.show {
+    ul {
+        display: none;
         top: 100%;
-        left: 1;
+        left: -3em;
         position: absolute;
         padding: 0;
         background-color: #111927;
         border: #000D1C solid 2px;
         border-radius: 0;
         text-align: right;
+        &.show {
+            display: block;
+        }
     }
+    
     
     .nav-item {
         margin: 0;

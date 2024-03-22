@@ -30,7 +30,7 @@ function FooterForm() {
                     minLength={5}
                     changeHandler={handleChange}
                     value={emailForm}
-                    placeholder={"put your email"}>
+                    placeholder={"Put your email into it!"}>
                     </FormFieldset>
                     <button className="btn btn-form" onClick={showNewsletter}>Subscribe</button>
                     </fieldset>

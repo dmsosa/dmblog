@@ -3,16 +3,11 @@ package com.duvi.blogservice.controller;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.duvi.blogservice.config.security.TokenService;
-import com.duvi.blogservice.model.Article;
 import com.duvi.blogservice.model.Tag;
-import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.*;
 import com.duvi.blogservice.model.exceptions.*;
-import com.duvi.blogservice.repository.UserRepository;
-import com.duvi.blogservice.service.ArticleService;
-import com.duvi.blogservice.service.CommentService;
-import com.duvi.blogservice.service.TagService;
-import com.duvi.blogservice.service.UserService;
+import com.duvi.blogservice.service.*;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,14 +16,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/articles")
-public class ArticleController {
+public class BlogController {
 
 
 
@@ -41,19 +34,22 @@ public class ArticleController {
     private CommentService commentService;
     private TokenService tokenService;
     private UserService userService;
+    private EmailService emailService;
 
 
-    public ArticleController(ArticleService articleService,
-                             TagService tagService,
-                             CommentService commentService,
-                             TokenService tokenService,
-                             UserService userService) {
+    public BlogController(ArticleService articleService,
+                          TagService tagService,
+                          CommentService commentService,
+                          TokenService tokenService,
+                          UserService userService,
+                          EmailService emailService) {
 
         this.articleService = articleService;
         this.tagService = tagService;
         this.commentService = commentService;
         this.tokenService = tokenService;
         this.userService = userService;
+        this.emailService = emailService;
     }
 
     //Basic CRUD
@@ -365,5 +361,9 @@ public class ArticleController {
         System.out.println(uploaded);
         return new ResponseEntity<>("upload", HttpStatus.CREATED);
     }
-
+    @PostMapping("/email")
+    public ResponseEntity<String> sendEmail(@RequestBody EmailDTO emailDTO) throws MessagingException {
+        emailService.sendGreetingEmail(emailDTO.to());
+        return new ResponseEntity<>("Email Sent!!", HttpStatus.OK);
+    }
 }

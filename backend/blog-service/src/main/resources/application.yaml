@@ -47,3 +47,10 @@ spring:
     console:
       enabled: false
 cloudinaryUrl: ${CLOUDINARY_URL}
+mail:
+  username: ${MAIL_USERNAME}
+  password: ${MAIL_PASSWORD}
+azure:
+  client-id: ${AZURE_CLIENT}
+  tenant-id: ${AZURE_TENANT}
+  client-secret: ${AZURE_SECRET}
