@@ -22,16 +22,4 @@ public class FlywayConfig {
                 .locations("classpath:/db/migration/%s".formatted(datasource))
                 .baselineOnMigrate(true);
     }
-
-    @Profile("dev")
-    @Bean
-    FlywayConfigurationCustomizer devCustomizer() {
-        return configuration -> configuration
-                .locations("classpath:dev/db/migration/%s".formatted(datasource))
-                .baselineOnMigrate(true);
-    }
-
-
-
-
 }

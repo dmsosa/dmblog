@@ -29,7 +29,8 @@ public interface ArticleService {
     Boolean checkFav(Long articleId, String loggedUsername);
 
     //Basic CRUD Operations
-    List<ArticleDTO> getArticles() throws ArticleDoNotExistsException;
+    List<ArticleDTO> getArticlesSorted();
+    List<ArticleDTO> getArticles() ;
     ArticleDTO createArticle(SetArticleDTO articleDTO) throws ArticleAlreadyExistsException, ArticleDoNotExistsException;
     ArticleDTO getArticleBySlug(String slug) throws ArticleDoNotExistsException;
     ArticleDTO getArticleById(Long id) throws ArticleDoNotExistsException;

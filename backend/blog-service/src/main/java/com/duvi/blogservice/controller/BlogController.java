@@ -57,11 +57,11 @@ public class BlogController {
     public ResponseEntity<ArticlesResponseDTO> getAllArticles(
             @RequestParam(required = false) Integer limit,
             @RequestParam(required = false) Integer offset,
-            @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException {
+            @RequestHeader HttpHeaders headers)   {
 
         String token = headers.getFirst("Authorization");
         String loggedUsername;
-        List<ArticleDTO> articleList = articleService.getArticles();
+        List<ArticleDTO> articleList = articleService.getArticlesSorted();
         Long articlesCount = (long) articleList.size();
         ArticlesResponseDTO articleResponse;
 

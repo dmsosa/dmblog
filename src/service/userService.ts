@@ -15,6 +15,8 @@ let instance = axios.create({
 type TUserData = {
     username: string,
     email: string,
+    bio: string | null,
+    image: string | null,
     password: string
 }
 
@@ -23,19 +25,146 @@ type TAuthResponse = {
     loggedUser: TUser
 }
 
+//OAuth2 Providers
+export type TProvider = "google" | "github" | "facebook";
+//Token Info type:
+type TTokenInfo = {
+    code: string,
+    expiresIn: string,
+    scope: string
+}
+////////////////// Sign Up with OAuth provider
 
+//Authorize with the given provider
+export function authorizeWith(provider: TProvider) : void {
 
+    var providerURL = "";
 
+    switch (provider) {
+        case "google" : {
+            providerURL = "http://localhost:8082/oauth2/authorization/google"
+            break
+        }
+        case "github" : {
+            providerURL = "http://localhost:8082/oauth2/authorization/github";
+            break
+        }
+        case "facebook" : {
+            providerURL = "http://localhost:8082/oauth2/authorization/facebook";
+            break
+        }
+    }
+    window.location.replace(providerURL);
+}
 
+//get token info
+function getTokenInfo(href: string) : TTokenInfo {
+    let info: TTokenInfo = {
+        code: "",
+        expiresIn: "",
+        scope: ""
+    };
+
+    let regex = /([^&=]+)=([^&]*)/g, m;
+
+    while (m = regex.exec(href)) {
+        switch (decodeURIComponent(m[1])) {
+            case "code" : {
+                info.code = decodeURIComponent(m[2]);
+                break
+            }
+            case "expires_in" : {
+                info.expiresIn = decodeURIComponent(m[2]);
+                break
+            }
+            case "scope" : {
+                info.scope = decodeURIComponent(m[2]);
+                break
+            }
+        }
+    }
+
+    return info;
+}
+//get user info using accessToken
+export async function getUserInfo({provider, href} : {
+    provider: TProvider,
+    href: string
+}) : Promise<TUserData> {
+
+    var url = "";
+    const info = getTokenInfo(href);
+    const { code, expiresIn, scope } = info;
+
+    console.log("Sending request to UserInfo endpoint\ntoken expires in: " + expiresIn + "\nscope: " + scope);
+    switch (provider) {
+        case "google": {
+            url = "https://www.googleapis.com/oauth2/v3/userinfo?access_token=";
+            break
+        }
+        case "github": {
+            url = "/accessToken/github";
+            break
+        }
+        case "facebook": {
+            break
+        }
+    }
+    
+    try {
+        const data = await instance.get(url, {params: { authCode: code }})
+        console.log("user data", data);
+        const userData = {
+            username:"",
+            email:"",
+            bio: "",
+            image: "",
+            password: ""
+        };
+
+        return userData;
+    } catch (error) {
+        errorHandler(error as AxiosError)
+        throw(error);
+    }
+}
+
+//logout user 
+function logoutFrom({ provider, accessToken } :
+    {
+        provider: TProvider,
+        accessToken: string
+    }) : void {
+        switch (provider) {
+            case "google": {
+                break
+            }
+            case "github" : {
+                break
+            }
+            case "facebook" : {
+                break
+            }
+        }
+}
 //Sign Up User
-export async function signUpUser( userData: TUserData, asAdmin:boolean=false): Promise<TAuthState> {
+export async function signUpUser( { userData, asAdmin } : {
+    userData?: TUserData,
+    asAdmin?: boolean, 
+}): Promise<TAuthState> {
 
-    const { username, email, password } = userData; 
+
+    if (!userData) {
+        throw new CustomError("Please, provide your registration data!");
+    };
+    const { username, email, bio, image, password } = userData; 
     const signUpData = {
         username: username, 
         email: email, 
+        bio: bio ? bio : "I just registered in Dmsosa Blog!",
+        image: image ? image : null,
         password: password, 
-        role: asAdmin? "ADMIN" : "USER" 
+        role: asAdmin ? "ADMIN" : "USER" 
     };
     
     try {
@@ -58,7 +187,6 @@ export async function signUpUser( userData: TUserData, asAdmin:boolean=false): P
         errorHandler(error);
         throw(error);
     }
-    
 }
 //Login User
 export async function loginUser({ login, password } : { login: string, password: string }): Promise<TAuthState>  {

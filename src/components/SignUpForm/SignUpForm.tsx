@@ -1,7 +1,7 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import FormFieldset from "../FormFieldset";
-import { useNavigate } from "react-router-dom";
-import { signUpUser } from "../../service/userService";
+import { useNavigate, useParams } from "react-router-dom";
+import { TProvider, authorizeWith, getUserInfo, signUpUser } from "../../service/userService";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 
 
@@ -11,21 +11,53 @@ function SignUpForm( {onError} : {onError: (error: Error) => void} ) {
     const navigate = useNavigate();
 
     //formState
-    const [{ username, email, password }, setFormState] = useState(
+    const [{ username, email, image, password }, setFormState] = useState(
         {
             username: "",
             email: "",
+            image: "",
             password: ""
         }
     )
 
+    useEffect(() => {
+        const href = window.location.href;
+        if (href.includes("registration_credentials") ) {
+            let formState = {
+                username: "",
+                email: "",
+                image: ""
+            };
+            let regex = /([^&=]+)=([^&]*)/g, match;
+            while (match = regex.exec(href)) {
+                switch(match[1]) {
+                    case "username": {
+                        formState.username = decodeURI(match[2]);
+                        break
+                    }
+                    case "email": {
+                        if (decodeURI(match[2]) === "null") {
+                            break
+                        }
+                        formState.email = decodeURI(match[2]);
+                        break
+                    }
+                }
+            }
+            setFormState((prev) => ({...prev, username: formState.username, email: formState.email, image: formState.image }))
+
+            window.history.pushState(formState, "", "/signup");
+            
+        }
+        
+    }, [])
 
     const handleSubmit = (e: FormEvent<HTMLFormElement> ) => {
 
         e.preventDefault();
 
-        const userData = {username: username, email: email, password: password};
-        signUpUser(userData)
+        const userData = {username: username, email: email, bio: "", image: "", password: password};
+        signUpUser({userData})
         .then((loggedState) => {
             setAuthState(loggedState);
             navigate("/");
@@ -39,6 +71,25 @@ function SignUpForm( {onError} : {onError: (error: Error) => void} ) {
         const name = e.target.name;
         const value = e.target.value;
         setFormState((prev) => ({...prev, [name]: value}));
+    }
+
+    const handleOAuth = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const name = e.currentTarget.innerText;
+        switch (name) {
+            case "Login with Google": { 
+                authorizeWith("google"); 
+                break
+            };
+            case "Login with GitHub": { 
+                authorizeWith("github"); 
+                break
+            }
+            case "Login with Facebook": { 
+                authorizeWith("facebook"); 
+                break
+            }
+        }
+        
     }
 
     const comeBack = () => {
@@ -80,8 +131,15 @@ function SignUpForm( {onError} : {onError: (error: Error) => void} ) {
                         minLength={7}
                     ></FormFieldset>
                     <button type="submit" className="btn btn-primary form-btn" >Sign up</button>
-                    <button className="btn form-btn" onClick={comeBack}>Come back</button>
                 </form>
+                <div className="container">
+                    <div className="row">
+                        <button className="google-btn google-auth" onClick={handleOAuth}>Login with Google</button>
+                        <button className="github-btn github-auth" onClick={handleOAuth}>Login with GitHub</button>
+                        <button className="facebook-btn facebook-auth" onClick={handleOAuth}>Login with Facebook</button>
+                    </div>
+                </div>
+                <button className="btn form-btn" onClick={comeBack}>Come back</button>
             </div>
         </div>
         

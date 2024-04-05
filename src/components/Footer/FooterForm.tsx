@@ -41,7 +41,7 @@ function FooterForm() {
                 <FormFieldset 
                 title="Send me a message"
                 type="email"
-                name="newsletter"
+                name="email message"
                 minLength={5}
                 changeHandler={handleChange}
                 value={emailForm}

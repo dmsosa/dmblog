@@ -33,6 +33,7 @@ public class SMTPService implements EmailService {
         helper.setTo(to);
         helper.setSubject("Greetings from Duvi at - " + LocalDateTime.now()    .toString() + " !");
         helper.setText(text, true);
+
         javaMailSender.send(message);
     }
 

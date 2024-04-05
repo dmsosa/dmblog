@@ -1,18 +1,24 @@
 datasource: h2
+server:
+  port: 8082
 api:
   security:
     token:
       secret: ${JWT_SECRET:secret}
       issuer: ${JWT_ISSUER:myessen}
+
+#Spring config
 spring:
   application:
     name: blog-service
   profiles:
     active: dev
-  main:
-    allow-bean-definition-overriding: true
+# Import .env file as if it were a .properties file
+  config:
+    import: optional:classpath:.env[.properties]
+#H2 database, in memory
   datasource:
-    url: jdbc:h2:file:./blog-service/src/main/resources/db/h2/data
+    url: jdbc:h2:mem:demo
     username: sa
     password: password
     driverClassName: org.h2.Driver
@@ -23,21 +29,40 @@ spring:
     properties:
       hibernate:
         format_sql: true
-server:
-  port: 8082
+#OAuth2Clients
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope: user
+          facebook:
+            client-id: ${FACEBOOK_CLIENT_ID}
+            client-secret: ${FACEBOOK_CLIENT_SECRET}
+#JavaMailSender
+mail:
+  username: ${MAIL_USERNAME}
+  password: ${MAIL_PASSWORD}
+#Cloudinary for storing large images
+cloudinaryUrl: ${CLOUDINARY_URL}
 logging:
   level:
     org.hibernate.sql: TRACE
     org.springframework.security: TRACE
 
----
 
+---
+#for dev profile, we use a postgres database
 datasource: postgres
 spring:
   config:
     activate:
       on-profile: dev
-    import: optional:classpath:.env[.properties]
   datasource:
     url: ${PG_URL}
     username: ${PG_USER}
@@ -46,11 +71,3 @@ spring:
   h2:
     console:
       enabled: false
-cloudinaryUrl: ${CLOUDINARY_URL}
-mail:
-  username: ${MAIL_USERNAME}
-  password: ${MAIL_PASSWORD}
-azure:
-  client-id: ${AZURE_CLIENT}
-  tenant-id: ${AZURE_TENANT}
-  client-secret: ${AZURE_SECRET}

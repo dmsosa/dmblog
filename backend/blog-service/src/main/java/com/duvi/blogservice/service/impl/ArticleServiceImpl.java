@@ -25,6 +25,7 @@ import com.duvi.blogservice.service.ArticleService;
 import com.duvi.blogservice.service.CommentService;
 import com.duvi.blogservice.service.UserService;
 import jakarta.annotation.Nullable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -96,11 +97,13 @@ public class ArticleServiceImpl implements ArticleService {
     }
     //Basic CRUD Operations
     @Override
-    public List<ArticleDTO> getArticles() throws ArticleDoNotExistsException {
+    public List<ArticleDTO> getArticlesSorted(){
+        List<Article> articleList = articleRepository.findAll(Sort.by(Sort.Direction.DESC, "updatedAt"));
+        return articleList.stream().map(article -> createDTO(article)).toList();
+    }
+    @Override
+    public List<ArticleDTO> getArticles()  {
         List<Article> articleList = articleRepository.findAll();
-        if (articleList.isEmpty()) {
-            throw new ArticleDoNotExistsException("No articles found!");
-        }
         return articleList.stream().map(article -> createDTO(article)).toList();
     }
     @Override

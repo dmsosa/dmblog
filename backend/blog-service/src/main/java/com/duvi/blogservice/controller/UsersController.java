@@ -6,36 +6,64 @@ import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.*;
 import com.duvi.blogservice.model.exceptions.UserAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.UserNotFoundException;
-import com.duvi.blogservice.model.relations.UserFollower;
 import com.duvi.blogservice.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.reactive.function.client.WebClient;
 
+
+import java.security.Principal;
 import java.util.List;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/users")
 public class UsersController {
 
-//    endpoints
-
-//    /follow?toId post: follow user delete unfollow user
-//    /follow?fromId get all followedByUser
+    private Environment env;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     private AuthenticationManager authenticationManager;
     private UserService userService;
     private TokenService tokenService;
 
-    public UsersController(UserService userService, AuthenticationManager authenticationManager, TokenService tokenService) {
+    public UsersController(
+                            Environment env,
+                            UserService userService,
+                           AuthenticationManager authenticationManager,
+                           TokenService tokenService
+    ) {
+        this.env = env;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
     }
+
+
+
 
     @GetMapping("/login")
     public ResponseEntity<AuthResponseDTO> currentUser(@RequestHeader HttpHeaders headers) throws UserNotFoundException, UserNotFoundException {
@@ -75,6 +103,46 @@ public class UsersController {
         AuthResponseDTO responseDTO = new AuthResponseDTO(token, userDTO);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
+
+//OAuth2 Requests and Redirect endpoint
+
+    //Redirect to our frontEnd with user info ready to sign up
+    @GetMapping("/redirect")
+    public void redirect(HttpServletResponse httpServletResponse, Principal principal) {
+        String username = "";
+        String email = "";
+        String image = "";
+
+        if (!(principal instanceof OAuth2AuthenticationToken)) {
+            return;
+        }
+        OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken) principal;
+        if (authenticationToken.getPrincipal() instanceof DefaultOidcUser) {
+
+            DefaultOidcUser defaultOidcUser = (DefaultOidcUser) authenticationToken.getPrincipal();
+
+            username = (String) defaultOidcUser.getAttributes().get("name");
+            email = defaultOidcUser.getEmail();
+            image = defaultOidcUser.getPicture();
+
+        } else {
+
+            DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authenticationToken.getPrincipal();
+
+
+            username = (String) defaultOAuth2User.getAttributes().get("name");
+            email = (String) defaultOAuth2User.getAttributes().get("email");
+            image = (String) defaultOAuth2User.getAttributes().get("avatar_url");
+
+        }
+        String redirectUri = "http://localhost:5173/signup";
+        String redirectParams = "?description=registration_credentials&username=%1$s&email=%2$s&image=%3$s"
+                .formatted(username, email, image);
+        httpServletResponse.setStatus(302);
+        httpServletResponse.setHeader("Location", redirectUri + redirectParams);
+    }
+
+
 
     @GetMapping("/")
     public ResponseEntity<List<UserDTO>> getAllUsers(@RequestHeader HttpHeaders headers) {

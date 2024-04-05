@@ -84,8 +84,8 @@ public class User implements UserDetails {
         this.email = userDTO.email();
         this.password = encryptedPassword;
         this.role = userDTO.role();
-        this.bio = null;
-        this.image = null;
+        this.bio = userDTO.bio();
+        this.image = userDTO.image();
         this.favArticles = new HashSet<>();
         this.followers = new HashSet<>();
         this.comments = new HashSet<>();
