@@ -57,20 +57,87 @@ body {
 
 .btn {
     @include btn-styles(background-color, rgba(246, 248, 244, 0.591));
-}
+    &.btn-primary {
+        @include btn-styles(background-color, rgba(153, 255, 51, 1));
+    }
+    &.btn-danger {
+        @include btn-styles(background-color, rgba(255, 29, 4, 0.772) );
+    }
+    &.btn-info {
+        @include btn-styles(background-color, rgba(255, 219, 40, 0.957) );
+        &.active {
+            @include btn-styles(background-color, rgba(28, 248, 164, 0.957) );
+        }
+    }
+    &.btn-google {
+        position: relative;
+        border-radius: 5em;
+        background-color: white;
+        font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        font-weight: bolder;
+        font-size: small;
+        &::after {
+            transition: transform 0.25s;
+            content: "";
+            position: absolute;
+            top:0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-radius: 5em;
+            border-left: rgba(255, 219, 40, 0.957) solid 0.3em;
+            border-top: rgba(255, 30, 30, 0.763) solid 0.3em;
+            border-right: rgba(9, 181, 15, 0.952) solid 0.3em;
+            border-bottom: rgba(30, 120, 255, 0.763) solid 0.3em;
+        }
+        &:hover {
+            color: black;
+            outline: none;
+            background-color: rgb(234, 255, 212);           
+            &::after {
+                border-radius: 5em;
+                border-left: rgba(255, 219, 40, 0.957) solid 0.3em;
+                border-top: rgba(255, 30, 30, 0.763) solid 0.3em;
+                border-right: rgba(9, 181, 15, 0.952) solid 0.3em;
+                border-bottom: rgba(30, 120, 255, 0.763) solid 0.3em;
+                transform: rotate(180deg);
+            }
+        }
+    }
+    &.btn-github {
+        border-radius: 5em;
+        color: white;
+        background-color: rgba(25, 25, 25, 0.8);
+        border: 0.3em rgba(61, 61, 61, 0.763) solid;
+        font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        font-weight: bolder;
+        font-size: small;
+        &:hover {
+            color: lightgreen;
+            border:#34A200 0.3em solid;
+        }
+    }
+    &.btn-facebook {
+        border-radius: 5em;
+        background-color: rgba(33, 137, 255, 0.8);
+        border: 0.3em rgba(255, 255, 255, 0.959) solid;
+        font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        font-size: small;
+        font-weight: bold;
+        color: white;
+        &:hover {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.959) ;
+            border: 0.3em rgba(33, 137, 255, 0.8) solid;
+            color: rgba(33, 137, 255, 0.8)  ;
 
-.btn-primary {
-    @include btn-styles(background-color, rgba(153, 255, 51, 1));
-}
-.btn-danger {
-    @include btn-styles(background-color, rgba(255, 29, 4, 0.772) );
-}
-.btn-info {
-    @include btn-styles(background-color, rgba(255, 219, 40, 0.957) );
-    &.active {
-        @include btn-styles(background-color, rgba(28, 248, 164, 0.957) );
+        }
     }
 }
+
+
+
+
 
 
 @keyframes hop {
@@ -675,6 +742,7 @@ a:hover {
         }
         margin-left: 1em;
     }
+
     .error-message {
         transition: visibility .1s;
         transition:  margin 0.2s;
@@ -1070,4 +1138,5 @@ footer {
 .not-found-page  {
     height: calc(100vh - 332px);
 }
+
 

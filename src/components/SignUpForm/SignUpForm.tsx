@@ -76,15 +76,15 @@ function SignUpForm( {onError} : {onError: (error: Error) => void} ) {
     const handleOAuth = (e: React.MouseEvent<HTMLButtonElement>) => {
         const name = e.currentTarget.innerText;
         switch (name) {
-            case "Login with Google": { 
+            case "Continue with Google": { 
                 authorizeWith("google"); 
                 break
             };
-            case "Login with GitHub": { 
+            case "Continue with GitHub": { 
                 authorizeWith("github"); 
                 break
             }
-            case "Login with Facebook": { 
+            case "Continue with Facebook": { 
                 authorizeWith("facebook"); 
                 break
             }
@@ -132,11 +132,15 @@ function SignUpForm( {onError} : {onError: (error: Error) => void} ) {
                     ></FormFieldset>
                     <button type="submit" className="btn btn-primary form-btn" >Sign up</button>
                 </form>
-                <div className="container">
-                    <div className="row">
-                        <button className="google-btn google-auth" onClick={handleOAuth}>Login with Google</button>
-                        <button className="github-btn github-auth" onClick={handleOAuth}>Login with GitHub</button>
-                        <button className="facebook-btn facebook-auth" onClick={handleOAuth}>Login with Facebook</button>
+                <div className="row row-cols-3 g-2">
+                    <div className="col">
+                        <button className="btn btn-google" onClick={handleOAuth}>Continue with Google</button>
+                    </div>
+                    <div className="col">
+                        <button className="btn btn-github" onClick={handleOAuth}>Continue with GitHub</button>
+                    </div>
+                    <div className="col">
+                        <button className="btn btn-facebook" onClick={handleOAuth}>Continue with Facebook</button>
                     </div>
                 </div>
                 <button className="btn form-btn" onClick={comeBack}>Come back</button>
