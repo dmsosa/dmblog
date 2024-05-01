@@ -13,5 +13,6 @@ export default defineConfig({
         target: 'http://localhost:8082'
       }
     }
-  }
+  },
+  base: "dmsosa.github.io",
 })
