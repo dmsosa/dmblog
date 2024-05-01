@@ -1,4 +1,3 @@
-import { FcAndroidOs } from "react-icons/fc";
 import NavItem from "../NavItem";
 import FooterForm from "./FooterForm";
 import SocialMedia from "./SocialMedia";

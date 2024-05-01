@@ -6,7 +6,6 @@ import {  useLocation, useNavigate, useParams } from "react-router-dom";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
 import { AxiosError } from "axios";
 import { TArticle } from "../../../types/Article";
-import MarkdownEditor from "./MarkdownEditor";
 
 type TForm = {
     title: string,
@@ -23,7 +22,6 @@ const emptyForm = {
 function ArticleEditor() {
     const { state } = useLocation();
     const [{title, description, body, tagList }, setForm ] = useState<TForm>(state || emptyForm); 
-    const [file, setFile] = useState<File[]>([]);
     const [errorMessage, setErrorMessage ] = useState("");
     const { authState } = useAuth() as TAuthContext;
     const { headers, isAuth, loggedUser } = authState;
@@ -101,8 +99,7 @@ function ArticleEditor() {
                             minLength={10}
                             title="Article description"/>
                             
-                            <MarkdownEditor body={body} handleChange={handleChange}>
-                            </MarkdownEditor>
+
                             {/* <ImageUploader onFilesSelected={setFile}/> */}
                             <FormFieldset
                             type="text"

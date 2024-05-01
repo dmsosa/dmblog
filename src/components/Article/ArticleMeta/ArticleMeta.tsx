@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import ContainerRow from "../../ContainerRow";
 import Avatar from "../../Avatar";
 import { dateFormatter } from "../../../helpers/helpers";
 import { TUser } from "../../../types/User";

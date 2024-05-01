@@ -1,8 +1,4 @@
 import { TComment } from "../../types/Comment";
-import { dateFormatter } from "../../helpers/helpers";
-import CommentAuthor from "./CommentAuthor";
-import { TAuthContext, useAuth } from "../../context/AuthContext";
-import AuthorButtons from "./AuthorButtons";
 import { TCommentData } from "../../service/commentService";
 import CommentCard from "./CommentCard";
 

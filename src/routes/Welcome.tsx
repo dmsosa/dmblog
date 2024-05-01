@@ -2,7 +2,6 @@ import ColContent from "../components/ColContent";
 import { ColContentImg } from "../components/ColContent/ColContentImg";
 import { ColContentUl } from "../components/ColContent/ColContentUl";
 import ContainerRow from "../components/ContainerRow";
-import TopicList from "../components/TagList";
 import grow from "../assets/img/grow.png";
 
 function Welcome() {
@@ -33,7 +32,6 @@ function Welcome() {
                         </ul>
                     </div>
                 </ColContent>
-                <TopicList classes=" col-md-3 cont cont-topic"/>
             </ContainerRow>
             <ContainerRow addClass={"cont-three"}>
                 <ColContent 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import NavbarLarge from "./NavbarLarge";
 import NavbarSmall from "./NavbarSmall";
 import scrollNavbar from "../../service/scrollNavbar";

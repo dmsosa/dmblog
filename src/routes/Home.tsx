@@ -1,6 +1,4 @@
 import { Outlet } from "react-router-dom";
-import BannerContainer from "../components/BannerContainer";
-import { TAuthContext, useAuth } from "../context/AuthContext";
 import FeedProvider from "../context/FeedContext";
 import FeedToggler from "../components/FeedToggler";
 import TagList from "../components/TagList/TagList";
@@ -9,16 +7,6 @@ import ContainerRow from "../components/ContainerRow";
 
 
 function Home() {
-    const { authState } = useAuth() as TAuthContext;
-    const { loggedUser } = authState;
-
-
-    const handleClick  = () => {
-        console.log(authState);
-        console.log(localStorage.getItem("loggedUser"));
-        
-        
-    }
     return(
         <>
         <section className="bg-hero"> 

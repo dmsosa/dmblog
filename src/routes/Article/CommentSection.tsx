@@ -1,8 +1,4 @@
 import { useEffect, useState } from "react";
-import ColContent from "../../components/ColContent";
-import { TComment } from "../../types/Comment";
-import ContainerRow from "../../components/ContainerRow";
-import { dateFormatter } from "../../helpers/helpers";
 import CommentList from "../../components/Comment/CommentList";
 import { useParams } from "react-router-dom";
 // import useComment from "../../hooks/useComment";

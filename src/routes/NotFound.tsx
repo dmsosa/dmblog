@@ -1,4 +1,3 @@
-import ColContent from "../components/ColContent";
 import ContainerRow from "../components/ContainerRow";
 import { TbError404 } from "react-icons/tb";
 

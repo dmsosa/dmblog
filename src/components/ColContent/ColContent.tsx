@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import { ColContentList } from "./ColContentList";
 
 function ColContent({addClass=null, title=null, subtitle=null, children=null} : 
     {addClass?: string | null , title?:string | null, subtitle?:string | null, children?: ReactNode | ReactNode[] | null }) {

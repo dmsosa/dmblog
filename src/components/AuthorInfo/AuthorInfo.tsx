@@ -1,12 +1,10 @@
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import {  useLocation, useNavigate, useParams } from "react-router-dom";
 import { TUser } from "../../types/User";
 import AuthorMeta from "./AuthorMeta";
-import ReactMarkdown from "react-markdown";
 import { useEffect, useState } from "react";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import { getUserByUsername } from "../../service/userService";
 import { errorHandler } from "../../service/handleError";
-import MDEditor from "@uiw/react-md-editor";
 
 function AuthorInfo() {
 

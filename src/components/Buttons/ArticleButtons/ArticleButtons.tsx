@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction } from "react";
 import { TArticle } from "../../../types/Article";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
 import { useParams } from "react-router-dom";

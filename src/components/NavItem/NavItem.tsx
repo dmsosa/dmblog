@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode } from "react";
+import { MouseEventHandler } from "react";
 import { NavLink } from "react-router-dom";
 
 function NavItem({icon=null, text="", url="", state="", activeClass=false, onClick=undefined } : {
