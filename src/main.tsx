@@ -24,7 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <AuthProvider>
           <Routes>
             <Route element={<App />}>
-              <Route path="/dmsosa.github.io" element={<Home />}>
+              <Route path="/dmblog" element={<Home />}>
                 <Route index element={<HomeArticles />}/>
               </Route>
               <Route path="login" element={<Login />}/>
