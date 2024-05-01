@@ -14,5 +14,5 @@ export default defineConfig({
       }
     }
   },
-  base: "/dmsosa.github.io",
+  base: "/dmblog",
 })
