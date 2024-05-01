@@ -1,5 +1,3 @@
-import { TUser } from "./User"
-
 export type TComment = {
     articleId: number, 
     userId: number,

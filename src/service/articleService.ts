@@ -1,8 +1,7 @@
 import axios, {  AxiosError } from 'axios';
-import { ApiError, errorHandler } from './handleError';
+import {  errorHandler } from './handleError';
 import { TArticle } from '../types/Article';
 import { slugify } from '../helpers/helpers';
-import { getUser, getUserById, getUserByUsername } from './userService';
 import { getTagsOf } from './tagService';
 
 

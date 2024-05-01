@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import FormFieldset from "../FormFieldset";
-import { useNavigate, useParams } from "react-router-dom";
-import { TProvider, authorizeWith, getUserInfo, signUpUser } from "../../service/userService";
+import { useNavigate } from "react-router-dom";
+import { authorizeWith, signUpUser } from "../../service/userService";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 
 
@@ -11,7 +11,7 @@ function SignUpForm( {onError} : {onError: (error: Error) => void} ) {
     const navigate = useNavigate();
 
     //formState
-    const [{ username, email, image, password }, setFormState] = useState(
+    const [{ username, email, password }, setFormState] = useState(
         {
             username: "",
             email: "",

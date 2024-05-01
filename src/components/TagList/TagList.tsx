@@ -10,7 +10,7 @@ function TagList() {
 
     useEffect(() => {
         setLoading(true);
-        const tags = getTags()
+        getTags()
         .then((list) => {
             setTagList(list);
         } )
@@ -26,7 +26,7 @@ function TagList() {
             >
                 <div className="topic-btn-cont cont-content">            
                     <TagButton 
-                    tagList={["spring", "a", "b", "c", "c", "c", "c", "c", "c", "c", "c", "c", "c", "c", "dictionary", "dictionary", "dictionary", "dictionary", "dictionary", "dictionary", "dictionary", "dictionary", "dictionary"]}
+                    tagList={tagList}
                     />    
                 </div>
             </ColContent> :

@@ -53,24 +53,24 @@ export function authorizeWith(provider: TProvider) : void {
 }
 
 
-//logout user 
-function logoutFrom({ provider, accessToken } :
-    {
-        provider: TProvider,
-        accessToken: string
-    }) : void {
-        switch (provider) {
-            case "google": {
-                break
-            }
-            case "github" : {
-                break
-            }
-            case "facebook" : {
-                break
-            }
-        }
-}
+// //logout user 
+// function logoutFrom({ provider, accessToken } :
+//     {
+//         provider: TProvider,
+//         accessToken: string
+//     }) : void {
+//         switch (provider) {
+//             case "google": {
+//                 break
+//             }
+//             case "github" : {
+//                 break
+//             }
+//             case "facebook" : {
+//                 break
+//             }
+//         }
+// }
 //Sign Up User
 export async function signUpUser( { userData, asAdmin } : {
     userData?: TUserData,
