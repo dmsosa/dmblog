@@ -3,11 +3,11 @@ run-name: ${{ github.actor }} deploying the website
 on: [push]
 jobs: 
   run-vite-code: 
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with: 
-        node-version: '20.6.1'
-    - run: npm install .
-    - run: npm run dev
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: 
+          node-version: '20.6.1'
+      - run: npm install .
+      - run: npm run dev
