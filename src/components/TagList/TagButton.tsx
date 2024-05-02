@@ -8,13 +8,13 @@ function TagButton({ tagList } : { tagList: string[] }) {
     const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
         changeFeed(e, "tag");
     }
-    return tagList.slice(0, 50).map(
+    return (tagList.slice(0, 50).map(
         (name) => (
-            <button className="topic-btn" onClick={handleClick}>
+            <button key={name} className="topic-btn" onClick={handleClick}>
                 {name}
             </button>
         
-        )
+        ))
             
 ) 
 }

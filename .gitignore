@@ -24,4 +24,5 @@ dist-ssr
 *.sw?
 
 #env variables
+.env
 backend/blog-service/src/main/resources/.env

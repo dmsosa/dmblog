@@ -10,8 +10,11 @@ let instance = axios.create({
 })
 export async function getTags(): Promise<string[]> {
     try {
-        const { data } = await instance.get("/global/tags");
-        return data;
+        const { data } : { data: TTag[] } = await instance.get("/global/tags");
+
+        const tagList = data.map((tag) => { return tag.name });
+        return tagList;
+        
     } catch (error) {
         errorHandler(error as AxiosError);
         throw(error);

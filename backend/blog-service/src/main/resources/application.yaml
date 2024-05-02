@@ -64,9 +64,9 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: ${PG_URL}
-    username: ${PG_USER}
-    password: ${PG_PASSWORD}
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
     driverClassName: org.postgresql.Driver
   h2:
     console:

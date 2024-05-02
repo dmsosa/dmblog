@@ -25,7 +25,7 @@ function ArticleMeta({ children, createdAt, author, bottom=false }: {
                     alt={username ? `Author: ${username}` : null}
                     src={image? image : null }
                 />
-                <a>{username}</a>
+                <p>{username}</p>
                 <span>{dateFormatter(createdAt)}</span>
             </Link>
             <div className="col-8 article-buttons">{children}</div>
