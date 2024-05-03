@@ -60,9 +60,10 @@ function AuthProvider({ children }: { children : ReactNode[] | ReactNode }) {
             })
             .catch((e: AxiosError) => {
                 errorHandler(e)
+                console.log("Could not retrieve loggedUser from backend: " + loggedUser + "\nlogging out...");
                 setAuthState(logoutUser());
             }); 
-        }, [headers, isAuth, loggedUser, authState, setAuthState ])
+        }, [ headers, isAuth, authState, setAuthState ])
     return (
         <AuthContext.Provider value={{authState, setAuthState}}>
             {children}
