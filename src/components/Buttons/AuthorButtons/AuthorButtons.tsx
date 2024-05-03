@@ -31,7 +31,7 @@ function AuthorButtons({title, body, description, tagList, slug} : {
             <Link
             className="nav-link"
             state={{ title, body, description, tagList }}
-            to={`/editor/${slug}`}>
+            to={`/dmblog/editor/${slug}`}>
                 <button className="btn">Edit</button>
             </Link>
             <button className="btn">Change access</button>

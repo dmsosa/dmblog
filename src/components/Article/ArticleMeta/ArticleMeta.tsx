@@ -19,7 +19,7 @@ function ArticleMeta({ children, createdAt, author, bottom=false }: {
             <Link
                 className="col-4 article-author"
                 state={{bio, followersCount, followingCount, image }}
-                to={`/profile/${username}`}
+                to={`/dmblog/profile/${username}`}
             >
                 <Avatar 
                     alt={username ? `Author: ${username}` : null}

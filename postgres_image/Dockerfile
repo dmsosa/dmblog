@@ -4,7 +4,9 @@ MAINTAINER Durian Sosa <dmsosa21@outlook.com>
 ENV POSTGRES_USER=${POSTGRES_USER}\
     POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
-RUN apt-get update && app-get dist-upgrade -y --force=yes && \
+COPY ./pg-entrypoint.sh ./docker-entrypoint-initdb.d/
+
+RUN apt-get update && apt-get dist-upgrade -y --force-yes && \
     apt-get install dos2unix && \
     apt-get autoremove -y && apt-get clean && \
     cd docker-entrypoint-initdb.d && \

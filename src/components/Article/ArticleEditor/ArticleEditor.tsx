@@ -6,6 +6,7 @@ import {  useLocation, useNavigate, useParams } from "react-router-dom";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
 import { AxiosError } from "axios";
 import { TArticle } from "../../../types/Article";
+import MDEditor, { ContextStore } from "@uiw/react-md-editor";
 
 type TForm = {
     title: string,
@@ -29,7 +30,7 @@ function ArticleEditor() {
     const { slug } = useParams();
 
     useEffect(() => {
-        const redirect = () => {navigate("/", {replace: true, state: null})}
+        const redirect = () => {navigate("/dmblog", {replace: true, state: null})}
         if (!isAuth) {
             alert("You need to login first!")
             return redirect()
@@ -54,6 +55,12 @@ function ArticleEditor() {
         const value = e.target.value;
         setForm((prev: TForm) =>  ({...prev, [name]:value})); 
     }
+    const handleMarkdownChange = (value?: string | undefined, event?: ChangeEvent<HTMLTextAreaElement> | undefined, state?: ContextStore | undefined) => {
+        event?.preventDefault()
+        const name = state?.textarea ? state.textarea.name : "";
+        if (!value) { value = ""};
+        setForm((prev: TForm) => ({...prev, [name]:value}));
+    }
     const handleTagInput = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setForm((prev: TForm) =>  ({...prev, tagList: value.split(/, | /)})); 
@@ -61,7 +68,7 @@ function ArticleEditor() {
     const handleSubmit = (e: MouseEvent<HTMLFormElement> ) => {
         e.preventDefault();
         setArticle({ userId: loggedUser.id, title, description, body, artSlug: slug || null, tagList, headers })
-        .then((article: TArticle) => {navigate(`/article/${article.slug}`)})
+        .then((article: TArticle) => {navigate(`dmblog/article/${article.slug}`)})
         .catch((error: AxiosError) => { handleError(error) })
     }
     const handleError = (e: AxiosError) => {
@@ -99,7 +106,12 @@ function ArticleEditor() {
                             minLength={10}
                             title="Article description"/>
                             
-
+                            <MDEditor  
+                                className="markdown-editor"
+                                textareaProps={{rows: 8, name: "body"}}
+                                value={body}
+                                onChange={handleMarkdownChange}
+                            />
                             {/* <ImageUploader onFilesSelected={setFile}/> */}
                             <FormFieldset
                             type="text"

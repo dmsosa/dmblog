@@ -65,7 +65,7 @@ public class UsersController {
 
 
 
-    @GetMapping("/login")
+    @GetMapping("/current")
     public ResponseEntity<AuthResponseDTO> currentUser(@RequestHeader HttpHeaders headers) throws UserNotFoundException, UserNotFoundException {
         String bearerToken = headers.get("Authorization").getFirst();
         String token = bearerToken.replace("Bearer ", "");
@@ -135,7 +135,7 @@ public class UsersController {
             image = (String) defaultOAuth2User.getAttributes().get("avatar_url");
 
         }
-        String redirectUri = "http://localhost:5173/signup";
+        String redirectUri = "http://localhost:5173//signup";
         String redirectParams = "?description=registration_credentials&username=%1$s&email=%2$s&image=%3$s"
                 .formatted(username, email, image);
         httpServletResponse.setStatus(302);

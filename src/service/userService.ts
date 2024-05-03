@@ -166,9 +166,9 @@ export function logoutUser() {
 export async function getUser({ headers } : { headers: object  }) : Promise<TUser> {
 
     try {
-        const { data } = await axios.request({
+        const { data } = await instance.request({
             method: "GET",
-            url: "/login", 
+            url: "/current", 
             headers: headers
         });
         return data.loggedUser;

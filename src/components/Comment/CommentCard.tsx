@@ -55,7 +55,7 @@ function CommentCard({ comment, setCommentData } : {
         } );
     }
     return (
-        <div className="col-12 comment-card" key={comment.id}>
+            <>
             <CommentAuthor image={comment.image} username={comment.username} />
             <div className="comment-cont">
                 { edit ? 
@@ -84,7 +84,7 @@ function CommentCard({ comment, setCommentData } : {
                 {loggedUser.username == comment.username && 
                 <AuthorButtons edit={edit} setEdit={setEdit} handleDelete={handleDelete} />}
             </div>
-        </div>
+        </>
     )
 }
 export default CommentCard;

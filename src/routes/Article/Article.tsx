@@ -31,7 +31,7 @@ function Article() {
 
     const handleTokenExpired = () => {
         alert("Token expired, Bruder!\n\nRedirecting to login");
-        navigate("/login");
+        navigate("/dmblog/login");
         setAuthState(logoutUser());
     }
 
@@ -50,7 +50,7 @@ function Article() {
             if (status === 406) {
                 handleTokenExpired()
             } else {
-                navigate("/not-found", { replace: true })
+                navigate("/dmblog/not-found", { replace: true })
             }
         })
         .finally(() => { setLoading(false); console.log(article.author);

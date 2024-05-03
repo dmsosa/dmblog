@@ -23,6 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-#env variables
+#env files
 .env
+postgres_image/.env
 backend/blog-service/src/main/resources/.env

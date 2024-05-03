@@ -1,7 +1,7 @@
 FROM openjdk:21 as builder
 WORKDIR app
-COPY ./target/blogservice-0.0.1-SNAPSHOT.jar ./app/
-RUN java -Djarmode=layertools -jar ./app/blogservice-0.0.1-SNAPSHOT.jar extract 
+COPY ./target/blog-service-0.0.1-SNAPSHOT.jar ./app/
+RUN java -Djarmode=layertools -jar ./app/blog-service-0.0.1-SNAPSHOT.jar extract
 
 FROM openjdk:21
 
@@ -12,5 +12,5 @@ COPY --from=builder app/spring-boot-loader/ ./
 COPY --from=builder app/snapshot-dependencies/ ./
 COPY --from=builder app/application/ ./
 
-ENTRYPOINT ["java", "org.springframework.boot.loader.lauch.JarLauncher"]
+ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
 EXPOSE 8082

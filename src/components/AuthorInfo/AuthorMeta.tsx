@@ -32,10 +32,10 @@ function AuthorMeta({ username, image, followersCount, isFollowing, loading, han
                 { loggedUser.username === username ? 
                 <div className="author-buttons row">
                     <button className="col col-12 btn btn-primary">
-                        <Link to={"/editor"}>New Article</Link>
+                        <Link to={"/dmblog/editor"}>New Article</Link>
                     </button>
                     <button className="col col-12 btn btn-info">
-                        <Link to={"/settings"}> Edit profile</Link>
+                        <Link to={"/dmblog/settings"}> Edit profile</Link>
                     </button>
                 </div> : 
                 <button className="btn btn-danger">Report</button>

@@ -5,8 +5,8 @@ import { useState } from "react";
 function Login() {
     const [errorMessage, setErrorMessage] = useState<string>("");
 
-    const handleError = (error: Error) => {
-        setErrorMessage(error.message);
+    const handleError = (errorMessage: string) => {
+        setErrorMessage(errorMessage);
     }
     return (
         <AuthPageContainer

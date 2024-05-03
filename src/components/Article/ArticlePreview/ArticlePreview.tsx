@@ -29,7 +29,7 @@ function ArticlePreview({  articles, isLoading, updateArticles } : {
                     isFav={article.isFav}/>
                 </ArticleMeta>
                 <div className="col article-link">
-                    <Link to={`/article/${article.slug}`} state={article}>
+                    <Link to={`/dmblog/article/${article.slug}`} state={article}>
                         <h1>{article.title}</h1>
                         <p>{article.description}</p>
                         <span>read more...</span>

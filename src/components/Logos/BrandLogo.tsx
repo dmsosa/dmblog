@@ -5,7 +5,7 @@ function BrandLogo () {
 
     const navigate = useNavigate();
     const goHome = () => {
-        navigate("/");
+        navigate(import.meta.env.BASE_URL);
     }
 
     return (

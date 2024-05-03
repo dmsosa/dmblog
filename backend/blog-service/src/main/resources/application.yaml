@@ -1,4 +1,5 @@
-datasource: h2
+# datasource: h2
+datasource: postgres
 server:
   port: 8082
 api:
@@ -9,22 +10,27 @@ api:
 
 #Spring config
 spring:
-  application:
-    name: blog-service
-  profiles:
-    active: dev
 # Import .env file as if it were a .properties file
   config:
     import: optional:classpath:.env[.properties]
-#H2 database, in memory
+  application:
+    name: blog-service
+############################################################################################
+#H2 database, in memory **You can uncomment this to switch to a H2 in memory database**
+#  datasource:
+#     url: jdbc:h2:mem:demo
+#     username: sa
+#     password: password
+#     driverClassName: org.h2.Driver
+#  h2:
+#     console:
+#       enabled: true
+############################################################################################
   datasource:
-    url: jdbc:h2:mem:demo
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
-  h2:
-    console:
-      enabled: true
+    url: jdbc:postgresql://localhost:5432/dmsosa
+    username: postgres
+    password: ${POSTGRES_PASSWORD}
+    driverClassName: org.postgresql.Driver
   jpa:
     properties:
       hibernate:
@@ -57,15 +63,15 @@ logging:
 
 
 ---
-#for dev profile, we use a postgres database
+#for prod profile, we use a postgres database running in a docker container
 datasource: postgres
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: prod
   datasource:
     url: ${POSTGRES_URL}
-    username: ${POSTGRES_USERNAME}
+    username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
     driverClassName: org.postgresql.Driver
   h2:

@@ -27,19 +27,19 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               <Route path="/dmblog" element={<Home />}>
                 <Route index element={<HomeArticles />}/>
               </Route>
-              <Route path="login" element={<Login />}/>
-              <Route path="signup" element={<SignUp />}></Route>
-              <Route path="editor" element={<ArticleEditor />}>
+              <Route path="/dmblog/login" element={<Login />}/>
+              <Route path="/dmblog/signup" element={<SignUp />}></Route>
+              <Route path="/dmblog/editor" element={<ArticleEditor />}>
                 <Route path=":slug" element={<ArticleEditor />}/>
               </Route>
-              <Route path="article/:slug" element={<Article />}>
+              <Route path="/dmblog/article/:slug" element={<Article />}>
                 <Route index element={<CommentSection />}/>
               </Route>
-              <Route path="profile/:username" element={<Profile />}>
+              <Route path="/dmblog/profile/:username" element={<Profile />}>
                 <Route index element={<ProfileArticles />} />
                 <Route path="favorites" element={<ProfileFavArticles />} />
               </Route>
-              <Route path="settings" element={<Settings />}></Route>
+              <Route path="/dmblog/settings" element={<Settings />}></Route>
               <Route path="*" element={<NotFound />}></Route>
             </Route>
           </Routes>

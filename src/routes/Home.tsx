@@ -11,7 +11,7 @@ function Home() {
         <section className="bg-hero"> 
             <ContainerRow>
                 <div className="banner-quote">
-                    <h1>"Genie ist 1% und 99% Transpiration"</h1>
+                    <h1>"Genie ist 1% Inspiration und 99% Transpiration"</h1>
                 </div>
             </ContainerRow>
             <ContainerRow

@@ -13,7 +13,9 @@ function CommentList({ comments, setCommentData } : {
     return comments.length > 0 ? 
     ( comments.map((comment) => { 
         return (
-            <CommentCard comment={comment} setCommentData={setCommentData}/>
+            <div className="col-12 comment-card" key={comment.id}>
+                <CommentCard comment={comment} setCommentData={setCommentData}/>
+            </div>
     )
 })
     

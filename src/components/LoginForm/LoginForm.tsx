@@ -3,12 +3,14 @@ import { loginUser } from "../../service/userService";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import { ChangeEvent, FormEvent, useState } from "react";
 import FormFieldset from "../FormFieldset";
+import { AxiosError } from "axios";
+import { ApiError, errorHandler } from "../../service/handleError";
 
 type TLoginData = {
     login: string,
     password: string
 }
-function LoginForm( {onError} : {onError: (error: Error) => void} ) {
+function LoginForm( {onError} : {onError: (errorMessage: string) => void} ) {
 
     const [{login, password}, setLoginData] = useState<TLoginData>({login: "", password: ""});
     const {setAuthState} = useAuth() as TAuthContext;
@@ -29,14 +31,17 @@ function LoginForm( {onError} : {onError: (error: Error) => void} ) {
         loginUser(loginData)
         .then((state) => { 
             setAuthState(state);
-            navigation("/");
+            navigation("/dmblog");
             window.location.reload(); 
         })
-        .catch((e) => {onError(e)});
+        .catch((e: AxiosError) => {
+            const apiError = errorHandler(e);    
+            onError(apiError);
+        });
     }
 
     const comeBack = () => {
-        navigation("/")
+        navigation("/dmblog")
     }
     return (
         <div className="row">
