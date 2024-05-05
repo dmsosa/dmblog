@@ -26,7 +26,9 @@ function ArticleButtons({ article, setArticle } : {
         setArticle((prevArticle) => ({...prevArticle, favoritesCount: article.favoritesCount, isFav: article.isFav}))
     }
     return !!article && !!author && loggedUser.username === author.username ? (
-        <AuthorButtons {...article } slug={slug}/>
+        <>
+            <AuthorButtons {...article } slug={slug}/>
+        </>
     ) : (
         <div className="row row-cols-2">      
             <FavButton {...article} handleFav={handleFav}/>

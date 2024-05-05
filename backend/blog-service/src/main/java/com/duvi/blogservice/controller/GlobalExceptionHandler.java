@@ -3,7 +3,6 @@ package com.duvi.blogservice.controller;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.duvi.blogservice.model.exceptions.*;
 import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -16,9 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.util.WebUtils;
 
-import java.io.IOException;
 import java.util.Collections;
-import java.util.Enumeration;
 
 @ControllerAdvice
 @Controller
@@ -44,23 +41,14 @@ public class GlobalExceptionHandler implements ErrorController {
             HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
             TokenExpiredException tee = (TokenExpiredException) exception;
             return teeHandler(tee, headers, status, request);
-        } else if (exception instanceof UserNotFoundException) {
+        } else if (exception instanceof EntityDoesNotExistsException) {
             HttpStatus status = HttpStatus.NOT_FOUND;
-            UserNotFoundException unfe = (UserNotFoundException) exception;
-            return unfeHandler(unfe, headers, status, request);
-        } else if (exception instanceof UserAlreadyExistsException) {
-            HttpStatus status = HttpStatus.CONFLICT;
-            UserAlreadyExistsException uaee = (UserAlreadyExistsException) exception;
-            return uaeeHandler(uaee, headers, status, request);
-        }
-        else if (exception instanceof ArticleDoNotExistsException) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-            ArticleDoNotExistsException anfe = (ArticleDoNotExistsException) exception;
-        return anfeHandler(anfe, headers, status, request);
-        } else if (exception instanceof ArticleAlreadyExistsException) {
+            EntityDoesNotExistsException unfe = (EntityDoesNotExistsException) exception;
+            return eaeeHandler(unfe, headers, status, request);
+        } else if (exception instanceof EntityAlreadyExistsException) {
         HttpStatus status = HttpStatus.CONFLICT;
-            ArticleAlreadyExistsException aaee = (ArticleAlreadyExistsException) exception;
-        return aaeeHandler(aaee, headers, status, request);
+            EntityAlreadyExistsException eaee = (EntityAlreadyExistsException) exception;
+        return aaeeHandler(eaee, headers, status, request);
         }
 
         else {
@@ -75,22 +63,12 @@ public class GlobalExceptionHandler implements ErrorController {
         ApiError body = new ApiError(Collections.singletonList(error));
         return internalHandler(tee, body, headers, status, request);
     }
-    public ResponseEntity<ApiError> unfeHandler(UserNotFoundException unfe, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ObjectError error = new ObjectError("User Not Found Exception", unfe.getMessage());
+    public ResponseEntity<ApiError> eaeeHandler(EntityDoesNotExistsException eaee, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ObjectError error = new ObjectError("Entity Not Found Exception", eaee.getMessage());
         ApiError body = new ApiError(Collections.singletonList(error));
-        return internalHandler(unfe, body, headers, status, request);
+        return internalHandler(eaee, body, headers, status, request);
     }
-    public ResponseEntity<ApiError> uaeeHandler(UserAlreadyExistsException uaee, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ObjectError error = new ObjectError("User Already Exists Exception", uaee.getMessage());
-        ApiError body = new ApiError(Collections.singletonList(error));
-        return internalHandler(uaee, body, headers, status, request);
-    }
-    public ResponseEntity<ApiError> anfeHandler(ArticleDoNotExistsException anfe, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ObjectError error = new ObjectError("Article Do Not Exists Exception", anfe.getMessage());
-        ApiError body = new ApiError(Collections.singletonList(error));
-        return internalHandler(anfe, body, headers, status, request);
-    }
-    public ResponseEntity<ApiError> aaeeHandler(ArticleAlreadyExistsException aaee, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    public ResponseEntity<ApiError> aaeeHandler(EntityAlreadyExistsException aaee, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ObjectError error = new ObjectError("Article Already Exists Exception", aaee.getMessage());
         ApiError body = new ApiError(Collections.singletonList(error));
         return internalHandler(aaee, body, headers, status, request);

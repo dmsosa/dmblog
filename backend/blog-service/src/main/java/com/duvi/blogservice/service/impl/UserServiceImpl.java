@@ -4,17 +4,15 @@ import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.RegisterDTO;
 import com.duvi.blogservice.model.dto.SetUserDTO;
 import com.duvi.blogservice.model.dto.UserDTO;
-import com.duvi.blogservice.model.exceptions.UserAlreadyExistsException;
-import com.duvi.blogservice.model.exceptions.UserNotFoundException;
+import com.duvi.blogservice.model.exceptions.EntityAlreadyExistsException;
+import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
 import com.duvi.blogservice.model.relations.UserFollower;
-import com.duvi.blogservice.model.relations.UserFollowerId;
 import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.repository.relations.UserFollowerRepository;
 import com.duvi.blogservice.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -59,37 +57,37 @@ public class UserServiceImpl implements UserService {
         return userDTOS;
     }
     @Override
-    public UserDTO findUserById(Long userId) throws UserNotFoundException {
+    public UserDTO findUserById(Long userId) throws EntityDoesNotExistsException {
         if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException(userId);
+            throw new EntityDoesNotExistsException(userId);
         }
         User user = userRepository.findById(userId).get();
         return createDTO(user);
     }
 
     @Override
-    public UserDTO findUserByUsername(String username) throws UserNotFoundException {
+    public UserDTO findUserByUsername(String username) throws EntityDoesNotExistsException {
         Optional<User> optUser = userRepository.findByUsername(username);
         if (optUser.isEmpty()) {
-            throw new UserNotFoundException("User with username '%s' do not exists!".formatted(username));
+            throw new EntityDoesNotExistsException("User with username '%s' do not exists!".formatted(username));
         }
         return createDTO(optUser.get());
     }
 
     @Override
-    public UserDTO findUserByEmail(String email) throws UserNotFoundException {
+    public UserDTO findUserByEmail(String email) throws EntityDoesNotExistsException {
         Optional<User> optUser = userRepository.findByEmail(email);
         if (optUser.isEmpty()) {
-            throw new UserNotFoundException("User with email '%s' do not exists!".formatted(email));
+            throw new EntityDoesNotExistsException("User with email '%s' do not exists!".formatted(email));
         }
         return createDTO(optUser.get());
     }
 
     @Override
-    public UserDTO findUserByLogin(String login) throws UserNotFoundException {
+    public UserDTO findUserByLogin(String login) throws EntityDoesNotExistsException {
 
         if (!(userRepository.existsByUsername(login) || userRepository.existsByEmail(login))) {
-            throw new UserNotFoundException("User with login '%s' do not exists!".formatted(login));
+            throw new EntityDoesNotExistsException("User with login '%s' do not exists!".formatted(login));
         }
         Optional<User> optUser = userRepository.findByEmail(login);
         if (optUser.isEmpty()) {
@@ -115,12 +113,12 @@ public class UserServiceImpl implements UserService {
 
     //POST
     @Override
-    public UserDTO createUser(RegisterDTO userDTO) throws UserAlreadyExistsException {
+    public UserDTO createUser(RegisterDTO userDTO) throws EntityAlreadyExistsException {
         if (userRepository.existsByUsername(userDTO.username())) {
-            throw new UserAlreadyExistsException("User with username %s already exists!".formatted(userDTO.username()));
+            throw new EntityAlreadyExistsException("User with username %s already exists!".formatted(userDTO.username()));
         }
         if (userRepository.existsByEmail(userDTO.email())) {
-            throw new UserAlreadyExistsException("User with email %s already exists!".formatted(userDTO.email()));
+            throw new EntityAlreadyExistsException("User with email %s already exists!".formatted(userDTO.email()));
         }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(userDTO.password());
@@ -140,18 +138,18 @@ public class UserServiceImpl implements UserService {
     }
         //DELETE
     @Override
-    public void deleteUser(Long userId) throws UserNotFoundException {
+    public void deleteUser(Long userId) throws EntityDoesNotExistsException {
         if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException(userId);
+            throw new EntityDoesNotExistsException(userId);
         }
         userRepository.delete(userRepository.findById(userId).get());
     }
 
     //Operations with Followers
     @Override
-    public UserDTO followUser(String fromUsername, String toUsername) throws UserNotFoundException {
+    public UserDTO followUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException {
         if (!userRepository.existsByUsername(toUsername)) {
-            throw new UserNotFoundException("User with username %s do not exists!".formatted(toUsername));
+            throw new EntityDoesNotExistsException("User with username %s do not exists!".formatted(toUsername));
         }
         User userFrom = userRepository.findByUsername(fromUsername).get();
         User userTo = userRepository.findByUsername(toUsername).get();
@@ -161,9 +159,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO unfollowUser(String fromUsername, String toUsername) throws UserNotFoundException {
+    public UserDTO unfollowUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException {
         if (!userRepository.existsByUsername(toUsername)) {
-            throw new UserNotFoundException("User with username %s do not exists!".formatted(toUsername));
+            throw new EntityDoesNotExistsException("User with username %s do not exists!".formatted(toUsername));
         }
         User userTo = userRepository.findByUsername(toUsername).get();
         List<UserFollower> relations = followersRepository.findByUserId(userTo.getId());

@@ -98,7 +98,7 @@ public class BlogController {
     public ResponseEntity<ArticlesResponseDTO> getFeedArticles(
             @RequestParam(required = false) Integer limit,
             @RequestParam(required = false) Integer offset,
-            @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException {
+            @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
 
         //if there is loggedUser, we get favs
         String token = headers.getFirst("Authorization");
@@ -133,7 +133,7 @@ public class BlogController {
     }
 
     @PostMapping("/global")
-    public ResponseEntity<ArticleDTO> createArticle(@RequestBody SetArticleDTO createArticleDTO, @RequestHeader HttpHeaders headers) throws ArticleAlreadyExistsException, ArticleDoNotExistsException {
+    public ResponseEntity<ArticleDTO> createArticle(@RequestBody SetArticleDTO createArticleDTO, @RequestHeader HttpHeaders headers) throws EntityAlreadyExistsException, EntityDoesNotExistsException {
 
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String username = tokenService.validateToken(token);
@@ -143,7 +143,7 @@ public class BlogController {
         return new ResponseEntity<>(article, HttpStatus.CREATED);
     }
     @GetMapping("/slug/{articleSlug}")
-    public ResponseEntity<ArticleDTO> getArticleBySlug(@PathVariable String articleSlug, @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException {
+    public ResponseEntity<ArticleDTO> getArticleBySlug(@PathVariable String articleSlug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
         String token = headers.getFirst("Authorization");
         String loggedUsername;
         if (token != null ) {
@@ -158,19 +158,19 @@ public class BlogController {
     }
 
     @PutMapping("/slug/{articleSlug}")
-    public ResponseEntity<ArticleDTO> editArticle(@PathVariable String articleSlug, @RequestBody SetArticleDTO setArticleDTO) throws ArticleDoNotExistsException {
+    public ResponseEntity<ArticleDTO> editArticle(@PathVariable String articleSlug, @RequestBody SetArticleDTO setArticleDTO) throws EntityDoesNotExistsException {
         return new ResponseEntity<>(articleService.updateArticleBySlug(articleSlug, setArticleDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/slug/{articleSlug}")
-    public ResponseEntity<String> deleteArticleBySlug(@PathVariable String articleSlug) throws ArticleDoNotExistsException {
+    public ResponseEntity<String> deleteArticleBySlug(@PathVariable String articleSlug) throws EntityDoesNotExistsException {
         articleService.deleteArticleBySlug(articleSlug);
         return new ResponseEntity<>("Article with slug %s successfully deleted".formatted(articleSlug), HttpStatus.OK);
     }
 
     //Operations with Author
     @GetMapping("/author/{username}")
-    public ResponseEntity<ArticlesResponseDTO> getArticlesFromAuthor(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset, @RequestHeader HttpHeaders headers) throws UserNotFoundException {
+    public ResponseEntity<ArticlesResponseDTO> getArticlesFromAuthor(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
         String token = headers.getFirst("Authorization");
         String loggedUsername;
         if (token != null ) {
@@ -199,20 +199,20 @@ public class BlogController {
 
     //Operations with Users
     @GetMapping("/favs/{slug}")
-    public ResponseEntity<List<UserDTO>> getFavsForArticle(@PathVariable String slug ) throws ArticleDoNotExistsException {
+    public ResponseEntity<List<UserDTO>> getFavsForArticle(@PathVariable String slug ) throws EntityDoesNotExistsException {
         List<UserDTO> favUsers = articleService.getFavUsers(slug);
         return new ResponseEntity<>(favUsers, HttpStatus.OK);
     }
 
     @PostMapping("/favs/{slug}")
-    public ResponseEntity<ArticleDTO> setFavsForUser(@PathVariable String slug, @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException, UserNotFoundException {
+    public ResponseEntity<ArticleDTO> setFavsForUser(@PathVariable String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String username = tokenService.validateToken(token);
         ArticleDTO article = articleService.setFavorite(slug, username);
         return new ResponseEntity<>(article, HttpStatus.OK);
     }
     @DeleteMapping("/favs/{slug}")
-    public ResponseEntity<ArticleDTO> removeFavsForUser(@PathVariable String slug, @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException, UserNotFoundException {
+    public ResponseEntity<ArticleDTO> removeFavsForUser(@PathVariable String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String username = tokenService.validateToken(token);
         ArticleDTO article = articleService.removeFavorite(slug, username);
@@ -220,7 +220,7 @@ public class BlogController {
     }
 
     @GetMapping("/favs/users/{username}")
-    public  ResponseEntity<ArticlesResponseDTO> getFavsForUser(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset, @RequestHeader HttpHeaders headers) throws UserNotFoundException {
+    public  ResponseEntity<ArticlesResponseDTO> getFavsForUser(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
 
         List<ArticleDTO> articleDTOS = articleService.getFavArticles(username);
         Long count = (long) articleDTOS.size();
@@ -246,7 +246,7 @@ public class BlogController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/favs/users/logged")
-    public ResponseEntity<ArticlesResponseDTO> getFavsOfLoggedUser(@RequestHeader HttpHeaders headers) throws UserNotFoundException {
+    public ResponseEntity<ArticlesResponseDTO> getFavsOfLoggedUser(@RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
 
         String token = headers.getFirst("Authorization");
         String loggedUsername;
@@ -300,18 +300,18 @@ public class BlogController {
 
     }
     @GetMapping("/tags/{slug}")
-    public ResponseEntity<List<Tag>> getTagsOf(@PathVariable String slug) throws ArticleDoNotExistsException {
+    public ResponseEntity<List<Tag>> getTagsOf(@PathVariable String slug) throws EntityDoesNotExistsException {
         List<Tag> tags = articleService.getTagsOf(slug);
         return new ResponseEntity<>(tags, HttpStatus.OK);
 
     }
     @PostMapping("/tags")
-    public ResponseEntity<ArticleDTO> setTagFor(@RequestParam(required = true) String slug, @RequestParam(required = true) String tag) throws ArticleDoNotExistsException {
+    public ResponseEntity<ArticleDTO> setTagFor(@RequestParam(required = true) String slug, @RequestParam(required = true) String tag) throws EntityDoesNotExistsException {
         ArticleDTO article = articleService.setTag(slug, tag);
         return new ResponseEntity<>(article, HttpStatus.OK);
     }
     @DeleteMapping("/tags")
-    public ResponseEntity<ArticleDTO> removeTagFor(@RequestParam(required = true) String slug, @RequestParam(required = true) String tag) throws ArticleDoNotExistsException {
+    public ResponseEntity<ArticleDTO> removeTagFor(@RequestParam(required = true) String slug, @RequestParam(required = true) String tag) throws EntityDoesNotExistsException {
         ArticleDTO article = articleService.removeTag(slug, tag);
         return new ResponseEntity<>(article, HttpStatus.OK);
     }
@@ -319,7 +319,7 @@ public class BlogController {
     //Operations with Comments
 
     @GetMapping("/comments")
-    public ResponseEntity<CommentResponseDTO> getCommentsOfArticle(@RequestParam(required = true) String slug) throws ArticleDoNotExistsException {
+    public ResponseEntity<CommentResponseDTO> getCommentsOfArticle(@RequestParam(required = true) String slug) throws EntityDoesNotExistsException {
         List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
         Long commentsCount = (long) comments.size();
         CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comments, commentsCount);
@@ -327,7 +327,7 @@ public class BlogController {
 
     }
     @PostMapping("/comments")
-    public ResponseEntity<CommentResponseDTO> postComment(@RequestBody SetCommentDTO commentDTO, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException, UserNotFoundException {
+    public ResponseEntity<CommentResponseDTO> postComment(@RequestBody SetCommentDTO commentDTO, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String username = tokenService.validateToken(token);
         CommentDTO comment = commentService.createComment(commentDTO.body(), username, slug);
@@ -337,7 +337,7 @@ public class BlogController {
         return new ResponseEntity<>(commentResponseDTO, HttpStatus.OK);
     }
     @PutMapping("/comments/{commentId}")
-    public ResponseEntity<CommentResponseDTO> editComment(@PathVariable Long commentId, @RequestBody SetCommentDTO commentDTO, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException {
+    public ResponseEntity<CommentResponseDTO> editComment(@PathVariable Long commentId, @RequestBody SetCommentDTO commentDTO, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
         CommentDTO comment = commentService.updateComment(commentId, commentDTO);
         List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
         Long commentsCount = (long) comments.size();
@@ -345,7 +345,7 @@ public class BlogController {
         return new ResponseEntity<>(commentResponseDTO, HttpStatus.OK);
     }
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<CommentResponseDTO> deleteComment(@PathVariable Long commentId, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws ArticleDoNotExistsException, CommentNotFoundException {
+    public ResponseEntity<CommentResponseDTO> deleteComment(@PathVariable Long commentId, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException, CommentNotFoundException {
         commentService.deleteComment(commentId);
         List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
         Long commentsCount = (long) comments.size();

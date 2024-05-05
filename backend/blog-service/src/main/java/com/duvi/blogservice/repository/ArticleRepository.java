@@ -18,5 +18,5 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     public Optional<Article> findBySlug(String slug);
     public List<Article> findArticleByAuthor(User author);
 
-    void deleteBySlug(String articleSlug);
+    long deleteBySlug(String articleSlug);
 }

@@ -16,11 +16,13 @@ function AuthorButtons({title, body, description, tagList, slug} : {
     const handleClick = () => {
         if (!isAuth) return alert("You need to login first!");
         if (!slug) return console.log(`Article with slug ${slug} does not exists!`);
+        var confirm = window.confirm("Are you sure to delete?");
+        if (!confirm) { return;}
         deleteArticleBySlug({slug, headers})
         .then((message) =>
-            { 
+            {   
                 alert(message);
-                navigate("/")
+                navigate("/dmblog")
             }
         ).catch((error) => {
             console.log(error)

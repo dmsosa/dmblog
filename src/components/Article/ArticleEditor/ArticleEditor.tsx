@@ -68,7 +68,7 @@ function ArticleEditor() {
     const handleSubmit = (e: MouseEvent<HTMLFormElement> ) => {
         e.preventDefault();
         setArticle({ userId: loggedUser.id, title, description, body, artSlug: slug || null, tagList, headers })
-        .then((article: TArticle) => {navigate(`dmblog/article/${article.slug}`)})
+        .then((article: TArticle) => {navigate(`/dmblog/article/${article.slug}`)})
         .catch((error: AxiosError) => { handleError(error) })
     }
     const handleError = (e: AxiosError) => {

@@ -5,7 +5,6 @@ import com.duvi.blogservice.model.dto.CommentDTO;
 import com.duvi.blogservice.model.dto.SetCommentDTO;
 import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
 import com.duvi.blogservice.model.exceptions.CommentNotFoundException;
-import com.duvi.blogservice.model.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

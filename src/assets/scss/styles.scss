@@ -11,14 +11,14 @@
         background-color: rgba(153, 255, 51, 1);
         color: gray;
         border: none;
-        outline: 7px solid rgba(52, 162, 9, 0.25);
+        outline: 0.7rem solid rgba(52, 162, 9, 0.25);
     }
 
     &:focus {
         background-color: rgba(153, 255, 51, 1);
         color: gray;
         border: none;
-        outline: 7px solid rgba(52, 162, 9, 0.25);
+        outline: 0.7rem solid rgba(52, 162, 9, 0.25);
         box-shadow: none;
     }
 }
@@ -30,8 +30,8 @@ html {
 
 body {
     margin: 0rem;
+    font-size: 1.7rem;
     font-family: sans-serif;
-    font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
 }
@@ -57,6 +57,7 @@ body {
 //Button Styles 
 
 .btn {
+    font-size: 1.7rem;
     @include btn-styles(background-color, rgba(246, 248, 244, 0.591));
     &.btn-primary {
         @include btn-styles(background-color, rgba(153, 255, 51, 1));
@@ -158,13 +159,13 @@ body {
         height: 0;
     }
     25% {
-        height: 15px;
+        height: 1.5rem;
     }
     50% {
-        height: 25px;
+        height: 2.5rem;
     }
     75% {
-        height: 45px;
+        height: 4.5rem;
     }
     100% {
         height: fit-content;
@@ -178,7 +179,7 @@ body {
 //some shadow
 
 .nav-shadow {
-    box-shadow: 0 9px 15px -12px black;
+    box-shadow: 0 0.9rem 1.5rem -1.2rem black;
 }
 
 //sticky and scroll effects
@@ -201,7 +202,7 @@ body {
 
 //navbar styles
 .nav-menu .navbar, .nav-menu .navbar-nav  {
-    height: 82px;
+    height: 8.2rem;
 }
 
 
@@ -212,7 +213,7 @@ body {
         padding: 0rem 0.5rem;
         border-radius: 0.5rem;
         &:hover {
-            outline: solid hsla(90, 100%, 60%, 0.5) 1.5px;
+            outline: solid hsla(90, 100%, 60%, 0.5) 1.5rem;
         }
     }
     .nav-link {
@@ -238,7 +239,7 @@ body {
         position: absolute;
         padding: 0;
         background-color: #111927;
-        border: #000D1C solid 2px;
+        border: #000D1C solid 0.2rem;
         border-radius: 0;
         text-align: right;
         &.show {
@@ -248,9 +249,10 @@ body {
     
     
     .nav-item {
+        font-size: 1.7rem;
         margin: 0;
         border-radius: 0;
-        border-bottom: solid #000D1C 2px;
+        border-bottom: solid #000D1C 0.2rem;
         .nav-link {
             color: white;
         }
@@ -288,7 +290,7 @@ body {
     .navbar-nav {
         flex-direction: column;
         flex-grow: 1;
-        height: calc(100vh - 82px);
+        height: calc(100vh - 8.2rem);
         width: 100%;
         li.nav-item {
             border-radius: 0;
@@ -313,7 +315,7 @@ body {
 }
 .brand-name {
     text-decoration: none;
-    font: 2rem sans-serif;
+    font: 3rem sans-serif;
     font-weight: bold;
     color: #51FF00;
     position: relative;
@@ -329,7 +331,7 @@ body {
 
 .main {
     background: linear-gradient(60deg, #112233 10%, #111927 10%, #111927 90%, #112233 90%) no-repeat fixed;
-    padding-top: 82px;
+    padding-top: 8.2rem;
     color: white;
 }
 
@@ -374,7 +376,7 @@ a:hover {
 //Image Styles
 
 .cont-img-div {
-    border: #34A200 solid 5px;
+    border: #34A200 solid 0.5rem;
     width: fit-content;
 }
 .cont-img {
@@ -401,10 +403,10 @@ a:hover {
         padding: 0;
     }
     li {
-        border: #34A200 solid 3px;
+        border: #34A200 solid 0.3rem;
         border-radius: 0.5rem;
         margin: 0;
-        margin-right: 10px;
+        margin-right: 1rem;
         &.active {
             .btn {
                 color: black;
@@ -420,7 +422,7 @@ a:hover {
             color: black;
         }
         &:focus {
-            box-shadow: 0px 0px 1px white        ;
+            box-shadow: 0 0 0.1rem white        ;
         }   
 
     }
@@ -439,21 +441,21 @@ a:hover {
     font-variant: small-caps;
     font-style: italic;
     color: white;
-    border-bottom: #34A200 solid 2.5px;
-    height: 35px;
+    border-bottom: #34A200 solid 0.25rem;
+    height: 3.5rem;
 }
 
 .topic-btn-cont {
-    max-height: 500px;
+    max-height: 50rem;
     padding: 0 1rem;
     margin: 0;
     overflow-x: hidden;
 }
 .topic-btn {
     display: block;
-    border: #34A200 solid 2.5px;
+    border: #34A200 solid 0.25rem;
     border-radius: 0.5rem;
-    margin-top: 10px;
+    margin-top: 1rem;
     background-color: transparent;
     color: whitesmoke;
     padding: 0 0.5rem;
@@ -477,7 +479,7 @@ a:hover {
         background-color: transparent;
         border: none;
         &:focus {
-            box-shadow: 0px 0px 10px #51FF00;
+            box-shadow: 0 0 1rem #51FF00;
         }
     }
     
@@ -486,7 +488,7 @@ a:hover {
     background-color: #000D1C;
     margin-bottom: 3rem;
     padding: 1rem;
-    border: #051d46 5px solid;
+    border: #051d46 0.5rem solid;
 }
 
 .article-meta {
@@ -509,7 +511,7 @@ a:hover {
     }
     p, span {
         display: inline;
-        margin-left: 5px;
+        margin-left: 0.5rem;
         margin-right: 1rem;
     }
 
@@ -564,7 +566,7 @@ a:hover {
 .tag-list li {
     background-color: #000D1C;
     padding: 0 1rem;
-    outline: yellowgreen 1px solid;
+    outline: yellowgreen 0.1rem solid;
     border-radius: 1rem;
     text-align: center;
 }
@@ -575,7 +577,7 @@ a:hover {
     justify-content: center;
 }
 .cont-three .cont {
-    box-shadow: 2.5px 2.5px 0px #34A200;
+    box-shadow: 0.25rem 0.25rem 0 #34A200;
     margin: 0 0.5rem 2.5rem;
 }
 .cont-three .cont .cont-header {
@@ -591,19 +593,19 @@ a:hover {
     margin: 7rem auto;
     text-align: center;
     border-radius: 0.5rem;
-    box-shadow: 10px 10px 0px #EEE;
+    box-shadow: 1rem 1rem 0 #EEE;
 
 }
 .banner-quote h1 {
     text-decoration: none;
     color: black;
-    font-size: 2rem;
+    font-size: 3rem;
     font-style: italic;
 }
 
 .cont.tech-banner-cont {
     background-color: #000D1C;
-    box-shadow: 5px 5px 1px #34A200;
+    box-shadow: 0.5rem 0.5rem 1rem #34A200;
     padding: 1rem;
 }
 
@@ -611,10 +613,7 @@ a:hover {
     margin: 0 auto;
 }
 
-.auth-page {
-    padding-top: 2rem;
-    padding-bottom: 1rem;
-}
+
 
 // Profile styles
 
@@ -632,11 +631,11 @@ a:hover {
     text-align: left;
     img {
         margin: 0 auto;
-        border: #112233 solid 5px;
+        border: #112233 solid 0.5rem;
         border-radius: 25%;
     }
     a {
-        font-size: large;
+        font-size: 2.5rem;
         width: fit-content;
         font-style: bold;
         display: block;
@@ -647,9 +646,9 @@ a:hover {
 .profile-bio {
     padding: 0.5rem 1rem;
     margin: 1rem auto;
-    border: #051d46 10px solid;
+    border: #051d46 1rem solid;
     background-color: #000D1C;
-    min-height: 200px;
+    min-height: 20rem;
     p {
         line-height: 1rem;
     }
@@ -730,7 +729,8 @@ a:hover {
 //Form styles
 
 .auth-page {
-
+    padding-top: 2rem;
+    padding-bottom: 1rem;
     h1 {
         text-align: center;
         text-transform: uppercase;
@@ -753,7 +753,7 @@ a:hover {
         margin-top: -4rem;
         background-color: hsl(0, 100%, 40%);
         padding: 0.5rem 1rem;
-        border: hsl(0, 100%, 15%) solid 5px;
+        border: hsl(0, 100%, 15%) solid 0.5rem;
         &.active {
             margin: 0;
             height: fit-content;
@@ -761,7 +761,7 @@ a:hover {
         }
         &::after {
             margin-left: 0.5rem;
-            font-size: large;
+            font-size: 2.5rem;
             content: "!"
         }
     }
@@ -776,7 +776,7 @@ a:hover {
     padding: 2rem;
     .markdown-editor {
         .wmde-markdown-var.w-md-editor.w-md-editor-show-live {
-            min-height: 200px;
+            min-height: 20rem;
             height: fit-content !important;
         }
         .w-md-editor-area.w-md-editor-input {
@@ -809,21 +809,21 @@ a:hover {
 }
 
 .form-input:hover {
-    box-shadow: 0.25rem 0.25rem 0px rgba(153, 255, 51, .7);
+    box-shadow: 0.25rem 0.25rem 0 rgba(153, 255, 51, .7);
 }
 
 .form-input {
     background-color: transparent;
     border: #ccc solid 0.25rem;
     border-radius: 0.5rem;
-    box-shadow: 0.25rem 0.25rem 0px rgba($color: #777, $alpha: .7);
+    box-shadow: 0.25rem 0.25rem 0 rgba($color: #777, $alpha: .7);
     padding: 0.25rem 1rem;
     z-index: 2;
     color: white;
 }
 .form-input:focus {
     outline: none;
-    box-shadow: 0.25rem 0.25rem 0px rgba(153, 255, 51, 1);
+    box-shadow: 0.25rem 0.25rem 0 rgba(153, 255, 51, 1);
 }
 
 
@@ -832,7 +832,7 @@ a:hover {
     display: block;
     position: relative;
     cursor: pointer;
-    padding-left: 35px;
+    padding-left: 3.5rem;
     margin-bottom: 1rem;
     width: fit-content;
 }
@@ -840,18 +840,18 @@ a:hover {
     position: absolute;
     top:0;
     left: 0;
-    width: 25px;
-    height: 25px;
+    width: 2.5rem;
+    height: 2.5rem;
     border: #ccc solid 0.25rem;
     border-radius: 0.5rem;
-    box-shadow: 0.125rem 0.125rem 0px rgba($color: #777, $alpha: .7);
+    box-shadow: 0.125rem 0.125rem 0 rgba($color: #777, $alpha: .7);
 }
 .form-checkbox-label:hover input ~.checkbox-span {
-    box-shadow: 0.125rem 0.125rem 0px rgba(153, 255, 51, .7);
+    box-shadow: 0.125rem 0.125rem 0 rgba(153, 255, 51, .7);
 }
 .form-checkbox-label input:checked ~ .checkbox-span {
     border: #ccc solid 0.25rem;
-    box-shadow: 0.125rem 0.125rem 0px rgba(153, 255, 51, .7);
+    box-shadow: 0.125rem 0.125rem 0 rgba(153, 255, 51, .7);
     background-color: rgba(153, 255, 51, .7);
 }
 .checkbox-span:after {
@@ -865,12 +865,12 @@ a:hover {
 }
 
 .form-checkbox-label .checkbox-span:after {
-    left: 5px;
-    top: 0px;
-    width: 7px;
-    height: 13px;
+    left: 0.5rem;
+    top: 0;
+    width: 0.7rem;
+    height: 1.3rem;
     border: solid white;
-    border-width: 0px 3px 3px 0px;
+    border-width: 0 0.3rem 0.3rem 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg)
@@ -915,7 +915,7 @@ a:hover {
     margin:0;
     hr {
         width: 100%; 
-        height: 10px;
+        height: 1rem;
         padding: 0;
         background-color: hsl(90, 100%, 30%);
     }
@@ -1137,7 +1137,7 @@ footer {
     display: block;
     margin: 0 auto;
     text-align: center;
-    height: calc(100vh - 332px);
+    height: calc(100vh - 33.2rem);
 }
 
 .not-found-page  {
