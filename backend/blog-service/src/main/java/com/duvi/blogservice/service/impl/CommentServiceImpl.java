@@ -5,7 +5,7 @@ import com.duvi.blogservice.model.Comment;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.CommentDTO;
 import com.duvi.blogservice.model.dto.SetCommentDTO;
-import com.duvi.blogservice.model.exceptions.ArticleDoNotExistsException;
+import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
 import com.duvi.blogservice.model.exceptions.CommentNotFoundException;
 import com.duvi.blogservice.repository.ArticleRepository;
 import com.duvi.blogservice.repository.CommentRepository;
@@ -46,11 +46,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDTO createComment(String body, String username, String slug) throws UserNotFoundException, ArticleDoNotExistsException {
+    public CommentDTO createComment(String body, String username, String slug) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
         Optional<User> user = userRepository.findByUsername(username);
         Optional<Article> article = articleRepository.findBySlug(slug);
-        if (user.isEmpty()) { throw new UserNotFoundException("User with username %s do not exists!".formatted(username)); }
-        if (article.isEmpty()) { throw new ArticleDoNotExistsException("Article with slug %s do not exists!".formatted(slug)); }
+        if (user.isEmpty()) { throw new EntityDoesNotExistsException("User with username %s do not exists!".formatted(username)); }
+        if (article.isEmpty()) { throw new EntityDoesNotExistsException("Article with slug %s do not exists!".formatted(slug)); }
         Comment comment = new Comment(user.get(), article.get(), body);
         return createDTO(commentRepository.save(comment));
 
@@ -85,33 +85,33 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDTO> getCommentOfUser(String username) throws UserNotFoundException {
+    public List<CommentDTO> getCommentOfUser(String username) throws EntityDoesNotExistsException {
         Optional<User> user = userRepository.findByUsername(username);
-        if (user.isEmpty()) { throw new UserNotFoundException("User with username %s can not post a comment since it does not exists!".formatted(username)); }
+        if (user.isEmpty()) { throw new EntityDoesNotExistsException("User with username %s can not post a comment since it does not exists!".formatted(username)); }
         List<Comment> commentList = commentRepository.findByUserId(user.get().getId());
         return commentList.stream().map(this::createDTO).toList();
     }
 
     @Override
-    public List<CommentDTO> getCommentOfUser(Long userId) throws UserNotFoundException {
+    public List<CommentDTO> getCommentOfUser(Long userId) throws EntityDoesNotExistsException {
         Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) { throw new UserNotFoundException(userId); }
+        if (user.isEmpty()) { throw new EntityDoesNotExistsException(userId); }
         List<Comment> commentList = commentRepository.findByUserId(userId);
         return commentList.stream().map(this::createDTO).toList();
     }
 
     @Override
-    public List<CommentDTO> getCommentOfArticle(String slug) throws ArticleDoNotExistsException {
+    public List<CommentDTO> getCommentOfArticle(String slug) throws EntityDoesNotExistsException {
         Optional<Article> article = articleRepository.findBySlug(slug);
-        if (article.isEmpty()) { throw new ArticleDoNotExistsException("Article with slug %s can not have any comments since it does not even exists!".formatted(slug)); }
+        if (article.isEmpty()) { throw new EntityDoesNotExistsException("Article with slug %s can not have any comments since it does not even exists!".formatted(slug)); }
         List<Comment> commentList = commentRepository.findByArticleId(article.get().getId());
         return commentList.stream().map(this::createDTO).toList();
     }
 
     @Override
-    public List<CommentDTO> getCommentOfArticle(Long articleId) throws ArticleDoNotExistsException {
+    public List<CommentDTO> getCommentOfArticle(Long articleId) throws EntityDoesNotExistsException {
         Optional<Article> article = articleRepository.findById(articleId);
-        if (article.isEmpty()) { throw new ArticleDoNotExistsException(articleId); }
+        if (article.isEmpty()) { throw new EntityDoesNotExistsException(articleId); }
         List<Comment> commentList = commentRepository.findByArticleId(articleId);
         return commentList.stream().map(this::createDTO).toList();
     }

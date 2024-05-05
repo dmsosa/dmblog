@@ -22,6 +22,7 @@ import com.duvi.blogservice.repository.relations.ArticleUserRepository;
 import com.duvi.blogservice.service.ArticleService;
 import com.duvi.blogservice.service.CommentService;
 import com.duvi.blogservice.service.UserService;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -175,10 +176,29 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void deleteArticleBySlug(String articleSlug) throws EntityDoesNotExistsException {
-        if (!articleRepository.existsBySlug(articleSlug)) {
+        Optional<Article> optionalArticle = articleRepository.findBySlug(articleSlug);
+        if (optionalArticle.isEmpty()) {
             throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(articleSlug));
         }
-        articleRepository.deleteBySlug(articleSlug);
+
+        //Delete all tag relations
+        Article article = optionalArticle.get();
+        ArticleTagId articleTagId = new ArticleTagId();
+        articleTagId.setArticleId(article.getId());
+        ArticleTag articleTagRelation = new ArticleTag();
+        articleTagRelation.setId(articleTagId);
+        List<ArticleTag> artTagRelation = catsRepository.findAll(Example.of(articleTagRelation));
+        catsRepository.deleteAll(artTagRelation);
+
+        //Delete all favorite user relations
+        ArticleUserId articleUserId = new ArticleUserId();
+        articleUserId.setArticleId(article.getId());
+        ArticleUser articleUserRelation = new ArticleUser();
+        articleUserRelation.setId(articleUserId);
+        List<ArticleUser> relations = favsRepository.findAll(Example.of(articleUserRelation));
+        favsRepository.deleteAll(relations);
+
+        articleRepository.delete(article);
     }
 
     //Operations with Author
