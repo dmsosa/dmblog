@@ -25,7 +25,7 @@ function FormFieldset(
         placeholder?: string | null,
         required?: boolean,
         type: string,
-        value: string,
+        value?: any,
     }
 ) {
     return(

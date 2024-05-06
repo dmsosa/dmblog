@@ -23,7 +23,7 @@ function CommentList({ comments, setCommentData } : {
     
     : 
     
-    <div>No comments yet</div>
+    <div className="no-comments">No comments yet</div>
 }
 
 export default CommentList; 

@@ -1,34 +1,46 @@
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import FormFieldset from "../../FormFieldset";
 
-import { getArticleBySlug, setArticle } from "../../../service/articleService";
+import { getArticleBySlug, setArticle, uploadImageForArticle } from "../../../service/articleService";
 import {  useLocation, useNavigate, useParams } from "react-router-dom";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
 import { AxiosError } from "axios";
 import { TArticle } from "../../../types/Article";
 import MDEditor, { ContextStore } from "@uiw/react-md-editor";
+import ErrorMessages from "./ErrorMessages";
 
+//Custom types
 type TForm = {
     title: string,
     description: string,
     body: string,
-    tagList: string[]
+    tagList: string[],
 }
 const emptyForm = {
     title: "",
     description: "",
     body: "",
-    tagList: [""]
+    tagList: [""],
 }
+
+//Component
 function ArticleEditor() {
     const { state } = useLocation();
+    const { slug } = useParams();
+    const navigate = useNavigate();
+
+
     const [{title, description, body, tagList }, setForm ] = useState<TForm>(state || emptyForm); 
-    const [errorMessage, setErrorMessage ] = useState("");
+    const [ backgroundImage, setBackgroundImage ] = useState<File | null>(null);
+    const [errorMessages, setErrorMessages ] = useState<string[]>([]);
+
     const { authState } = useAuth() as TAuthContext;
     const { headers, isAuth, loggedUser } = authState;
-    const navigate = useNavigate();
-    const { slug } = useParams();
 
+
+
+
+//use Effect
     useEffect(() => {
         const redirect = () => {navigate("/dmblog", {replace: true, state: null})}
         if (!isAuth) {
@@ -50,43 +62,67 @@ function ArticleEditor() {
 
     }, [headers, isAuth, loggedUser.id, navigate, slug, state]);
 
+
+//handle input changes
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> ) => {
         const name = e.target.name;
         const value = e.target.value;
         setForm((prev: TForm) =>  ({...prev, [name]:value})); 
     }
+//handle markdown change
     const handleMarkdownChange = (value?: string | undefined, event?: ChangeEvent<HTMLTextAreaElement> | undefined, state?: ContextStore | undefined) => {
         event?.preventDefault()
         const name = state?.textarea ? state.textarea.name : "";
         if (!value) { value = ""};
         setForm((prev: TForm) => ({...prev, [name]:value}));
     }
+//handle tag input
     const handleTagInput = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setForm((prev: TForm) =>  ({...prev, tagList: value.split(/, | /)})); 
     }
+//handle image change
+    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files !== null) {
+            setBackgroundImage(e.target.files[e.target.files.length-1]);
+        }
+    }
+//handle submit
     const handleSubmit = (e: MouseEvent<HTMLFormElement> ) => {
         e.preventDefault();
-        setArticle({ userId: loggedUser.id, title, description, body, artSlug: slug || null, tagList, headers })
-        .then((article: TArticle) => {navigate(`/dmblog/article/${article.slug}`)})
-        .catch((error: AxiosError) => { handleError(error) })
+        if (backgroundImage != null) {
+            uploadImageForArticle({ backgroundImage, title, headers})
+            .then((message) => {
+                console.log(message);
+                //set article
+                setArticle({ userId: loggedUser.id, title, description, body, artSlug: slug || null, tagList, headers })
+                .then((article: TArticle) => {navigate(`/dmblog/article/${article.slug}`)})
+                .catch((error: AxiosError) => { handleError(error) })
+            }
+            )
+            .catch(
+                (error) => console.log(error)
+            )
+        } else {
+            setArticle({ userId: loggedUser.id, title, description, body, artSlug: slug || null, tagList, headers })
+            .then((article: TArticle) => {navigate(`/dmblog/article/${article.slug}`)})
+            .catch((error: AxiosError) => { handleError(error) })
+        }
     }
     const handleError = (e: AxiosError) => {
         var message = e.name + " caused by " + e.cause + ", message: " + e.message;
-        setErrorMessage(message);
+        setErrorMessages((prev) => [...prev, message]);
     }
     return (
         <>
-            
-                {errorMessage && 
+            {errorMessages.length > 0 && 
                     <div className="col">
                         <h1>Error!</h1>
-                        <p className="error-message">{errorMessage}</p>
                     </div>}
             <div className="col">
                 <form className="article-form" onSubmit={handleSubmit}> 
                     <fieldset>
-                            {errorMessage && <h1>{errorMessage}</h1>}
+                            <ErrorMessages errorList={errorMessages}/>
                             <FormFieldset
                             type="text"
                             name="title"
@@ -121,6 +157,13 @@ function ArticleEditor() {
                             changeHandler={handleTagInput}
                             required={false}
                             title="Article tags"/>
+                            <FormFieldset
+                            type="file"
+                            name="backgroundImage"
+                            placeholder="Select a background image for your article"
+                            title="Background Image"
+                            changeHandler={handleImageChange}
+                            />
                             <button className="btn btn-form" type="submit">
                                 {slug? "Update Article" : "Post Article"}
                             </button>

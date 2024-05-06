@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/users/oauth2/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/articles/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/articles/email").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/articles/images/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/error").permitAll()
                         .anyRequest().authenticated()
                 )

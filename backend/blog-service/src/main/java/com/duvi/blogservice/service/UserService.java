@@ -3,7 +3,7 @@ package com.duvi.blogservice.service;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.RegisterDTO;
 import com.duvi.blogservice.model.dto.SetUserDTO;
-import com.duvi.blogservice.model.dto.UserDTO;
+import com.duvi.blogservice.model.dto.UserResponseDTO;
 import com.duvi.blogservice.model.exceptions.EntityAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
 import org.springframework.stereotype.Service;
@@ -20,26 +20,26 @@ public interface UserService {
     boolean isFollowing(Long userId, String loggedUsername);
 
     //Create DTOS
-    UserDTO createDTO(User user);
+    UserResponseDTO createDTO(User user);
 
     //Basic CRUD
-    List<UserDTO> getAllUsers();
-    UserDTO createUser(RegisterDTO userDTO) throws EntityAlreadyExistsException;
-    UserDTO findUserById(Long userId) throws EntityDoesNotExistsException;
-    UserDTO findUserByUsername(String username) throws EntityDoesNotExistsException;
-    UserDTO findUserByEmail(String email) throws EntityDoesNotExistsException;
+    List<UserResponseDTO> getAllUsers();
+    UserResponseDTO createUser(RegisterDTO userDTO) throws EntityAlreadyExistsException;
+    UserResponseDTO findUserById(Long userId) throws EntityDoesNotExistsException;
+    UserResponseDTO findUserByUsername(String username) throws EntityDoesNotExistsException;
+    UserResponseDTO findUserByEmail(String email) throws EntityDoesNotExistsException;
     //Login look for Username and Email at once
-    UserDTO findUserByLogin(String login) throws EntityDoesNotExistsException;
-    UserDTO updateUser(String oldUsername, SetUserDTO userDTO);
+    UserResponseDTO findUserByLogin(String login) throws EntityDoesNotExistsException;
+    UserResponseDTO updateUser(String oldUsername, SetUserDTO userDTO);
     void deleteUser(Long userId) throws EntityDoesNotExistsException;
 
     //Operations with Followers
-    UserDTO followUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException;
-    UserDTO unfollowUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException;
+    UserResponseDTO followUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException;
+    UserResponseDTO unfollowUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException;
     public Integer findFollowersCount(Long userId);
 
-    public List<UserDTO> findFollowersOf(Long userId);
+    public List<UserResponseDTO> findFollowersOf(Long userId);
     public Integer findFollowingCount(Long userId);
-    public List<UserDTO> findFollowingOf(Long userId);
+    public List<UserResponseDTO> findFollowingOf(Long userId);
 
 }

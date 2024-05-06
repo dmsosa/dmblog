@@ -92,15 +92,44 @@ export async function setArticle({userId, title, description, body, artSlug, tag
             method: artSlug? "PUT":"POST",
             url: artSlug? `/slug/${artSlug}`:"/global",
             headers: headers || {},
-            data: artSlug? { userId, title, description, body, slug: slugify(title), tagList } : 
-            { userId, title, description, body, slug: slugify(title), tagList }
+            data:{ userId, title, description, body, slug: slugify(title), tagList }
         })
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);
-        throw (error)
+        throw (error);
     }
+}
 
+export async function uploadImageForArticle({ backgroundImage, title, headers } : { backgroundImage: File, title: string, headers: object | null }) : Promise<string> {
+    try {
+        const slug = slugify(title);
+        const formData = new FormData();
+        formData.append("file", backgroundImage);
+        console.log(backgroundImage.name)
+        console.log(formData.getAll("file")[0].toString)
+
+        const {data} =  await instance.post(
+            `/images/${slug}`, formData, { 
+                headers: {...headers, "Content-Type": "multipart/form-data"}
+            }
+        )
+        return data;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw (error);
+    }
+}
+
+export async function getBackgroundImage({ slug } : { slug: string }) : Promise<string> {
+    try {
+        //this will return the URL of the image
+        const {data} =  await instance.get(`/images/${slug}`);
+        return data;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw (error);
+    }
 }
 
 //Get article by slug

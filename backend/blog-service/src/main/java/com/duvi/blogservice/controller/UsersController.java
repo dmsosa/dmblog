@@ -57,7 +57,7 @@ public class UsersController {
         String bearerToken = headers.get("Authorization").getFirst();
         String token = bearerToken.replace("Bearer ", "");
         String username = tokenService.validateToken(token);
-        UserDTO user = userService.findUserByUsername(username);
+        UserResponseDTO user = userService.findUserByUsername(username);
         user = user.withFollowing(userService.isFollowing(user.id(), username));
         AuthResponseDTO response = new AuthResponseDTO(token, user);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -68,13 +68,13 @@ public class UsersController {
         if (!userService.existsByLogin(loginDTO.login())) {
             throw new EntityDoesNotExistsException("User with login '%s' do not exists!".formatted(loginDTO.login()));
         }
-        UserDTO loggedUser = userService.findUserByLogin(loginDTO.login());
+        UserResponseDTO loggedUser = userService.findUserByLogin(loginDTO.login());
         var usernamePassword = new UsernamePasswordAuthenticationToken(loggedUser.username(), loginDTO.password());
         Authentication auth = authenticationManager.authenticate(usernamePassword);
         User user = (User) auth.getPrincipal();
         String token = tokenService.generateToken(user);
-        UserDTO userDTO = userService.createDTO(user);
-        AuthResponseDTO responseDTO = new AuthResponseDTO(token, userDTO);
+        UserResponseDTO userResponseDTO = userService.createDTO(user);
+        AuthResponseDTO responseDTO = new AuthResponseDTO(token, userResponseDTO);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
@@ -82,12 +82,12 @@ public class UsersController {
     public ResponseEntity<AuthResponseDTO> registerUser(@RequestBody RegisterDTO registerDTO) throws EntityAlreadyExistsException {
         //User service will check if username and email are available, and
         // encrypt the password before storing the new user into the database
-        UserDTO createdUser = userService.createUser(registerDTO);
+        UserResponseDTO createdUser = userService.createUser(registerDTO);
         var authToken = new UsernamePasswordAuthenticationToken(createdUser.username(), registerDTO.password());
         Authentication auth = authenticationManager.authenticate(authToken);
         String token = tokenService.generateToken((User) auth.getPrincipal());
-        UserDTO userDTO = userService.createDTO((User) auth.getPrincipal());
-        AuthResponseDTO responseDTO = new AuthResponseDTO(token, userDTO);
+        UserResponseDTO userResponseDTO = userService.createDTO((User) auth.getPrincipal());
+        AuthResponseDTO responseDTO = new AuthResponseDTO(token, userResponseDTO);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
@@ -132,9 +132,9 @@ public class UsersController {
 
 
     @GetMapping("/")
-    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestHeader HttpHeaders headers) {
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers(@RequestHeader HttpHeaders headers) {
         String token = headers.getFirst("Authorization");
-        List<UserDTO> users = userService.getAllUsers();
+        List<UserResponseDTO> users = userService.getAllUsers();
 
         if (token != null) {
             token = token.replace("Bearer ", "");
@@ -146,9 +146,9 @@ public class UsersController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
     @GetMapping("/find/{userId}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long userId, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
         String token = headers.getFirst("Authorization");
-        UserDTO user = userService.findUserById(userId);
+        UserResponseDTO user = userService.findUserById(userId);
 
         if (token != null) {
             token = token.replace("Bearer ", "");
@@ -159,32 +159,32 @@ public class UsersController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
+    public ResponseEntity<UserResponseDTO> getUserByUsername(@PathVariable String username, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
         String token = headers.getFirst("Authorization");
-        UserDTO userDTO = userService.findUserByUsername(username);
+        UserResponseDTO userResponseDTO = userService.findUserByUsername(username);
 
         if (token != null) {
             token = token.replace("Bearer ", "");
             String loggedUsername = tokenService.validateToken(token);
-            userDTO = userDTO.withFollowing(userService.isFollowing(userDTO.id(), loggedUsername));
+            userResponseDTO = userResponseDTO.withFollowing(userService.isFollowing(userResponseDTO.id(), loggedUsername));
         }
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
     @PutMapping("/")
     public ResponseEntity<AuthResponseDTO> updateUser(@RequestBody SetUserDTO newUserDTO, @RequestHeader HttpHeaders headers ) {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String username = tokenService.validateToken(token);
-        UserDTO userDTO = userService.updateUser(username, newUserDTO);
+        UserResponseDTO userResponseDTO = userService.updateUser(username, newUserDTO);
         var authToken = new UsernamePasswordAuthenticationToken(newUserDTO.username(), newUserDTO.password());
         Authentication authentication = authenticationManager.authenticate(authToken);
         String newToken = tokenService.generateToken((User) authentication.getPrincipal() );
-        AuthResponseDTO response = new AuthResponseDTO(newToken, userDTO);
+        AuthResponseDTO response = new AuthResponseDTO(newToken, userResponseDTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/followers/{userId}")
-    public ResponseEntity<List<UserDTO>> getFollowersOf(@PathVariable Long userId, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<List<UserResponseDTO>> getFollowersOf(@PathVariable Long userId, @RequestHeader HttpHeaders headers) {
         String token = headers.getFirst("Authorization");
-        List<UserDTO> followers = userService.findFollowersOf(userId);
+        List<UserResponseDTO> followers = userService.findFollowersOf(userId);
 
         if (token != null) {
             token = token.replace("Bearer ", "");
@@ -196,9 +196,9 @@ public class UsersController {
         return new ResponseEntity<>(followers, HttpStatus.OK);
     }
     @GetMapping("/following/{userId}")
-    public ResponseEntity<List<UserDTO>> getFollowingOf(@PathVariable Long userId, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<List<UserResponseDTO>> getFollowingOf(@PathVariable Long userId, @RequestHeader HttpHeaders headers) {
         String token = headers.getFirst("Authorization");
-        List<UserDTO> following = userService.findFollowingOf(userId);
+        List<UserResponseDTO> following = userService.findFollowingOf(userId);
         if (token != null) {
             token = token.replace("Bearer ", "");
             String loggedUsername = tokenService.validateToken(token);
@@ -211,17 +211,17 @@ public class UsersController {
 
 
     @PostMapping("/follow/{username}")
-    public ResponseEntity<UserDTO> followUser(@PathVariable String username, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
+    public ResponseEntity<UserResponseDTO> followUser(@PathVariable String username, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String fromUsername = tokenService.validateToken(token);
-        UserDTO toUser = userService.followUser(fromUsername, username);
+        UserResponseDTO toUser = userService.followUser(fromUsername, username);
         return new ResponseEntity<>(toUser, HttpStatus.OK);
     }
     @DeleteMapping("/follow/{username}")
-    public ResponseEntity<UserDTO> unfollowUser(@PathVariable String username, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
+    public ResponseEntity<UserResponseDTO> unfollowUser(@PathVariable String username, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String fromUsername = tokenService.validateToken(token);
-        UserDTO toUser = userService.unfollowUser(fromUsername, username);
+        UserResponseDTO toUser = userService.unfollowUser(fromUsername, username);
         return new ResponseEntity<>(toUser, HttpStatus.OK);
     }
 

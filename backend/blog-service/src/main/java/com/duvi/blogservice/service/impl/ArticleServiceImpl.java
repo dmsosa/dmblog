@@ -1,13 +1,17 @@
 package com.duvi.blogservice.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.api.ApiResponse;
+import com.cloudinary.utils.ObjectUtils;
 import com.duvi.blogservice.model.Article;
 import com.duvi.blogservice.model.Tag;
 import com.duvi.blogservice.model.User;
-import com.duvi.blogservice.model.dto.ArticleDTO;
+import com.duvi.blogservice.model.dto.ArticleResponseDTO;
 import com.duvi.blogservice.model.dto.SetArticleDTO;
-import com.duvi.blogservice.model.dto.UserDTO;
+import com.duvi.blogservice.model.dto.UserResponseDTO;
 import com.duvi.blogservice.model.exceptions.EntityAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
+import com.duvi.blogservice.model.exceptions.ImageException;
 import com.duvi.blogservice.model.exceptions.TagNotFoundException;
 import com.duvi.blogservice.model.relations.ArticleTag;
 import com.duvi.blogservice.model.relations.ArticleTagId;
@@ -22,10 +26,13 @@ import com.duvi.blogservice.repository.relations.ArticleUserRepository;
 import com.duvi.blogservice.service.ArticleService;
 import com.duvi.blogservice.service.CommentService;
 import com.duvi.blogservice.service.UserService;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -56,12 +63,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     //CreateDTO
     @Override
-    public ArticleDTO createDTO(Article article) {
+    public ArticleResponseDTO createDTO(Article article) {
 
         List<String> tagList = this.getTagsOf(article.getSlug()).stream().map((tag) -> tag.getName()).toList();
         Integer favsCount = 0;
         Boolean isFav = false;
-        UserDTO author = null;
+        UserResponseDTO author = null;
 
         if (article.getFavUsers() != null) {
             favsCount = article.getFavUsers().size();
@@ -71,7 +78,7 @@ public class ArticleServiceImpl implements ArticleService {
         } catch (EntityDoesNotExistsException unfe) {
         }
 
-        return new ArticleDTO(
+        return new ArticleResponseDTO(
                 article.getId(),
                 author,
                 article.getTitle(),
@@ -95,21 +102,23 @@ public class ArticleServiceImpl implements ArticleService {
     }
     //Basic CRUD Operations
     @Override
-    public List<ArticleDTO> getArticlesSorted(){
+    public List<ArticleResponseDTO> getArticlesSorted(){
         List<Article> articleList = articleRepository.findAll(Sort.by(Sort.Direction.DESC, "updatedAt"));
         return articleList.stream().map(article -> createDTO(article)).toList();
     }
     @Override
-    public List<ArticleDTO> getArticles()  {
+    public List<ArticleResponseDTO> getArticles()  {
         List<Article> articleList = articleRepository.findAll();
         return articleList.stream().map(article -> createDTO(article)).toList();
     }
     @Override
-    public ArticleDTO createArticle(SetArticleDTO articleDTO) throws EntityAlreadyExistsException, EntityDoesNotExistsException {
+    public ArticleResponseDTO createArticle(SetArticleDTO articleDTO) throws EntityAlreadyExistsException, EntityDoesNotExistsException {
         if (!articleRepository.existsByTitle(articleDTO.title())) {
+            //set author
             User user = userRepository.findById(articleDTO.userId()).get();
             Article article = new Article(articleDTO, user);
             articleRepository.save(article);
+            //set tags
             for (String tag : articleDTO.tagList()) {
                 this.setTag(articleDTO.slug(), tag);
             }
@@ -119,7 +128,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDTO getArticleBySlug(String articleSlug) throws EntityDoesNotExistsException {
+    public ArticleResponseDTO getArticleBySlug(String articleSlug) throws EntityDoesNotExistsException {
         Optional<Article> optArticle = articleRepository.findBySlug(articleSlug);
         if (optArticle.isEmpty()) {
             throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(articleSlug));
@@ -128,7 +137,7 @@ public class ArticleServiceImpl implements ArticleService {
         return createDTO(article);
     }
     @Override
-    public ArticleDTO getArticleById(Long id) throws EntityDoesNotExistsException {
+    public ArticleResponseDTO getArticleById(Long id) throws EntityDoesNotExistsException {
         Optional<Article> optionalArticle = articleRepository.findById(id);
         if (optionalArticle.isPresent()) {
             return createDTO(optionalArticle.get());
@@ -136,7 +145,7 @@ public class ArticleServiceImpl implements ArticleService {
         throw new EntityDoesNotExistsException(id);
     }
     @Override
-    public ArticleDTO getArticleByTitle(String title) throws EntityDoesNotExistsException {
+    public ArticleResponseDTO getArticleByTitle(String title) throws EntityDoesNotExistsException {
         Optional<Article> optionalArticle = articleRepository.findByTitle(title);
 
         if (optionalArticle.isPresent()) {
@@ -146,7 +155,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDTO updateArticle(Long articleId, SetArticleDTO articleDTO) throws EntityDoesNotExistsException {
+    public ArticleResponseDTO updateArticle(Long articleId, SetArticleDTO articleDTO) throws EntityDoesNotExistsException {
         Optional<Article> optionalArticle = articleRepository.findById(articleId);
         if (optionalArticle.isEmpty()) {
             throw new EntityDoesNotExistsException(articleId);
@@ -164,7 +173,7 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.deleteById(id);
     }
     @Override
-    public ArticleDTO updateArticleBySlug(String articleSlug, SetArticleDTO articleDTO) throws EntityDoesNotExistsException {
+    public ArticleResponseDTO updateArticleBySlug(String articleSlug, SetArticleDTO articleDTO) throws EntityDoesNotExistsException {
         Optional<Article> optionalArticle = articleRepository.findBySlug(articleSlug);
         if (optionalArticle.isEmpty()) {
             throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(articleSlug));
@@ -203,7 +212,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     //Operations with Author
     @Override
-    public List<ArticleDTO> getByAuthor(String username) throws EntityDoesNotExistsException {
+    public List<ArticleResponseDTO> getByAuthor(String username) throws EntityDoesNotExistsException {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty() ) {
             throw new EntityDoesNotExistsException("User with username: %s does not exist!".formatted(username));
@@ -216,7 +225,7 @@ public class ArticleServiceImpl implements ArticleService {
     //Operations with Users
 
     @Override
-    public List<UserDTO> getFavUsers(String slug) throws EntityDoesNotExistsException {
+    public List<UserResponseDTO> getFavUsers(String slug) throws EntityDoesNotExistsException {
         if (!articleRepository.existsBySlug(slug)) {
             throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
         }
@@ -227,7 +236,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDTO setFavorite(String slug, String username) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
+    public ArticleResponseDTO setFavorite(String slug, String username) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
         if (!articleRepository.existsBySlug(slug)) {
             throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
         }
@@ -242,7 +251,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDTO removeFavorite(String slug, String username) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
+    public ArticleResponseDTO removeFavorite(String slug, String username) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
         if (!articleRepository.existsBySlug(slug)) {
             throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
         }
@@ -268,7 +277,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleDTO> getFavArticles(String username) throws EntityDoesNotExistsException {
+    public List<ArticleResponseDTO> getFavArticles(String username) throws EntityDoesNotExistsException {
         if (!userRepository.existsByUsername(username)) {
             throw new EntityDoesNotExistsException("User with username: %s does not exist!".formatted(username));
         }
@@ -280,7 +289,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     //Operations with tags
     @Override
-    public List<ArticleDTO> getArticlesByTag(String tagName) throws TagNotFoundException {
+    public List<ArticleResponseDTO> getArticlesByTag(String tagName) throws TagNotFoundException {
         if (!tagRepository.existsByName(tagName)) {
             throw new TagNotFoundException(tagName);
         }
@@ -302,7 +311,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDTO setTag(String slug, String tagName) throws EntityDoesNotExistsException {
+    public ArticleResponseDTO setTag(String slug, String tagName) throws EntityDoesNotExistsException {
         if (!articleRepository.existsBySlug(slug)) {
             throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
         }
@@ -333,7 +342,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDTO removeTag(String slug, String tagName) throws EntityDoesNotExistsException {
+    public ArticleResponseDTO removeTag(String slug, String tagName) throws EntityDoesNotExistsException {
         if (!articleRepository.existsBySlug(slug)) {
             throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
         }
@@ -344,6 +353,51 @@ public class ArticleServiceImpl implements ArticleService {
             catsRepository.delete(relation.get());
         }
         return createDTO(articleRepository.findBySlug(slug).get());
+    }
+
+    @Override
+    public String uploadBackgroundImage(MultipartFile backgroundImage, String articleSlug) throws ImageException {
+        Dotenv dotenv = Dotenv.load();
+        String cloudinaryURL = dotenv.get("CLOUDINARY_URL");
+        if (cloudinaryURL == null) {
+            return "There is no cloudinary API to upload images with!";
+        }
+        Cloudinary cloudinary = new Cloudinary(cloudinaryURL);
+        cloudinary.config.secure = true;
+        String publicId = "background/" + articleSlug + "-image";
+        Map params = ObjectUtils.asMap(
+                "overwrite", true,
+                "public_id", publicId,
+                "unique_filename", "true"
+        );
+        try {
+            Map response = cloudinary.uploader().upload(backgroundImage.getBytes(), params);
+            return "Image uploaded successfully, public_id is: " + response.get("public_id");
+
+        } catch (IOException exception) {
+            throw new ImageException("Couldn't upload image: " + exception.getMessage());
+        }
+    }
+
+    @Override
+    public String getBackgroundImage(String articleSlug) {
+        Dotenv dotenv = Dotenv.load();
+        String cloudinaryURL = dotenv.get("CLOUDINARY_URL");
+        if (cloudinaryURL == null) {
+            return "";
+        }
+        Cloudinary cloudinary = new Cloudinary(cloudinaryURL);
+        cloudinary.config.secure = true;
+        Map options = ObjectUtils.asMap();
+        String publicId = "/background/" + articleSlug + "-image";
+        try {
+            ApiResponse image = cloudinary.api().resource(publicId, options);
+
+            return (String) image.get("secure_url");
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return "";
+        }
     }
 
 

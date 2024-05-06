@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import { TUser } from "../types/User";
 
 export type TAuthState = {
-    headers: object | null,
+    headers:  {[key: string] : string } | null,
     isAuth: boolean,
     loggedUser: TUser;
 }

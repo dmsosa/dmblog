@@ -1,15 +1,11 @@
 package com.duvi.blogservice.model.dto;
 
-import com.duvi.blogservice.model.Article;
-import com.duvi.blogservice.model.User;
-import jakarta.annotation.Nullable;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ArticleDTO(
+public record ArticleResponseDTO(
         Long id,
-        UserDTO author,
+        UserResponseDTO author,
         String title,
         String body,
         String description,
@@ -21,12 +17,12 @@ public record ArticleDTO(
         Boolean isFav
 ) {
 
-    public ArticleDTO withAuthor(UserDTO author) {
-        return new ArticleDTO(id(), author, title(), body(), description(), slug(), tagList(),
+    public ArticleResponseDTO withAuthor(UserResponseDTO author) {
+        return new ArticleResponseDTO(id(), author, title(), body(), description(), slug(), tagList(),
                 createdAt(), updatedAt(), favoritesCount(), isFav());
     }
-    public ArticleDTO withFav(Boolean isFav) {
-        return new ArticleDTO(id(), author(), title(), body(), description(), slug(), tagList(),
+    public ArticleResponseDTO withFav(Boolean isFav) {
+        return new ArticleResponseDTO(id(), author(), title(), body(), description(), slug(), tagList(),
                 createdAt(), updatedAt(), favoritesCount(), isFav);
     }
 

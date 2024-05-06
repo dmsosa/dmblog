@@ -8,10 +8,11 @@ import LoadingPage  from "../../components/LoadingPage";
 import { useEffect, useState } from "react";
 import { TArticle } from "../../types/Article";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
-import { getArticleBySlug } from "../../service/articleService";
+import { getArticleBySlug, getBackgroundImage } from "../../service/articleService";
 import { errorHandler } from "../../service/handleError";
 import { logoutUser } from "../../service/userService";
 import MDEditor from "@uiw/react-md-editor";
+
 
 
 function Article() {
@@ -24,6 +25,8 @@ function Article() {
     const [ loading, setLoading ] = useState(false);
     const [ article, setArticle ] = useState<TArticle>(state || {});
     const { title, body, createdAt } = article;
+    const [backgroundImage, setBackgroundImage] = useState("");
+    const [backgroundColor, setBackgroundColor] = useState("");
     //navigate and authState
     const navigate = useNavigate();
     const { authState, setAuthState } = useAuth() as TAuthContext;
@@ -35,25 +38,37 @@ function Article() {
         setAuthState(logoutUser());
     }
 
+    //Css styles
+    const backgroundStyles = {
+        backgroundColor: backgroundColor.length > 0 ? backgroundColor : "rgba(153, 255, 51, 1)",
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundPosition: "top",
+        backgroundSize: "45%",
+        backgroundRepeat: "no-repeat", 
+        display: "block", 
+        height: "25rem"
+    };
+
+    //use Effect
     useEffect(() => {
         if (!slug  || state ) return;
         setLoading(true);
 
-        //if we only have the slug, we get the article
         getArticleBySlug({slug})
         .then((article) => {
-            setArticle(article);            
+            setArticle(article); 
+            getBackgroundImage({slug}).then((url) => {console.log(url); setBackgroundImage(url)}).catch((err) => errorHandler(err));           
         })
         .catch((error) => { 
             errorHandler(error)
             const status = error.response?.status;
             if (status === 406) {
                 handleTokenExpired()
-            } else {
+            } else if (status === 404 ) {
                 navigate("/dmblog/not-found", { replace: true })
             }
         })
-        .finally(() => { setLoading(false); console.log(article.author);
+        .finally(() => { setLoading(false);
         
          })
     
@@ -62,8 +77,9 @@ function Article() {
     return (
         loading ? <LoadingPage/> : !!article &&
         <div className="container article-page">
-            <BannerContainer>
-                <h1>{title}</h1>
+            <BannerContainer 
+            title={title}
+            backgroundStyles={backgroundStyles}>
             </BannerContainer>
             <ArticleMeta
                 createdAt={createdAt}

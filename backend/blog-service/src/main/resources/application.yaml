@@ -54,8 +54,6 @@ spring:
 mail:
   username: ${MAIL_USERNAME}
   password: ${MAIL_PASSWORD}
-#Cloudinary for storing large images
-cloudinaryUrl: ${CLOUDINARY_URL}
 logging:
   level:
     org.hibernate.sql: TRACE

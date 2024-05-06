@@ -3,7 +3,7 @@ package com.duvi.blogservice.service.impl;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.RegisterDTO;
 import com.duvi.blogservice.model.dto.SetUserDTO;
-import com.duvi.blogservice.model.dto.UserDTO;
+import com.duvi.blogservice.model.dto.UserResponseDTO;
 import com.duvi.blogservice.model.exceptions.EntityAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
 import com.duvi.blogservice.model.relations.UserFollower;
@@ -38,10 +38,10 @@ public class UserServiceImpl implements UserService {
 
     //Create DTOS, by default isFollowing is set to false
     @Override
-    public UserDTO createDTO(User user) {
+    public UserResponseDTO createDTO(User user) {
         Integer followingCount = this.findFollowingCount(user.getId());
         Integer followersCount = this.findFollowersCount(user.getId());
-        return new UserDTO(user.getId(), user.getUsername(),
+        return new UserResponseDTO(user.getId(), user.getUsername(),
                 user.getEmail(), user.getPassword(),
                 user.getBio(), user.getImage(),
                 followersCount, followingCount,
@@ -51,13 +51,13 @@ public class UserServiceImpl implements UserService {
     //Basic CRUD
         //GET
     @Override
-    public List<UserDTO> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
         List<User> userList = userRepository.findAll();
-        List<UserDTO> userDTOS = userList.stream().map(this::createDTO).toList();
-        return userDTOS;
+        List<UserResponseDTO> userResponseDTOS = userList.stream().map(this::createDTO).toList();
+        return userResponseDTOS;
     }
     @Override
-    public UserDTO findUserById(Long userId) throws EntityDoesNotExistsException {
+    public UserResponseDTO findUserById(Long userId) throws EntityDoesNotExistsException {
         if (!userRepository.existsById(userId)) {
             throw new EntityDoesNotExistsException(userId);
         }
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findUserByUsername(String username) throws EntityDoesNotExistsException {
+    public UserResponseDTO findUserByUsername(String username) throws EntityDoesNotExistsException {
         Optional<User> optUser = userRepository.findByUsername(username);
         if (optUser.isEmpty()) {
             throw new EntityDoesNotExistsException("User with username '%s' do not exists!".formatted(username));
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findUserByEmail(String email) throws EntityDoesNotExistsException {
+    public UserResponseDTO findUserByEmail(String email) throws EntityDoesNotExistsException {
         Optional<User> optUser = userRepository.findByEmail(email);
         if (optUser.isEmpty()) {
             throw new EntityDoesNotExistsException("User with email '%s' do not exists!".formatted(email));
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findUserByLogin(String login) throws EntityDoesNotExistsException {
+    public UserResponseDTO findUserByLogin(String login) throws EntityDoesNotExistsException {
 
         if (!(userRepository.existsByUsername(login) || userRepository.existsByEmail(login))) {
             throw new EntityDoesNotExistsException("User with login '%s' do not exists!".formatted(login));
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
 
     //POST
     @Override
-    public UserDTO createUser(RegisterDTO userDTO) throws EntityAlreadyExistsException {
+    public UserResponseDTO createUser(RegisterDTO userDTO) throws EntityAlreadyExistsException {
         if (userRepository.existsByUsername(userDTO.username())) {
             throw new EntityAlreadyExistsException("User with username %s already exists!".formatted(userDTO.username()));
         }
@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
     }
         //PUT
     @Override
-    public UserDTO updateUser(String oldUsername, SetUserDTO userDTO) {
+    public UserResponseDTO updateUser(String oldUsername, SetUserDTO userDTO) {
         User oldUser = userRepository.findByUsername(oldUsername).get();
         String encryptedPassword = new BCryptPasswordEncoder().encode(userDTO.password());
         oldUser.updateUser(userDTO.username(), userDTO.email(), userDTO.image(), userDTO.bio(), encryptedPassword);
@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
 
     //Operations with Followers
     @Override
-    public UserDTO followUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException {
+    public UserResponseDTO followUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException {
         if (!userRepository.existsByUsername(toUsername)) {
             throw new EntityDoesNotExistsException("User with username %s do not exists!".formatted(toUsername));
         }
@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO unfollowUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException {
+    public UserResponseDTO unfollowUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException {
         if (!userRepository.existsByUsername(toUsername)) {
             throw new EntityDoesNotExistsException("User with username %s do not exists!".formatted(toUsername));
         }
@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> findFollowersOf(Long userId) {
+    public List<UserResponseDTO> findFollowersOf(Long userId) {
         List<UserFollower> userFollowerList = followersRepository.findByUserId(userId);
         List<User> followersList = userFollowerList.stream().map(UserFollower::getFollower).toList();
         return followersList.stream().map(this::createDTO).toList();
@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService {
         return  followersRepository.findByFollowerId(userId).size();
     }
     @Override
-    public List<UserDTO> findFollowingOf(Long userId) {
+    public List<UserResponseDTO> findFollowingOf(Long userId) {
         List<UserFollower> userFollowerList = followersRepository.findByFollowerId(userId);
         List<User> followingList = userFollowerList.stream().map(UserFollower::getUser).toList();
         return followingList.stream().map(this::createDTO).toList();

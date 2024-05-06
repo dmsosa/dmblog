@@ -1,7 +1,7 @@
 package com.duvi.blogservice.model.dto;
 
-public record AuthResponseDTO(String token, UserDTO loggedUser) {
-    public AuthResponseDTO withUser(UserDTO loggedUser) {
+public record AuthResponseDTO(String token, UserResponseDTO loggedUser) {
+    public AuthResponseDTO withUser(UserResponseDTO loggedUser) {
         return new AuthResponseDTO(token(), loggedUser);
     }
 }

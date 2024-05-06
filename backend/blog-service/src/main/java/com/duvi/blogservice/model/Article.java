@@ -1,18 +1,16 @@
 package com.duvi.blogservice.model;
 
 
-import com.duvi.blogservice.model.dto.ArticleDTO;
 import com.duvi.blogservice.model.dto.SetArticleDTO;
 import com.duvi.blogservice.model.relations.ArticleTag;
 import com.duvi.blogservice.model.relations.ArticleUser;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
