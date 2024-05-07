@@ -23,7 +23,7 @@ Um dieses projekt zu laufen, folgen die nachsten Schriffte:
 
 1. gehen Sie zu das Ordner "backend/blog-service" und laufen das command `mvnw spring-boot:run`, oder laufen Sie das Backend App. 
 2. Das App mit ein InMemory H2 Database funktioniert, aber du kannst es auch mit ein PostgreSQL Dateibank laufen, du muss nur deine eigene Beglaubigungsschreiben zu dem .env Datei
-3. Go ahead
+3. Go ahead!
 
 ### Erklarung: Wie es funktioniert?
 
