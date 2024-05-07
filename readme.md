@@ -9,6 +9,8 @@ Spring, PostgreSQL, TypeScript, React, Vite
 enthalt auch Docker
 ---
 
+#### Wie kann man dieses Projekt laufen?
+
 Um dieses projekt zu laufen, folgen die nachsten Schriffte:
 
 #### Frontend:
@@ -23,7 +25,13 @@ Um dieses projekt zu laufen, folgen die nachsten Schriffte:
 2. Das App mit ein InMemory H2 Database funktioniert, aber du kannst es auch mit ein PostgreSQL Dateibank laufen, du muss nur deine eigene Beglaubigungsschreiben zu dem .env Datei
 3. Go ahead
 
-#### Frontend:
+### Erklarung: Wie es funktioniert?
+
+#### Backend:
+
+Ich gilt das Backend als besser erklart in einem separaten Repository, sonst wurde dieses Readme unnotig lang werden.
+
+das Backend repo: 
 
 
 ## Extra funktionen:
@@ -36,8 +44,22 @@ Ich mochte hier geschreiben, wie alles das gemacht worden.
 
 Ich habe nicht ein neues Feld zu der Einheit "Artikel" gerstellt, sondern nur alle die Background Bilder unseres Blog zu Cloudinary gesendet, und dann wir laden Sie als notig herunter.
 
-Input: Durch ein HTML Form, die Dateien muss 
+Input: Durch HTML Form
 
-Endpoint 1: Creates ArticleDTO
-Endpoint 2: uploads images to Cloudinary
-Check first if image can be uploaded, if yes then create image, if not then throw exception
+Das frontend machst:
+POST Anfrage, um das Bild hochzuladen
+GET Anfrage, um das Bild zu erhalten
+
+Das backend machst:
+Schrifft 1: zu Cloudinary hochladen
+Schrifft 2: von Cloudinary erhalten
+
+Wenn das Bilder hochgeladen ist, es geht in unsere Cloudinary API gespeichert, dann es kann durch der Slug der Artikel erhalten werden.
+
+Zu-Machen:
+* Der Nutzer der Farbe des Backgrounds wahlen kann
+* Ladenbar zu der Form hinzufugen
+Das Bilder kann mann bewenden
+* Profile Bildern
+
+Das Backend zu Deploy:
