@@ -31,7 +31,7 @@ Um dieses projekt zu laufen, folgen die nachsten Schriffte:
 
 Ich gilt das Backend als besser erklart in einem separaten Repository, sonst wurde dieses Readme unnotig lang werden.
 
-das Backend repo: 
+das Backend repo finden man hier: [dmsosa-backend](https://github.com/dmsosa/dmblog-backend) 
 
 
 ## Extra funktionen:
