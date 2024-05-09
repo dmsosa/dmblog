@@ -185,17 +185,24 @@ public class BlogController {
 
         List<ArticleResponseDTO> articleResponseDTOS = articleService.getByAuthor(username);
         ArticlesResponseDTO response;
-        Long count = (long) articleResponseDTOS.size();
+        Integer count = articleResponseDTOS.size();
+
+        //Crop the list into pieces of 3 by offset
         if (limit != null && offset != null) {
             Integer initOffset = offset*limit;
             Integer endOffset = initOffset + limit;
-            articleResponseDTOS = articleResponseDTOS.subList(initOffset, endOffset);
+            if (endOffset > count) {
+                articleResponseDTOS = articleResponseDTOS.subList(initOffset, count);
+            } else {
+                articleResponseDTOS = articleResponseDTOS.subList(initOffset, endOffset);
+            }
         }
 
+        //We want to know if the logged User is currently following the author of the articles
         articleResponseDTOS = articleResponseDTOS.stream().map(article ->
                 article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
         ).toList();
-        response = new ArticlesResponseDTO(articleResponseDTOS, count);
+        response = new ArticlesResponseDTO(articleResponseDTOS, (long) count);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

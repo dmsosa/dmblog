@@ -1,0 +1,131 @@
+.main {
+    background: linear-gradient(60deg, #112233 10%, #111927 10%, #111927 90%, #112233 90%) no-repeat fixed;
+    padding-top: 8.2rem;
+    color: white;
+}
+
+
+a:not(:disabled) {
+    cursor: pointer;
+}
+a {
+    text-decoration: none;
+    color: white;
+}
+a:hover {
+    color: rgba(153, 255, 51, 1);
+}
+
+.cont {
+    background-color: #000D1C;
+    padding: 0;
+}
+
+
+.cont-header {
+    padding: 0 1rem;
+}
+.cont-content {
+    line-height: 1.75rem;
+    margin: 0 1rem;
+    padding: 1rem;
+}
+.cont-row {
+    padding: 0;
+}
+
+.cont-content h5 {
+    line-height: inherit;
+}
+.cont-content p {
+    margin-top: 1rem;
+    line-height: 1.5rem;
+}
+
+//Image Styles
+
+.cont-img-div {
+    border: #34A200 solid 0.5rem;
+    width: fit-content;
+}
+.cont-img {
+    width: 10rem;
+}
+
+.img-avatar {
+    width:5rem;
+    background-color: red;
+}
+
+//Specific Styles (topic container, banner and forms container)
+
+// Feed container
+
+.page-feed {
+    padding-bottom: 2rem;
+}
+
+.cont-feed {
+    ul {
+        justify-content: left;
+        display: flex;
+        padding: 0;
+    }
+    li {
+        border: #34A200 solid 0.3rem;
+        border-radius: 0.5rem;
+        margin: 0;
+        margin-right: 1rem;
+        &.active {
+            .btn {
+                color: black;
+                background-color: hsl(90, 100%, 60%);
+            }
+        }
+    }
+    .btn-feed {
+        color: white;
+        background-color: transparent;
+        &:active {
+            background-color: hsl(90, 100%, 60%);
+            color: black;
+        }
+        &:focus {
+            box-shadow: 0 0 0.1rem white        ;
+        }   
+
+    }
+}
+
+
+
+// Tag container
+.cont-tags {
+    color: red;
+    max-height: inherit;
+    margin: 0;
+}
+
+.cont-tags>.cont-header {
+    font-variant: small-caps;
+    font-style: italic;
+    color: white;
+    border-bottom: #34A200 solid 0.25rem;
+    height: 3.5rem;
+}
+
+.topic-btn-cont {
+    max-height: 50rem;
+    padding: 0 1rem;
+    margin: 0;
+    overflow-x: hidden;
+}
+.topic-btn {
+    display: block;
+    border: #34A200 solid 0.25rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    background-color: transparent;
+    color: whitesmoke;
+    padding: 0 0.5rem;
+}

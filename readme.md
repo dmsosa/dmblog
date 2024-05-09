@@ -58,6 +58,7 @@ Wenn das Bilder hochgeladen ist, es geht in unsere Cloudinary API gespeichert, d
 
 Zu-Machen:
 * Der Nutzer der Farbe des Backgrounds wahlen kann
+    * ArtikelnForm zu arbeiten
 * Ladenbar zu der Form hinzufugen
 Das Bilder kann mann bewenden
 * Profile Bildern

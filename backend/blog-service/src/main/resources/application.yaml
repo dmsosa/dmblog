@@ -1,4 +1,4 @@
-# datasource: h2
+#datasource: h2
 datasource: postgres
 server:
   port: 8082
@@ -27,7 +27,7 @@ spring:
 #       enabled: true
 ############################################################################################
   datasource:
-    url: jdbc:postgresql://localhost:5432/dmsosa
+    url: ${POSTGRES_URL}
     username: postgres
     password: ${POSTGRES_PASSWORD}
     driverClassName: org.postgresql.Driver

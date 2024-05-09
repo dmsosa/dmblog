@@ -7,6 +7,8 @@ export type TArticle = {
     description: string,
     body: string,
     slug: string,
+    backgroundColor: string | null,
+    emoji: string | null,
     tagList: string[],
     isFav: boolean,
     favoritesCount: number,

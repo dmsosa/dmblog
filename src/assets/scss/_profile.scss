@@ -1,0 +1,110 @@
+// Profile styles
+
+.profile-page {
+    padding-top: 2rem;
+}
+
+.profile-info {
+    .btn-follow>span {
+        display: block;
+    }
+}
+.profile-avatar {
+    display: block;
+    text-align: left;
+    img {
+        margin: 0 auto;
+        border: #112233 solid 0.5rem;
+        border-radius: 25%;
+    }
+    a {
+        font-size: 2.5rem;
+        width: fit-content;
+        font-style: bold;
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+.profile-bio {
+    padding: 0.5rem 1rem;
+    margin: 1rem auto;
+    border: #051d46 1rem solid;
+    background-color: #000D1C;
+    min-height: 20rem;
+    p {
+        line-height: 1rem;
+    }
+}
+.profile-buttons {
+    display: flex;
+    margin: 1rem auto;
+    width: fit-content;
+    .follow-row {
+        margin: 0 1rem;
+        width: auto;
+        .btn.btn-primary {
+            background-color: skyblue;
+        }
+
+    }
+    .btn {
+        margin: 0 0.5rem;
+    }
+    .btn-info {
+        a {
+            color: #000D1C;
+        }
+    }
+    span {
+        text-align: center;
+        height: 2.5rem;
+        width: 100%;
+        display: block;
+        font-style: bold;
+        margin: 0 auto;
+    }
+    .col-12 {
+        margin-bottom: 0.5rem;
+    }
+}
+.author-buttons {
+    max-width: 50%;
+    .btn.btn-primary {
+        &:active {
+            a {
+                color: white;
+            }
+            background-color: transparent;
+        }
+        a {
+            color: #000D1C;
+        }
+    }
+}
+
+.profile-toggler {
+    ul {
+        display: flex;
+        margin: 1rem 0;
+        list-style: none;
+        
+    }
+    li.nav-item {
+        margin: 0 0.5rem;
+        padding: 0 1rem;
+        border-radius: 0.5rem;
+        transition: ease-out 0.1s outline;
+        outline: 0;
+        &:hover {
+            outline: 0.15rem solid #51FF00;
+        }
+        &.active {
+            background-color: greenyellow;
+            a {
+                color: #000D1C;
+            }
+        }
+
+    }
+}

@@ -15,7 +15,6 @@ public class FlywayConfig {
     @Value("${datasource}")
     private String datasource;
 
-
     @Bean
     FlywayConfigurationCustomizer customizer() {
         return configuration -> configuration

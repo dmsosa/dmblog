@@ -31,6 +31,8 @@ public class Article {
     private String body;
     private String description;
     private String slug;
+    private String backgroundColor;
+    private String emoji;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -62,7 +64,13 @@ public class Article {
     @OneToMany(mappedBy = "article")
     private Set<Comment> comments;
 
-
+    public Article(String body, String description, String title, String slug, LocalDateTime createdAt) {
+        this.body = body;
+        this.description = description;
+        this.title = title;
+        this.slug = slug;
+        this.createdAt = createdAt;
+    }
     public Article(SetArticleDTO articleDTO, User user) {
         this.author = user;
         this.body = articleDTO.body();

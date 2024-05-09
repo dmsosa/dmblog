@@ -78,7 +78,11 @@ public class User implements UserDetails {
 
 
     //User methods
-
+    public User(String username, String email, String bio) {
+        this.username = username;
+        this.email = email;
+        this.bio = bio;
+    };
     public User(RegisterDTO userDTO, String encryptedPassword) {
         this.username = userDTO.username();
         this.email = userDTO.email();

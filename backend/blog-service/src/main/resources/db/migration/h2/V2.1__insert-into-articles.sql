@@ -33,3 +33,6 @@ INSERT INTO articles (user_id, body, description, title, slug) VALUES (
 INSERT INTO articles (user_id, body, description, title, slug) VALUES (
 3, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ante lacinia magna ultricies cursus nec non lacus. Praesent blandit sodales semper. Mauris eget leo non erat molestie faucibus luctus sed ex. Duis sollicitudin tellus vitae aliquam cursus. Integer ultricies ultricies erat. Vivamus egestas ac augue nec mattis. Duis posuere bibendum ex vitae placerat. Duis in odio vestibulum, pellentesque odio vitae, egestas nibh.', 'Lorem ipsum dolor sit amet', 'Lorem Ipsum 3.3', 'lorem-ipsum-3-dot3'
 );
+INSERT INTO articles (user_id, body, description, title, slug) VALUES (
+3, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ante lacinia magna ultricies cursus nec non lacus. Praesent blandit sodales semper. Mauris eget leo non erat molestie faucibus luctus sed ex. Duis sollicitudin tellus vitae aliquam cursus. Integer ultricies ultricies erat. Vivamus egestas ac augue nec mattis. Duis posuere bibendum ex vitae placerat. Duis in odio vestibulum, pellentesque odio vitae, egestas nibh.', 'Lorem ipsum dolor sit amet', 'Lorem Ipsum 3.4', 'lorem-ipsum-3-dot4'
+);

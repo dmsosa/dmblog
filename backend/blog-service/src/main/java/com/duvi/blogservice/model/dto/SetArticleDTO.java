@@ -9,11 +9,13 @@ public record SetArticleDTO(
         String title,
         String body,
         String slug,
+        String backgroundColor,
+        String emoji,
         String description,
         List<String> tagList,
         MultipartFile backgroundImage) {
 
     public SetArticleDTO withBackgroundImage(MultipartFile backgroundImage) {
-        return new SetArticleDTO(userId(), title(), body(), slug(), description(), tagList(), backgroundImage);
+        return new SetArticleDTO(userId(), title(), body(), slug(), backgroundColor(), emoji(), description(), tagList(), backgroundImage);
     }
 }

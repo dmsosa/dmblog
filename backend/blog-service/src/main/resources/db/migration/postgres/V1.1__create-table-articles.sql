@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS articles (
     description VARCHAR(2000),
     title VARCHAR(50) NOT NULL UNIQUE,
     slug TEXT,
+    background_color TEXT,
+    emoji TEXT,
     created_at DATE,
     updated_at DATE
 );

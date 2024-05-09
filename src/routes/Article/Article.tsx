@@ -24,9 +24,9 @@ function Article() {
     //loading, article and setArticle
     const [ loading, setLoading ] = useState(false);
     const [ article, setArticle ] = useState<TArticle>(state || {});
-    const { title, body, createdAt } = article;
+    const { title, body, createdAt, backgroundColor } = article;
     const [backgroundImage, setBackgroundImage] = useState("");
-    const [backgroundColor, setBackgroundColor] = useState("");
+    const [currentBackgroundColor, setBackgroundColor] = useState<string>(backgroundColor ? backgroundColor : "#99ff33");
     //navigate and authState
     const navigate = useNavigate();
     const { authState, setAuthState } = useAuth() as TAuthContext;
@@ -39,8 +39,10 @@ function Article() {
     }
 
     //Css styles
+
+
     const backgroundStyles = {
-        backgroundColor: backgroundColor.length > 0 ? backgroundColor : "rgba(153, 255, 51, 1)",
+        backgroundColor: currentBackgroundColor,
         backgroundImage: `url(${backgroundImage})`,
         backgroundPosition: "top",
         backgroundSize: "45%",
@@ -51,35 +53,41 @@ function Article() {
 
     //use Effect
     useEffect(() => {
-        if (!slug  || state ) return;
+        if (!slug) return;
         setLoading(true);
 
-        getArticleBySlug({slug})
-        .then((article) => {
-            setArticle(article); 
-            getBackgroundImage({slug}).then((url) => {console.log(url); setBackgroundImage(url)}).catch((err) => errorHandler(err));           
-        })
-        .catch((error) => { 
-            errorHandler(error)
-            const status = error.response?.status;
-            if (status === 406) {
-                handleTokenExpired()
-            } else if (status === 404 ) {
-                navigate("/dmblog/not-found", { replace: true })
-            }
-        })
-        .finally(() => { setLoading(false);
-        
-         })
-    
-        
+        //if there is state, we only request the background image to the backend
+        if ( state ) {
+            getBackgroundImage({slug})
+            .then((url) => {console.log(url); setBackgroundImage(url)})
+            .catch((err) => errorHandler(err))
+            .finally(() => setLoading(false));
+        } else { // else, we request the article info plus the background image
+            getArticleBySlug({slug})
+            .then((article) => {
+                setArticle(article); 
+                getBackgroundImage({slug}).then((url) => {console.log(url); setBackgroundImage(url)}).catch((err) => errorHandler(err));           
+            })
+            .catch((error) => { 
+                errorHandler(error)
+                const status = error.response?.status;
+                if (status === 406) {
+                    handleTokenExpired()
+                } else if (status === 404 ) {
+                    navigate("/dmblog/not-found", { replace: true })
+                }
+            })
+            .finally(() => { setLoading(false);})
+        }
     },[slug, headers])
     return (
         loading ? <LoadingPage/> : !!article &&
         <div className="container article-page">
             <BannerContainer 
             title={title}
-            backgroundStyles={backgroundStyles}>
+            backgroundStyles={backgroundStyles}
+            setBackgroundColor={setBackgroundColor}
+            >
             </BannerContainer>
             <ArticleMeta
                 createdAt={createdAt}

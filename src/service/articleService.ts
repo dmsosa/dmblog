@@ -77,12 +77,14 @@ export async function toggleFavs({ headers, slug, isFav } : {
 
 
 //createArticle
-export async function setArticle({userId, title, description, body, artSlug, tagList, headers } : {
+export async function setArticle({userId, title, description, body, artSlug, backgroundColor, emoji, tagList, headers } : {
     userId: number | null,
     title: string,
     description: string,
     body: string,
     artSlug: string | null,
+    backgroundColor: string | null,
+    emoji: string | null,
     tagList: string[],
     headers: object | null
 }) : Promise<TArticle> {
@@ -166,6 +168,18 @@ export async function deleteArticleBySlug({slug, headers} : {slug: string, heade
         errorHandler(error as AxiosError);
         throw(error)
     }
+}
 
-
+export async function setBackgroundColor({slug, headers} :  {slug: string, headers: object | null }) : Promise<void> {
+    if (!headers) { headers = {}};
+    try {
+        await instance.request(
+            {
+                url: 
+            }
+        )
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
 }
