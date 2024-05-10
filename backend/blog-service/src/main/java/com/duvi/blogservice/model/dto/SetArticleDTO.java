@@ -15,7 +15,5 @@ public record SetArticleDTO(
         List<String> tagList,
         MultipartFile backgroundImage) {
 
-    public SetArticleDTO withBackgroundImage(MultipartFile backgroundImage) {
-        return new SetArticleDTO(userId(), title(), body(), slug(), backgroundColor(), emoji(), description(), tagList(), backgroundImage);
-    }
+
 }

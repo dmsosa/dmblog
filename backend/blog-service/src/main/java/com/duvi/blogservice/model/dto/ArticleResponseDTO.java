@@ -10,6 +10,9 @@ public record ArticleResponseDTO(
         String body,
         String description,
         String slug,
+        String fontColor,
+        String backgroundColor,
+        String emoji,
         List<String> tagList,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
@@ -18,11 +21,11 @@ public record ArticleResponseDTO(
 ) {
 
     public ArticleResponseDTO withAuthor(UserResponseDTO author) {
-        return new ArticleResponseDTO(id(), author, title(), body(), description(), slug(), tagList(),
+        return new ArticleResponseDTO(id(), author, title(), body(), description(), slug(), fontColor(), backgroundColor(), emoji(), tagList(),
                 createdAt(), updatedAt(), favoritesCount(), isFav());
     }
     public ArticleResponseDTO withFav(Boolean isFav) {
-        return new ArticleResponseDTO(id(), author(), title(), body(), description(), slug(), tagList(),
+        return new ArticleResponseDTO(id(), author(), title(), body(), description(), slug(), fontColor(), backgroundColor(), emoji(), tagList(),
                 createdAt(), updatedAt(), favoritesCount(), isFav);
     }
 

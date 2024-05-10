@@ -7,6 +7,7 @@ export type TArticle = {
     description: string,
     body: string,
     slug: string,
+    fontColor: string | null,
     backgroundColor: string | null,
     emoji: string | null,
     tagList: string[],

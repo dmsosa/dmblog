@@ -24,9 +24,9 @@ function Article() {
     //loading, article and setArticle
     const [ loading, setLoading ] = useState(false);
     const [ article, setArticle ] = useState<TArticle>(state || {});
-    const { title, body, createdAt, backgroundColor } = article;
+    const { title, body, createdAt, fontColor, backgroundColor, emoji } = article;
     const [backgroundImage, setBackgroundImage] = useState("");
-    const [currentBackgroundColor, setBackgroundColor] = useState<string>(backgroundColor ? backgroundColor : "#99ff33");
+
     //navigate and authState
     const navigate = useNavigate();
     const { authState, setAuthState } = useAuth() as TAuthContext;
@@ -42,7 +42,8 @@ function Article() {
 
 
     const backgroundStyles = {
-        backgroundColor: currentBackgroundColor,
+        color: fontColor || "#000D1C",
+        backgroundColor: backgroundColor || "#99ff33",
         backgroundImage: `url(${backgroundImage})`,
         backgroundPosition: "top",
         backgroundSize: "45%",
@@ -59,14 +60,14 @@ function Article() {
         //if there is state, we only request the background image to the backend
         if ( state ) {
             getBackgroundImage({slug})
-            .then((url) => {console.log(url); setBackgroundImage(url)})
+            .then((url) => {setBackgroundImage(url)})
             .catch((err) => errorHandler(err))
             .finally(() => setLoading(false));
         } else { // else, we request the article info plus the background image
             getArticleBySlug({slug})
             .then((article) => {
                 setArticle(article); 
-                getBackgroundImage({slug}).then((url) => {console.log(url); setBackgroundImage(url)}).catch((err) => errorHandler(err));           
+                getBackgroundImage({slug}).then((url) => {setBackgroundImage(url)}).catch((err) => errorHandler(err));           
             })
             .catch((error) => { 
                 errorHandler(error)
@@ -80,13 +81,14 @@ function Article() {
             .finally(() => { setLoading(false);})
         }
     },[slug, headers])
+
     return (
         loading ? <LoadingPage/> : !!article &&
         <div className="container article-page">
             <BannerContainer 
             title={title}
             backgroundStyles={backgroundStyles}
-            setBackgroundColor={setBackgroundColor}
+            emoji={emoji}
             >
             </BannerContainer>
             <ArticleMeta

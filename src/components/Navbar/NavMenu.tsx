@@ -18,6 +18,7 @@ function NavMenu() {
 
     const onClick = () => {
         document.getElementById("navbarSupportedContent")?.classList.toggle("show");
+        document.body.classList.toggle("nonscroll");
     };
 
     return (

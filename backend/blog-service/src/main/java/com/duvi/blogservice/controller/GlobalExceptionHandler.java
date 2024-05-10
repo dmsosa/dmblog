@@ -1,6 +1,7 @@
 package com.duvi.blogservice.controller;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.cloudinary.api.exceptions.NotFound;
 import com.duvi.blogservice.model.exceptions.*;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,10 +47,15 @@ public class GlobalExceptionHandler implements ErrorController {
             EntityDoesNotExistsException unfe = (EntityDoesNotExistsException) exception;
             return eaeeHandler(unfe, headers, status, request);
         } else if (exception instanceof EntityAlreadyExistsException) {
-        HttpStatus status = HttpStatus.CONFLICT;
+            HttpStatus status = HttpStatus.CONFLICT;
             EntityAlreadyExistsException eaee = (EntityAlreadyExistsException) exception;
-        return aaeeHandler(eaee, headers, status, request);
+            return aaeeHandler(eaee, headers, status, request);
+        } else if (exception instanceof NotFound) {
+            HttpStatus status = HttpStatus.NOT_FOUND;
+            NotFound nfException = (NotFound) exception;
+            return rnfeHandler(nfException, headers, status, request);
         }
+
 
         else {
             ObjectError error = new ObjectError("Unexpected Exception", exception.getMessage());
@@ -69,9 +75,14 @@ public class GlobalExceptionHandler implements ErrorController {
         return internalHandler(eaee, body, headers, status, request);
     }
     public ResponseEntity<ApiError> aaeeHandler(EntityAlreadyExistsException aaee, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ObjectError error = new ObjectError("Article Already Exists Exception", aaee.getMessage());
+        ObjectError error = new ObjectError("Entity Already Exists Exception", aaee.getMessage());
         ApiError body = new ApiError(Collections.singletonList(error));
         return internalHandler(aaee, body, headers, status, request);
+    }
+    public ResponseEntity<ApiError> rnfeHandler(NotFound nf, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ObjectError error = new ObjectError("Resource Not Found Exception", nf.getMessage());
+        ApiError body = new ApiError(Collections.singletonList(error));
+        return internalHandler(nf, body, headers, status, request);
     }
 
 

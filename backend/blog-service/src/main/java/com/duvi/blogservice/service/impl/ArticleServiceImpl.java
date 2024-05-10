@@ -2,6 +2,7 @@ package com.duvi.blogservice.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.api.ApiResponse;
+import com.cloudinary.api.exceptions.NotFound;
 import com.cloudinary.utils.ObjectUtils;
 import com.duvi.blogservice.model.Article;
 import com.duvi.blogservice.model.Tag;
@@ -85,6 +86,9 @@ public class ArticleServiceImpl implements ArticleService {
                 article.getBody(),
                 article.getDescription(),
                 article.getSlug(),
+                article.getFontColor(),
+                article.getBackgroundColor(),
+                article.getEmoji(),
                 tagList,
                 article.getCreatedAt(),
                 article.getUpdatedAt(),
@@ -380,7 +384,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public String getBackgroundImage(String articleSlug) {
+    public String getBackgroundImage(String articleSlug) throws NotFound {
         Dotenv dotenv = Dotenv.load();
         String cloudinaryURL = dotenv.get("CLOUDINARY_URL");
         if (cloudinaryURL == null) {
@@ -394,13 +398,45 @@ public class ArticleServiceImpl implements ArticleService {
             ApiResponse image = cloudinary.api().resource(publicId, options);
 
             return (String) image.get("secure_url");
-        } catch (Exception exception) {
+        } catch (NotFound notFound) {
+            throw notFound;
+        }
+        catch (Exception exception) {
             exception.printStackTrace();
             return "";
         }
     }
 
+    @Override
+    public ArticleResponseDTO setFontColor(String slug, String fontColor) throws EntityDoesNotExistsException {
+        Optional<Article> article = articleRepository.findBySlug(slug);
+        if (article.isEmpty()) {
+            throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
+        };
+        Article art = article.get();
+        art.setFontColor(fontColor);
+        return this.createDTO(articleRepository.save(art));
+    }
 
+    @Override
+    public ArticleResponseDTO setBackgroundColor(String slug, String backgroundColor) throws EntityDoesNotExistsException {
+        Optional<Article> article = articleRepository.findBySlug(slug);
+        if (article.isEmpty()) {
+            throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
+        };
+        Article art = article.get();
+        art.setBackgroundColor(backgroundColor);
+        return this.createDTO(articleRepository.save(art));
+    }
 
-
+    @Override
+    public ArticleResponseDTO setEmoji(String slug, String emoji) throws EntityDoesNotExistsException {
+        Optional<Article> article = articleRepository.findBySlug(slug);
+        if (article.isEmpty()) {
+            throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
+        };
+        Article art = article.get();
+        art.setEmoji(emoji);
+        return this.createDTO(articleRepository.save(art));
+    }
 }

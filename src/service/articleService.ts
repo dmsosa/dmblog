@@ -143,7 +143,7 @@ export async function getArticleBySlug({slug } : {slug: string }) : Promise<TArt
         getTagsOf({slug})
         .then((tagList) => data.tagList = tagList)
         .catch((error) => console.log(error))
-
+        console.log(data);
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);
@@ -170,14 +170,53 @@ export async function deleteArticleBySlug({slug, headers} : {slug: string, heade
     }
 }
 
-export async function setBackgroundColor({slug, headers} :  {slug: string, headers: object | null }) : Promise<void> {
+export async function putBackgroundColor({slug, backgroundColor, headers} :  {slug: string, backgroundColor:string, headers: object | null }) : Promise<TArticle> {
     if (!headers) { headers = {}};
     try {
-        await instance.request(
+        const { data } = await instance.request(
             {
-                url: 
+                url: `/color/${slug}`,
+                method: 'POST',
+                params: { 'backgroundColor': backgroundColor },
+                headers: headers 
             }
         )
+        return data;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
+}
+export async function putFontColor({slug, fontColor, headers} :  {slug: string, fontColor:string, headers: object | null }) : Promise<TArticle> {
+    if (!headers) { headers = {}};
+    try {
+        const { data } = await instance.request(
+            {
+                url: `/color/${slug}`,
+                method: 'POST',
+                params: { 'fontColor': fontColor },
+                headers: headers 
+            }
+        )
+        return data;
+    } catch (error) {
+        errorHandler(error as AxiosError);
+        throw(error);
+    }
+}
+
+export async function putEmoji({slug, emoji, headers} :  {slug: string, emoji:string, headers: object | null }) : Promise<TArticle> {
+    if (!headers) { headers = {}};
+    try {
+        const { data } = await instance.request(
+            {
+                url: `/color/${slug}`,
+                method: 'POST',
+                params: { 'emoji': emoji },
+                headers: headers 
+            }
+        )
+        return data;
     } catch (error) {
         errorHandler(error as AxiosError);
         throw(error);

@@ -3,6 +3,7 @@ import NavItem from "../NavItem";
 export function NotLoggedOptions() {
     const onClick = () => {
         document.getElementById("navbarSupportedContent")?.classList.toggle("show");
+        document.body.classList.toggle("nonscroll");
     }
     return (
         <>

@@ -32,6 +32,7 @@ public class Article {
     private String description;
     private String slug;
     private String backgroundColor;
+    private String fontColor;
     private String emoji;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

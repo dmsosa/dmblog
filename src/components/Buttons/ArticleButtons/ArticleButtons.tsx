@@ -1,7 +1,6 @@
 import { SetStateAction } from "react";
 import { TArticle } from "../../../types/Article";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
-import { useParams } from "react-router-dom";
 import AuthorButtons from "../AuthorButtons/AuthorButtons";
 import FavButton from "../FavButton";
 import FollowButton from "../FollowButton/FollowButton";
@@ -16,7 +15,6 @@ function ArticleButtons({ article, setArticle } : {
     const { author } = article;
     const { authState } = useAuth() as TAuthContext;
     const { loggedUser } = authState;
-    const { slug } = useParams();
 
 
     const handleFollow = (author: TUser) => {
@@ -25,9 +23,13 @@ function ArticleButtons({ article, setArticle } : {
     const handleFav = (article: TArticle) => {
         setArticle((prevArticle) => ({...prevArticle, favoritesCount: article.favoritesCount, isFav: article.isFav}))
     }
+    const setArticleWithNewFields = (article: TArticle) => {
+        setArticle((prevArticle) => ({...prevArticle, backgroundColor: article.backgroundColor, emoji: article.emoji}))
+    }
+
     return !!article && !!author && loggedUser.username === author.username ? (
         <>
-            <AuthorButtons {...article } slug={slug}/>
+            <AuthorButtons {...article } setArticleWithNewFields={setArticleWithNewFields}/>
         </>
     ) : (
         <div className="row row-cols-2">      
