@@ -169,15 +169,17 @@
         justify-content: center;
         margin: 0;
         padding: 0rem;
+        padding-bottom: 1rem;
         position: absolute;        
         bottom: 0;
         width: 100%;
         background: linear-gradient( 0deg, #99ff33, transparent);
     }
     img {
-        max-width: 10rem;
+        max-width: 5rem;
     }
     span {
+        padding-left: 1rem;
         font-weight: bold;
         font-size: xx-large;
         vertical-align: middle;
@@ -225,6 +227,10 @@
     border-color: #555 transparent transparent transparent;
 }
 
+.emojiPopup {
+    height: 0;
+}
+//Container styles
 
 .container.article-cont {
     max-width: 100%;

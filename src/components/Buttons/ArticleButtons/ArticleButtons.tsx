@@ -24,7 +24,8 @@ function ArticleButtons({ article, setArticle } : {
         setArticle((prevArticle) => ({...prevArticle, favoritesCount: article.favoritesCount, isFav: article.isFav}))
     }
     const setArticleWithNewFields = (article: TArticle) => {
-        setArticle((prevArticle) => ({...prevArticle, backgroundColor: article.backgroundColor, emoji: article.emoji}))
+        history.replaceState(article, "");
+        setArticle((prevArticle) => ({...prevArticle, fontColor: article.fontColor, backgroundColor: article.backgroundColor, emoji: article.emoji}))
     }
 
     return !!article && !!author && loggedUser.username === author.username ? (

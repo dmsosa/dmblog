@@ -4,8 +4,8 @@
         import { TArticle } from "../../../types/Article";
         import { ChangeEvent, useState } from "react";
         import { errorHandler } from "../../../service/handleError";
-        import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
-
+        import EmojiPicker, { EmojiClickData, EmojiStyle, Theme } from "emoji-picker-react";
+    
         function AuthorButtons({
             title, 
             body, 
@@ -27,6 +27,7 @@
             emoji: string | null
             setArticleWithNewFields: (article: TArticle) => void
         }) {
+
             const { authState } = useAuth() as TAuthContext;
             const { headers, isAuth } = authState;
             const navigate = useNavigate();
@@ -36,6 +37,7 @@
             const [currentFontColor, setFontColor] = useState(fontColor ? fontColor : "black");
             const [currentColor, setColor ] = useState(backgroundColor ? backgroundColor : "#99ff33");
             const [currentEmoji, setEmoji] = useState(emoji ? emoji : "")
+            const [ show, setShow ] = useState(false);
 
             slug = slug || "";
 
@@ -44,7 +46,7 @@
                 if (popupName === "colorPopup") {
                     document.getElementById("colorPopup")?.classList.toggle("show");
                 } else if (popupName === "emojiPopup") {
-                    document.querySelector(".emojiPopup")?.classList.toggle("show");
+                    setShow(!show);
                 }
 
             }
@@ -126,7 +128,12 @@
                     <button className="btn btn-popup" name="emojiPopup" onClick={(e) => showPopup(e.currentTarget.name)}>
                         Change emoji
                     </button>
-                    <EmojiPicker className="emojiPopup popupcontent" onEmojiClick={handleEmojiInput}/>
+                    <EmojiPicker 
+                    className="emojiPopup" 
+                    onEmojiClick={handleEmojiInput} 
+                    emojiStyle={EmojiStyle.TWITTER}
+                    theme={Theme.DARK}
+                    open={show}/>
                     <button onClick={sendEmojiToBackend}>Confirm Emoji Change</button>
                     <button className="btn btn-popup" name="colorPopup" onClick={(e) => showPopup(e.currentTarget.name)}>Change background color</button>
                     <div id="colorPopup" className="popupcontent">

@@ -108,9 +108,6 @@ export async function uploadImageForArticle({ backgroundImage, title, headers } 
         const slug = slugify(title);
         const formData = new FormData();
         formData.append("file", backgroundImage);
-        console.log(backgroundImage.name)
-        console.log(formData.getAll("file")[0].toString)
-
         const {data} =  await instance.post(
             `/images/${slug}`, formData, { 
                 headers: {...headers, "Content-Type": "multipart/form-data"}
@@ -143,7 +140,6 @@ export async function getArticleBySlug({slug } : {slug: string }) : Promise<TArt
         getTagsOf({slug})
         .then((tagList) => data.tagList = tagList)
         .catch((error) => console.log(error))
-        console.log(data);
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);
@@ -177,7 +173,7 @@ export async function putBackgroundColor({slug, backgroundColor, headers} :  {sl
             {
                 url: `/color/${slug}`,
                 method: 'POST',
-                params: { 'backgroundColor': backgroundColor },
+                params: { property: 'backgroundColor', value: backgroundColor },
                 headers: headers 
             }
         )
@@ -194,7 +190,7 @@ export async function putFontColor({slug, fontColor, headers} :  {slug: string, 
             {
                 url: `/color/${slug}`,
                 method: 'POST',
-                params: { 'fontColor': fontColor },
+                params: { property: 'fontColor', value: fontColor },
                 headers: headers 
             }
         )
@@ -210,7 +206,7 @@ export async function putEmoji({slug, emoji, headers} :  {slug: string, emoji:st
     try {
         const { data } = await instance.request(
             {
-                url: `/color/${slug}`,
+                url: `/emoji/${slug}`,
                 method: 'POST',
                 params: { 'emoji': emoji },
                 headers: headers 

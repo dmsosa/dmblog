@@ -169,14 +169,23 @@ public class BlogController {
     }
     //Set backgroundColor
     @PostMapping("/color/{articleSlug}")
-    public ResponseEntity<ArticleResponseDTO> setBackgroundColor(@PathVariable String articleSlug, @RequestParam(required = true, name = "backgroundColor") String backgroundColor) throws EntityDoesNotExistsException {
-        ArticleResponseDTO article = articleService.setBackgroundColor(articleSlug, backgroundColor);
-        return new ResponseEntity<>(article, HttpStatus.OK);
-    }
-    @PostMapping("/color/{articleSlug}")
-    public ResponseEntity<ArticleResponseDTO> setFontColor(@PathVariable String articleSlug, @RequestParam(required = true, name = "fontColor") String fontColor) throws EntityDoesNotExistsException {
-        ArticleResponseDTO article = articleService.setFontColor(articleSlug, fontColor);
-        return new ResponseEntity<>(article, HttpStatus.OK);
+    public ResponseEntity<ArticleResponseDTO> setBackgroundColor(
+            @PathVariable String articleSlug,
+            @RequestParam(required = true, name = "property") String property,
+            @RequestParam(required = true, name = "value") String value) throws EntityDoesNotExistsException {
+        switch (property) {
+            case "backgroundColor" : {
+                ArticleResponseDTO article = articleService.setBackgroundColor(articleSlug, value);
+                return new ResponseEntity<>(article, HttpStatus.OK);
+            }
+            case "fontColor" : {
+                ArticleResponseDTO article = articleService.setFontColor(articleSlug, value);
+                return new ResponseEntity<>(article, HttpStatus.OK);
+            }
+            default: {
+                throw new RuntimeException("The given property does not exist or can not be assigned to article: " + property);
+            }
+        }
     }
     @PostMapping("/emoji/{articleSlug}")
     public ResponseEntity<ArticleResponseDTO> setEmoji(@PathVariable String articleSlug, @RequestParam(required = true, name = "emoji") String emoji) throws EntityDoesNotExistsException {

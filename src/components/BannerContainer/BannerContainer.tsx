@@ -9,7 +9,7 @@ function BannerContainer({title, backgroundStyles, emoji }:
     return (
         <div id="banner" className="container banner-container" style={backgroundStyles as CSSProperties}>
             <div style={gradient}>
-                <img src={apple}/>
+                <img src={emoji? emoji :  apple}/>
                 <span>{title}</span>
             </div>
         </div>
