@@ -1,10 +1,6 @@
-[![Readme Badge](https://img.shields.io/badge/lang-en-lightgreen?style=flat)](https://github.com/dmsosa/dmblog/blob/main/readme.md)
-
-[![Readme Badge](https://img.shields.io/badge/lang-de-red?style=flat)](https://github.com/dmsosa/dmblog/blob/main/readme.de.md)
-
-
-
 # DmBlog;
+
+[![Readme Badge](https://img.shields.io/badge/lang-en-lightgreen?style=flat)](https://github.com/dmsosa/dmblog/blob/main/readme.md) [![Readme Badge](https://img.shields.io/badge/lang-de-red?style=flat)](https://github.com/dmsosa/dmblog/blob/main/readme.de.md)
 
 ### This project is inspired by  [realworld from Thinkster](https://github.com/gothinkster/realworld).
 
@@ -14,6 +10,10 @@ Implementation of the "Realworld" blog with a frontend made by Vite, React, Type
 Spring, PostgreSQL, TypeScript, React, Vite
 also includes Docker
 ---
+
+<h2>Look at my image test</h2>
+<img src="https://previews.123rf.com/images/photosvit/photosvit1911/photosvit191111677/135106247-economics-and-finance-financial-wellbeing-savings-account-savings-deposit-is-convenient-flexible-way.jpg" width="300px"/>
+
 
 #### How to run this project?
 
