@@ -66,4 +66,4 @@ Das Bilder kann mann bewenden
 Das Backend zu Deploy:
 
 
-![Static Bdge](https://img.shields.io/badge/any_text-new-blue?link=https://github.com/dmsosa/dmblog/blob/main/readme.md&style=plastic)
+[![Static Bdge](https://img.shields.io/badge/any_text-new-blue?style=social)](https://github.com/dmsosa/dmblog/blob/main/readme.md)
