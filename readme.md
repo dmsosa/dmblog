@@ -1,6 +1,5 @@
 [![Readme Badge](https://img.shields.io/badge/lang-en-lightgreen?style=flat)](https://github.com/dmsosa/dmblog/blob/main/readme.md)
-
-[![Readme Badge](https://img.shields.io/badge/lang-de-red?style=flat)](https://github.com/dmsosa/dmblog/blob/main/readme.de.md)
+[![Readme Badge](https://img.shields.io/badge/lang-de-red?style=flat)](https://github.com/dmsosa/dmblog/blob/main/README.de.md)
 
 
 
