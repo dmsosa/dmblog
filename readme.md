@@ -66,4 +66,4 @@ Das Bilder kann mann bewenden
 Das Backend zu Deploy:
 
 
-https://img.shields.io/badge/any_text-new-blue
+![Static Bdge](https://img.shields.io/badge/any_text-new-blue)
