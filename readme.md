@@ -1,69 +1,74 @@
-# DmBlog; 
+[![Readme Badge](https://img.shields.io/badge/lang-en-lightgreen?style=flat)](https://github.com/dmsosa/dmblog/blob/main/readme.md)
 
-### Dieses Projekt kommst aus [realworld von Thinkster](https://github.com/gothinkster/realworld) inspiriert 
+[![Readme Badge](https://img.shields.io/badge/lang-de-red?style=flat)](https://github.com/dmsosa/dmblog/blob/main/readme.de.md)
 
-Implementation der "Realworld" Blog mit ein FrontEnd durch Vite, React, TypeScript und ein Backend durch Spring und PostgreSQL gemacht. Es hat mir geholfen, um viel mehr zu lernen.
+
+
+# DmBlog;
+
+### This project is inspired by  [realworld from Thinkster](https://github.com/gothinkster/realworld).
+
+Implementation of the "Realworld" blog with a frontend made by Vite, React, TypeScript and a backend made by Spring and PostgreSQL. It helped me to learn a lot more.
 ---
 ##### Tech Stack:
 Spring, PostgreSQL, TypeScript, React, Vite
-enthalt auch Docker
+also includes Docker
 ---
 
-#### Wie kann man dieses Projekt laufen?
+#### How to run this project?
 
-Um dieses projekt zu laufen, folgen die nachsten Schriffte:
+To run this project, follow the following steps:
 
 #### Frontend:
 
-1. machen sie ein Pull dieses Repo: `git pull https://github.com/dmsosa/dmsosa.github.io.git`
-2. laufen Sie das command `npm run dev`
-3. Das Seite in die addresse http://localhost:5173/ verfugbar sein sollte
+1. pull this repo: `git pull https://github.com/dmsosa/dmsosa.github.io.git`
+2. Run the command `npm run dev`
+3. The site should be available at the address http://localhost:5173/
 
 #### Backend:
 
-1. gehen Sie zu das Ordner "backend/blog-service" und laufen das command `mvnw spring-boot:run`, oder laufen Sie das Backend App. 
-2. Das App mit ein InMemory H2 Database funktioniert, aber du kannst es auch mit ein PostgreSQL Dateibank laufen, du muss nur deine eigene Beglaubigungsschreiben zu dem .env Datei
+1. Go to the "backend/blog-service" folder and run the command `mvnw spring-boot:run`, or run the backend app.
+2. The app works with an InMemory H2 database, but you can also run it with a PostgreSQL file bank, you just need to add your own attestation to the .env file
 3. Go ahead!
 
-### Erklarung: Wie es funktioniert?
+### Explanation: How it works?
 
 #### Backend:
 
-Ich gilt das Backend als besser erklart in einem separaten Repository, sonst wurde dieses Readme unnotig lang werden.
+I consider the backend better explained in a separate repository, otherwise this readme would be unnecessarily long.
 
-das Backend repo finden man hier: [dmsosa-backend](https://github.com/dmsosa/dmblog-backend) 
-
-
-## Extra funktionen:
-
-Auchwenn dieses Projekt bei Realworld Conduit Blog inspiriert ist, ich mochte etwas interessanter machen, also ich habe ein anderes Stil zu dem GUI gegeben, Bilder fur den Artikeln, Like zu den Kommentare, du kannst ein nutzer blockieren, ein Responsive Mobile Navbar... etc.
-
-Ich mochte hier geschreiben, wie alles das gemacht worden.
-
-1. Background Photos fur den Artikeln
-
-Ich habe nicht ein neues Feld zu der Einheit "Artikel" gerstellt, sondern nur alle die Background Bilder unseres Blog zu Cloudinary gesendet, und dann wir laden Sie als notig herunter.
-
-Input: Durch HTML Form
-
-Das frontend machst:
-POST Anfrage, um das Bild hochzuladen
-GET Anfrage, um das Bild zu erhalten
-
-Das backend machst:
-Schrifft 1: zu Cloudinary hochladen
-Schrifft 2: von Cloudinary erhalten
-
-Wenn das Bilder hochgeladen ist, es geht in unsere Cloudinary API gespeichert, dann es kann durch der Slug der Artikel erhalten werden.
-
-Zu-Machen:
-* Der Nutzer der Farbe des Backgrounds wahlen kann
-    * ArtikelnForm zu arbeiten
-* Ladenbar zu der Form hinzufugen
-Das Bilder kann mann bewenden
-* Profile Bildern
-
-Das Backend zu Deploy:
+The backend repo can be found here: [dmsosa-backend](https://github.com/dmsosa/dmblog-backend)
 
 
-[![Static Bdge](https://img.shields.io/badge/any_text-new-blue?style=social)](https://github.com/dmsosa/dmblog/blob/main/readme.md)
+##Extra features:
+
+Even though this project is inspired by Realworld Conduit Blog, I wanted to make something more interesting, so I gave a different style to the GUI, images for the articles, like to the comments, you can block a user, a responsive mobile navbar... Etc.
+
+I would like to write here how all this was done.
+
+1. Background photos for the article
+
+I didn't create a new field for the Articles unit, I just sent all the background images of our blog to Cloudinary and then we downloaded them as needed.
+
+Input: Through HTML form
+
+Do the frontend:
+POST request to upload the image
+GET request to get the image
+
+Do the baking:
+Font 1: upload to Cloudinary
+Scripture 2: obtained from Cloudinary
+
+When the image is uploaded, it goes into our Cloudinary API, then it can be obtained through the article's slug.
+
+Close:
+* The user can choose the color of the background
+    * Article form to work
+* Add loadable to the form
+You can use the pictures
+* Profile images
+
+Deploy the backend:
+
+
