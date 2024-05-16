@@ -384,7 +384,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public String getBackgroundImage(String articleSlug) throws NotFound {
+    public String getBackgroundImage(String articleSlug)   {
         Dotenv dotenv = Dotenv.load();
         String cloudinaryURL = dotenv.get("CLOUDINARY_URL");
         if (cloudinaryURL == null) {
@@ -398,10 +398,7 @@ public class ArticleServiceImpl implements ArticleService {
             ApiResponse image = cloudinary.api().resource(publicId, options);
 
             return (String) image.get("secure_url");
-        } catch (NotFound notFound) {
-            throw notFound;
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
             return "";
         }

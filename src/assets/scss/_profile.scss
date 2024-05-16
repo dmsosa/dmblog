@@ -68,20 +68,7 @@
         margin-bottom: 0.5rem;
     }
 }
-.author-buttons {
-    max-width: 50%;
-    .btn.btn-primary {
-        &:active {
-            a {
-                color: white;
-            }
-            background-color: transparent;
-        }
-        a {
-            color: #000D1C;
-        }
-    }
-}
+
 
 .profile-toggler {
     ul {

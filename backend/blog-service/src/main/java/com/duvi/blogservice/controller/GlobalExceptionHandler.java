@@ -50,13 +50,7 @@ public class GlobalExceptionHandler implements ErrorController {
             HttpStatus status = HttpStatus.CONFLICT;
             EntityAlreadyExistsException eaee = (EntityAlreadyExistsException) exception;
             return aaeeHandler(eaee, headers, status, request);
-        } else if (exception instanceof NotFound) {
-            HttpStatus status = HttpStatus.NOT_FOUND;
-            NotFound nfException = (NotFound) exception;
-            return rnfeHandler(nfException, headers, status, request);
         }
-
-
         else {
             ObjectError error = new ObjectError("Unexpected Exception", exception.getMessage());
             ApiError body = new ApiError(Collections.singletonList(error));
@@ -79,13 +73,7 @@ public class GlobalExceptionHandler implements ErrorController {
         ApiError body = new ApiError(Collections.singletonList(error));
         return internalHandler(aaee, body, headers, status, request);
     }
-    public ResponseEntity<ApiError> rnfeHandler(NotFound nf, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ObjectError error = new ObjectError("Resource Not Found Exception", nf.getMessage());
-        ApiError body = new ApiError(Collections.singletonList(error));
-        return internalHandler(nf, body, headers, status, request);
-    }
-
-
+    
     public ResponseEntity<ApiError> internalHandler(Exception ex, ApiError body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         if (status.equals(HttpStatus.INTERNAL_SERVER_ERROR)) {
             request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST);

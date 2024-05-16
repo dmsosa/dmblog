@@ -166,7 +166,7 @@ export async function deleteArticleBySlug({slug, headers} : {slug: string, heade
     }
 }
 
-export async function putBackgroundColor({slug, backgroundColor, headers} :  {slug: string, backgroundColor:string, headers: object | null }) : Promise<TArticle> {
+export async function putBackgroundColor({slug, backgroundColor, headers} :  {slug: string, backgroundColor:string | null, headers: object | null }) : Promise<TArticle> {
     if (!headers) { headers = {}};
     try {
         const { data } = await instance.request(
@@ -183,7 +183,7 @@ export async function putBackgroundColor({slug, backgroundColor, headers} :  {sl
         throw(error);
     }
 }
-export async function putFontColor({slug, fontColor, headers} :  {slug: string, fontColor:string, headers: object | null }) : Promise<TArticle> {
+export async function putFontColor({slug, fontColor, headers} :  {slug: string, fontColor:string | null, headers: object | null }) : Promise<TArticle> {
     if (!headers) { headers = {}};
     try {
         const { data } = await instance.request(

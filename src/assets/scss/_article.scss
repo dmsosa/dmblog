@@ -40,8 +40,9 @@
     margin-bottom:8rem;
 }
 .article-author {
-    width: fit-content;
-    padding: 0;
+    width: 35rem;
+    padding: 0.5rem 4rem;
+    border-left: 0.5rem solid #51FF00;
     img {
         border-radius: 50%;
         width: 2.5rem;
@@ -55,9 +56,9 @@
 }
 
 .article-buttons {
+    padding: 0 5rem;
+    max-width: 40rem;
     border-left: 0.5rem solid #51FF00;
-    padding: 0 4rem;
-    max-width: 50%;
     .btn {
         margin-right: 1rem;
     }
@@ -188,48 +189,95 @@
 
 //Popup styles
 
-.popup {
-    z-index: 1;
-}
-.popupcontent {
-    visibility: hidden;
-    height: 15rem;
-    background-color: #051d46;
-    color: white;
-    padding: 3rem;
-    border: solid 0.5rem black;
-    border-radius: 0.6rem;
+.emojiPopup {
     position: absolute;
-    bottom: 50%;
-    right: 5%;
+    input, h2 {
+        background-color: #111927;
+    }
+}
+.colorPopup {
+    visibility: hidden;
+    position: absolute;
+    top: 100%;
+    left:0%;
     z-index: 2;
-    span {
+    width: fit-content;
+    padding: 1rem 2rem;
+    background-color: #000D1C;
+    color: lightgrey;
+    border: solid 0.1rem rgba(0, 0%, 0%, 0.5);
+    border-radius: 0.6rem;
+    box-shadow: 0 0 0.5rem rgba(0, 0%, 0%, 0.5);
+    font-size: medium;
+    label {
+        display: flex;
+        margin-bottom: 1rem;
+        padding: 1rem 0.25rem;
+        border-radius: 0.5rem;
+        width: 18rem;
+        transition: all 0.25s;
+        &:hover {
+            background-color: rgba(153, 255, 51, 0.5);
+        }
+        input {
+            display: block;
+            max-width: 3rem;
+        }
+        span {
+            display: inline;
+            padding-left: 1rem;
+        }
+    }
+    .btn {
         display: block;
         margin: 0 auto;
-    }
-    input {
-        margin-top: 0.1rem;
-        
+        max-width: 50%;
     }
     &.show {        
         visibility: visible;
-        animation: fadeIn 1s;
+        animation: fadeIn 0.25s;
     }
 }
-.popup .popupcontent::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
+
+.author-buttons {
+    .nav-link {
+        margin: 0;
+        padding: 0;
+    }
+    .divPopup {
+        position: relative;
+        padding: 0;
+        margin: 0;
+    }
+    .btn.btn-primary {
+        &:active {
+            a {
+                color: white;
+            }
+            background-color: transparent;
+        }
+        a {
+            color: #000D1C;
+        }
+    }
+    .btn-danger {
+        margin:0;
+        padding: 0;
+        &:active {
+            a {
+                color: white;
+            }
+            background-color: transparent;
+        }
+        a {
+            color: #000D1C;
+        }
+    }
 }
 
-.emojiPopup {
-    height: 0;
-}
+
+
+
 //Container styles
 
 .container.article-cont {
@@ -266,8 +314,8 @@
     }
 }
 .comment-count {
-    color: #112233;
-    background-color: #51FF00;
+    color: white;
+    background-color: #112233;
     padding: 0 1.6rem;
 }
 .comment-form {
