@@ -46,7 +46,7 @@ const loggedIn : string | null = localStorage.getItem("loggedUser");
 if (loggedIn) {
     authState = JSON.parse(loggedIn);
 };
-
+        
 function AuthProvider({ children }: { children : ReactNode[] | ReactNode }) {
     const [{ headers, isAuth, loggedUser } , setAuthState] = useState(authState);
     useEffect(

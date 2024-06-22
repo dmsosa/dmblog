@@ -8,18 +8,23 @@ import { AxiosError } from "axios";
 import { TArticle } from "../../../types/Article";
 import MDEditor, { ContextStore } from "@uiw/react-md-editor";
 import ErrorMessages from "./ErrorMessages";
+import EmojiPicker, { EmojiClickData, EmojiStyle, Theme } from "emoji-picker-react";
 
 //Custom types
 type TForm = {
     title: string,
     description: string,
     body: string,
+    backgroundColor: string,
+    emoji: string,
     tagList: string[],
 }
 const emptyForm = {
     title: "",
     description: "",
     body: "",
+    backgroundColor: "#99ff33",
+    emoji: "",
     tagList: [""],
 }
 
@@ -30,8 +35,9 @@ function ArticleEditor() {
     const navigate = useNavigate();
 
 
-    const [{title, description, body, tagList }, setForm ] = useState<TForm>(state || emptyForm); 
+    const [{title, description, body, backgroundColor, emoji, tagList }, setForm ] = useState<TForm>(state || emptyForm); 
     const [ backgroundImage, setBackgroundImage ] = useState<File | null>(null);
+    const [ emojiOpen, setEmojiOpen ] = useState(false);
     const [errorMessages, setErrorMessages ] = useState<string[]>([]);
 
     const { authState } = useAuth() as TAuthContext;
@@ -54,7 +60,7 @@ function ArticleEditor() {
             
             const { id, title, description, body, tagList } = article;
             if (loggedUser.id !== id) redirect();
-            setForm({ title, description, body, tagList });
+            setForm({ title, description, body, backgroundColor, emoji, tagList });
         })
         .catch((error) => {handleError(error as AxiosError)})
         
@@ -87,6 +93,10 @@ function ArticleEditor() {
             setBackgroundImage(e.target.files[e.target.files.length-1]);
         }
     }
+    const handleEmojiChange = (emoji: EmojiClickData) => {
+        setForm((prev) => ({...prev, emoji: emoji.imageUrl}))
+        setEmojiOpen(!emojiOpen);
+    }
 //handle submit
     const handleSubmit = (e: MouseEvent<HTMLFormElement> ) => {
         e.preventDefault();
@@ -95,7 +105,7 @@ function ArticleEditor() {
             .then((message) => {
                 console.log(message);
                 //set article
-                setArticle({ userId: loggedUser.id, title, description, body, artSlug: slug || null, tagList, headers })
+                setArticle({ userId: loggedUser.id, title, description, body, backgroundColor, emoji, artSlug: slug || null, tagList, headers })
                 .then((article: TArticle) => {navigate(`/dmblog/article/${article.slug}`)})
                 .catch((error: AxiosError) => { handleError(error) })
             }
@@ -104,7 +114,7 @@ function ArticleEditor() {
                 (error) => console.log(error)
             )
         } else {
-            setArticle({ userId: loggedUser.id, title, description, body, artSlug: slug || null, tagList, headers })
+            setArticle({ userId: loggedUser.id, title, description, body, backgroundColor, emoji, artSlug: slug || null, tagList, headers })
             .then((article: TArticle) => {navigate(`/dmblog/article/${article.slug}`)})
             .catch((error: AxiosError) => { handleError(error) })
         }
@@ -150,6 +160,18 @@ function ArticleEditor() {
                             />
                             {/* <ImageUploader onFilesSelected={setFile}/> */}
                             <FormFieldset
+                            type="color"
+                            name="backgroundColor"
+                            value={backgroundColor}
+                            changeHandler={handleChange}
+                            required={false}
+                            title="Background color"/>
+                            <div onClick={() => setEmojiOpen(!emojiOpen)}>Select Emoji: 
+                            </div>
+                            <EmojiPicker onEmojiClick={handleEmojiChange} open={emojiOpen}
+                            emojiStyle={EmojiStyle.TWITTER}
+                            theme={Theme.DARK}/>
+                            <FormFieldset
                             type="text"
                             name="tags"
                             placeholder="Put some tags into it!"
@@ -160,7 +182,6 @@ function ArticleEditor() {
                             <FormFieldset
                             type="file"
                             name="backgroundImage"
-                            placeholder="Select a background image for your article"
                             title="Background Image"
                             changeHandler={handleImageChange}
                             />

@@ -73,7 +73,7 @@ public class GlobalExceptionHandler implements ErrorController {
         ApiError body = new ApiError(Collections.singletonList(error));
         return internalHandler(aaee, body, headers, status, request);
     }
-    
+
     public ResponseEntity<ApiError> internalHandler(Exception ex, ApiError body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         if (status.equals(HttpStatus.INTERNAL_SERVER_ERROR)) {
             request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST);

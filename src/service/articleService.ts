@@ -94,7 +94,7 @@ export async function setArticle({userId, title, description, body, artSlug, bac
             method: artSlug? "PUT":"POST",
             url: artSlug? `/slug/${artSlug}`:"/global",
             headers: headers || {},
-            data:{ userId, title, description, body, slug: slugify(title), tagList }
+            data:{ userId, title, description, body, slug: slugify(title), backgroundColor, emoji, tagList }
         })
         return data;
     } catch (error) {
@@ -122,8 +122,7 @@ export async function uploadImageForArticle({ backgroundImage, title, headers } 
 
 export async function getBackgroundImage({ slug } : { slug: string }) : Promise<string> {
     try {
-        //this will return the URL of the image
-        const {data} =  await instance.get(`/images/${slug}`);
+        const {data} =  await instance.get(`/images/${slug}`, { timeout: 8000 });
         return data;
     } catch (error) {
         errorHandler(error as AxiosError);

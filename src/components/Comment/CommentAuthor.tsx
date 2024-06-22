@@ -8,8 +8,8 @@ function CommentAuthor({ image, username }:  {
     return (
         <div className="comment-author">
             <Link 
-            to={`/profile/${username}`}>
-                <Avatar src={image} />
+            to={`/dmblog/profile/${username}`}>
+                <Avatar image={image} username={username} />
                 <span>{username}</span>
             </Link>
         </div>

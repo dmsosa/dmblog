@@ -60,7 +60,7 @@ public interface ArticleService {
     ArticleResponseDTO setTag(String slug, String tagName) throws EntityDoesNotExistsException;
     ArticleResponseDTO removeTag(String slug, String tagName) throws EntityDoesNotExistsException;
     public String uploadBackgroundImage(MultipartFile backgroundImage,  String articleSlug) throws ImageException;
-    public String getBackgroundImage(String articleSlug) ;
+    public String getBackgroundImage(String articleSlug) throws NotFound;
     public ArticleResponseDTO setFontColor(String slug, String backgroundColor) throws EntityDoesNotExistsException;
 
     public ArticleResponseDTO setBackgroundColor(String slug, String backgroundColor) throws EntityDoesNotExistsException;

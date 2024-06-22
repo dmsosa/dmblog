@@ -12,6 +12,7 @@ import { getArticleBySlug, getBackgroundImage } from "../../service/articleServi
 import { errorHandler } from "../../service/handleError";
 import { logoutUser } from "../../service/userService";
 import MDEditor from "@uiw/react-md-editor";
+import { AxiosError } from "axios";
 
 
 
@@ -24,8 +25,9 @@ function Article() {
     //loading, article and setArticle
     const [ loading, setLoading ] = useState(false);
     const [ article, setArticle ] = useState<TArticle>(state || {});
+    const [ error, setError ] = useState<string | null>(null)
     const { title, body, createdAt, fontColor, backgroundColor, emoji } = article;
-    const [backgroundImage, setBackgroundImage] = useState("");
+    const [ backgroundImage, setBackgroundImage ] = useState("");
 
     //navigate and authState
     const navigate = useNavigate();
@@ -44,7 +46,7 @@ function Article() {
     const backgroundStyles = {
         color: fontColor || "#000D1C",
         backgroundColor: backgroundColor || "#99ff33",
-        backgroundImage: `url(${backgroundImage})`,
+        backgroundImage: backgroundImage ? `url(${backgroundImage})` : "none",
         backgroundPosition: "top",
         backgroundSize: "45%",
         backgroundRepeat: "no-repeat", 
@@ -60,22 +62,31 @@ function Article() {
         //if there is state, we only request the background image to the backend
         if ( state ) {
             getBackgroundImage({slug})
-            .then((url) => {setBackgroundImage(url)})
-            .catch((err) => errorHandler(err))
+            .then((url) => {
+                if (url.length > 1) {
+                    setBackgroundImage(url)
+                }
+            })
+            .catch((err) => 
+                errorHandler(err))
             .finally(() => setLoading(false));
         } else { // else, we request the article info plus the background image
             getArticleBySlug({slug})
             .then((article) => {
                 setArticle(article); 
-                getBackgroundImage({slug}).then((url) => {setBackgroundImage(url)}).catch((err) => errorHandler(err));           
+                getBackgroundImage({slug}).then((url) => {if (url.length > 1) {setBackgroundImage(url)}}).catch((err) => errorHandler(err));           
             })
             .catch((error) => { 
                 errorHandler(error)
+        
                 const status = error.response?.status;
                 if (status === 406) {
                     handleTokenExpired()
                 } else if (status === 404 ) {
                     navigate("/dmblog/not-found", { replace: true })
+                } else if (status === 500) {
+                    const apiError = error as AxiosError;
+                    setError(apiError.message);
                 }
             })
             .finally(() => { setLoading(false);})
@@ -83,7 +94,10 @@ function Article() {
     },[slug, headers])
 
     return (
-        loading ? <LoadingPage/> : !!article &&
+        loading ? <LoadingPage/> : 
+        error ? 
+        <div>An error ocurred {error} </div> :
+        !!article &&
         <div className="container article-page">
             <BannerContainer 
             title={title}

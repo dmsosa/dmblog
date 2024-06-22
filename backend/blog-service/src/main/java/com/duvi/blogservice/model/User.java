@@ -37,6 +37,7 @@ public class User implements UserDetails {
     private String password;
     private String bio;
     private String image;
+    private String backgroundColor;
     @Enumerated(EnumType.STRING)
     private UserRole role;
     private LocalDateTime createdAt;
@@ -97,11 +98,11 @@ public class User implements UserDetails {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void updateUser(String username, String email, String image, String bio, String password) {
+    public void updateUser(String username, String email, String bio, String image, String password) {
         this.username = username;
         this.email = email;
-        this.image = image;
         this.bio = bio;
+        this.image = image;
         this.password = password;
         this.updatedAt = LocalDateTime.now();
     }

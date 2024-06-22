@@ -21,7 +21,7 @@ function AuthorInfo() {
     useEffect(() => {
         if (!username) return;
         getUserByUsername({ headers, username })
-        .then((author) => setAuthor(author))
+        .then((author) => {setAuthor(author);})
         .catch((error) => {
             errorHandler(error)
             navigate("/not-found");
@@ -30,7 +30,6 @@ function AuthorInfo() {
     }, []);
 
     const handleFollow = (author: TUser) => {
-        console.log(author, "changed")
         setAuthor(author)
     }
 
@@ -49,7 +48,6 @@ function AuthorInfo() {
                     <h1>Biography</h1>
                     <p>{bio}</p>
                 </div>}
-
         </div>
     )
 }

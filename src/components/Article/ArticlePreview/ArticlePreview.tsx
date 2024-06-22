@@ -3,6 +3,7 @@ import ArticleMeta from "../ArticleMeta";
 import { TArticle } from "../../../types/Article";
 import { TArticleData } from "../../../service/articleService";
 import FavButton from "../../Buttons/FavButton";
+import { dateFormatter } from "../../../helpers/helpers";
 
 function ArticlePreview({  articles, isLoading, updateArticles } : { 
     articles: TArticle[], 
@@ -20,15 +21,16 @@ function ArticlePreview({  articles, isLoading, updateArticles } : {
     
     return articles.length > 0 ? articles.map((article) => 
         <div className="article-preview container" key={article.title}>
+            <span className="created-at">Created at: {dateFormatter(article.createdAt)}</span>
             <div className="row">
-                <ArticleMeta createdAt={article.createdAt} author={article.author}>
+                <ArticleMeta author={article.author}>
                     <FavButton
                     slug={article.slug}
                     favoritesCount={article.favoritesCount}
                     handleFav={handleFav}
                     isFav={article.isFav}/>
                 </ArticleMeta>
-                <div className="col article-link">
+                <div className="article-link">
                     <Link to={`/dmblog/article/${article.slug}`} state={article}>
                         <h1>{article.title}</h1>
                         <p>{article.description}</p>

@@ -18,7 +18,7 @@ function AuthorMeta({ username, image, followersCount, isFollowing, loading, han
     return loading ? ( <div>Loading</div>) : ( 
         <>
             <div className="profile-avatar col col-md-6 col-12">
-                <Avatar src={image} addClass="profile-avatar"/>
+                <Avatar image={image} username={username}/>
                 <a href="" className="profile-username">{username}</a>
             </div>
             <div className="profile-buttons col col-md-6 col-12 ">

@@ -13,7 +13,7 @@ function FeedNavLink({name, text} : {
     }
     return (
         <li className={`nav-link ${tabName === name? "active": ""}`}>
-            <button className={`btn btn-feed`} onClick={handleClick}>
+            <button className={`btn`} onClick={handleClick}>
                 {text}
             </button>
         </li>

@@ -1,4 +1,4 @@
-import axios, {  AxiosError } from "axios";
+import axios, {  AxiosError, AxiosResponse } from "axios";
 import { TAuthState } from "../context/AuthContext";
 import {  CustomError, errorHandler } from "./handleError";
 import { TUser } from "../types/User";
@@ -219,12 +219,12 @@ export async function getUserById({  headers, userId } : {
     }
 }
 
-export async function updateUser({ headers, username, email, image, bio, password } : {
+export async function updateUser({ headers, username, email, bio, image, password } : {
     headers: object,
     username: string,
     email: string,
-    image: string | null,
     bio: string | null,
+    image: string,
     password: string
     }
 ) : Promise<TAuthState> {
@@ -232,11 +232,12 @@ export async function updateUser({ headers, username, email, image, bio, passwor
         if (!headers) { 
             headers = {} 
         }
+
         const { data } : { data: TAuthResponse } =  await instance.request({
             url:"/",
             headers: headers,
             method: "PUT",
-            data: { username, email, image, bio, password }
+            data: { username, email, bio, image, password }
         })
         const { token } = data;
         const newHeaders = { Authorization: `Bearer ${token}`};
@@ -315,5 +316,12 @@ export async function getFollowingOf({ headers, userId } : {
     }
 }
 
-
+export async function uploadProfileImage({ profileImageFile, username, headers} : { profileImageFile: File, username: string, headers: object | null }) : Promise<void> {
+    const formData = new FormData();
+    formData.append("file", profileImageFile);
+    return instance.post(`/images/${username}`, formData, { headers: {...headers, "Content-Type" :  "multipart/form-data"}, timeout: 10000});
+}
+export async function getProfileImage({ image } : { image: string }) : Promise<AxiosResponse> {
+    return instance.get(`/images/${image}`, { timeout: 4000});
+}
 

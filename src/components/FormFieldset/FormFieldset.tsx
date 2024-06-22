@@ -29,8 +29,8 @@ function FormFieldset(
     }
 ) {
     return(
-        <fieldset
-            className="form-fieldset"
+        <div
+            className="fieldset-div"
         >
             <label htmlFor={name} className="form-label">{title}</label>
             <input
@@ -46,7 +46,7 @@ function FormFieldset(
                 value={value}
             />
             {children}
-        </fieldset>
+        </div>
     )
 }
 

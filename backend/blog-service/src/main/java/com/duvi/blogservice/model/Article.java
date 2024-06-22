@@ -87,6 +87,8 @@ public class Article {
         this.body = newArticle.body();
         this.description = newArticle.description();
         this.slug = newArticle.slug();
+        this.backgroundColor = newArticle.backgroundColor();
+        this.emoji = newArticle.emoji();
         this.updatedAt = LocalDateTime.now();
     }
 }

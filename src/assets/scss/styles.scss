@@ -44,7 +44,7 @@ body {
 
 .btn {
     font-size: 1.7rem;
-    @include btn-styles(background-color, rgba(246, 248, 244, 0.591));
+    @include btn-styles(background-color, rgb(232, 254, 209));
     &.btn-primary {
         @include btn-styles(background-color, rgba(153, 255, 51, 1));
     }

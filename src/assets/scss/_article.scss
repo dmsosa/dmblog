@@ -22,16 +22,30 @@
     
 }
 .article-preview {
+    position: relative;
     background-color: #000D1C;
     margin-bottom: 3rem;
-    padding: 1rem;
     border: #051d46 0.5rem solid;
+    span.created-at {
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.5rem;
+        text-align: right;
+    }
 }
 
 .article-meta {
-    margin: 0 auto;
-    padding: 0.7rem 1.6rem;
+    display: flex;
+    max-width: 100%;
     background-color: #000D1C;
+    .btn.btn-info {
+        position: relative;
+        top: 50%;
+        left: 2rem;
+        transform: translateY(-50%);
+        max-height: 4rem;
+        align-items: center;
+    }
 }
 .article-meta.bottom {
     border-radius: 1rem;
@@ -40,42 +54,35 @@
     margin-bottom:8rem;
 }
 .article-author {
-    width: 35rem;
-    padding: 0.5rem 4rem;
+    position: relative;
+    display: flex;
+    padding: 0.5rem 1rem;
     border-left: 0.5rem solid #51FF00;
+    .avatar {
+        position: relative;
+        background-color: red;
+        height: 6rem;
+        width: 6rem;
+        border-radius: 20%;
+    }
     img {
-        border-radius: 50%;
-        width: 2.5rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: auto;
+        width: 4rem;
     }
-    p, span {
-        display: inline;
-        margin-left: 0.5rem;
-        margin-right: 1rem;
+    p {
+        padding: 1.5rem 1rem;
+        margin-bottom: 0;
     }
-
 }
 
-.article-buttons {
-    padding: 0 5rem;
-    max-width: 40rem;
-    border-left: 0.5rem solid #51FF00;
-    .btn {
-        margin-right: 1rem;
-    }
-    .btn.btn-info {
-        max-width: 7rem;
-    }
-    .follow-row {
-        span {
-            display: block;
-            text-align: center;
-        }
-    }
-
-}
 
 .article-link {
     margin-top: 1rem;
+    padding: 1rem;
 }
 
 .tag-list {

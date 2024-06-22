@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import apple from '../../assets/img/apple.svg';
+import apple from '../../assets/img/profile/apple.svg';
 
 function BrandLogo () {
 

@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import  apple  from "../../assets/img/apple.svg";
+import  apple  from "../../assets/img/profile/apple.svg";
 function BannerContainer({title, backgroundStyles, emoji }:
     {title?: string | null, backgroundStyles?: CSSProperties | null, emoji: string | null}) {
     const gradient = {

@@ -38,10 +38,38 @@
         }
     }
 }
+.current-image {
+    width: 10.5rem;
+    height: 10.5rem;
+    border: solid 0.5rem gray;
+    border-radius: 2.5rem;
+    margin: 0 auto;
+    img {
+        display: block;
+        position: relative;
+        width: 9rem;
+        height: 9rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
 .form-cont {
     padding: 1rem;
     textarea {
         width: 100%;
+    }
+}
+.form-btns {
+    display: flex;
+    width: 50%;
+    justify-content: space-between;
+    gap: 2rem;
+    margin: 0 auto;
+    .btn {
+        flex-grow: 1;
+        flex-basis: 0;
+        flex-shrink: 1;
     }
 }
 .article-form {
@@ -61,7 +89,7 @@
 }
 
 
-.form-fieldset {
+.fieldset-div {
     margin: auto;
     justify-content: center;
     text-align: center;
@@ -75,10 +103,92 @@
         padding: 0 0.5rem;
         margin-left: 1rem;
         margin-bottom: -0.5rem;
-        z-index: 3;
+        z-index: 2;
         cursor: pointer;
     }
 }
+.fieldset-images {
+    display: flex;
+    gap: 5rem;
+    height: 10rem;
+    width: 70%;
+    margin: 0 auto;
+}
+.fieldset-images .fieldset-div:first-child {
+    width: 20rem;
+    height: fit-content;
+    margin: auto;
+}
+
+
+.default-images {
+    width: 20rem;
+    height: fit-content;
+    margin: auto;
+}
+.default-images label[for="custom-select"] {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.custom-select {
+    position: relative;
+}
+.fieldset-images div.select-list {
+    width: 25rem;
+    height: 0;
+    max-height: 0;
+    opacity: 0;
+    position: absolute;
+    z-index: 3;
+    top: -0.5rem;
+    left: calc(50% + 9rem);
+    transform: translateX(-50%);
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    border: solid 0.5rem darkcyan;
+    border-radius: 0.5rem;
+    transition: all 0.4s;
+}
+.fieldset-images .custom-select.active div.select-list {
+    height: fit-content;
+    max-height: 50rem;
+    opacity: 1;
+}
+
+.fieldset-images div.select-item {
+    width: 5rem;
+    height: 6rem;
+    outline: solid 0.5rem darkcyan;
+    border-radius: 0.5rem;
+    flex-grow: 1;
+    cursor: pointer;
+}
+.fieldset-images div.select-item.selected {
+    position: relative;
+    width: 6rem;
+    height: 6rem;
+    margin: 0 auto;
+    z-index: 4;
+    background-color: rgb(75, 199, 241);
+}
+.fieldset-images .custom-select.active div.select-item.selected {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-radius: 0;
+}
+.fieldset-images div.select-list .select-item {
+    border: none;
+    outline-width: 0.25rem;
+    border-radius: 0;
+}
+.fieldset-images div.select-list .select-item:hover {
+    background-color: lightcyan;
+}
+
 
 .form-input:hover {
     box-shadow: 0.25rem 0.25rem 0 rgba(153, 255, 51, .7);
@@ -90,7 +200,7 @@
     border-radius: 0.5rem;
     box-shadow: 0.25rem 0.25rem 0 rgba($color: #777, $alpha: .7);
     padding: 0.25rem 1rem;
-    z-index: 2;
+    z-index: 1;
     color: white;
 }
 .form-input:focus {
@@ -98,8 +208,38 @@
     box-shadow: 0.25rem 0.25rem 0 rgba(153, 255, 51, 1);
 }
 
+.form-input[type="file"] {
+    cursor: pointer;
+    position: relative;
+    color: transparent;
+    width: 4rem;
+    height: 4rem;
+    margin: 0 auto;
+}
 
+.form-input[type="file"]::file-selector-button {
+    display: none;
+}
 
+.form-input[type="file"]::before {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    content: "";
+    width: 0rem;
+    height: 0rem;
+    border: 1rem white solid;
+    border-color: white transparent transparent transparent;
+}
+.form-input[type="file"]:hover::before {
+    border-color: lightgreen transparent transparent transparent;
+}
+
+.fieldset-images label[for="profileImage"] {
+    width: 100%;
+    margin: 0 auto;
+}
 .form-checkbox-label {
     display: block;
     position: relative;
@@ -108,6 +248,8 @@
     margin-bottom: 1rem;
     width: fit-content;
 }
+
+
 .checkbox-span {
     position: absolute;
     top:0;
@@ -148,7 +290,55 @@
     transform: rotate(45deg)
 }
 
-.form-btn {
-    width: 100%;
-    margin: 1rem auto;
+// sprites and bg-positions
+
+.select-item.selected, .select-list .select-item:not(:first-child) {
+    background: url("../img/fruit-sprites.png") no-repeat;
+    background-color: lightblue;
+}   
+
+.select-item.selected.bg-apple, .select-item:not(:first-child).bg-apple {
+    background-position: 0px 0px;
+}
+.select-item.selected.bg-aubergine, .select-item:not(:first-child).bg-aubergine {
+    background-position: -60px 0px;
+}
+.select-item.selected.bg-avocado, .select-item:not(:first-child).bg-avocado {
+    background-position: 0px -60px;
+}
+.select-item.selected.bg-banana, .select-item:not(:first-child).bg-banana {
+    background-position: -60px -60px;
+}
+.select-item.selected.bg-broccoli, .select-item:not(:first-child).bg-broccoli {
+    background-position: -120px 0px;
+}
+.select-item.selected.bg-carrot, .select-item:not(:first-child).bg-carrot {
+    background-position: -120px -60px;
+}
+.select-item.selected.bg-cheese, .select-item:not(:first-child).bg-cheese {
+    background-position: 0px -120px;
+}
+.select-item.selected.bg-coconut, .select-item:not(:first-child).bg-coconut {
+    background-position: -60px -120px;
+}
+.select-item.selected.bg-corn, .select-item:not(:first-child).bg-corn {
+    background-position: -120px -120px;
+}
+.select-item.selected.bg-cucumber, .select-item:not(:first-child).bg-cucumber {
+    background-position: -180px 0px;
+}
+.select-item.selected.bg-orange, .select-item:not(:first-child).bg-orange {
+    background-position: -180px -60px;
+}
+.select-item.selected.bg-peach, .select-item:not(:first-child).bg-peach {
+    background-position: -180px -120px;
+}
+.select-item.selected.bg-pear, .select-item:not(:first-child).bg-pear {
+    background-position: 0px -180px;
+}
+.select-item.selected.bg-pineapple, .select-item:not(:first-child).bg-pineapple {
+    background-position: 0px -180px;
+}
+.select-item.selected.bg-strawberry, .select-item:not(:first-child).bg-strawberry {
+    background-position: -120px -180px;
 }

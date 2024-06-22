@@ -1,11 +1,13 @@
 package com.duvi.blogservice.controller;
 
 
+import com.cloudinary.api.exceptions.NotFound;
 import com.duvi.blogservice.config.security.TokenService;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.*;
 import com.duvi.blogservice.model.exceptions.EntityAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
+import com.duvi.blogservice.model.exceptions.ImageException;
 import com.duvi.blogservice.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +23,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.validation.support.BindingAwareModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.security.Principal;
@@ -174,11 +179,14 @@ public class UsersController {
     public ResponseEntity<AuthResponseDTO> updateUser(@RequestBody SetUserDTO newUserDTO, @RequestHeader HttpHeaders headers ) {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String username = tokenService.validateToken(token);
+
         UserResponseDTO userResponseDTO = userService.updateUser(username, newUserDTO);
+
         var authToken = new UsernamePasswordAuthenticationToken(newUserDTO.username(), newUserDTO.password());
         Authentication authentication = authenticationManager.authenticate(authToken);
         String newToken = tokenService.generateToken((User) authentication.getPrincipal() );
         AuthResponseDTO response = new AuthResponseDTO(newToken, userResponseDTO);
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/followers/{userId}")
@@ -225,4 +233,15 @@ public class UsersController {
         return new ResponseEntity<>(toUser, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/images/{username}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Void> uploadProfileImage(@RequestParam("file") MultipartFile profileImageFile, @PathVariable String username) throws ImageException {
+        userService.uploadProfileImage(profileImageFile, username);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/images/{image}")
+    public ResponseEntity<String> getProfileImage(@PathVariable String image) throws EntityDoesNotExistsException, ImageException {
+        String profileImageURL = userService.getProfileImage(image);
+        return new ResponseEntity<>(profileImageURL, HttpStatus.OK);
+    }
 }
