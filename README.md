@@ -85,7 +85,7 @@ Ich bin eine vehement selbst gelernt Software Entwlicker.
   <a href="https://github.com/ashutosh00710/github-readme-activity-graph"><img alt="dmsosa's Activity Graph" src="https://github-readme-activity-graph.vercel.app/graph/?username=dmsosa&bg_color=1F222E&color=F8D866&line=F85D7F&point=FFFFFF&hide_border=true" /></a>
 </details>
 
-<h2>🕶️: über mich </h2>
+🕶️: über mich
 - 🔭 Ich arbeite derzeit an Freelance für WebSeiten und REST APIs
 - 🌱 Ich lerne gerade alles 🤣
 - 👯 Ich suche eine Zusammenarbeit bei Leute, die ein WebSeite erstellen möchte
