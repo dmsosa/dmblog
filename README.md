@@ -18,8 +18,8 @@ Ich bin eine vehement selbst gelernt Software Entwlicker.
 [![Instagram Follow](https://img.shields.io/badge/INSTAGRAM-FOLLOW-deeppink?style=for-the-badge&logo=instagram&labelColor=b00c4e&logoColor=white)](https://www.instagram.com/duvi_official/?hl=de)
 [![Github Stars](https://custom-icon-badges.demolab.com/github/stars/dmsosa?color=048037&style=for-the-badge&labelColor=2c9959&logo=star)](https://github.com/dmsosa?tab=repositories&sort=stargazers)
    </p>
----
 
+---
 ### 🧰 Sprachen und Werkzeuge
 
 <img align="left" alt="Java" width="30px" style="padding-right:10px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"/>
