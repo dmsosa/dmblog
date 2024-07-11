@@ -42,25 +42,11 @@ Ich bin eine vehement selbst gelernt Software Entwlicker.
 #
 
 ### Connect with me:
-<ul list-style="none">
+<ul style="none">
    <li><img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://github.com/dmsosa/dmsosa/assets/112881114/96375a2d-124a-4f94-88b0-d6b57e5fe93e"/> Derzeite arbeite ich bei AUTODOC ja... gar nichst mit Code zu tun, aber alles muss irgendwo starten, oder?</li>
    <li><img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/devicon/devicon-original.svg" /> Backend developer</li>
    <li><img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/codepen/codepen-original.svg" /> ALLE meine Projekte sind von Grund auf gerstellten, durch den Projekte anderer inspiriert, aber immer mit meine eigene Soße darin.</li>
 </ul>
-
-
-
-
-<details>
-  <summary><h2>🕶️: über mich </h2></summary>
-
-- 🔭 Ich arbeite derzeit an Freelance für WebSeiten und REST APIs
-- 🌱 Ich lerne gerade alles 🤣
-- 👯 Ich suche eine Zusammenarbeit bei Leute, die ein WebSeite erstellen möchte
-- 😄 Pronomen: Duri
-- ⚡ Fun Fact: Durian ist ein Obst, aber gar nicht nur ein Obst, sondern der König der Fruchten!
-  
-</details>
 
 <details>
     <!-- https://github.com/anuraghazra/github-readme-stats -->
@@ -97,11 +83,11 @@ Ich bin eine vehement selbst gelernt Software Entwlicker.
   <!-- https://github.com/ashutosh00710/github-readme-activity-graph -->
 
   <a href="https://github.com/ashutosh00710/github-readme-activity-graph"><img alt="dmsosa's Activity Graph" src="https://github-readme-activity-graph.vercel.app/graph/?username=dmsosa&bg_color=1F222E&color=F8D866&line=F85D7F&point=FFFFFF&hide_border=true" /></a>
-
-  <h3>⚡ Recent GitHub Activity</h3>
-
-  <!-- https://github.com/jamesgeorge007/github-activity-readme -->
-  <!--START_SECTION:activity-->
-<!--END_SECTION:activity-->
-
 </details>
+
+<h2>🕶️: über mich </h2>
+- 🔭 Ich arbeite derzeit an Freelance für WebSeiten und REST APIs
+- 🌱 Ich lerne gerade alles 🤣
+- 👯 Ich suche eine Zusammenarbeit bei Leute, die ein WebSeite erstellen möchte
+- 😄 Pronomen: Duri
+- ⚡ Fun Fact: Durian ist ein Obst, aber gar nicht nur ein Obst, sondern der König der Fruchten!
