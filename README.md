@@ -2,15 +2,14 @@
 **`Digital Craftsman (Developer/Creator)`**
 
 Ich bin eine vehement selbst gelernt Software Entwlicker. 
-
-
+<img src="https://readme-typing-svg.demolab.com/?lines=Full-stack%20web%20and%20app%20developer;Always%20learning%20new%20things&font=consolas%20Code&center=true&width=440&height=45&color=20e884&vCenter=true&pause=1000&size=24"/>
 
 
 Profil:
 
 <img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://github.com/dmsosa/dmsosa/assets/112881114/96375a2d-124a-4f94-88b0-d6b57e5fe93e"/>Derzeite arbeite ich bei AUTODOC ja... gar nichst mit Code zu tun, aber alles muss irgendwo starten, oder?
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/devicon/devicon-original.svg" />Backend developer
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/codepen/codepen-original.svg" />ALLE meine Projekte sind:
+<img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/devicon/devicon-original.svg" />Backend developer
+<img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/codepen/codepen-original.svg" />ALLE meine Projekte sind:
    *  von Grund auf gerstellten
    *  durch den Projekte anderer inspiriert
    *  aber immer mit meine eigene Soße darin.
@@ -19,13 +18,11 @@ Profil:
 * Frag mich irgendetwas [hier](mailto:dmsosa21@outlook.com)
 
    <p align="left">
-      <a href="https://www.youtube.com/c/fknight?sub_confirmation=1">
-         <img alt="linkedin" title="see my LinkedIn profile" src="https://img.shields.io/badge/LINKEDIN-+-blue?logo=linkedin&style=for-the-badge&logoColor=white&labelColor=2667d1"/></a> 
-      <a href="https://www.youtube.com/c/fknight">
-         <img alt="youtube views" title="YouTube views" src="https://custom-icon-badges.demolab.com/youtube/channel/views/UC2WHjPDvbE6O328n17ZGcfg?color=%23E1AD0E&logo=eye&logoColor=white&style=for-the-badge&labelColor=C79600"/></a> 
-      <a href="https://github.com/dmsosa?tab=followers">
-         <img alt="followers" title="Follow me on Github" src="https://custom-icon-badges.demolab.com/github/followers/ForrestKnight?color=236ad3&labelColor=1155ba&style=for-the-badge&logo=person-add&label=Follow&logoColor=white"/></a>
-[![Instagram Follow](https://img.shields.io/badge/INSTAGRAM--deeppink?style=for-the-badge&logo=instagram)](https://www.instagram.com/duvi_official/?hl=de)
+[![LinkedIn Profile](https://img.shields.io/badge/LINKEDIN-blue?style=for-the-badge&logo=linkedin&labelColor=2667d1&logoColor=white)](https://www.instagram.com/duvi_official/?hl=de)
+[![Github Follow](https://img.shields.io/badge/GITHUB-FOLLOW-gray?logo=github&style=for-the-badge&logoColor=white&labelColor=black)](https://github.com/dmsosa?tab=followers)
+[![Instagram Follow](https://img.shields.io/badge/INSTAGRAM--deeppink?style=for-the-badge&logo=instagram&labelColor=b00c4e)](https://www.instagram.com/duvi_official/?hl=de)
+[![Github Stars](https://img.shields.io/badge/STARS-gray?logo=github&style=for-the-badge&logoColor=white&labelColor=black)](https://github.com/dmsosa?tab=repositories&sort=stargazers)
+
 
    </p>
 ---
