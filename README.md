@@ -2,6 +2,7 @@
 **`Digital Craftsman (Developer/Creator)`**
 
 Ich bin eine vehement selbst gelernt Software Entwlicker. 
+![atd](https://github.com/dmsosa/dmsosa/assets/112881114/96375a2d-124a-4f94-88b0-d6b57e5fe93e)
 
 Über mich:
 
