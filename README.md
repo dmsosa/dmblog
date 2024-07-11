@@ -42,13 +42,17 @@ Ich bin eine vehement selbst gelernt Software Entwlicker.
 #
 
 ### Connect with me:
-
-<img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://github.com/dmsosa/dmsosa/assets/112881114/96375a2d-124a-4f94-88b0-d6b57e5fe93e"/> Derzeite arbeite ich bei AUTODOC ja... gar nichst mit Code zu tun, aber alles muss irgendwo starten, oder?
-<img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/devicon/devicon-original.svg" /> Backend developer
-<img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/codepen/codepen-original.svg" /> ALLE meine Projekte sind:
+<ul list-style="none">
+   <li><img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://github.com/dmsosa/dmsosa/assets/112881114/96375a2d-124a-4f94-88b0-d6b57e5fe93e"/> Derzeite arbeite ich bei AUTODOC ja... gar nichst mit Code zu tun, aber alles muss irgendwo starten, oder?</li>
+   <li><img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/devicon/devicon-original.svg" /> Backend developer</li>
+   <li><img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/codepen/codepen-original.svg" /> ALLE meine Projekte sind:
    *  von Grund auf gerstellten
    *  durch den Projekte anderer inspiriert
-   *  aber immer mit meine eigene Soße darin.
+   *  aber immer mit meine eigene Soße darin.</li>
+</ul>
+
+
+
 
 <details>
   <summary><h2>🕶️: über mich </h2></summary>
