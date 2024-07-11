@@ -8,19 +8,19 @@ Ich bin eine vehement selbst gelernt Software Entwlicker.
 
 Profil:
 
-ALLE meine Projekte sind:
+<img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://github.com/dmsosa/dmsosa/assets/112881114/96375a2d-124a-4f94-88b0-d6b57e5fe93e"/>Derzeite arbeite ich bei AUTODOC ja... gar nichst mit Code zu tun, aber alles muss irgendwo starten, oder?
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/devicon/devicon-original.svg" />Backend developer
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/codepen/codepen-original.svg" />ALLE meine Projekte sind:
    *  von Grund auf gerstellten
    *  durch den Projekte anderer inspiriert
    *  aber immer mit meine eigene Soße darin.
-* Backend developer
-* Erstellung von UI und JavaScript Code
-* <img align="left" alt="Autodoc Logo" width="30px" style="padding-right:4px;" src="https://github.com/dmsosa/dmsosa/assets/112881114/96375a2d-124a-4f94-88b0-d6b57e5fe93e"/> Derzeite arbeite ich bei AUTODOC ja... gar nichst mit Code zu tun, aber alles muss irgendwo starten, oder?
+
 * Meine WebSeiten können Sie [hier](https://github.com/dmsosa/dmblog) finden.
 * Frag mich irgendetwas [hier](mailto:dmsosa21@outlook.com)
 
    <p align="left">
       <a href="https://www.youtube.com/c/fknight?sub_confirmation=1">
-         <img alt="youtube subscribers" title="Subscribe to my YouTube channel" src="https://custom-icon-badges.demolab.com/youtube/channel/subscribers/UC2WHjPDvbE6O328n17ZGcfg?color=%23E05D44&label=SUBSCRIBE&logo=video&logoColor=white&style=for-the-badge&labelColor=CE4630"/></a> 
+         <img alt="linkedin" title="see my LinkedIn profile" src="https://img.shields.io/badge/LINKEDIN-+-blue?logo=linkedin&style=for-the-badge&logoColor=white&labelColor=2667d1"/></a> 
       <a href="https://www.youtube.com/c/fknight">
          <img alt="youtube views" title="YouTube views" src="https://custom-icon-badges.demolab.com/youtube/channel/views/UC2WHjPDvbE6O328n17ZGcfg?color=%23E1AD0E&logo=eye&logoColor=white&style=for-the-badge&labelColor=C79600"/></a> 
       <a href="https://github.com/dmsosa?tab=followers">
