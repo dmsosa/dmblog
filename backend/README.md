@@ -30,3 +30,4 @@ Als ersters, ich habe Cloudinary API benutzt, um die Bilder unsere Seite hochzul
 2. Bucket erstellen (Wenn es noch nicht existiert werde)
 3. Methode um Bilder zu erhalten
 4. Methode um Bilder hochzuladen
+5. 
