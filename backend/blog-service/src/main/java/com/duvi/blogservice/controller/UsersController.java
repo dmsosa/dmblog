@@ -233,15 +233,5 @@ public class UsersController {
         return new ResponseEntity<>(toUser, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/images/{username}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Void> uploadProfileImage(@RequestParam("file") MultipartFile profileImageFile, @PathVariable String username) throws ImageException {
-        userService.uploadProfileImage(profileImageFile, username);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
-    @GetMapping(value = "/images/{image}")
-    public ResponseEntity<String> getProfileImage(@PathVariable String image) throws EntityDoesNotExistsException, ImageException {
-        String profileImageURL = userService.getProfileImage(image);
-        return new ResponseEntity<>(profileImageURL, HttpStatus.OK);
-    }
 }

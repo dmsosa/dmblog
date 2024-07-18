@@ -1,15 +1,12 @@
 package com.duvi.blogservice.service;
 
-import com.cloudinary.api.exceptions.NotFound;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.RegisterDTO;
 import com.duvi.blogservice.model.dto.SetUserDTO;
 import com.duvi.blogservice.model.dto.UserResponseDTO;
 import com.duvi.blogservice.model.exceptions.EntityAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
-import com.duvi.blogservice.model.exceptions.ImageException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -44,7 +41,5 @@ public interface UserService {
     public List<UserResponseDTO> findFollowersOf(Long userId);
     public Integer findFollowingCount(Long userId);
     public List<UserResponseDTO> findFollowingOf(Long userId);
-    public void uploadProfileImage(MultipartFile profileImage, String imageName) throws ImageException;
-    public String getProfileImage(String username) throws EntityDoesNotExistsException, ImageException;
 
 }

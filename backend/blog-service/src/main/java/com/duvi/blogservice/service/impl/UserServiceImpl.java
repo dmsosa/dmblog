@@ -1,25 +1,17 @@
 package com.duvi.blogservice.service.impl;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.api.ApiResponse;
-import com.cloudinary.api.exceptions.NotFound;
-import com.cloudinary.utils.ObjectUtils;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.RegisterDTO;
 import com.duvi.blogservice.model.dto.SetUserDTO;
 import com.duvi.blogservice.model.dto.UserResponseDTO;
 import com.duvi.blogservice.model.exceptions.EntityAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
-import com.duvi.blogservice.model.exceptions.ImageException;
 import com.duvi.blogservice.model.relations.UserFollower;
 import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.repository.relations.UserFollowerRepository;
 import com.duvi.blogservice.service.UserService;
-import io.github.cdimascio.dotenv.Dotenv;
-import org.apache.http.util.ByteArrayBuffer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -209,57 +201,4 @@ public class UserServiceImpl implements UserService {
         return followingList.stream().map(this::createDTO).toList();
     }
 
-    @Override
-    public void uploadProfileImage(MultipartFile profileImage, String username) throws ImageException {
-        Dotenv dotenv = Dotenv.load();
-        String cloudinaryURL = dotenv.get("CLOUDINARY_URL");
-        if (cloudinaryURL == null) {
-            throw new ImageException("There is no cloudinary API to upload images with!");
-        }
-        Cloudinary cloudinary = new Cloudinary(cloudinaryURL);
-        cloudinary.config.secure = true;
-
-        String publicId = "profile/" + username + "-profile";
-        Map params = ObjectUtils.asMap(
-                "overwrite", true,
-                "public_id", publicId,
-                "unique_filename", "true"
-        );
-
-
-        try {
-            cloudinary.uploader().upload(profileImage.getBytes(), params);
-        } catch (IOException exception) {
-            throw new ImageException("Couldn't upload image: " + exception.getMessage());
-        }
-    }
-
-    @Override
-    public String getProfileImage(String image) throws EntityDoesNotExistsException, ImageException {
-
-        if (image == null) {
-            return image;
-        }
-
-        Dotenv dotenv = Dotenv.load();
-        String cloudinaryURL = dotenv.get("CLOUDINARY_URL");
-
-        if (cloudinaryURL == null) {
-            throw new ImageException("There is no cloudinary API to upload images with!");
-        }
-
-        Cloudinary cloudinary = new Cloudinary(cloudinaryURL);
-        cloudinary.config.secure = true;
-
-        Map options = ObjectUtils.asMap();
-
-        String publicId = "/profile/" + image;
-
-        try {
-            ApiResponse response = cloudinary.api().resource(publicId, options);
-            return (String) response.get("secure_url");
-        } catch (Exception e) {
-            return image;
-        }
-    }
 }

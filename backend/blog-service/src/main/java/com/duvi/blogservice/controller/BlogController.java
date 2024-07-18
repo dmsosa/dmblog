@@ -156,17 +156,7 @@ public class BlogController {
 
     //More operations with articles
     //Upload Background Image of article
-    @PostMapping(value = "/images/{articleSlug}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<String> uploadBackgroundImage(@RequestParam("file") MultipartFile file, @PathVariable String articleSlug) throws ImageException {
-        String uploadMessage = articleService.uploadBackgroundImage(file, articleSlug);
-        return new ResponseEntity<>(uploadMessage, HttpStatus.CREATED);
-    }
-    //Get Background Image of article
-    @GetMapping("/images/{articleSlug}")
-    public ResponseEntity<String> getBackgroundImage(@PathVariable String articleSlug ) throws NotFound {
-        String imageUrl = articleService.getBackgroundImage(articleSlug);
-        return new ResponseEntity<>(imageUrl, HttpStatus.CREATED);
-    }
+
     //Set backgroundColor
     @PostMapping("/color/{articleSlug}")
     public ResponseEntity<ArticleResponseDTO> setBackgroundColor(

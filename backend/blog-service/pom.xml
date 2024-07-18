@@ -15,7 +15,19 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>21</java.version>
+		<aws.java.sdk.version>2.26.20</aws.java.sdk.version>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>software.amazon.awssdk</groupId>
+				<artifactId>bom</artifactId>
+				<version>${aws.java.sdk.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 
 <!--		Web  -->
@@ -77,21 +89,10 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
-		<!--Cloudinary-->
+		<!--AWS-->
 		<dependency>
-			<groupId>com.cloudinary</groupId>
-			<artifactId>cloudinary-http45</artifactId>
-			<version>1.38.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.cloudinary</groupId>
-			<artifactId>cloudinary-taglib</artifactId>
-			<version>1.36.0</version>
-		</dependency>
-		<dependency>
-			<groupId>io.github.cdimascio</groupId>
-			<artifactId>dotenv-java</artifactId>
-			<version>2.2.4</version>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
 		</dependency>
 <!--		Tests-->
 		<dependency>

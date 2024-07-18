@@ -38,6 +38,7 @@ public class User implements UserDetails {
     private String bio;
     private String image;
     private String backgroundColor;
+    private String backgroundImage;
     @Enumerated(EnumType.STRING)
     private UserRole role;
     private LocalDateTime createdAt;

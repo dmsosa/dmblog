@@ -1,9 +1,6 @@
 package com.duvi.blogservice.service.impl;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.api.ApiResponse;
-import com.cloudinary.api.exceptions.NotFound;
-import com.cloudinary.utils.ObjectUtils;
+
 import com.duvi.blogservice.model.Article;
 import com.duvi.blogservice.model.Tag;
 import com.duvi.blogservice.model.User;
@@ -12,7 +9,6 @@ import com.duvi.blogservice.model.dto.SetArticleDTO;
 import com.duvi.blogservice.model.dto.UserResponseDTO;
 import com.duvi.blogservice.model.exceptions.EntityAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
-import com.duvi.blogservice.model.exceptions.ImageException;
 import com.duvi.blogservice.model.exceptions.TagNotFoundException;
 import com.duvi.blogservice.model.relations.ArticleTag;
 import com.duvi.blogservice.model.relations.ArticleTagId;
@@ -27,13 +23,10 @@ import com.duvi.blogservice.repository.relations.ArticleUserRepository;
 import com.duvi.blogservice.service.ArticleService;
 import com.duvi.blogservice.service.CommentService;
 import com.duvi.blogservice.service.UserService;
-import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -357,49 +350,6 @@ public class ArticleServiceImpl implements ArticleService {
             catsRepository.delete(relation.get());
         }
         return createDTO(articleRepository.findBySlug(slug).get());
-    }
-
-    @Override
-    public String uploadBackgroundImage(MultipartFile backgroundImage, String articleSlug) throws ImageException {
-        Dotenv dotenv = Dotenv.load();
-        String cloudinaryURL = dotenv.get("CLOUDINARY_URL");
-        if (cloudinaryURL == null) {
-            return "There is no cloudinary API to upload images with!";
-        }
-        Cloudinary cloudinary = new Cloudinary(cloudinaryURL);
-        cloudinary.config.secure = true;
-        String publicId = "background/" + articleSlug + "-image";
-        Map params = ObjectUtils.asMap(
-                "overwrite", true,
-                "public_id", publicId,
-                "unique_filename", "true"
-        );
-        try {
-            Map response = cloudinary.uploader().upload(backgroundImage.getBytes(), params);
-            return "Image uploaded successfully, public_id is: " + response.get("public_id");
-
-        } catch (IOException exception) {
-            throw new ImageException("Couldn't upload image: " + exception.getMessage());
-        }
-    }
-
-    @Override
-    public String getBackgroundImage(String articleSlug) throws NotFound {
-        Dotenv dotenv = Dotenv.load();
-        String cloudinaryURL = dotenv.get("CLOUDINARY_URL");
-        if (cloudinaryURL == null) {
-            throw new NotFound("No Cloudinary API Found");
-        }
-        Cloudinary cloudinary = new Cloudinary(cloudinaryURL);
-        cloudinary.config.secure = true;
-        Map options = ObjectUtils.asMap();
-        String publicId = "/background/" + articleSlug + "-image";
-        try {
-            ApiResponse image = cloudinary.api().resource(publicId, options);
-            return (String) image.get("secure_url");
-        } catch (Exception exception) {
-            return "";
-        }
     }
 
     @Override
