@@ -176,18 +176,13 @@ public class UsersController {
         return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
     @PutMapping("/")
-    public ResponseEntity<AuthResponseDTO> updateUser(@RequestBody SetUserDTO newUserDTO, @RequestHeader HttpHeaders headers ) {
+    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody SetUserDTO newUserDTO, @RequestHeader HttpHeaders headers ) {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String username = tokenService.validateToken(token);
 
         UserResponseDTO userResponseDTO = userService.updateUser(username, newUserDTO);
 
-        var authToken = new UsernamePasswordAuthenticationToken(newUserDTO.username(), newUserDTO.password());
-        Authentication authentication = authenticationManager.authenticate(authToken);
-        String newToken = tokenService.generateToken((User) authentication.getPrincipal() );
-        AuthResponseDTO response = new AuthResponseDTO(newToken, userResponseDTO);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
     @GetMapping("/followers/{userId}")
     public ResponseEntity<List<UserResponseDTO>> getFollowersOf(@PathVariable Long userId, @RequestHeader HttpHeaders headers) {

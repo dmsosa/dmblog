@@ -30,7 +30,7 @@ public interface UserService {
     UserResponseDTO findUserByEmail(String email) throws EntityDoesNotExistsException;
     //Login look for Username and Email at once
     UserResponseDTO findUserByLogin(String login) throws EntityDoesNotExistsException;
-    UserResponseDTO updateUser(String oldUsername, SetUserDTO userDTO);
+    UserResponseDTO updateUser(String oldUsername, SetUserDTO userDTO) throws EntityAlreadyExistsException;
     void deleteUser(Long userId) throws EntityDoesNotExistsException;
 
     //Operations with Followers

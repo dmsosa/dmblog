@@ -1,6 +1,5 @@
 package com.duvi.blogservice.controller;
 
-import com.cloudinary.api.exceptions.NotFound;
 import com.duvi.blogservice.config.security.TokenService;
 import com.duvi.blogservice.model.Tag;
 import com.duvi.blogservice.model.dto.*;
@@ -9,10 +8,8 @@ import com.duvi.blogservice.service.*;
 import jakarta.mail.MessagingException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -341,38 +338,38 @@ public class BlogController {
     //Operations with Comments
 
     @GetMapping("/comments")
-    public ResponseEntity<CommentResponseDTO> getCommentsOfArticle(@RequestParam(required = true) String slug) throws EntityDoesNotExistsException {
+    public ResponseEntity<CommentListDTO> getCommentsOfArticle(@RequestParam(required = true) String slug) throws EntityDoesNotExistsException {
         List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
         Long commentsCount = (long) comments.size();
-        CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comments, commentsCount);
-        return new ResponseEntity<>(commentResponseDTO, HttpStatus.OK);
+        CommentListDTO commentListDTO = new CommentListDTO(comments, commentsCount);
+        return new ResponseEntity<>(commentListDTO, HttpStatus.OK);
 
     }
     @PostMapping("/comments")
-    public ResponseEntity<CommentResponseDTO> postComment(@RequestBody SetCommentDTO commentDTO, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
+    public ResponseEntity<CommentListDTO> postComment(@RequestBody SetCommentDTO commentDTO, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String username = tokenService.validateToken(token);
         CommentDTO comment = commentService.createComment(commentDTO.body(), username, slug);
         List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
         Long commentsCount = (long) comments.size();
-        CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comments, commentsCount);
-        return new ResponseEntity<>(commentResponseDTO, HttpStatus.OK);
+        CommentListDTO commentListDTO = new CommentListDTO(comments, commentsCount);
+        return new ResponseEntity<>(commentListDTO, HttpStatus.OK);
     }
     @PutMapping("/comments/{commentId}")
-    public ResponseEntity<CommentResponseDTO> editComment(@PathVariable Long commentId, @RequestBody SetCommentDTO commentDTO, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
+    public ResponseEntity<CommentListDTO> editComment(@PathVariable Long commentId, @RequestBody SetCommentDTO commentDTO, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
         CommentDTO comment = commentService.updateComment(commentId, commentDTO);
         List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
         Long commentsCount = (long) comments.size();
-        CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comments, commentsCount);
-        return new ResponseEntity<>(commentResponseDTO, HttpStatus.OK);
+        CommentListDTO commentListDTO = new CommentListDTO(comments, commentsCount);
+        return new ResponseEntity<>(commentListDTO, HttpStatus.OK);
     }
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<CommentResponseDTO> deleteComment(@PathVariable Long commentId, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException, CommentNotFoundException {
+    public ResponseEntity<CommentListDTO> deleteComment(@PathVariable Long commentId, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException, CommentNotFoundException {
         commentService.deleteComment(commentId);
         List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
         Long commentsCount = (long) comments.size();
-        CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comments, commentsCount);
-        return new ResponseEntity<>(commentResponseDTO, HttpStatus.OK);
+        CommentListDTO commentListDTO = new CommentListDTO(comments, commentsCount);
+        return new ResponseEntity<>(commentListDTO, HttpStatus.OK);
     }
 
     @PostMapping("/email")

@@ -1,6 +1,7 @@
 package com.duvi.blogservice.service.impl;
 
 import com.duvi.blogservice.model.User;
+import com.duvi.blogservice.model.UserRole;
 import com.duvi.blogservice.model.dto.RegisterDTO;
 import com.duvi.blogservice.model.dto.SetUserDTO;
 import com.duvi.blogservice.model.dto.UserResponseDTO;
@@ -9,13 +10,12 @@ import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
 import com.duvi.blogservice.model.relations.UserFollower;
 import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.repository.relations.UserFollowerRepository;
+import com.duvi.blogservice.service.AmazonS3Service;
 import com.duvi.blogservice.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -24,11 +24,15 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private UserFollowerRepository followersRepository;
+    private AmazonS3Service s3Service;
 
-    public UserServiceImpl(UserRepository userRepository, UserFollowerRepository followersRepository) {
-
+    public UserServiceImpl(
+            UserRepository userRepository,
+            UserFollowerRepository followersRepository,
+            AmazonS3Service s3Service) {
         this.userRepository = userRepository;
         this.followersRepository = followersRepository;
+        this.s3Service = s3Service;
     }
 
     //Check following
@@ -45,7 +49,9 @@ public class UserServiceImpl implements UserService {
         Integer followersCount = this.findFollowersCount(user.getId());
         return new UserResponseDTO(user.getId(), user.getUsername(),
                 user.getEmail(), user.getPassword(),
-                user.getBio(), user.getImage(),
+                user.getBio(), user.getImageUrl(),
+                user.getBackgroundImageUrl(),
+                user.getIcon(), user.getBackgroundColor(),
                 followersCount, followingCount,
                 user.getCreatedAt(), user.getUpdatedAt(), false);
     }
@@ -115,7 +121,33 @@ public class UserServiceImpl implements UserService {
 
     //POST
     @Override
-    public UserResponseDTO createUser(RegisterDTO userDTO) throws EntityAlreadyExistsException {
+    public UserResponseDTO createUser(RegisterDTO register) throws EntityAlreadyExistsException {
+        if (userRepository.existsByUsername(register.username())) {
+            throw new EntityAlreadyExistsException("User with username %s already exists!".formatted(register.username()));
+        }
+        if (userRepository.existsByEmail(register.email())) {
+            throw new EntityAlreadyExistsException("User with email %s already exists!".formatted(register.email()));
+        }
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(register.password());
+
+        User createdUser = new User();
+        createdUser.setUsername(register.username());
+        createdUser.setEmail(register.email());
+        createdUser.setPassword(encryptedPassword);
+        createdUser.setBio("Ich bin ein neuer Benutzer der Dmblog!");
+        createdUser.setImageUrl("");
+        createdUser.setBackgroundImageUrl("");
+        createdUser.setIcon("apple");
+        createdUser.setBackgroundColor("#DFFF00");
+        createdUser.setRole(UserRole.USER);
+
+        return createDTO(userRepository.save(createdUser));
+    }
+        //PUT
+    @Override
+    public UserResponseDTO updateUser(String oldUsername, SetUserDTO userDTO) throws EntityAlreadyExistsException {
+
         if (userRepository.existsByUsername(userDTO.username())) {
             throw new EntityAlreadyExistsException("User with username %s already exists!".formatted(userDTO.username()));
         }
@@ -123,23 +155,35 @@ public class UserServiceImpl implements UserService {
             throw new EntityAlreadyExistsException("User with email %s already exists!".formatted(userDTO.email()));
         }
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(userDTO.password());
-        User createdUser = new User(userDTO, encryptedPassword);
+        String imageUrl = "";
+        String backgroundImageUrl = "";
 
-        userRepository.save(createdUser);
-        return createDTO(createdUser);
-    }
-        //PUT
-    @Override
-    public UserResponseDTO updateUser(String oldUsername, SetUserDTO userDTO) {
+        if (userDTO.image() != null) {
+
+            imageUrl = s3Service.uploadImage(userDTO.image());
+        }
+        if (userDTO.backgroundImage() != null) {
+            backgroundImageUrl = s3Service.uploadImage(userDTO.backgroundImage());
+        }
+
         User oldUser = userRepository.findByUsername(oldUsername).get();
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(userDTO.password());
+        if (!oldUser.getImageUrl().isEmpty()) {
+            s3Service.deleteByUrl(oldUser.getImageUrl());
+        }
+        if (!oldUser.getBackgroundImageUrl().isEmpty()) {
+            s3Service.deleteByUrl(oldUser.getBackgroundImageUrl());
+        }
 
-        oldUser.updateUser(userDTO.username(), userDTO.email(), userDTO.bio(), userDTO.image(), encryptedPassword);
-        userRepository.save(oldUser);
+        oldUser.setUsername(userDTO.username());
+        oldUser.setEmail(userDTO.email());
+        oldUser.setImageUrl(imageUrl);
+        oldUser.setBackgroundImageUrl(backgroundImageUrl);
+        oldUser.setIcon(userDTO.icon());
+        oldUser.setBackgroundColor(userDTO.backgroundColor());
+        oldUser.setBio(userDTO.bio());
 
-        return createDTO(oldUser);
+        return createDTO(userRepository.save(oldUser));
     }
         //DELETE
     @Override

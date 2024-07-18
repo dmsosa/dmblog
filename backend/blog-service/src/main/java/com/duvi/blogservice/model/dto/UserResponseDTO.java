@@ -7,14 +7,17 @@ public record UserResponseDTO(Long id,
                               String email,
                               String password,
                               String bio,
-                              String image,
+                              String imageUrl,
+                              String backgroundImageUrl,
+                              String icon,
+                              String backgroundColor,
                               Integer followersCount,
                               Integer followingCount,
                               LocalDateTime createdAt,
                               LocalDateTime updatedAt,
                               Boolean isFollowing ) {
     public UserResponseDTO withFollowing(Boolean isFollowing) {
-        return new UserResponseDTO(id(), username(), email(), password(), bio(), image(), followersCount(),
+        return new UserResponseDTO(id(), username(), email(), password(), bio(), imageUrl(), backgroundImageUrl(), icon(), backgroundColor(), followersCount(),
                 followingCount(), createdAt(), updatedAt(), isFollowing);
     }
 }

@@ -36,9 +36,10 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private String bio;
-    private String image;
+    private String imageUrl;
+    private String backgroundImageUrl;
+    private String icon;
     private String backgroundColor;
-    private String backgroundImage;
     @Enumerated(EnumType.STRING)
     private UserRole role;
     private LocalDateTime createdAt;
@@ -79,40 +80,6 @@ public class User implements UserDetails {
     private Set<Comment> comments;
 
 
-    //User methods
-    public User(String username, String email, String bio) {
-        this.username = username;
-        this.email = email;
-        this.bio = bio;
-    };
-    public User(RegisterDTO userDTO, String encryptedPassword) {
-        this.username = userDTO.username();
-        this.email = userDTO.email();
-        this.password = encryptedPassword;
-        this.role = userDTO.role();
-        this.bio = userDTO.bio();
-        this.image = userDTO.image();
-        this.favArticles = new HashSet<>();
-        this.followers = new HashSet<>();
-        this.comments = new HashSet<>();
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public void updateUser(String username, String email, String bio, String image, String password) {
-        this.username = username;
-        this.email = email;
-        this.bio = bio;
-        this.image = image;
-        this.password = password;
-        this.updatedAt = LocalDateTime.now();
-    }
-    public void updatePassword(String password) {
-        this.password = password;
-    };
-    public void updateRole(UserRole role) {
-        this.role = role;
-    };
 
 
     //UserDetails methods
@@ -138,9 +105,7 @@ public class User implements UserDetails {
         return username;
     }
 
-    public String getEmail() {return this.email;};
 
-    public UserRole getRole() { return this.role;};
 
     @Override
     public boolean isAccountNonExpired() {
