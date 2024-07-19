@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public record CommentDTO(
         Long id,
         Long articleId,
-        String image,
+        String imageUrl,
         String username,
         String body,
         @Nullable LocalDateTime postedAt,

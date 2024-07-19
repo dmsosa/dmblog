@@ -1,7 +1,6 @@
 package com.duvi.blogservice.controller;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.cloudinary.api.exceptions.NotFound;
 import com.duvi.blogservice.model.exceptions.*;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;

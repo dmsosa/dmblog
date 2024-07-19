@@ -144,7 +144,6 @@ public class UserServiceImpl implements UserService {
 
         return createDTO(userRepository.save(createdUser));
     }
-        //PUT
     @Override
     public UserResponseDTO updateUser(String oldUsername, SetUserDTO userDTO) throws EntityAlreadyExistsException {
 
@@ -159,7 +158,6 @@ public class UserServiceImpl implements UserService {
         String backgroundImageUrl = "";
 
         if (userDTO.image() != null) {
-
             imageUrl = s3Service.uploadImage(userDTO.image());
         }
         if (userDTO.backgroundImage() != null) {

@@ -1,6 +1,5 @@
 package com.duvi.blogservice.service;
 
-import com.cloudinary.api.exceptions.NotFound;
 import com.duvi.blogservice.model.Article;
 import com.duvi.blogservice.model.Tag;
 import com.duvi.blogservice.model.dto.ArticleResponseDTO;
@@ -8,11 +7,9 @@ import com.duvi.blogservice.model.dto.SetArticleDTO;
 import com.duvi.blogservice.model.dto.UserResponseDTO;
 import com.duvi.blogservice.model.exceptions.EntityAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
-import com.duvi.blogservice.model.exceptions.ImageException;
 import com.duvi.blogservice.model.exceptions.TagNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.List;
 

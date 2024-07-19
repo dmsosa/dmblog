@@ -1,13 +1,11 @@
 package com.duvi.blogservice.controller;
 
 
-import com.cloudinary.api.exceptions.NotFound;
 import com.duvi.blogservice.config.security.TokenService;
 import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.dto.*;
 import com.duvi.blogservice.model.exceptions.EntityAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
-import com.duvi.blogservice.model.exceptions.ImageException;
 import com.duvi.blogservice.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -15,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,10 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
-import org.springframework.validation.support.BindingAwareModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 
 import java.security.Principal;
 import java.util.List;
@@ -176,7 +170,7 @@ public class UsersController {
         return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
     @PutMapping("/")
-    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody SetUserDTO newUserDTO, @RequestHeader HttpHeaders headers ) {
+    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody SetUserDTO newUserDTO, @RequestHeader HttpHeaders headers ) throws EntityAlreadyExistsException {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String username = tokenService.validateToken(token);
 

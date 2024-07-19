@@ -33,10 +33,11 @@ public class ArticleRepositoryTest {
         Article a2 = new Article("article 2 title", "article 2 body", "article 2 description", "article-2-slug", LocalDateTime.now().minusDays(3L));
         Article a3 = new Article("article 3 title", "article 3 body", "article 3 description", "article-3-slug", LocalDateTime.now().minusDays(3L));
         Article a4 = new Article("article 4 title", "article 4 body", "article 4 description", "article-4-slug", LocalDateTime.now().minusDays(3L));
-        User author1 = new User("author 1", "author1@test.com", "author 1 bio");
-        User author2 = new User("author 2", "author2@test.com", "author 2 bio");
-        User author3 = new User("author 3", "author3@test.com", "author 3 bio");
-        User author4 = new User("author 4", "author4@test.com", "author 4 bio");
+        User author1 = new User();
+        User author2 = new User();
+        User author3 = new User();
+        User author4 = new User();
+        author1.setUsername("author1");
         a1.setAuthor(author1);
         a2.setAuthor(author2);
         a3.setAuthor(author3);

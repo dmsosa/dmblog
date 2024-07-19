@@ -37,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
         return new CommentDTO(
                 comment.getId(),
                 comment.getArticle().getId(),
-                comment.getUser().getImage(),
+                comment.getUser().getImageUrl(),
                 comment.getUser().getUsername(),
                 comment.getBody(),
                 comment.getPostedAt(),
