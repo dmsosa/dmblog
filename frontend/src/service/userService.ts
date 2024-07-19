@@ -227,8 +227,8 @@ export async function updateUser({ headers, username, email, bio, image, backgro
     username: string,
     email: string,
     bio: string,
-    image: File | null,
-    backgroundImage: File | null,
+    image: File | string,
+    backgroundImage: File | string,
     icon: string,
     backgroundColor: string,
     }
@@ -245,10 +245,10 @@ export async function updateUser({ headers, username, email, bio, image, backgro
         formData.append("icon", icon);
         formData.append("backgroundColor", backgroundColor);
 
-        if (image) {
+        if (image.toString.length > 0) {
             formData.append("image", image);
         }
-        if (backgroundImage) {
+        if (backgroundImage.toString.length > 0) {
             formData.append("backgroundImage", backgroundImage);
         }
 

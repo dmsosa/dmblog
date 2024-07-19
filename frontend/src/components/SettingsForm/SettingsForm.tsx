@@ -1,10 +1,9 @@
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import FormFieldset from "../FormFieldset";
-import { updateUser, uploadProfileImage } from "../../service/userService";
+import { updateUser } from "../../service/userService";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
-import { errorHandler } from "../../service/handleError";
 import CustomSelectImage from "../ChooseImage/CustomSelectImage";
 import Avatar from "../Avatar";
 
@@ -14,8 +13,9 @@ function SettingsForm() {
     const navigate = useNavigate();
     const { authState, setAuthState } = useAuth() as TAuthContext;
     const { headers, isAuth, loggedUser } = authState;
-    const [ { username, email, bio, password, icon }, setForm ] = useState(loggedUser);
-    const [ profileImageFile, setProfileImageFile ] = useState<File | undefined>(undefined)
+    const [ { username, email, bio, icon, backgroundColor  }, setForm ] = useState(loggedUser);
+    const [ image, setImage ] = useState<File | string>("")
+    const [ backgroundImage, setBackgroundImage ] = useState<File | string>("")
     const [ active, setActive ] = useState(true);
     const [ errorMessage, setErrorMessage ] = useState("");
     const { imageUrl } = loggedUser;
@@ -35,10 +35,17 @@ function SettingsForm() {
         setActive(true);
     }
     
-    const handleImageFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        console.log("bef", backgroundImage)
+
         if (e.target.files) {
-            setProfileImageFile(e.target.files[e.target.files.length-1]);
+            if (e.target.name === "backgroundImage") {
+                setBackgroundImage(e.target.files[e.target.files.length-1]);
+            } else {
+                setImage(e.target.files[e.target.files.length-1]);
+            }
         }
+        console.log("after", backgroundImage)
     }
 
     const handleCustomSelectClick = (e: MouseEvent<HTMLDivElement>) => {
@@ -51,16 +58,8 @@ function SettingsForm() {
     
         if (!active || !headers ) return;
 
-        if (profileImageFile) {
-            console.log(profileImageFile)
-            uploadProfileImage({ profileImageFile, username, headers})
-            .then(() => {
-                console.log("profile image uploaded successfully")
-            })
-            .catch((err) => errorHandler(err));
-        }
 
-        updateUser({headers, username, email, bio, imageUrl, password })
+        updateUser({headers, username, email, bio, image, backgroundImage, icon, backgroundColor })
         .then((loggedIn) => {setAuthState(loggedIn);})
         .catch((error: AxiosError) => { setErrorMessage(error.message) })
         .finally(() => {
@@ -88,13 +87,29 @@ function SettingsForm() {
                             <FormFieldset
                             title="Upload Image"
                             name="profileImage"
-                            value={profileImageFile}
+                            value={image}
                             type="file"
-                            changeHandler={handleImageFileChange}
+                            changeHandler={handleFileChange}
                             >
                             </FormFieldset>
                             <CustomSelectImage imageUrl={imageUrl} changeHandler={handleCustomSelectClick}/>
                         </div>
+                        <FormFieldset
+                        title="Background Image"
+                        type="file"
+                        name="backgroundImage"
+                        value={backgroundImage}
+                        changeHandler={handleFileChange}
+                        >
+                        </FormFieldset>
+                        <FormFieldset
+                        title="Background Color"
+                        type="color"
+                        name="backgroundColor"
+                        value={backgroundColor}
+                        changeHandler={handleChange}
+                        >
+                        </FormFieldset>
                         <FormFieldset
                         title="Change username"
                         name="username"
