@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +22,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -169,12 +171,23 @@ public class UsersController {
         }
         return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
-    @PutMapping("/")
-    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody SetUserDTO newUserDTO, @RequestHeader HttpHeaders headers ) throws EntityAlreadyExistsException {
-        String token = headers.getFirst("Authorization").replace("Bearer ", "");
-        String username = tokenService.validateToken(token);
+    @PutMapping(value = "/", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<UserResponseDTO> updateUser(
+            @RequestParam("username") String username,
+            @RequestParam("email") String email,
+            @RequestParam("bio") String bio,
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            @RequestParam(value = "backgroundImage", required = false) MultipartFile backgroundImage,
+            @RequestParam("username") String icon,
+            @RequestParam("backgroundColor") String backgroundColor,
+            @RequestHeader HttpHeaders headers ) throws EntityAlreadyExistsException {
 
-        UserResponseDTO userResponseDTO = userService.updateUser(username, newUserDTO);
+        SetUserDTO newUserDTO = new SetUserDTO(username, email, bio, image, backgroundImage, icon, backgroundColor);
+        String token = headers.getFirst("Authorization").replace("Bearer ", "");
+
+        String oldUsername = tokenService.validateToken(token);
+
+        UserResponseDTO userResponseDTO = userService.updateUser(oldUsername, newUserDTO);
 
         return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }

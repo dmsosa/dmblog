@@ -148,12 +148,15 @@ export function logoutUser() {
             username: "",
             email: "",
             password: "",
-            image: "",
             bio: "",
+            imageUrl: "",
+            backgroundImageUrl: "",
+            icon: "apple",
+            backgroundColor: "#DFFF00",
             followersCount: null, 
             followingCount: null,
-            followers: [],
-            following: [],
+            followers: null,
+            following: null,
             createdAt: null,
             updatedAt: null,
             isFollowing: false
@@ -219,13 +222,15 @@ export async function getUserById({  headers, userId } : {
     }
 }
 
-export async function updateUser({ headers, username, email, bio, image, password } : {
-    headers: object,
+export async function updateUser({ headers, username, email, bio, image, backgroundImage, icon, backgroundColor } : {
+    headers: {[key: string] : string } | null,
     username: string,
     email: string,
-    bio: string | null,
-    image: string,
-    password: string
+    bio: string,
+    image: File | null,
+    backgroundImage: File | null,
+    icon: string,
+    backgroundColor: string,
     }
 ) : Promise<TAuthState> {
     try {
@@ -233,17 +238,30 @@ export async function updateUser({ headers, username, email, bio, image, passwor
             headers = {} 
         }
 
-        const { data } : { data: TAuthResponse } =  await instance.request({
+        const formData = new FormData();
+        formData.append("username", username);
+        formData.append("email", email);
+        formData.append("bio", bio);
+        formData.append("icon", icon);
+        formData.append("backgroundColor", backgroundColor);
+
+        if (image) {
+            formData.append("image", image);
+        }
+        if (backgroundImage) {
+            formData.append("backgroundImage", backgroundImage);
+        }
+
+        const { data } : { data: TUser } =  await instance.request({
             url:"/",
             headers: headers,
             method: "PUT",
-            data: { username, email, bio, image, password }
+            data: formData
         })
-        const { token } = data;
-        const newHeaders = { Authorization: `Bearer ${token}`};
 
 
-        const loggedIn = { headers: newHeaders, isAuth: true, loggedUser: data.loggedUser};
+
+        const loggedIn = { headers: headers, isAuth: true, loggedUser: data};
         localStorage.setItem("loggedUser", JSON.stringify(loggedIn));
 
         return loggedIn;
@@ -314,14 +332,5 @@ export async function getFollowingOf({ headers, userId } : {
         errorHandler(error as AxiosError);
         throw(error);
     }
-}
-
-export async function uploadProfileImage({ profileImageFile, username, headers} : { profileImageFile: File, username: string, headers: object | null }) : Promise<void> {
-    const formData = new FormData();
-    formData.append("file", profileImageFile);
-    return instance.post(`/images/${username}`, formData, { headers: {...headers, "Content-Type" :  "multipart/form-data"}, timeout: 10000});
-}
-export async function getProfileImage({ image } : { image: string }) : Promise<AxiosResponse> {
-    return instance.get(`/images/${image}`, { timeout: 4000});
 }
 

@@ -6,6 +6,7 @@ function FormFieldset(
         children,
         changeHandler,
         minLength,
+        maxLength,
         name,
         title,
         addClass="",
@@ -19,6 +20,7 @@ function FormFieldset(
         children?: ReactNode | ReactNode[] | null,
         changeHandler:(e:React.ChangeEvent<HTMLInputElement>) => void | ((e: React.ChangeEvent<HTMLTextAreaElement>) => void),
         minLength?: number | undefined,
+        maxLength?: number | undefined,
         name: string,
         title: string,
         addClass?: string,
@@ -38,6 +40,7 @@ function FormFieldset(
                 className={`form-input ${addClass.length>1? addClass : ""}`}
                 onChange={changeHandler}
                 minLength={minLength}
+                maxLength={maxLength}
                 placeholder={placeholder || ""}
                 name={name}
                 autoFocus={autoFocus}

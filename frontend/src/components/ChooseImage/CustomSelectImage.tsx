@@ -1,10 +1,19 @@
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 
 const defaultImages = ["apple", "pear", "pineapple", "banana", "broccoli", "cucumber", "carrot", "orange", "cheese", "coconut", "avocado", "corn", "strawberry", "peach", "aubergine"];
 
-function CustomSelectImage({ image, changeHandler }:{ image:string, changeHandler: (e: React.MouseEvent<HTMLDivElement>) => void }) {
+function CustomSelectImage({ imageUrl, changeHandler }:{ imageUrl:string, changeHandler: (e: React.MouseEvent<HTMLDivElement>) => void }) {
 
-    const [ currentImage, setCurrentImage ] = useState(image)
+    const [ currentImage, setCurrentImage ] = useState("cheese")
+
+    useEffect(() => {
+        let imageName = "";
+        
+        if (imageUrl) { 
+            imageName = imageUrl.split("/profile/")[1].split(".")[0];
+            setCurrentImage(imageName);
+        };
+    }, []);
 
     const handleToggle = (e: MouseEvent<HTMLDivElement>) => {
         const customSelect = e.currentTarget.closest(".custom-select") as HTMLDivElement;

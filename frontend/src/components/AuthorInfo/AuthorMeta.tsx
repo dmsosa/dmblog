@@ -4,9 +4,9 @@ import { TUser } from "../../types/User";
 import { Link } from "react-router-dom";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 
-function AuthorMeta({ username, image, followersCount, isFollowing, loading, handleFollow } : {
+function AuthorMeta({ username, imageUrl, followersCount, isFollowing, loading, handleFollow } : {
     username: string,
-    image: string,
+    imageUrl: string,
     followersCount: number, 
     isFollowing: boolean, 
     loading: boolean,
@@ -18,7 +18,7 @@ function AuthorMeta({ username, image, followersCount, isFollowing, loading, han
     return loading ? ( <div>Loading</div>) : ( 
         <>
             <div className="profile-avatar col col-md-6 col-12">
-                <Avatar image={image} username={username}/>
+                <Avatar imageUrl={imageUrl} username={username}/>
                 <a href="" className="profile-username">{username}</a>
             </div>
             <div className="profile-buttons col col-md-6 col-12 ">

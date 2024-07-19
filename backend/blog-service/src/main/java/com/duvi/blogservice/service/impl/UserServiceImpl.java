@@ -159,6 +159,8 @@ public class UserServiceImpl implements UserService {
 
         if (userDTO.image() != null) {
             imageUrl = s3Service.uploadImage(userDTO.image());
+        } else {
+            imageUrl = s3Service.findIconUrl(userDTO.icon());
         }
         if (userDTO.backgroundImage() != null) {
             backgroundImageUrl = s3Service.uploadImage(userDTO.backgroundImage());
@@ -166,7 +168,7 @@ public class UserServiceImpl implements UserService {
 
         User oldUser = userRepository.findByUsername(oldUsername).get();
 
-        if (!oldUser.getImageUrl().isEmpty()) {
+        if (!oldUser.getImageUrl().isEmpty() && !oldUser.getImageUrl().contains(userDTO.icon())) {
             s3Service.deleteByUrl(oldUser.getImageUrl());
         }
         if (!oldUser.getBackgroundImageUrl().isEmpty()) {

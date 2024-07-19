@@ -9,4 +9,5 @@ public interface AmazonS3Service {
     public String uploadImage(MultipartFile multipartFile);
     public boolean existsByFilename(String fileName);
     public void deleteByUrl(String url);
+    public String findIconUrl(String icon);
 }

@@ -1,35 +1,26 @@
 import { useEffect, useState } from "react";
-import { getProfileImage } from "../../service/userService";
-import {  AxiosResponse } from "axios";
-import { errorHandler } from "../../service/handleError";
+import LoadingSquare from "../Widgets/LoadingSquare";
 
-const defaultImages = ["apple", "pear", "pineapple", "banana", "broccoli", "cucumber", "carrot", "orange", "cheese", "coconut", "avocado", "corn", "strawberry", "peach", "aubergine"];
-const imagesRoute = "/dmblog/src/assets/img/profile/";
-
-function Avatar({ image, username } : {image: string, username: string } ) {
+function Avatar({ imageUrl, username } : {imageUrl: string, username: string } ) {
 
     const [ source, setSource ] = useState("");
     const [ loading, setLoading ] = useState(false);
 
     useEffect(() => {
         setLoading(true);
-        getProfileImage({image})
-        .then((res: AxiosResponse) => {
-                const profileImage = res.data;
-                if (profileImage === null) {
-                    setSource(imagesRoute + "apple.svg");
-                } else {
-                    if (defaultImages.includes(profileImage)) {
-                        setSource(imagesRoute + profileImage + ".svg");
-                    } else {
-                        setSource(profileImage);
-                    }
-                }
-            })
-        .finally(() => {setLoading(false)})
-    }, [source]);
+        if (!imageUrl) {
+            setSource("https://dmblogbucket.s3.eu-west-2.amazonaws.com/profile/apple.svg");
+        } else {
+            setSource(imageUrl);
+        }
+        setTimeout(() => {
+            setLoading(false);
+        }, 1500);   
+    }, []);
 
     return (
+        loading ? 
+        <LoadingSquare /> :
         <div className="avatar">
             <img 
                 alt={`${username}'s profile image`}

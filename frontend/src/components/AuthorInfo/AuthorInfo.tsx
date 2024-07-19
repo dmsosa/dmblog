@@ -16,7 +16,7 @@ function AuthorInfo() {
     const { headers } = authState;
     const [ loading, setLoading ] = useState(false);
     const [ author, setAuthor ] = useState( state || {} )
-    const { image, bio, isFollowing, followersCount } = author;
+    const { imageUrl, bio, isFollowing, followersCount } = author;
 
     useEffect(() => {
         if (!username) return;
@@ -39,7 +39,7 @@ function AuthorInfo() {
             <AuthorMeta 
             username={username || ""}
             loading={loading}
-            image={image}
+            imageUrl={imageUrl}
             followersCount={followersCount}
             isFollowing={isFollowing}
             handleFollow={handleFollow}/>

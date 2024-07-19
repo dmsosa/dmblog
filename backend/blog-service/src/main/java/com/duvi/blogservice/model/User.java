@@ -6,6 +6,8 @@ import com.duvi.blogservice.model.relations.UserFollower;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -29,12 +31,16 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Min(value = 3)
+    @Max(value = 25)
     private String username;
     @NotNull(message = "{email required}")
     @Pattern(regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$",
             message = "{invalid.email}")
     private String email;
     private String password;
+    @Min(value = 10)
+    @Max(value = 30000)
     private String bio;
     private String imageUrl;
     private String backgroundImageUrl;

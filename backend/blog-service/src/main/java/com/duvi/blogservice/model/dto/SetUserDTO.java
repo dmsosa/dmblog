@@ -5,10 +5,11 @@ import org.springframework.web.multipart.MultipartFile;
 public record SetUserDTO(
         String username,
         String email,
+        String bio,
+
         MultipartFile image,
         MultipartFile backgroundImage,
-        String bio,
-        String backgroundColor,
-        String icon
+        String icon,
+        String backgroundColor
         ) {
 }

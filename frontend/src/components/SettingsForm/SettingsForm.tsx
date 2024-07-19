@@ -6,7 +6,7 @@ import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { errorHandler } from "../../service/handleError";
 import CustomSelectImage from "../ChooseImage/CustomSelectImage";
-import CurrentImage from "../ChooseImage/CurrentImage";
+import Avatar from "../Avatar";
 
 
 function SettingsForm() {
@@ -14,11 +14,11 @@ function SettingsForm() {
     const navigate = useNavigate();
     const { authState, setAuthState } = useAuth() as TAuthContext;
     const { headers, isAuth, loggedUser } = authState;
-    const [ { username, email, bio, password, image }, setForm ] = useState(loggedUser);
+    const [ { username, email, bio, password, icon }, setForm ] = useState(loggedUser);
     const [ profileImageFile, setProfileImageFile ] = useState<File | undefined>(undefined)
     const [ active, setActive ] = useState(true);
     const [ errorMessage, setErrorMessage ] = useState("");
-
+    const { imageUrl } = loggedUser;
 
 
     useEffect(() => {
@@ -42,8 +42,8 @@ function SettingsForm() {
     }
 
     const handleCustomSelectClick = (e: MouseEvent<HTMLDivElement>) => {
-        const imageClicked = e.currentTarget.classList.toString().split("bg-")[1];
-        setForm((prev) => ({...prev, image: imageClicked}));
+        const iconClicked = e.currentTarget.classList.toString().split("bg-")[1];
+        setForm((prev) => ({...prev, icon: iconClicked}));
     }
 
     const handleSubmit = (e: MouseEvent<HTMLFormElement>) => {
@@ -60,7 +60,7 @@ function SettingsForm() {
             .catch((err) => errorHandler(err));
         }
 
-        updateUser({headers, username, email, bio, image, password })
+        updateUser({headers, username, email, bio, imageUrl, password })
         .then((loggedIn) => {setAuthState(loggedIn);})
         .catch((error: AxiosError) => { setErrorMessage(error.message) })
         .finally(() => {
@@ -81,7 +81,7 @@ function SettingsForm() {
                     <p>{errorMessage}</p>
                 </div>}
             <div className="col">
-                <CurrentImage image={image}/>
+                <Avatar imageUrl={imageUrl} username={username}/>
                 <form className="form-cont" onSubmit={handleSubmit}>
                     <fieldset>
                         <div className="fieldset-images">
@@ -93,7 +93,7 @@ function SettingsForm() {
                             changeHandler={handleImageFileChange}
                             >
                             </FormFieldset>
-                            <CustomSelectImage image={image} changeHandler={handleCustomSelectClick}/>
+                            <CustomSelectImage imageUrl={imageUrl} changeHandler={handleCustomSelectClick}/>
                         </div>
                         <FormFieldset
                         title="Change username"
@@ -102,6 +102,8 @@ function SettingsForm() {
                         placeholder="Your username"
                         changeHandler={handleChange}
                         type="text"
+                        minLength={3}
+                        maxLength={25}
                         ></FormFieldset>
                         <FormFieldset
                         title="Change email address"
@@ -118,16 +120,11 @@ function SettingsForm() {
                             placeholder="Brief biography about yourself"
                             name="bio"
                             value={bio}
-                            onChange={handleChange}>
+                            onChange={handleChange}
+                            minLength={10}
+                            maxLength={30000}>
                             </textarea>
                         </fieldset>
-                        <FormFieldset
-                        title="Change your password"
-                        name="password"
-                        value={password}
-                        changeHandler={handleChange}
-                        type="password"
-                        ></FormFieldset>
                     </fieldset>
                     <div className="form-btns">
                         <button type="submit" className="btn btn-primary" disabled={!active}>Save changes</button>

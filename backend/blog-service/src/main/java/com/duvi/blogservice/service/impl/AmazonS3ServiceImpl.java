@@ -63,4 +63,14 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
                 .key(url)
                 .build();
     }
+
+    @Override
+    public String findIconUrl(String icon) {
+        String objectKey = "profile/" + icon + ".svg";
+        GetUrlRequest getUrlRequest = GetUrlRequest.builder()
+                .bucket(BUCKET_NAME)
+                .key(objectKey)
+                .build();
+        return s3Client.utilities().getUrl(getUrlRequest).toString();
+    }
 }
