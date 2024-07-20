@@ -10,18 +10,18 @@ function ArticleMeta({ children, author, bottom=false }: {
     bottom?: boolean
 }) {
 
-    const { bio, followersCount, followingCount, image, username } = author || {};
+    const { bio, followersCount, followingCount, imageUrl, username } = author || {};
 
     return (
         <div className={`article-meta ${bottom ? "bottom": ""}`}>
             <Link
                 className="article-author"
-                state={{bio, followersCount, followingCount, image }}
+                state={{bio, followersCount, followingCount, imageUrl }}
                 to={`/dmblog/profile/${username}`}
             >
                 <Avatar 
                     username={username}
-                    image={image}
+                    imageUrl={imageUrl}
                 />
                 <p>{username}</p>
             </Link>

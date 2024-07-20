@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
@@ -26,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 
 @RestController
@@ -54,14 +57,13 @@ public class UsersController {
 
 
     @GetMapping("/current")
-    public ResponseEntity<AuthResponseDTO> currentUser(@RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
+    public ResponseEntity<UserResponseDTO> currentUser(@RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
         String bearerToken = headers.get("Authorization").getFirst();
         String token = bearerToken.replace("Bearer ", "");
         String username = tokenService.validateToken(token);
         UserResponseDTO user = userService.findUserByUsername(username);
-        user = user.withFollowing(userService.isFollowing(user.id(), username));
-        AuthResponseDTO response = new AuthResponseDTO(token, user);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -95,42 +97,6 @@ public class UsersController {
 //OAuth2 Requests and Redirect endpoint
 
     //Redirect to our frontEnd with user info ready to sign up
-    @GetMapping("/redirect")
-    public void redirect(HttpServletResponse httpServletResponse, Principal principal) {
-        String username = "";
-        String email = "";
-        String image = "";
-
-        if (!(principal instanceof OAuth2AuthenticationToken)) {
-            return;
-        }
-        OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken) principal;
-        if (authenticationToken.getPrincipal() instanceof DefaultOidcUser) {
-
-            DefaultOidcUser defaultOidcUser = (DefaultOidcUser) authenticationToken.getPrincipal();
-
-            username = (String) defaultOidcUser.getAttributes().get("name");
-            email = defaultOidcUser.getEmail();
-            image = defaultOidcUser.getPicture();
-
-        } else {
-
-            DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authenticationToken.getPrincipal();
-
-
-            username = (String) defaultOAuth2User.getAttributes().get("name");
-            email = (String) defaultOAuth2User.getAttributes().get("email");
-            image = (String) defaultOAuth2User.getAttributes().get("avatar_url");
-
-        }
-        String redirectUri = "http://localhost:5173//signup";
-        String redirectParams = "?description=registration_credentials&username=%1$s&email=%2$s&image=%3$s"
-                .formatted(username, email, image);
-        httpServletResponse.setStatus(302);
-        httpServletResponse.setHeader("Location", redirectUri + redirectParams);
-    }
-
-
 
     @GetMapping("/")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers(@RequestHeader HttpHeaders headers) {
@@ -172,13 +138,13 @@ public class UsersController {
         return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
     @PutMapping(value = "/", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<UserResponseDTO> updateUser(
+    public ResponseEntity<AuthResponseDTO> updateUser(
             @RequestParam("username") String username,
             @RequestParam("email") String email,
             @RequestParam("bio") String bio,
             @RequestParam(value = "image", required = false) MultipartFile image,
             @RequestParam(value = "backgroundImage", required = false) MultipartFile backgroundImage,
-            @RequestParam("username") String icon,
+            @RequestParam("icon") String icon,
             @RequestParam("backgroundColor") String backgroundColor,
             @RequestHeader HttpHeaders headers ) throws EntityAlreadyExistsException {
 
@@ -189,7 +155,15 @@ public class UsersController {
 
         UserResponseDTO userResponseDTO = userService.updateUser(oldUsername, newUserDTO);
 
-        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User principal = (User) authentication.getPrincipal();
+        principal.setUsername(newUserDTO.username());
+
+        String newToken = tokenService.generateToken(principal);
+
+        AuthResponseDTO authResponse = new AuthResponseDTO(newToken, userResponseDTO);
+
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
     @GetMapping("/followers/{userId}")
     public ResponseEntity<List<UserResponseDTO>> getFollowersOf(@PathVariable Long userId, @RequestHeader HttpHeaders headers) {

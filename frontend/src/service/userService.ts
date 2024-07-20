@@ -1,6 +1,6 @@
-import axios, {  AxiosError, AxiosResponse } from "axios";
+import axios, {  AxiosError } from "axios";
 import { TAuthState } from "../context/AuthContext";
-import {  CustomError, errorHandler } from "./handleError";
+import {   errorHandler } from "./handleError";
 import { TUser } from "../types/User";
 
 
@@ -11,14 +11,7 @@ let instance = axios.create({
     headers: {"duvi":"duvivalue"}
 })
 
-//Custom type
-type TUserData = {
-    username: string,
-    email: string,
-    bio: string | null,
-    image: string | null,
-    password: string
-}
+
 
 type TAuthResponse = {
     token: string,
@@ -28,65 +21,17 @@ type TAuthResponse = {
 //OAuth2 Providers
 export type TProvider = "google" | "github" | "facebook";
 
-////////////////// Sign Up with OAuth provider
-
-//Authorize with the given provider
-export function authorizeWith(provider: TProvider) : void {
-
-    var providerURL = "";
-
-    switch (provider) {
-        case "google" : {
-            providerURL = "http://localhost:8082/oauth2/authorization/google"
-            break
-        }
-        case "github" : {
-            providerURL = "http://localhost:8082/oauth2/authorization/github";
-            break
-        }
-        case "facebook" : {
-            providerURL = "http://localhost:8082/oauth2/authorization/facebook";
-            break
-        }
-    }
-    window.location.replace(providerURL);
-}
-
-
-// //logout user 
-// function logoutFrom({ provider, accessToken } :
-//     {
-//         provider: TProvider,
-//         accessToken: string
-//     }) : void {
-//         switch (provider) {
-//             case "google": {
-//                 break
-//             }
-//             case "github" : {
-//                 break
-//             }
-//             case "facebook" : {
-//                 break
-//             }
-//         }
-// }
-//Sign Up User
-export async function signUpUser( { userData, asAdmin } : {
-    userData?: TUserData,
+//Register User
+export async function signUpUser( { username, email, password, asAdmin = false } : {
+    username: string,
+    email: string,
+    password: string,
     asAdmin?: boolean, 
 }): Promise<TAuthState> {
 
-
-    if (!userData) {
-        throw new CustomError("Please, provide your registration data!");
-    };
-    const { username, email, bio, image, password } = userData; 
     const signUpData = {
         username: username, 
         email: email, 
-        bio: bio ? bio : "I just registered in Dmsosa Blog!",
-        image: image ? image : null,
         password: password, 
         role: asAdmin ? "ADMIN" : "USER" 
     };
@@ -117,9 +62,7 @@ export async function loginUser({ login, password } : { login: string, password:
 
 
     try {
-        if ( login.length < 1 || password.length < 1 ) {
-            throw new CustomError("You must indicate your login credentials!");
-        }
+
         const { data } = await instance.request({
             data: {login: login, password: password},
             method: "POST",
@@ -227,8 +170,8 @@ export async function updateUser({ headers, username, email, bio, image, backgro
     username: string,
     email: string,
     bio: string,
-    image: File | string,
-    backgroundImage: File | string,
+    image: File | undefined,
+    backgroundImage: File | undefined,
     icon: string,
     backgroundColor: string,
     }
@@ -245,23 +188,24 @@ export async function updateUser({ headers, username, email, bio, image, backgro
         formData.append("icon", icon);
         formData.append("backgroundColor", backgroundColor);
 
-        if (image.toString.length > 0) {
+        if (image) {
+            console.log("image found")
             formData.append("image", image);
         }
-        if (backgroundImage.toString.length > 0) {
+        if (backgroundImage) {
             formData.append("backgroundImage", backgroundImage);
         }
 
-        const { data } : { data: TUser } =  await instance.request({
+        const { data } : { data: TAuthResponse } =  await instance.request({
             url:"/",
             headers: headers,
             method: "PUT",
             data: formData
         })
 
+        const { token, loggedUser } = data;
 
-
-        const loggedIn = { headers: headers, isAuth: true, loggedUser: data};
+        const loggedIn = { headers : { ...headers, "Authorization" : "Bearer " + token }, isAuth: true, loggedUser};
         localStorage.setItem("loggedUser", JSON.stringify(loggedIn));
 
         return loggedIn;

@@ -147,10 +147,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDTO updateUser(String oldUsername, SetUserDTO userDTO) throws EntityAlreadyExistsException {
 
-        if (userRepository.existsByUsername(userDTO.username())) {
+        User oldUser = userRepository.findByUsername(oldUsername).get();
+
+        if (userRepository.existsByUsername(userDTO.username()) &&
+                !Objects.equals( oldUser.getUsername(), userDTO.username())) {
             throw new EntityAlreadyExistsException("User with username %s already exists!".formatted(userDTO.username()));
         }
-        if (userRepository.existsByEmail(userDTO.email())) {
+        if (userRepository.existsByEmail(userDTO.email()) &&
+                !Objects.equals( oldUser.getEmail(), userDTO.email())) {
             throw new EntityAlreadyExistsException("User with email %s already exists!".formatted(userDTO.email()));
         }
 
@@ -158,15 +162,13 @@ public class UserServiceImpl implements UserService {
         String backgroundImageUrl = "";
 
         if (userDTO.image() != null) {
-            imageUrl = s3Service.uploadImage(userDTO.image());
+            imageUrl = s3Service.uploadUserImage(userDTO.image(), "profile", userDTO.username());
         } else {
             imageUrl = s3Service.findIconUrl(userDTO.icon());
         }
         if (userDTO.backgroundImage() != null) {
-            backgroundImageUrl = s3Service.uploadImage(userDTO.backgroundImage());
+            backgroundImageUrl = s3Service.uploadUserImage(userDTO.backgroundImage(), "background", userDTO.username());
         }
-
-        User oldUser = userRepository.findByUsername(oldUsername).get();
 
         if (!oldUser.getImageUrl().isEmpty() && !oldUser.getImageUrl().contains(userDTO.icon())) {
             s3Service.deleteByUrl(oldUser.getImageUrl());

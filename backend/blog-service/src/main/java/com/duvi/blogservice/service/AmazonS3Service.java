@@ -6,7 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public interface AmazonS3Service {
-    public String uploadImage(MultipartFile multipartFile);
+    public String uploadUserImage(MultipartFile multipartFile, String folder, String username);
+    public String uploadArticleImage(MultipartFile multipartFile, String articleSlug);
     public boolean existsByFilename(String fileName);
     public void deleteByUrl(String url);
     public String findIconUrl(String icon);

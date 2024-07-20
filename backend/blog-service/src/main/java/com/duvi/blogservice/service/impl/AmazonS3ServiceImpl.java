@@ -25,10 +25,10 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     private S3Client s3Client;
 
     @Override
-    public String uploadImage(MultipartFile multipartFile) {
+    public String uploadUserImage(MultipartFile multipartFile, String folder, String username) {
 
         try {
-            String fileName = multipartFile.getOriginalFilename();
+            String fileName = folder + "/" + username;
             byte[] bytes = multipartFile.getBytes();
 
             Map<String, String> metadata = new HashMap<>();
@@ -48,6 +48,11 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
             logger.error("Fehler bei der Hochladen den Bilder: " + exception.getMessage());
             return "";
         }
+    }
+
+    @Override
+    public String uploadArticleImage(MultipartFile multipartFile, String articleSlug) {
+        return null;
     }
 
     @Override

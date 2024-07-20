@@ -14,8 +14,8 @@ function SettingsForm() {
     const { authState, setAuthState } = useAuth() as TAuthContext;
     const { headers, isAuth, loggedUser } = authState;
     const [ { username, email, bio, icon, backgroundColor  }, setForm ] = useState(loggedUser);
-    const [ image, setImage ] = useState<File | string>("")
-    const [ backgroundImage, setBackgroundImage ] = useState<File | string>("")
+    const [ image, setImage ] = useState<File>()
+    const [ backgroundImage, setBackgroundImage ] = useState<File>()
     const [ active, setActive ] = useState(true);
     const [ errorMessage, setErrorMessage ] = useState("");
     const { imageUrl } = loggedUser;
@@ -36,21 +36,25 @@ function SettingsForm() {
     }
     
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        console.log("bef", image)
         console.log("bef", backgroundImage)
 
         if (e.target.files) {
             if (e.target.name === "backgroundImage") {
+                console.log("bg")
                 setBackgroundImage(e.target.files[e.target.files.length-1]);
             } else {
                 setImage(e.target.files[e.target.files.length-1]);
             }
         }
+        console.log("after", image)
         console.log("after", backgroundImage)
+
     }
 
     const handleCustomSelectClick = (e: MouseEvent<HTMLDivElement>) => {
-        const iconClicked = e.currentTarget.classList.toString().split("bg-")[1];
-        setForm((prev) => ({...prev, icon: iconClicked}));
+        const iconName = e.currentTarget.classList[1].replace("bg-", "");
+        setForm((prev) => ({...prev, icon: iconName}));
     }
 
     const handleSubmit = (e: MouseEvent<HTMLFormElement>) => {
@@ -59,17 +63,16 @@ function SettingsForm() {
         if (!active || !headers ) return;
 
 
-        updateUser({headers, username, email, bio, image, backgroundImage, icon, backgroundColor })
+        updateUser({ headers, username, email, bio, image, backgroundImage, icon, backgroundColor })
         .then((loggedIn) => {setAuthState(loggedIn);})
         .catch((error: AxiosError) => { setErrorMessage(error.message) })
         .finally(() => {
-            location.reload();
             setActive(false)
         });
     }
 
     const comeBack = () => {
-        navigate("/")
+        navigate("/dmblog")
     }
     return (
         <>
@@ -87,18 +90,16 @@ function SettingsForm() {
                             <FormFieldset
                             title="Upload Image"
                             name="profileImage"
-                            value={image}
                             type="file"
                             changeHandler={handleFileChange}
                             >
                             </FormFieldset>
-                            <CustomSelectImage imageUrl={imageUrl} changeHandler={handleCustomSelectClick}/>
+                            <CustomSelectImage icon={icon} changeHandler={handleCustomSelectClick}/>
                         </div>
                         <FormFieldset
                         title="Background Image"
                         type="file"
                         name="backgroundImage"
-                        value={backgroundImage}
                         changeHandler={handleFileChange}
                         >
                         </FormFieldset>

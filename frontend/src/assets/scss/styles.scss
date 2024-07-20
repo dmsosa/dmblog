@@ -147,6 +147,10 @@ body {
     align-items: center;
     justify-content: center;
 }
+.article-meta .loading-square-wrapper, .article-meta .loading-square-wrapper::before, .article-meta .loading-square-wrapper::after {
+    max-width: 70px;
+    max-height: 70px;
+}
 .loading-square-wrapper::before {
     content: "";
     position: absolute;

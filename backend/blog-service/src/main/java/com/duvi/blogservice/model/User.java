@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,16 +32,14 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Min(value = 3)
-    @Max(value = 25)
+    @Length(min = 3, max = 25)
     private String username;
     @NotNull(message = "{email required}")
     @Pattern(regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$",
             message = "{invalid.email}")
     private String email;
     private String password;
-    @Min(value = 10)
-    @Max(value = 30000)
+    @Length(min = 10, max = 5000)
     private String bio;
     private String imageUrl;
     private String backgroundImageUrl;

@@ -6,7 +6,6 @@ import './assets/scss/styles.scss'
 import AuthProvider from './context/AuthContext.tsx'
 import Home from './routes/Home.tsx'
 import  Login  from './routes/Login.tsx'
-import SignUp from './routes/SignUp.tsx'
 import HomeArticles from './routes/HomeArticles.tsx'
 import ArticleEditor from './components/Article/ArticleEditor/ArticleEditor.tsx'
 import CommentSection from './routes/Article/CommentSection.tsx'
@@ -16,6 +15,7 @@ import ProfileArticles from './routes/Profile/ProfileArticles.tsx'
 import ProfileFavArticles from './routes/Profile/ProfileFavArticles.tsx'
 import Profile from './routes/Profile/Profile.tsx'
 import Settings from './routes/Settings.tsx'
+import Register from './routes/Register.tsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -28,7 +28,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 <Route index element={<HomeArticles />}/>
               </Route>
               <Route path="/dmblog/login" element={<Login />}/>
-              <Route path="/dmblog/signup" element={<SignUp />}></Route>
+              <Route path="/dmblog/register" element={<Register />}></Route>
               <Route path="/dmblog/editor" element={<ArticleEditor />}>
                 <Route path=":slug" element={<ArticleEditor />}/>
               </Route>

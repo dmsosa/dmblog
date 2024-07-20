@@ -52,21 +52,20 @@ if (loggedIn) {
         
 function AuthProvider({ children }: { children : ReactNode[] | ReactNode }) {
     const [{ headers, isAuth, loggedUser } , setAuthState] = useState(authState);
-    useEffect(
-        () => {
-            if (headers === null ) { return };
-            
-            
-            getUser({ headers })
-            .then((loggedUser) => {
-                setAuthState((prev) => ({ ...prev, loggedUser }))
-            })
-            .catch((e: AxiosError) => {
-                errorHandler(e)
-                console.log("Could not retrieve loggedUser from backend: " + loggedUser + "\nlogging out...");
-                setAuthState(logoutUser());
-            }); 
-        }, [ headers, isAuth, authState, setAuthState ])
+
+    useEffect(() => {
+        if (!headers || !isAuth ) { return };
+
+        getUser({ headers })
+        .then((loggedUser) => { 
+            setAuthState((prev) => ({...prev, loggedUser}))
+        })
+        .catch((e: AxiosError) => {
+            errorHandler(e)
+            console.log("Could not retrieve loggedUser from backend: " + loggedUser + "\nlogging out...");
+            setAuthState(logoutUser());
+        }); 
+    }, [headers, isAuth, loggedUser, setAuthState]);
     return (
         <AuthContext.Provider value={{authState, setAuthState}}>
             {children}

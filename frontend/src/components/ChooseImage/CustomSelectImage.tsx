@@ -1,37 +1,29 @@
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useState } from "react";
 
-const defaultImages = ["apple", "pear", "pineapple", "banana", "broccoli", "cucumber", "carrot", "orange", "cheese", "coconut", "avocado", "corn", "strawberry", "peach", "aubergine"];
+const defaultIcons = ["apple", "pear", "pineapple", "banana", "broccoli", "cucumber", "carrot", "orange", "cheese", "coconut", "avocado", "corn", "strawberry", "peach", "aubergine"];
 
-function CustomSelectImage({ imageUrl, changeHandler }:{ imageUrl:string, changeHandler: (e: React.MouseEvent<HTMLDivElement>) => void }) {
+function CustomSelectImage({ icon, changeHandler }:{ icon:string, changeHandler: (e: React.MouseEvent<HTMLDivElement>) => void }) {
 
-    const [ currentImage, setCurrentImage ] = useState("cheese")
-
-    useEffect(() => {
-        let imageName = "";
-        
-        if (imageUrl) { 
-            imageName = imageUrl.split("/profile/")[1].split(".")[0];
-            setCurrentImage(imageName);
-        };
-    }, []);
+    const [ currentIcon, setCurrentIcon ] = useState(icon)
 
     const handleToggle = (e: MouseEvent<HTMLDivElement>) => {
         const customSelect = e.currentTarget.closest(".custom-select") as HTMLDivElement;
         customSelect.classList.toggle("active");
     }
-    const handleClick = (e: MouseEvent<HTMLDivElement>, img: string) => {
+    const handleClick = (e: MouseEvent<HTMLDivElement>) => {
+        const iconName = e.currentTarget.classList[1].replace("bg-", "");
         handleToggle(e);
-        setCurrentImage(img);
+        setCurrentIcon(iconName);
         changeHandler(e);
     }
     return (
         <div className="default-images">
             <label htmlFor="custom-select">Choose image</label>
             <div className="custom-select">
-                <div className={`select-item selected bg-${currentImage}`} onClick={handleToggle}></div>
+                <div className={`select-item selected bg-${currentIcon}`} onClick={handleToggle}></div>
                 <div className="select-list">
                     <div className="select-item"></div>
-                    { defaultImages.map((img) => (<div key={img} className={`select-item bg-${img}`} onClick={(e) => {handleClick(e, img)}}></div>))}
+                    { defaultIcons.map((defaultIcon) => (<div key={defaultIcon} className={`select-item bg-${defaultIcon}`} onClick={handleClick}></div>))}
                 </div>
             </div>
         </div>

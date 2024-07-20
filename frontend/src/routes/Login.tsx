@@ -12,7 +12,7 @@ function Login() {
         <AuthPageContainer
             title="Log into it!"
             message="need an account?"
-            path="/sign-up"
+            path="/dmblog/register"
             error={errorMessage}
         >
             <LoginForm onError={handleError}></LoginForm>

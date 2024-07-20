@@ -2,7 +2,7 @@ import { useState } from "react";
 import AuthPageContainer from "../components/AuthPageContainer";
 import SignUpForm from "../components/SignUpForm";
 
-function SignUp() {
+function Register() {
     const [errorMessage, setErrorMessage] = useState<string>("");
 
     const handleError = (error: Error) => {
@@ -13,11 +13,11 @@ function SignUp() {
             error={errorMessage}
             title="Come to Duvi!"
             message="already have an account?"
-            path="/login"
+            path="/dmblog/login"
         >
             <SignUpForm onError={handleError}></SignUpForm>
         </AuthPageContainer>
     )
 }
 
-export default SignUp;
+export default Register;

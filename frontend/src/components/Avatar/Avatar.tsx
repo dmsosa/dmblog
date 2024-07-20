@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import LoadingSquare from "../Widgets/LoadingSquare";
 
-function Avatar({ imageUrl, username } : {imageUrl: string, username: string } ) {
+function    Avatar({ imageUrl, username } : {imageUrl: string, username: string } ) {
 
     const [ source, setSource ] = useState("");
     const [ loading, setLoading ] = useState(false);
 
     useEffect(() => {
         setLoading(true);
-        if (!imageUrl) {
+        if (!imageUrl || imageUrl.length < 1) {
             setSource("https://dmblogbucket.s3.eu-west-2.amazonaws.com/profile/apple.svg");
         } else {
             setSource(imageUrl);
