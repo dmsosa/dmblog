@@ -1,1 +1,1 @@
-export {default} from "./FeedToggler";
+export { default } from "./FeedToggler";

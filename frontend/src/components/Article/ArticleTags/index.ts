@@ -1,1 +1,1 @@
-export {default} from "./ArticleTags";
+export { default } from "./ArticleTags";

@@ -30,8 +30,6 @@
 //     );
 // }
 
-
-
 // function insertIntoTextArea(text: string ): string | null {
 //     const textarea = document.getElementById("md-editor") as HTMLTextAreaElement;
 //     if (!textarea) {
@@ -49,6 +47,6 @@
 //     textarea.value = sentence;
 
 //     textarea.selectionEnd = end + text.length;
-    
+
 //     return sentence;
 // }

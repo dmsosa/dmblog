@@ -5,33 +5,35 @@ import { LoggedOptions } from "./LoggedOptions";
 import { NotLoggedOptions } from "./NotLoggedOptions";
 
 function NavMenu() {
-    const navigation = useNavigate();
-    const { authState, setAuthState } =  useAuth() as TAuthContext;
-    const { isAuth, loggedUser } = authState;
+  const navigation = useNavigate();
+  const { authState, setAuthState } = useAuth() as TAuthContext;
+  const { isAuth, loggedUser } = authState;
 
-    const handleLogout = () => {
-        if (setAuthState) {
-            setAuthState(logoutUser);
-            navigation("/");
-        }
-    };
+  const handleLogout = () => {
+    if (setAuthState) {
+      setAuthState(logoutUser);
+      navigation("/");
+    }
+  };
 
-    const onClick = () => {
-        document.getElementById("navbarSupportedContent")?.classList.toggle("show");
-        document.body.classList.toggle("nonscroll");
-    };
+  const onClick = () => {
+    document.getElementById("navbarSupportedContent")?.classList.toggle("show");
+    document.body.classList.toggle("nonscroll");
+  };
 
-    return (
-            <ul className="navbar-nav">
-                {isAuth && loggedUser ? 
-                <LoggedOptions 
-                username={loggedUser.username}
-                handleClick={onClick}
-                handleLogout={handleLogout}
-                /> : <NotLoggedOptions />}
-            </ul>
-
-)
+  return (
+    <ul className="navbar-nav">
+      {isAuth && loggedUser ? (
+        <LoggedOptions
+          username={loggedUser.username}
+          handleClick={onClick}
+          handleLogout={handleLogout}
+        />
+      ) : (
+        <NotLoggedOptions />
+      )}
+    </ul>
+  );
 }
 
 export default NavMenu;

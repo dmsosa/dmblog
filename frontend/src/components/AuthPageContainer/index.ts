@@ -1,1 +1,1 @@
-export { default } from './AuthPageContainer';
+export { default } from "./AuthPageContainer";

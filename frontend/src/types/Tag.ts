@@ -1,3 +1,3 @@
 export type TTag = {
-    name: string
-}
+  name: string;
+};

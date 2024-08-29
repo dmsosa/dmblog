@@ -8,9 +8,6 @@
 // function useComment({ slug } : {
 //     slug: string | undefined
 // }) {
-    
-
-    
 
 //     return { loading, comments, commentsCount, setCommentData };
 // }
