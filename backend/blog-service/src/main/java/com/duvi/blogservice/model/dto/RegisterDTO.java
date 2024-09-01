@@ -1,6 +1,5 @@
 package com.duvi.blogservice.model.dto;
 
-import com.duvi.blogservice.model.User;
 import com.duvi.blogservice.model.UserRole;
 
 public record RegisterDTO(

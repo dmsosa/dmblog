@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 function FormFieldset({
+  id,
   autoFocus = false,
   children,
   changeHandler,
@@ -14,6 +15,7 @@ function FormFieldset({
   type,
   value,
 }: {
+  id: string,
   autoFocus?: boolean;
   children?: ReactNode | ReactNode[] | null;
   changeHandler: (
@@ -27,7 +29,7 @@ function FormFieldset({
   placeholder?: string | null;
   required?: boolean;
   type: string;
-  value?: string | null | undefined;
+  value?: string | number | readonly string[] | undefined;
 }) {
   return (
     <div className="fieldset-div">
@@ -35,7 +37,7 @@ function FormFieldset({
         {title}
       </label>
       <input
-        id={name}
+        id={id}
         className={`form-input ${addClass.length > 1 ? addClass : ""}`}
         onChange={changeHandler}
         minLength={minLength}

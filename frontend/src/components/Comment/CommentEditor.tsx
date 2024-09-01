@@ -3,7 +3,7 @@ import CommentAuthor from "./CommentAuthor";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import { Link, useParams } from "react-router-dom";
 import { TCommentData, postComment } from "../../service/commentService";
-import { errorHandler } from "../../service/handleError";
+import { errorHandler } from "../../service/errorHandler";
 
 function CommentEditor({
   setCommentData,

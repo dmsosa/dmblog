@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { TAuthState } from "../context/AuthContext";
-import { errorHandler } from "./handleError";
+import { createApiError } from "./errorHandler";
 import { TUser } from "../types/User";
 
 //Axios instance
@@ -52,8 +52,8 @@ export async function signUpUser({
 
     return loggedIn;
   } catch (error: unknown) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 //Login User
@@ -81,8 +81,8 @@ export async function loginUser({
     localStorage.setItem("loggedUser", JSON.stringify(loggedIn));
     return loggedIn;
   } catch (error: unknown) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 //Logout User
@@ -126,8 +126,8 @@ export async function getUser({
     });
     return data.loggedUser;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
@@ -150,8 +150,8 @@ export async function getUserByUsername({
     });
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
@@ -175,8 +175,8 @@ export async function getUserById({
 
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
@@ -237,8 +237,8 @@ export async function updateUser({
 
     return loggedIn;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
@@ -260,8 +260,8 @@ export async function toggleFollow({
     });
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
@@ -283,8 +283,8 @@ export async function getFollowersOf({
     });
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
@@ -307,7 +307,7 @@ export async function getFollowingOf({
     });
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }

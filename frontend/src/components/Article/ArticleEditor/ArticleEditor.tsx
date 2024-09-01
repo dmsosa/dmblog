@@ -2,9 +2,8 @@ import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import FormFieldset from "../../FormFieldset";
 
 import {
-  getArticleBySlug,
-  setArticle,
-  uploadImageForArticle,
+  getArticle,
+  putArticle
 } from "../../../service/articleService";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
@@ -17,21 +16,28 @@ import EmojiPicker, {
   EmojiStyle,
   Theme,
 } from "emoji-picker-react";
+import { ApiError } from "../../../service/errorHandler";
 
 //Custom types
 type TForm = {
+  articleId: string;
+  userId: string;
   title: string;
   description: string;
   body: string;
   backgroundColor: string;
+  fontColor: string;
   emoji: string;
   tagList: string[];
 };
 const emptyForm = {
+  articleId: "",
+  userId: "",
   title: "",
   description: "",
   body: "",
   backgroundColor: "#99ff33",
+  fontColor: "#333",
   emoji: "",
   tagList: [""],
 };
@@ -42,11 +48,8 @@ function ArticleEditor() {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  const [
-    { title, description, body, backgroundColor, emoji, tagList },
-    setForm,
-  ] = useState<TForm>(state || emptyForm);
-  const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
+  const [{ articleId, userId, title, description, body, backgroundColor, fontColor, emoji, tagList }, setForm] = useState<TForm>(state || emptyForm);
+  const [ image, setImage ] = useState<File | null>(null);
   const [emojiOpen, setEmojiOpen] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
@@ -61,29 +64,55 @@ function ArticleEditor() {
     if (!isAuth) {
       alert("You need to login first!");
       return redirect();
-    }
-    if (state || !slug) return;
+    };
+    if (!slug) return;
+    if (state) {
+      
+      //getBgImage
+      return
+    };
 
-    getArticleBySlug({ slug })
+    getArticle({ slug })
       .then((article: TArticle) => {
-        const { id, title, description, body, tagList } = article;
-        if (loggedUser.id !== id) redirect();
-        setForm({ title, description, body, backgroundColor, emoji, tagList });
+        const { id, author, title, description, body, backgroundColor, fontColor, emoji,  tagList } = article;
+        if (loggedUser.id !== author.id) redirect();
+
+        let userId = loggedUser.id ? loggedUser.id.toString() : "";
+        let articleId = id ? id.toString() : "";
+
+        setForm({ articleId, userId, title, description, body, backgroundColor, fontColor, emoji, tagList });
       })
-      .catch((error) => {
-        handleError(error as AxiosError);
+      .catch((error: ApiError) => {
+        setErrorMessages([error.getMessage()])
       });
 
     return () => setForm(emptyForm);
-  }, [headers, isAuth, loggedUser.id, navigate, slug, state, backgroundColor, emoji]);
+  }, [
+    headers,
+    isAuth,
+    loggedUser.id,
+    navigate,
+    slug,
+    state,
+    backgroundColor,
+    emoji,
+  ]);
 
   //handle input changes
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>,
+    e: ChangeEvent<HTMLInputElement> ,
   ) => {
+
     const name = e.target.name;
     const value = e.target.value;
-    setForm((prev: TForm) => ({ ...prev, [name]: value }));
+
+    if (name === "backgroundImage") {
+      const file = e.target.files ? e.target.files[0] : null;
+      setImage(file);
+    }
+    else {
+      setForm((prev: TForm) => ({ ...prev, [name]: value }));
+    }
   };
   //handle markdown change
   const handleMarkdownChange = (
@@ -98,73 +127,48 @@ function ArticleEditor() {
     }
     setForm((prev: TForm) => ({ ...prev, [name]: value }));
   };
+
+  const handleEmojiChange = (emoji: EmojiClickData) => {
+    setForm((prev: TForm) => ({ ...prev, "emoji": emoji.imageUrl }));
+    setEmojiOpen(!emojiOpen);
+  }
   //handle tag input
-  const handleTagInput = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleTagChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setForm((prev: TForm) => ({ ...prev, tagList: value.split(/, | /) }));
   };
-  //handle image change
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files !== null) {
-      setBackgroundImage(e.target.files[e.target.files.length - 1]);
-    }
-  };
-  const handleEmojiChange = (emoji: EmojiClickData) => {
-    setForm((prev) => ({ ...prev, emoji: emoji.imageUrl }));
-    setEmojiOpen(!emojiOpen);
-  };
+
+
   //handle submit
   const handleSubmit = (e: MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (backgroundImage != null) {
-      uploadImageForArticle({ backgroundImage, title, headers })
-        .then((message) => {
-          console.log(message);
-          //set article
-          setArticle({
-            userId: loggedUser.id,
-            title,
-            description,
-            body,
-            backgroundColor,
-            emoji,
-            artSlug: slug || null,
-            tagList,
-            headers,
-          })
-            .then((article: TArticle) => {
-              navigate(`/dmblog/article/${article.slug}`);
-            })
-            .catch((error: AxiosError) => {
-              handleError(error);
-            });
-        })
-        .catch((error) => console.log(error));
-    } else {
-      setArticle({
-        userId: loggedUser.id,
-        title,
-        description,
-        body,
-        backgroundColor,
-        emoji,
-        artSlug: slug || null,
-        tagList,
-        headers,
-      })
-        .then((article: TArticle) => {
-          navigate(`/dmblog/article/${article.slug}`);
-        })
-        .catch((error: AxiosError) => {
-          handleError(error);
-        });
+    const formData = new FormData();
+    formData.append("articleId", articleId);
+    formData.append("userId", userId);
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("body", body);
+    formData.append("backgroundColor", backgroundColor);
+    formData.append("fontColor", fontColor);
+    formData.append("emoji", emoji);
+    for (let i = 0; i < tagList.length ; i++ ) {
+      formData.append("tagList[]", tagList[i]);
     }
-  };
-  const handleError = (e: AxiosError) => {
-    const message =
-      e.name + " caused by " + e.cause + ", message: " + e.message;
-    setErrorMessages((prev) => [...prev, message]);
-  };
+    if (image) {
+      formData.append("image", image);
+    };
+    putArticle({
+      formData,
+      artSlug: slug || null,
+      headers,
+    })
+    .then((article: TArticle) => {
+      navigate(`/dmblog/article/${article.slug}`);
+    })
+    .catch((error: ApiError) => {
+      setErrorMessages([error.getMessage()]);
+    });
+    }
   return (
     <>
       {errorMessages.length > 0 && (
@@ -177,6 +181,7 @@ function ArticleEditor() {
           <fieldset>
             <ErrorMessages errorList={errorMessages} />
             <FormFieldset
+              id="title"
               type="text"
               name="title"
               placeholder="A wonderful title"
@@ -187,6 +192,7 @@ function ArticleEditor() {
               title="Article title"
             />
             <FormFieldset
+              id="description"
               type="text"
               name="description"
               placeholder="A description of what your article is about"
@@ -205,12 +211,22 @@ function ArticleEditor() {
             />
             {/* <ImageUploader onFilesSelected={setFile}/> */}
             <FormFieldset
+              id="articleBackgroundColor"
               type="color"
               name="backgroundColor"
               value={backgroundColor}
               changeHandler={handleChange}
               required={false}
               title="Background color"
+            />
+            <FormFieldset 
+              id="fontColor"
+              type="color"
+              name="fontColor"
+              value={fontColor}
+              changeHandler={handleChange}
+              required={false}
+              title="Font Color"
             />
             <div onClick={() => setEmojiOpen(!emojiOpen)}>Select Emoji:</div>
             <EmojiPicker
@@ -219,21 +235,25 @@ function ArticleEditor() {
               emojiStyle={EmojiStyle.TWITTER}
               theme={Theme.DARK}
             />
+            <div className="fieldset-div">
+              <label></label>
+              <input 
+              type="file"
+              name="backgroundImage"
+              onChange={handleChange}
+              />
+            </div>
             <FormFieldset
+              id="tags"
               type="text"
               name="tags"
               placeholder="Put some tags into it!"
               value={tagList.toLocaleString()}
-              changeHandler={handleTagInput}
+              changeHandler={handleTagChange}
               required={false}
               title="Article tags"
             />
-            <FormFieldset
-              type="file"
-              name="backgroundImage"
-              title="Background Image"
-              changeHandler={handleImageChange}
-            />
+
             <button className="btn btn-form" type="submit">
               {slug ? "Update Article" : "Post Article"}
             </button>
@@ -243,5 +263,4 @@ function ArticleEditor() {
     </>
   );
 }
-
 export default ArticleEditor;

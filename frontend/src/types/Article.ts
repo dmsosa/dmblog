@@ -7,9 +7,10 @@ export type TArticle = {
   description: string;
   body: string;
   slug: string;
-  fontColor: string | null;
-  backgroundColor: string | null;
-  emoji: string | null;
+  fontColor: string;
+  backgroundColor: string;
+  emoji: string;
+  imageUrl: string;
   tagList: string[];
   isFav: boolean;
   favoritesCount: number;

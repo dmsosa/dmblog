@@ -8,11 +8,8 @@ import LoadingPage from "../../components/LoadingPage";
 import { useEffect, useState } from "react";
 import { TArticle } from "../../types/Article";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
-import {
-  getArticleBySlug,
-  getBackgroundImage,
-} from "../../service/articleService";
-import { errorHandler } from "../../service/handleError";
+import { getArticle } from "../../service/articleService";
+import { errorHandler } from "../../service/errorHandler";
 import { logoutUser } from "../../service/userService";
 import MDEditor from "@uiw/react-md-editor";
 import { AxiosError } from "axios";
@@ -34,8 +31,6 @@ function Article() {
   const { authState, setAuthState } = useAuth() as TAuthContext;
   const { headers } = authState;
 
-
-
   //Css styles
 
   const backgroundStyles = {
@@ -51,9 +46,8 @@ function Article() {
 
   //use Effect
   useEffect(() => {
-    if (!slug) return;
+    if (!slug || state) return;
     setLoading(true);
-
 
     const handleTokenExpired = () => {
       alert("Token expired, Bruder!\n\nRedirecting to login");
@@ -61,47 +55,27 @@ function Article() {
       setAuthState(logoutUser());
     };
 
-    //if there is state, we only request the background image to the backend
-    if (state) {
-      getBackgroundImage({ slug })
-        .then((url) => {
-          if (url.length > 1) {
-            setBackgroundImage(url);
-          }
-        })
-        .catch((err) => errorHandler(err))
-        .finally(() => setLoading(false));
-    } else {
-      // else, we request the article info plus the background image
-      getArticleBySlug({ slug })
-        .then((article) => {
-          setArticle(article);
-          getBackgroundImage({ slug })
-            .then((url) => {
-              if (url.length > 1) {
-                setBackgroundImage(url);
-              }
-            })
-            .catch((err) => errorHandler(err));
-        })
-        .catch((error) => {
-          errorHandler(error);
-
-          const status = error.response?.status;
-          if (status === 406) {
-            handleTokenExpired();
-          } else if (status === 404) {
-            navigate("/dmblog/not-found", { replace: true });
-          } else if (status === 500) {
-            const apiError = error as AxiosError;
-            setError(apiError.message);
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, [slug, headers, navigate, setAuthState, state ]);
+    getArticle({ slug })
+      .then((article) => {
+        setArticle(article);
+      })
+      .catch((error) => {
+        errorHandler(error);
+        const status = error.response?.status;
+        if (status === 406) {
+          handleTokenExpired();
+        } else if (status === 404) {
+          navigate("/dmblog/not-found", { replace: true });
+        } else if (status === 500) {
+          const apiError = error as AxiosError;
+          setError(apiError.message);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  
+  }, [slug, headers, navigate, setAuthState, state]);
 
   return loading ? (
     <LoadingPage />
@@ -126,10 +100,7 @@ function Article() {
             <ArticleTags tagList={article.tagList} />
           </div>
           <div className="col-12">
-            <ArticleMeta
-              bottom={true}
-              author={article.author}
-            ></ArticleMeta>
+            <ArticleMeta bottom={true} author={article.author}></ArticleMeta>
           </div>
         </ContainerRow>
         <Outlet />

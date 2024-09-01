@@ -46,9 +46,9 @@ function CurrentImage({ image }: { image: string }) {
       });
   }, [source, image]);
 
-  return (
-    loading ? <div>Loading</div>
-    :
+  return loading ? (
+    <div>Loading</div>
+  ) : (
     <div className="current-image">
       <img src={source}></img>
     </div>

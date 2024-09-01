@@ -4,7 +4,7 @@ import AuthorMeta from "./AuthorMeta";
 import { useEffect, useState } from "react";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import { getUserByUsername } from "../../service/userService";
-import { errorHandler } from "../../service/handleError";
+import { errorHandler } from "../../service/errorHandler";
 
 function AuthorInfo() {
   const { state } = useLocation();
@@ -28,7 +28,7 @@ function AuthorInfo() {
         navigate("/not-found");
       })
       .finally(() => setLoading(false));
-  }, [ headers, navigate, username]);
+  }, [headers, navigate, username]);
 
   const handleFollow = (author: TUser) => {
     setAuthor(author);

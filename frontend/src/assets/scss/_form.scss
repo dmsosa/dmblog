@@ -89,6 +89,7 @@
 }
 
 .fieldset-div {
+  position: relative;
   margin: auto;
   justify-content: center;
   text-align: center;
@@ -286,6 +287,17 @@
   transform: rotate(45deg);
 }
 
+
+.toggle-password {
+  padding: 0; margin: 0;
+  background-color: transparent;
+  border: none;
+  border-radius: 100%;
+  position: absolute;
+  bottom: 4px; right: 20px;
+  cursor: pointer;
+  z-index: 1;
+}
 // sprites and bg-positions
 
 .select-item.selected,

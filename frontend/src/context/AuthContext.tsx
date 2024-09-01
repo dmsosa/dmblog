@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import { getUser, logoutUser } from "../service/userService";
-import { errorHandler } from "../service/handleError";
+import { createApiError } from "../service/errorHandler";
 import { AxiosError } from "axios";
 import { TUser } from "../types/User";
 
@@ -69,7 +69,7 @@ function AuthProvider({ children }: { children: ReactNode[] | ReactNode }) {
         setAuthState((prev) => ({ ...prev, loggedUser }));
       })
       .catch((e: AxiosError) => {
-        errorHandler(e);
+        createApiError(e);
         console.log(
           "Could not retrieve loggedUser from backend: " +
             loggedUser +

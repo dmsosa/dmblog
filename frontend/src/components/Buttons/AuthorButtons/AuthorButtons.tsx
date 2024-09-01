@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
-import { deleteArticleBySlug } from "../../../service/articleService";
+import { deleteArticle } from "../../../service/articleService";
 import { TArticle } from "../../../types/Article";
 import { PopUpColors, PopUpEmojis } from "./PopUpButtons";
 
@@ -28,7 +28,6 @@ function AuthorButtons({
   const { headers, isAuth } = authState;
   const navigate = useNavigate();
 
-
   const handleDelete = () => {
     if (!isAuth) return alert("You need to login first!");
     if (slug.length < 1)
@@ -37,7 +36,7 @@ function AuthorButtons({
     if (!confirm) {
       return;
     }
-    deleteArticleBySlug({ slug, headers })
+    deleteArticle({ slug, headers })
       .then((message) => {
         alert(message);
         navigate("/dmblog");

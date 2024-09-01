@@ -7,23 +7,22 @@ type TErrorData = {
 type TApiError = {
   errors: TErrorData[];
 };
-export class CustomError extends Error {
-  constructor(message: string) {
-    super(message);
-  }
-}
+
 export class ApiError {
-  private error: AxiosError | null;
+  private cause: AxiosError | null;
+  private errors: TErrorData[] | null;
   public defaultMessage;
   public message;
   private statusCode;
   private _globallyHandled: boolean = false;
-  constructor(error: AxiosError) {
-    this.error = error;
-    this.statusCode = error.response ? error.response.status : null;
-    const errorData: TApiError | null = error.response
-      ? (error.response.data as TApiError)
+  constructor(cause: AxiosError) {
+    this.cause = cause;
+    this.statusCode = cause.response ? cause.response.status : null;
+    const errorData: TApiError | null = cause.response
+      ? (cause.response.data as TApiError)
       : null;
+    this.errors = errorData ? errorData.errors : null;
+
     if (errorData) {
       const { objectName, defaultMessage } = errorData.errors[0];
       this.defaultMessage = `${objectName} due to ${defaultMessage}`;
@@ -62,8 +61,11 @@ export class ApiError {
   public getDefaultMessage(): string {
     return this.defaultMessage;
   }
-  public getError(): AxiosError | null {
-    return this.error;
+  public getCause(): AxiosError | null {
+    return this.cause;
+  }
+  public getErrors(): TErrorData[] | null {
+    return this.errors;
   }
   public getStatusCode(): number | null {
     return this.statusCode;
@@ -74,7 +76,7 @@ export class ApiError {
     }
     this._globallyHandled = true;
     console.log(
-      this.error +
+      this.cause +
         "\n - - -   - - -   - - - \n" +
         this.message +
         "\n - - -    - - -    - - -\n",
@@ -83,8 +85,8 @@ export class ApiError {
 }
 
 //Global error handler
-export function errorHandler(error: AxiosError): string {
+export function createApiError(error: AxiosError): ApiError {
   const apiError = new ApiError(error);
   apiError.handleGlobally();
-  return apiError.getMessage();
+  return apiError;
 }

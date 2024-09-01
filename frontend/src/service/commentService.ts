@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { TComment } from "../types/Comment";
-import { errorHandler } from "./handleError";
+import { createApiError } from "./errorHandler";
 
 export type TCommentData = {
   comments: TComment[];
@@ -24,8 +24,8 @@ export async function getCommentsOfArticle({
     });
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
@@ -48,8 +48,8 @@ export async function postComment({
 
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
@@ -75,8 +75,8 @@ export async function editComment({
 
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
@@ -99,7 +99,7 @@ export async function deleteComment({
 
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }

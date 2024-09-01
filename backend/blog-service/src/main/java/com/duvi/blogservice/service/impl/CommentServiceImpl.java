@@ -46,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDTO createComment(String body, String username, String slug) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
+    public CommentDTO createComment(String body, String username, String slug) throws EntityDoesNotExistsException {
         Optional<User> user = userRepository.findByUsername(username);
         Optional<Article> article = articleRepository.findBySlug(slug);
         if (user.isEmpty()) { throw new EntityDoesNotExistsException("User with username %s do not exists!".formatted(username)); }
@@ -63,24 +63,27 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDTO getCommentById(Long id) throws CommentNotFoundException {
+    public CommentDTO getCommentById(Long id) throws EntityDoesNotExistsException {
         Optional<Comment> comment = commentRepository.findById(id);
-        if (comment.isEmpty()) throw new CommentNotFoundException(id);
+        if (comment.isEmpty()) throw new EntityDoesNotExistsException("Comment with id '%s' do not exists!".formatted(id));
         return createDTO(comment.get());
     }
 
     @Override
-    public CommentDTO updateComment(Long commentId, SetCommentDTO newCommentDTO) {
-        Comment oldComment = commentRepository.findById(commentId).get();
-        oldComment.setBody(newCommentDTO.body());
-        oldComment.setUpdatedAt(LocalDateTime.now());
-        return createDTO(commentRepository.save(oldComment));
+    public CommentDTO updateComment(Long commentId, String body) throws EntityDoesNotExistsException {
+        Optional<Comment> oldComment = commentRepository.findById(commentId);
+
+        if (oldComment.isEmpty()) throw new EntityDoesNotExistsException("Comment with id '%s' do not exists!".formatted(commentId));
+
+        oldComment.get().setBody(body);
+        oldComment.get().setUpdatedAt(LocalDateTime.now());
+        return createDTO(commentRepository.save(oldComment.get()));
     }
 
     @Override
-    public void deleteComment(Long id) throws CommentNotFoundException {
+    public void deleteComment(Long id) throws EntityDoesNotExistsException {
         Optional<Comment> comment = commentRepository.findById(id);
-        if (comment.isEmpty()) throw new CommentNotFoundException(id);
+        if (comment.isEmpty()) throw new EntityDoesNotExistsException("Comment with id '%s' do not exists!".formatted(id));
         commentRepository.deleteById(id);
     }
 

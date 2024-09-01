@@ -43,7 +43,6 @@ public class User implements UserDetails {
     private String bio;
     private String imageUrl;
     private String backgroundImageUrl;
-    private String icon;
     private String backgroundColor;
     @Enumerated(EnumType.STRING)
     private UserRole role;

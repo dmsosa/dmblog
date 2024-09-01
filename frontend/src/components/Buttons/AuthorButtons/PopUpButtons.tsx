@@ -4,7 +4,7 @@ import {
   putEmoji,
   putFontColor,
 } from "../../../service/articleService";
-import { errorHandler } from "../../../service/handleError";
+import { errorHandler } from "../../../service/errorHandler";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
 import { TArticle } from "../../../types/Article";
 import EmojiPicker, {

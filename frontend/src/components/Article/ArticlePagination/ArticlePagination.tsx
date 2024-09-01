@@ -7,7 +7,7 @@ import { TAuthContext, useAuth } from "../../../context/AuthContext";
 
 type selectedItem = {
   selected: number;
-}
+};
 function ArticlePagination({
   articlesCount,
   username,

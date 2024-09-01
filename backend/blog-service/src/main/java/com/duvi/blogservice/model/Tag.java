@@ -33,6 +33,5 @@ public class Tag {
 
     public Tag(String tagName) {
         this.name = tagName;
-        this.articles = null;
     }
 }

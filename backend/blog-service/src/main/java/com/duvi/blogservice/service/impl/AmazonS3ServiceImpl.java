@@ -34,13 +34,13 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
             Map<String, String> metadata = new HashMap<>();
             metadata.put("Powered By", "duvi");
 
-            PutObjectRequest putObject = PutObjectRequest.builder()
+            PutObjectRequest putObjectReq = PutObjectRequest.builder()
                     .bucket(BUCKET_NAME)
                     .metadata(metadata)
                     .key(fileName)
                     .build();
 
-            s3Client.putObject(putObject, RequestBody.fromBytes(bytes));
+            s3Client.putObject(putObjectReq, RequestBody.fromBytes(bytes));
 
             GetUrlRequest getUrlRequest = GetUrlRequest.builder().bucket(BUCKET_NAME).key(fileName).build();
             return s3Client.utilities().getUrl(getUrlRequest).toString();
@@ -61,12 +61,24 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     }
 
     @Override
-    public void deleteByUrl(String url) {
-        DeleteObjectRequest deleteObject = DeleteObjectRequest
+    public void deleteUserImage(String folder, String username) {
+        String key = folder + "/" + username;
+        DeleteObjectRequest deleteObjectReq = DeleteObjectRequest
                 .builder()
                 .bucket(BUCKET_NAME)
-                .key(url)
+                .key(key)
                 .build();
+        s3Client.deleteObject(deleteObjectReq);
+    }
+    @Override
+    public void deleteArticleImage(String articleSlug) {
+        String key = "articles/" + articleSlug;
+        DeleteObjectRequest deleteObjectReq = DeleteObjectRequest
+                .builder()
+                .bucket(BUCKET_NAME)
+                .key(key)
+                .build();
+        s3Client.deleteObject(deleteObjectReq);
     }
 
     @Override

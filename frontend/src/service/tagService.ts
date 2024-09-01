@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { errorHandler } from "./handleError";
+import { createApiError } from "./errorHandler";
 import { TTag } from "../types/Tag";
 
 const instance = axios.create({
@@ -16,8 +16,8 @@ export async function getTags(): Promise<string[]> {
     });
     return tagList;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
@@ -30,7 +30,7 @@ export async function getTagsOf({ slug }: { slug: string }): Promise<string[]> {
     });
     return tagList;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }

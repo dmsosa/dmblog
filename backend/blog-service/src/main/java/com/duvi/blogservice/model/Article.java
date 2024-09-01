@@ -12,6 +12,8 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Table(name = "articles")
@@ -31,6 +33,7 @@ public class Article {
     private String body;
     private String description;
     private String slug;
+    private String imageURL;
     private String backgroundColor;
     private String fontColor;
     private String emoji;
@@ -38,7 +41,7 @@ public class Article {
     private LocalDateTime updatedAt;
 
     //Relations
-        //Users
+    //Users
     @OneToMany(
             fetch = FetchType.LAZY,
             cascade = {
@@ -50,7 +53,7 @@ public class Article {
     )
     Set<ArticleUser> favUsers;
 
-        //Tags
+    //Tags
     @OneToMany(
             fetch = FetchType.LAZY,
             cascade = {
@@ -61,7 +64,7 @@ public class Article {
             , mappedBy = "article"
     )
     private Set<ArticleTag> tags;
-        //Comments
+    //Comments
     @OneToMany(mappedBy = "article")
     private Set<Comment> comments;
 
@@ -82,13 +85,12 @@ public class Article {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void updateWith(SetArticleDTO newArticle) {
-        this.title = newArticle.title();
-        this.body = newArticle.body();
-        this.description = newArticle.description();
-        this.slug = newArticle.slug();
-        this.backgroundColor = newArticle.backgroundColor();
-        this.emoji = newArticle.emoji();
-        this.updatedAt = LocalDateTime.now();
+    public List<String> getTagList() {
+        List<String> tagList = new ArrayList<>();
+        for (ArticleTag relation : this.tags) {
+            tagList.add(relation.getTag().getName());
+        }
+        return tagList.stream().toList();
     }
+
 }

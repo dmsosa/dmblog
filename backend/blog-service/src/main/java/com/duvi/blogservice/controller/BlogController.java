@@ -1,6 +1,7 @@
 package com.duvi.blogservice.controller;
 
 import com.duvi.blogservice.config.security.TokenService;
+import com.duvi.blogservice.model.Comment;
 import com.duvi.blogservice.model.Tag;
 import com.duvi.blogservice.model.dto.*;
 import com.duvi.blogservice.model.exceptions.*;
@@ -8,8 +9,10 @@ import com.duvi.blogservice.service.*;
 import jakarta.mail.MessagingException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -50,16 +53,13 @@ public class BlogController {
         String token = headers.getFirst("Authorization");
         String loggedUsername;
         List<ArticleResponseDTO> articleList = articleService.getArticlesSorted();
-        Long articlesCount = (long) articleList.size();
-        ArticleListDTO articleResponse;
 
-        //if there is loggedUser, get favs
+        Integer count = articleList.size();
+
+        //if there is loggedUser, check favorite articles
         if (token != null ) {
             token = token.replace("Bearer ","");
             loggedUsername = tokenService.validateToken(token);
-            articleList = articleList.stream().map( article ->
-                    article.withFav(articleService.checkFav(article.id(), loggedUsername))
-            ).toList();
         } else {
             loggedUsername = "";
         }
@@ -68,65 +68,50 @@ public class BlogController {
         if (limit != null && offset != null) {
             Integer initOffset = offset*limit;
             Integer endOffset = initOffset + limit;
-            articleList = articleList.subList(initOffset, endOffset);
+            if (endOffset > count) {
+                articleList = articleList.subList(initOffset, count);
+            } else {
+                articleList = articleList.subList(initOffset, endOffset);
+            }
         }
 
-        //All userDTO's are created with 'isFollowing' field as false by default,
-        //so we find out if the current loggedUser is following the author of the article
-        articleList = articleList.stream().map(
-                article ->
-                        article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
-        ).toList();
 
-        articleResponse = new ArticleListDTO(articleList, articlesCount);
-        return new ResponseEntity<>(articleResponse, HttpStatus.OK);
-    }
-
-    @GetMapping("/feed")
-    public ResponseEntity<ArticleListDTO> getFeedArticles(
-            @RequestParam(required = false) Integer limit,
-            @RequestParam(required = false) Integer offset,
-            @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
-
-        //if there is loggedUser, we get favs
-        String token = headers.getFirst("Authorization");
-        String loggedUsername;
-        ArticleListDTO response;
-        List<ArticleResponseDTO> articleList = articleService.getArticles();
-        Long articlesCount = (long) articleList.size();
-
-        if (token != null) {
-            token = token.replace("Bearer ", "");
-            loggedUsername = tokenService.validateToken(token);
+        if (!loggedUsername.isBlank()) {
+            //if loggedUser, check Fav articles
             articleList = articleList.stream().map( article ->
                     article.withFav(articleService.checkFav(article.id(), loggedUsername))
             ).toList();
-        } else {
-            loggedUsername = "";
+
+
+            //if loggedUser, check if following the author(s) of the article(s)
+            articleList = articleList.stream().map(
+                    article ->
+                            article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
+            ).toList();
         }
-
-        if (limit != null && offset != null) {
-            Integer initOffset = offset*limit;
-            Integer endOffset = initOffset + limit;
-            articleList = articleList.subList(initOffset, endOffset);
-        }
-
-        articleList = articleList.stream().map(
-                article ->
-                        article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
-        ).toList();
-
-        response = new ArticleListDTO(articleList, articlesCount);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(new ArticleListDTO(count, articleList), HttpStatus.OK);
     }
 
-    @PostMapping("/global")
-    public ResponseEntity<ArticleResponseDTO> createArticle(@RequestBody SetArticleDTO createArticleDTO) throws EntityAlreadyExistsException, EntityDoesNotExistsException {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ArticleResponseDTO> createArticle(
+            @RequestParam("userId") Long userId,
+            @RequestParam(name = "slug") String slug,
+            @RequestParam(name = "title") String title,
+            @RequestParam(name = "description") String description,
+            @RequestParam(name = "body") String body,
+            @RequestParam(name = "backgroundColor") String backgroundColor,
+            @RequestParam(name = "fontColor") String fontColor,
+            @RequestParam(name = "emoji") String emoji,
+            @RequestParam(name = "tagList") List<String> tagList,
+            @RequestParam(name = "image") MultipartFile image
+    ) throws EntityAlreadyExistsException, EntityDoesNotExistsException {
+
+        SetArticleDTO createArticleDTO = new SetArticleDTO(null, userId, slug, null, title, description, body, backgroundColor, fontColor, emoji, tagList, image);
         ArticleResponseDTO article = articleService.createArticle(createArticleDTO);
         return new ResponseEntity<>(article, HttpStatus.CREATED);
     }
-    @GetMapping("/slug/{articleSlug}")
-    public ResponseEntity<ArticleResponseDTO> getArticleBySlug(@PathVariable String articleSlug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
+    @GetMapping
+    public ResponseEntity<ArticleResponseDTO> getArticle(@RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
         String token = headers.getFirst("Authorization");
         String loggedUsername;
         if (token != null ) {
@@ -135,38 +120,98 @@ public class BlogController {
         } else {
             loggedUsername = "";
         }
-        ArticleResponseDTO articleResponseDTO = articleService.getArticleBySlug(articleSlug);
-        articleResponseDTO = articleResponseDTO.withAuthor(articleResponseDTO.author().withFollowing(userService.isFollowing(articleResponseDTO.author().id(), loggedUsername)));
+
+        ArticleResponseDTO articleResponseDTO = articleService.getArticleBySlug(slug);
+
+
+        if (!loggedUsername.isBlank()) {
+            articleResponseDTO = articleResponseDTO.withAuthor(articleResponseDTO.author().withFollowing(userService.isFollowing(articleResponseDTO.author().id(), loggedUsername)));
+        }
         return new ResponseEntity<>(articleResponseDTO, HttpStatus.OK);
     }
-
-    @PutMapping("/slug/{articleSlug}")
-    public ResponseEntity<ArticleResponseDTO> editArticle(@PathVariable String articleSlug, @RequestBody SetArticleDTO setArticleDTO) throws EntityDoesNotExistsException {
-        return new ResponseEntity<>(articleService.updateArticleBySlug(articleSlug, setArticleDTO), HttpStatus.OK);
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> putArticle(
+            @RequestParam("articleId") Long articleId,
+            @RequestParam("userId") Long userId,
+            @RequestParam(name = "slug") String slug,
+            @RequestParam(name = "newSlug") String newSlug,
+            @RequestParam(name = "title") String title,
+            @RequestParam(name = "description") String description,
+            @RequestParam(name = "body") String body,
+            @RequestParam(name = "backgroundColor") String backgroundColor,
+            @RequestParam(name = "fontColor") String fontColor,
+            @RequestParam(name = "emoji") String emoji,
+            @RequestParam(name = "tagList") List<String> tagList,
+            @RequestParam(name = "image") MultipartFile image
+    ) throws EntityDoesNotExistsException {
+        SetArticleDTO newArticleDTO = new SetArticleDTO(articleId, userId, slug, newSlug, title, description, body, backgroundColor, fontColor, emoji, tagList, image);
+        articleService.updateArticle(slug, newArticleDTO);
+        return new ResponseEntity<>("Article with slug %s successfully deleted".formatted(slug), HttpStatus.OK);
+    }
+    @DeleteMapping
+    public ResponseEntity<String> deleteArticle(@RequestParam(required = true) String slug) throws EntityDoesNotExistsException {
+        articleService.deleteArticleBySlug(slug);
+        return new ResponseEntity<>("Article with slug %s successfully deleted".formatted(slug), HttpStatus.OK);
     }
 
-    @DeleteMapping("/slug/{articleSlug}")
-    public ResponseEntity<String> deleteArticleBySlug(@PathVariable String articleSlug) throws EntityDoesNotExistsException {
-        articleService.deleteArticleBySlug(articleSlug);
-        return new ResponseEntity<>("Article with slug %s successfully deleted".formatted(articleSlug), HttpStatus.OK);
+    //Operations with Author
+    @GetMapping("/author/{username}")
+    public ResponseEntity<ArticleListDTO> getArticlesFromAuthor(@PathVariable(required = true) String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
+        String token = headers.getFirst("Authorization");
+        String loggedUsername;
+        if (token != null ) {
+            token = token.replace("Bearer ","");
+            loggedUsername = tokenService.validateToken(token);
+        } else {
+            loggedUsername = "";
+        }
+
+        List<ArticleResponseDTO> articleList = articleService.getByAuthor(username  );
+        Integer count = articleList.size();
+
+        //Crop the list into pieces of 3 by offset
+        if (limit != null && offset != null) {
+            Integer initOffset = offset*limit;
+            Integer endOffset = initOffset + limit;
+            if (endOffset > count) {
+                articleList = articleList.subList(initOffset, count);
+            } else {
+                articleList = articleList.subList(initOffset, endOffset);
+            }
+        }
+
+        //if loggedUser, check Following
+        if (!loggedUsername.isBlank()) {
+            articleList = articleList.stream().map(article ->
+                    article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
+            ).toList();
+        }
+
+        return new ResponseEntity<>(new ArticleListDTO(count, articleList), HttpStatus.OK);
     }
+
+
 
     //More operations with articles
-    //Upload Background Image of article
+    //Upload Background Image of article, Bei dieses Moment machen es einfach
 
     //Set backgroundColor
-    @PostMapping("/color/{articleSlug}")
-    public ResponseEntity<ArticleResponseDTO> setBackgroundColor(
-            @PathVariable String articleSlug,
-            @RequestParam(required = true, name = "property") String property,
+    @PostMapping("/edit")
+    public ResponseEntity<ArticleResponseDTO> setField(
+            @RequestParam(required = true) String slug,
+            @RequestParam(required = true, name = "field") String property,
             @RequestParam(required = true, name = "value") String value) throws EntityDoesNotExistsException {
         switch (property) {
             case "backgroundColor" : {
-                ArticleResponseDTO article = articleService.setBackgroundColor(articleSlug, value);
+                ArticleResponseDTO article = articleService.setBackgroundColor(slug, value);
                 return new ResponseEntity<>(article, HttpStatus.OK);
             }
             case "fontColor" : {
-                ArticleResponseDTO article = articleService.setFontColor(articleSlug, value);
+                ArticleResponseDTO article = articleService.setFontColor(slug, value);
+                return new ResponseEntity<>(article, HttpStatus.OK);
+            }
+            case "emoji" : {
+                ArticleResponseDTO article = articleService.setEmoji(slug, value);
                 return new ResponseEntity<>(article, HttpStatus.OK);
             }
             default: {
@@ -174,46 +219,8 @@ public class BlogController {
             }
         }
     }
-    @PostMapping("/emoji/{articleSlug}")
-    public ResponseEntity<ArticleResponseDTO> setEmoji(@PathVariable String articleSlug, @RequestParam(required = true, name = "emoji") String emoji) throws EntityDoesNotExistsException {
-        ArticleResponseDTO article = articleService.setEmoji(articleSlug, emoji);
-        return new ResponseEntity<>(article, HttpStatus.OK);
-    }
 
-    //Operations with Author
-    @GetMapping("/author/{username}")
-    public ResponseEntity<ArticleListDTO> getArticlesFromAuthor(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
-        String token = headers.getFirst("Authorization");
-        String loggedUsername;
-        if (token != null ) {
-            token = token.replace("Bearer ","");
-            loggedUsername = tokenService.validateToken(token);
-        } else {
-            loggedUsername = "";
-        }
 
-        List<ArticleResponseDTO> articleResponseDTOS = articleService.getByAuthor(username);
-        ArticleListDTO response;
-        Integer count = articleResponseDTOS.size();
-
-        //Crop the list into pieces of 3 by offset
-        if (limit != null && offset != null) {
-            Integer initOffset = offset*limit;
-            Integer endOffset = initOffset + limit;
-            if (endOffset > count) {
-                articleResponseDTOS = articleResponseDTOS.subList(initOffset, count);
-            } else {
-                articleResponseDTOS = articleResponseDTOS.subList(initOffset, endOffset);
-            }
-        }
-
-        //We want to know if the logged User is currently following the author of the articles
-        articleResponseDTOS = articleResponseDTOS.stream().map(article ->
-                article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
-        ).toList();
-        response = new ArticleListDTO(articleResponseDTOS, (long) count);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 
 
     //Operations with Users
@@ -231,20 +238,21 @@ public class BlogController {
         return new ResponseEntity<>(article, HttpStatus.OK);
     }
     @DeleteMapping("/favs/{slug}")
-    public ResponseEntity<ArticleResponseDTO> removeFavsForUser(@PathVariable String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
+    public ResponseEntity<ArticleResponseDTO> removeFavsForUser(@PathVariable String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
         String username = tokenService.validateToken(token);
         ArticleResponseDTO article = articleService.removeFavorite(slug, username);
         return new ResponseEntity<>(article, HttpStatus.OK);
     }
 
-    @GetMapping("/favs/users/{username}")
-    public  ResponseEntity<ArticleListDTO> getFavsForUser(@PathVariable String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
+    @GetMapping("/favs")
+    public  ResponseEntity<ArticleListDTO> getFavsForUser(@RequestParam(required = true) String username, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
 
-        List<ArticleResponseDTO> articleResponseDTOS = articleService.getFavArticles(username);
-        Long count = (long) articleResponseDTOS.size();
-        ArticleListDTO response;
+        List<ArticleResponseDTO> articleList = articleService.getFavArticles(username);
+
+        Integer count = articleList.size();
         String token = headers.getFirst("Authorization");
+
         String loggedUsername;
         if (token != null ) {
             token = token.replace("Bearer ","");
@@ -253,74 +261,66 @@ public class BlogController {
             loggedUsername = "";
         }
 
-        if (limit != null && offset != null ) {
-            Integer initOffset = offset*limit;
-            Integer endOffset = initOffset + limit;
-            articleResponseDTOS = articleResponseDTOS.subList(initOffset, endOffset > articleResponseDTOS.size() ? articleResponseDTOS.size() : endOffset);
-        }
-        articleResponseDTOS = articleResponseDTOS.stream().map(article ->
-                article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
-        ).toList();
-        response = new ArticleListDTO(articleResponseDTOS, count);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-    @GetMapping("/favs/users/logged")
-    public ResponseEntity<ArticleListDTO> getFavsOfLoggedUser(@RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
-
-        String token = headers.getFirst("Authorization");
-        String loggedUsername;
-        if (token != null ) {
-            token = token.replace("Bearer ","");
-            loggedUsername = tokenService.validateToken(token);
-        } else {
-            loggedUsername = "";
-        }
-        List<ArticleResponseDTO> articleResponseDTOS = articleService.getFavArticles(loggedUsername);
-        Long count = (long) articleResponseDTOS.size();
-        ArticleListDTO response;
-
-        articleResponseDTOS = articleResponseDTOS.stream().map(article ->
-                article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
-        ).toList();
-
-        response = new ArticleListDTO(articleResponseDTOS, count);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-    //Operations with Tags
-    @GetMapping("/tags")
-    public  ResponseEntity<ArticleListDTO> getArticlesByTag(@RequestParam(required = true) String tag, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset, @RequestHeader HttpHeaders headers) throws TagNotFoundException {
-        ArticleListDTO response;
-        List<ArticleResponseDTO> articleResponseDTOS = articleService.getArticlesByTag(tag);
-        Long count = (long) articleResponseDTOS.size();
-        String token = headers.getFirst("Authorization");
-        String loggedUsername;
-        if (token != null ) {
-            token = token.replace("Bearer ","");
-            loggedUsername = tokenService.validateToken(token);
-        } else {
-            loggedUsername = "";
-        }
+        //Crop the list into pieces of 3 by offset
         if (limit != null && offset != null) {
             Integer initOffset = offset*limit;
             Integer endOffset = initOffset + limit;
-            articleResponseDTOS = articleResponseDTOS.subList(initOffset, endOffset);
+            if (endOffset > count) {
+                articleList = articleList.subList(initOffset, count);
+            } else {
+                articleList = articleList.subList(initOffset, endOffset);
+            }
         }
-        articleResponseDTOS = articleResponseDTOS.stream().map(article ->
-                article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
-        ).toList();
-        response = new ArticleListDTO(articleResponseDTOS, count);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        if (!loggedUsername.isBlank()) {
+            articleList = articleList.stream().map(article ->
+                    article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
+            ).toList();
+        }
+
+
+        return new ResponseEntity<>(new ArticleListDTO(count, articleList), HttpStatus.OK);
+    }
+
+    //Operations with Tags
+    @GetMapping("/tags")
+    public  ResponseEntity<ArticleListDTO> getArticlesByTag(@RequestParam(required = true) String tag, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset, @RequestHeader HttpHeaders headers) throws TagNotFoundException {
+
+        List<ArticleResponseDTO> articleList = articleService.getArticlesByTag(tag);
+        Integer count = articleList.size();
+        String token = headers.getFirst("Authorization");
+
+        String loggedUsername;
+        if (token != null ) {
+            token = token.replace("Bearer ","");
+            loggedUsername = tokenService.validateToken(token);
+        } else {
+            loggedUsername = "";
+        }
+
+        //Crop the list into pieces of 3 by offset
+        if (limit != null && offset != null) {
+            Integer initOffset = offset*limit;
+            Integer endOffset = initOffset + limit;
+            if (endOffset > count) {
+                articleList = articleList.subList(initOffset, count);
+            } else {
+                articleList = articleList.subList(initOffset, endOffset);
+            }
+        }
+
+        if (!loggedUsername.isBlank()) {
+            articleList = articleList.stream().map(article ->
+                    article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUsername)))
+            ).toList();
+        }
+
+        return new ResponseEntity<>(new ArticleListDTO(count, articleList), HttpStatus.OK);
     }
 
     @GetMapping("/global/tags")
     public ResponseEntity<List<Tag>> getAllTags() {
         List<Tag> tags = tagService.getAllTags();
-        return new ResponseEntity<>(tags, HttpStatus.OK);
-
-    }
-    @GetMapping("/tags/{slug}")
-    public ResponseEntity<List<Tag>> getTagsOf(@PathVariable String slug) throws EntityDoesNotExistsException {
-        List<Tag> tags = articleService.getTagsOf(slug);
         return new ResponseEntity<>(tags, HttpStatus.OK);
 
     }
@@ -340,36 +340,24 @@ public class BlogController {
     @GetMapping("/comments")
     public ResponseEntity<CommentListDTO> getCommentsOfArticle(@RequestParam(required = true) String slug) throws EntityDoesNotExistsException {
         List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
-        Long commentsCount = (long) comments.size();
-        CommentListDTO commentListDTO = new CommentListDTO(comments, commentsCount);
-        return new ResponseEntity<>(commentListDTO, HttpStatus.OK);
+
+        return new ResponseEntity<>(new CommentListDTO(comments.size(), comments), HttpStatus.OK);
 
     }
     @PostMapping("/comments")
-    public ResponseEntity<CommentListDTO> postComment(@RequestBody SetCommentDTO commentDTO, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
-        String token = headers.getFirst("Authorization").replace("Bearer ", "");
-        String username = tokenService.validateToken(token);
-        CommentDTO comment = commentService.createComment(commentDTO.body(), username, slug);
-        List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
-        Long commentsCount = (long) comments.size();
-        CommentListDTO commentListDTO = new CommentListDTO(comments, commentsCount);
-        return new ResponseEntity<>(commentListDTO, HttpStatus.OK);
+    public ResponseEntity<CommentDTO> postComment(@RequestParam(required = true) String body, @RequestParam(required = true) String slug, @RequestParam(required = true) String username) throws EntityDoesNotExistsException {
+        CommentDTO comment = commentService.createComment(body, username, slug);
+        return new ResponseEntity<>(comment, HttpStatus.CREATED);
     }
     @PutMapping("/comments/{commentId}")
-    public ResponseEntity<CommentListDTO> editComment(@PathVariable Long commentId, @RequestBody SetCommentDTO commentDTO, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
-        CommentDTO comment = commentService.updateComment(commentId, commentDTO);
-        List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
-        Long commentsCount = (long) comments.size();
-        CommentListDTO commentListDTO = new CommentListDTO(comments, commentsCount);
-        return new ResponseEntity<>(commentListDTO, HttpStatus.OK);
+    public ResponseEntity<CommentDTO> editComment(@PathVariable Long commentId, @RequestParam(required = true) String body) throws EntityDoesNotExistsException {
+        CommentDTO comment = commentService.updateComment(commentId, body);
+        return new ResponseEntity<>(comment, HttpStatus.OK);
     }
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<CommentListDTO> deleteComment(@PathVariable Long commentId, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException, CommentNotFoundException {
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId, @RequestParam(required = true) String slug, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
         commentService.deleteComment(commentId);
-        List<CommentDTO> comments = commentService.getCommentOfArticle(slug);
-        Long commentsCount = (long) comments.size();
-        CommentListDTO commentListDTO = new CommentListDTO(comments, commentsCount);
-        return new ResponseEntity<>(commentListDTO, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/email")

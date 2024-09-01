@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TArticleData, getArticles } from "../service/articleService";
 import { TAuthContext, useAuth } from "../context/AuthContext";
-import { errorHandler } from "../service/handleError";
+import { errorHandler } from "../service/errorHandler";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { logoutUser } from "../service/userService";
@@ -28,15 +28,11 @@ function useArticle({
 
   //hook
   useEffect(() => {
-    if (!headers && location === "feed") {
-      setLoading(false);
-      return;
-    }
-
     setLoading(true);
     //get articles
     getArticles({ location, tagName, headers, username })
       .then((articleData) => {
+        console.log("Arts", articleData)
         setArticlesData(articleData);
       })
       .catch((error: AxiosError) => {

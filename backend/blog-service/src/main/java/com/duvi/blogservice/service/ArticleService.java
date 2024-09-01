@@ -30,9 +30,8 @@ public interface ArticleService {
     ArticleResponseDTO getArticleBySlug(String slug) throws EntityDoesNotExistsException;
     ArticleResponseDTO getArticleById(Long id) throws EntityDoesNotExistsException;
     ArticleResponseDTO getArticleByTitle(String title) throws EntityDoesNotExistsException;
-    ArticleResponseDTO updateArticle(Long articleId, SetArticleDTO newArticleDTO) throws EntityDoesNotExistsException;
+    ArticleResponseDTO updateArticle(String slug, SetArticleDTO newArticleDTO) throws EntityDoesNotExistsException;
     void deleteArticle(Long id) throws EntityDoesNotExistsException;
-    ArticleResponseDTO updateArticleBySlug(String articleSlug, SetArticleDTO newArticleDTO) throws EntityDoesNotExistsException;
     void deleteArticleBySlug(String articleSlug) throws EntityDoesNotExistsException;
 
     //Operations related with Author
@@ -53,7 +52,6 @@ public interface ArticleService {
 
     //Operations related with Tags
     List<ArticleResponseDTO> getArticlesByTag(String tagName) throws TagNotFoundException;
-    List<Tag> getTagsOf(String slug);
     ArticleResponseDTO setTag(String slug, String tagName) throws EntityDoesNotExistsException;
     ArticleResponseDTO removeTag(String slug, String tagName) throws EntityDoesNotExistsException;
     public ArticleResponseDTO setFontColor(String slug, String backgroundColor) throws EntityDoesNotExistsException;

@@ -50,8 +50,7 @@ public class UserServiceImpl implements UserService {
         return new UserResponseDTO(user.getId(), user.getUsername(),
                 user.getEmail(), user.getPassword(),
                 user.getBio(), user.getImageUrl(),
-                user.getBackgroundImageUrl(),
-                user.getIcon(), user.getBackgroundColor(),
+                user.getBackgroundImageUrl(), user.getBackgroundColor(),
                 followersCount, followingCount,
                 user.getCreatedAt(), user.getUpdatedAt(), false);
     }
@@ -138,7 +137,6 @@ public class UserServiceImpl implements UserService {
         createdUser.setBio("Ich bin ein neuer Benutzer der Dmblog!");
         createdUser.setImageUrl("");
         createdUser.setBackgroundImageUrl("");
-        createdUser.setIcon("apple");
         createdUser.setBackgroundColor("#DFFF00");
         createdUser.setRole(UserRole.USER);
 
@@ -170,18 +168,17 @@ public class UserServiceImpl implements UserService {
             backgroundImageUrl = s3Service.uploadUserImage(userDTO.backgroundImage(), "background", userDTO.username());
         }
 
-        if (!oldUser.getImageUrl().isEmpty() && !oldUser.getImageUrl().contains(userDTO.icon())) {
-            s3Service.deleteByUrl(oldUser.getImageUrl());
+        if (!oldUser.getImageUrl().contains(userDTO.icon())) {
+            s3Service.deleteUserImage("profile", oldUser.getUsername());
         }
         if (!oldUser.getBackgroundImageUrl().isEmpty()) {
-            s3Service.deleteByUrl(oldUser.getBackgroundImageUrl());
+            s3Service.deleteUserImage("background", oldUser.getUsername());
         }
 
         oldUser.setUsername(userDTO.username());
         oldUser.setEmail(userDTO.email());
         oldUser.setImageUrl(imageUrl);
         oldUser.setBackgroundImageUrl(backgroundImageUrl);
-        oldUser.setIcon(userDTO.icon());
         oldUser.setBackgroundColor(userDTO.backgroundColor());
         oldUser.setBio(userDTO.bio());
 

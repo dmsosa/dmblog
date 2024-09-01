@@ -20,6 +20,7 @@ import com.duvi.blogservice.repository.TagRepository;
 import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.repository.relations.ArticleTagRepository;
 import com.duvi.blogservice.repository.relations.ArticleUserRepository;
+import com.duvi.blogservice.service.AmazonS3Service;
 import com.duvi.blogservice.service.ArticleService;
 import com.duvi.blogservice.service.CommentService;
 import com.duvi.blogservice.service.UserService;
@@ -27,6 +28,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -38,6 +40,7 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleTagRepository catsRepository;
     private TagRepository tagRepository;
     private UserService userService;
+    private AmazonS3Service awsService;
 
     public ArticleServiceImpl(ArticleRepository articleRepository,
                               UserRepository userRepository,
@@ -59,10 +62,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleResponseDTO createDTO(Article article) {
 
-        List<String> tagList = this.getTagsOf(article.getSlug()).stream().map((tag) -> tag.getName()).toList();
+        List<String> tagList = article.getTagList();
+
         Integer favsCount = 0;
         Boolean isFav = false;
-        UserResponseDTO author = null;
+        UserResponseDTO author;
 
         if (article.getFavUsers() != null) {
             favsCount = article.getFavUsers().size();
@@ -70,6 +74,7 @@ public class ArticleServiceImpl implements ArticleService {
         try {
             author = userService.findUserById(article.getAuthor().getId());
         } catch (EntityDoesNotExistsException unfe) {
+            author = null;
         }
 
         return new ArticleResponseDTO(
@@ -93,7 +98,8 @@ public class ArticleServiceImpl implements ArticleService {
     public Boolean checkFav(Long articleId, String loggedUsername) {
         User user = userRepository.findByUsername(loggedUsername).get();
         List<ArticleUser> favArticles = favsRepository.findByUserId(user.getId());
-        return !favArticles.stream().filter(rel -> rel.getArticle().getId() == articleId)
+        return !favArticles.stream().filter(
+                rel -> Objects.equals(rel.getArticle().getId(), articleId))
                 .toList()
                 .isEmpty();
     }
@@ -138,7 +144,7 @@ public class ArticleServiceImpl implements ArticleService {
         Optional<Article> optionalArticle = articleRepository.findById(id);
         if (optionalArticle.isPresent()) {
             return createDTO(optionalArticle.get());
-        };
+        }
         throw new EntityDoesNotExistsException(id);
     }
     @Override
@@ -147,18 +153,56 @@ public class ArticleServiceImpl implements ArticleService {
 
         if (optionalArticle.isPresent()) {
             return createDTO(optionalArticle.get());
-        };
+        }
         throw new EntityDoesNotExistsException("Article with title '%s' not found!".formatted(title));
     }
 
     @Override
-    public ArticleResponseDTO updateArticle(Long articleId, SetArticleDTO articleDTO) throws EntityDoesNotExistsException {
-        Optional<Article> optionalArticle = articleRepository.findById(articleId);
+    public ArticleResponseDTO updateArticle(String slug, SetArticleDTO articleDTO) throws EntityDoesNotExistsException {
+        Optional<Article> optionalArticle = articleRepository.findBySlug(slug);
         if (optionalArticle.isEmpty()) {
-            throw new EntityDoesNotExistsException(articleId);
+            throw new EntityDoesNotExistsException("Article with slug '%s' not found!".formatted(slug));
         }
         Article oldArticle = optionalArticle.get();
-        oldArticle.updateWith(articleDTO);
+        oldArticle.setTitle(articleDTO.title());
+        oldArticle.setDescription(articleDTO.description());
+        oldArticle.setBody(articleDTO.body());
+        oldArticle.setBackgroundColor(articleDTO.backgroundColor());
+        oldArticle.setFontColor(articleDTO.fontColor());
+        oldArticle.setEmoji(articleDTO.emoji());
+        oldArticle.setSlug(articleDTO.newSlug());
+
+
+
+        //Zwei Listen zu Vergleichen
+
+        //entfernen die Datenbeziehungen, die nicht in der neuen Liste enthalten sind
+        for (String tag : oldArticle.getTagList()) {
+            if (!articleDTO.tagList().contains(tag)) {
+                ArticleTagId relId = new ArticleTagId(articleDTO.articleId(), tag);
+                catsRepository.deleteById(relId);
+            }
+        }
+        //alle Dbzhng von neue Liste zu speichern, und die nicht vorhandenen Tags zu erstellen
+        //Creating tags that did not exist
+        for (String tagName : articleDTO.tagList()) {
+            if (!oldArticle.getTagList().contains(tagName)) {
+                Optional<Tag> optTag = tagRepository.findByName(tagName);
+                Tag tag = optTag.orElseGet(() -> tagRepository.save(new Tag(tagName)));
+                ArticleTag articleTag = new ArticleTag(oldArticle, tag);
+                catsRepository.save(articleTag);
+            }
+        }
+        //save
+
+        String imageURL = "";
+
+        if (!Objects.isNull(articleDTO.image())) {
+            imageURL = awsService.uploadArticleImage(articleDTO.image(), articleDTO.slug());
+        }
+        oldArticle.setImageURL(imageURL);
+        oldArticle.setUpdatedAt(LocalDateTime.now());
+
         return createDTO(articleRepository.save(oldArticle));
     }
 
@@ -169,16 +213,7 @@ public class ArticleServiceImpl implements ArticleService {
         }
         articleRepository.deleteById(id);
     }
-    @Override
-    public ArticleResponseDTO updateArticleBySlug(String articleSlug, SetArticleDTO articleDTO) throws EntityDoesNotExistsException {
-        Optional<Article> optionalArticle = articleRepository.findBySlug(articleSlug);
-        if (optionalArticle.isEmpty()) {
-            throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(articleSlug));
-        }
-        Article oldArticle = optionalArticle.get();
-        oldArticle.updateWith(articleDTO);
-        return createDTO(articleRepository.save(oldArticle));
-    }
+
 
     @Override
     public void deleteArticleBySlug(String articleSlug) throws EntityDoesNotExistsException {
@@ -233,7 +268,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleResponseDTO setFavorite(String slug, String username) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
+    public ArticleResponseDTO setFavorite(String slug, String username) throws EntityDoesNotExistsException {
         if (!articleRepository.existsBySlug(slug)) {
             throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
         }
@@ -248,7 +283,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleResponseDTO removeFavorite(String slug, String username) throws EntityDoesNotExistsException, EntityDoesNotExistsException {
+    public ArticleResponseDTO removeFavorite(String slug, String username) throws EntityDoesNotExistsException {
         if (!articleRepository.existsBySlug(slug)) {
             throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
         }
@@ -266,7 +301,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public boolean isFavorite(String slug, String username) throws EntityDoesNotExistsException {
+    public boolean isFavorite(String slug, String username) {
         Article article = articleRepository.findBySlug(slug).get();
         User user = userRepository.findByUsername(username).get();
         ArticleUserId relationId = new ArticleUserId(user.getId(), article.getId());
@@ -296,16 +331,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleList.stream().map(this::createDTO).toList();
     }
 
-    @Override
-    public List<Tag> getTagsOf(String slug) {
-        if (!articleRepository.existsBySlug(slug)) {
-            return new ArrayList<>();
-        }
-        Article article = articleRepository.findBySlug(slug).get();
-        List<ArticleTag> relations = catsRepository.findByArticleId(article.getId());
-        return relations.stream().map(ArticleTag::getTag).toList();
 
-    }
 
     @Override
     public ArticleResponseDTO setTag(String slug, String tagName) throws EntityDoesNotExistsException {
@@ -325,7 +351,7 @@ public class ArticleServiceImpl implements ArticleService {
             }
         }
         if (tag.isEmpty()) {
-            //If tag does not exist, neither does the relation so we create a newTag and a new relation
+            //If tag does not exist, neither does the relation, so we create a newTag and a new relation
             Tag newTag = new Tag(tagName);
             Set<ArticleTag> relations = new HashSet<>();
             ArticleTag newRelation = new ArticleTag(article, newTag);
@@ -357,7 +383,7 @@ public class ArticleServiceImpl implements ArticleService {
         Optional<Article> article = articleRepository.findBySlug(slug);
         if (article.isEmpty()) {
             throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
-        };
+        }
         Article art = article.get();
         art.setFontColor(fontColor);
         return this.createDTO(articleRepository.save(art));
@@ -368,7 +394,7 @@ public class ArticleServiceImpl implements ArticleService {
         Optional<Article> article = articleRepository.findBySlug(slug);
         if (article.isEmpty()) {
             throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
-        };
+        }
         Article art = article.get();
         art.setBackgroundColor(backgroundColor);
         return this.createDTO(articleRepository.save(art));
@@ -379,7 +405,7 @@ public class ArticleServiceImpl implements ArticleService {
         Optional<Article> article = articleRepository.findBySlug(slug);
         if (article.isEmpty()) {
             throw new EntityDoesNotExistsException("Article with slug '%s' do not exists!".formatted(slug));
-        };
+        }
         Article art = article.get();
         art.setEmoji(emoji);
         return this.createDTO(articleRepository.save(art));

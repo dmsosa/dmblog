@@ -6,6 +6,7 @@ import com.duvi.blogservice.model.dto.SetCommentDTO;
 import com.duvi.blogservice.model.exceptions.CommentNotFoundException;
 import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.List;
 
@@ -15,11 +16,11 @@ public interface CommentService {
     //Create DTO
     CommentDTO createDTO(Comment comment);
     //Basic CRUD
-    CommentDTO createComment(String body, String username, String slug) throws EntityDoesNotExistsException, EntityDoesNotExistsException;
+    CommentDTO createComment(String body, String username, String slug) throws EntityDoesNotExistsException;
     List<CommentDTO> getComments();
-    CommentDTO getCommentById(Long id) throws CommentNotFoundException;
-    CommentDTO updateComment(Long commentId, SetCommentDTO newCommentDTO);
-    void deleteComment(Long id) throws CommentNotFoundException;
+    CommentDTO getCommentById(Long id) throws EntityDoesNotExistsException;
+    CommentDTO updateComment(Long commentId, String body) throws EntityDoesNotExistsException;
+    void deleteComment(Long id) throws EntityDoesNotExistsException;
 
     //Operations with Users
 

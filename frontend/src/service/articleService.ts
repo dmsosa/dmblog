@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { errorHandler } from "./handleError";
+import { createApiError } from "./errorHandler";
 import { TArticle } from "../types/Article";
 import { slugify } from "../helpers/helpers";
 import { getTagsOf } from "./tagService";
@@ -37,11 +37,9 @@ export async function getArticles({
 }): Promise<TArticleData> {
   const endpoint: TEndpoint = {
     global: `/global?limit=${limit}&offset=${offset}`,
-    favs: `/favs/users/${username}?limit=${limit}&offset=${offset}&favorited=${username}`,
-    feed: `/feed?limit=${limit}&offset=${offset}`,
+    favs: `/favs?username=${username}&limit=${limit}&offset=${offset}`,
     tags: `/tags?limit=${limit}&offset=${offset}&tag=${tagName}`,
-    profile: `/author/${username}?limit=${limit}&offset=${offset}`,
-    favList: `/favs/users/logged`,
+    profile: `/?author${username}&limit=${limit}&offset=${offset}`,
   };
   try {
     if (!headers) {
@@ -50,10 +48,11 @@ export async function getArticles({
     const { data } = await instance.get(endpoint[location], {
       headers: headers,
     });
+
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
@@ -76,113 +75,59 @@ export async function toggleFavs({
     data.isFav = !isFav;
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
 //createArticle
-export async function setArticle({
-  userId,
-  title,
-  description,
-  body,
+export async function putArticle({
+  formData,
   artSlug,
-  backgroundColor,
-  emoji,
-  tagList,
   headers,
 }: {
-  userId: number | null;
-  title: string;
-  description: string;
-  body: string;
+  formData: FormData;
   artSlug: string | null;
-  backgroundColor: string | null;
-  emoji: string | null;
-  tagList: string[];
   headers: object | null;
 }): Promise<TArticle> {
   try {
+
+    let title = formData.get("title") as string || "";
+
     const { data } = await instance.request({
       method: artSlug ? "PUT" : "POST",
-      url: artSlug ? `/slug/${artSlug}` : "/global",
-      headers: headers || {},
-      data: {
-        userId,
-        title,
-        description,
-        body,
-        slug: slugify(title),
-        backgroundColor,
-        emoji,
-        tagList,
-      },
+      params: artSlug ? { "slug": artSlug } : { "slug": slugify(title) },
+      headers: {...headers, 'Content-Type': 'multipart/form-data'} || {},
+      data: formData,
     });
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
-export async function uploadImageForArticle({
-  backgroundImage,
-  title,
-  headers,
-}: {
-  backgroundImage: File;
-  title: string;
-  headers: object | null;
-}): Promise<string> {
-  try {
-    const slug = slugify(title);
-    const formData = new FormData();
-    formData.append("file", backgroundImage);
-    const { data } = await instance.post(`/images/${slug}`, formData, {
-      headers: { ...headers, "Content-Type": "multipart/form-data" },
-    });
-    return data;
-  } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
-  }
-}
-
-export async function getBackgroundImage({
-  slug,
-}: {
-  slug: string;
-}): Promise<string> {
-  try {
-    const { data } = await instance.get(`/images/${slug}`, { timeout: 8000 });
-    return data;
-  } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
-  }
-}
 
 //Get article by slug
-export async function getArticleBySlug({
+export async function getArticle({
   slug,
 }: {
   slug: string;
 }): Promise<TArticle> {
   try {
-    const { data }: { data: TArticle } = await instance.get(`/slug/${slug}`);
+    const { data }: { data: TArticle } = await instance.request({ method: "GET", params: { "slug": slug }});
 
     getTagsOf({ slug })
       .then((tagList) => (data.tagList = tagList))
       .catch((error) => console.log(error));
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
-export async function deleteArticleBySlug({
+export async function deleteArticle({
   slug,
   headers,
 }: {
@@ -194,14 +139,15 @@ export async function deleteArticleBySlug({
   }
   try {
     const { data } = await instance.request({
-      url: `/slug/${slug}`,
+      params: { "slug": slug },
       method: "DELETE",
       headers: headers,
     });
     return data;
+
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
@@ -226,8 +172,8 @@ export async function putBackgroundColor({
     });
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 export async function putFontColor({
@@ -251,8 +197,8 @@ export async function putFontColor({
     });
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
 
@@ -277,7 +223,7 @@ export async function putEmoji({
     });
     return data;
   } catch (error) {
-    errorHandler(error as AxiosError);
-    throw error;
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
   }
 }
