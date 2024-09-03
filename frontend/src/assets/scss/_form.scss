@@ -17,26 +17,6 @@
     margin-left: 1rem;
   }
 
-  .error-message {
-    transition: visibility 0.1s;
-    transition: margin 0.2s;
-    height: 0;
-    visibility: hidden;
-    margin-top: -4rem;
-    background-color: hsl(0, 100%, 40%);
-    padding: 0.5rem 1rem;
-    border: hsl(0, 100%, 15%) solid 0.5rem;
-    &.active {
-      margin: 0;
-      height: fit-content;
-      visibility: visible;
-    }
-    &::after {
-      margin-left: 0.5rem;
-      font-size: 2.5rem;
-      content: "!";
-    }
-  }
 }
 .current-image {
   width: 10.5rem;
@@ -58,6 +38,26 @@
   padding: 1rem;
   textarea {
     width: 100%;
+  }
+  .error-message {
+    transition: visibility 0.1s;
+    transition: margin 0.2s;
+    height: 0;
+    visibility: hidden;
+    margin-top: -4rem;
+    background-color: hsl(0, 100%, 40%);
+    padding: 0.5rem 1rem;
+    border: hsl(0, 100%, 15%) solid 0.5rem;
+    &.active {
+      margin: 0;
+      height: fit-content;
+      visibility: visible;
+    }
+    &::after {
+      margin-left: 0.5rem;
+      font-size: 2.5rem;
+      content: "!";
+    }
   }
 }
 .form-btns {

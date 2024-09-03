@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../service/userService";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
-import { ChangeEvent, FormEvent,  useState } from "react";
+import { ChangeEvent, FormEvent,  MouseEvent,  useState } from "react";
 import FormFieldset from "../FormFieldset";
 import { AxiosError } from "axios";
 import { createApiError } from "../../service/errorHandler";
@@ -28,6 +28,9 @@ function LoginForm() {
     setLoginData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const togglePassword = () => {
+    setPasswordVisible(!passwordVisible)
+  }
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -41,7 +44,7 @@ function LoginForm() {
       })
       .catch((e: AxiosError) => {
         const apiError = createApiError(e);
-        setErrorMessage(apiError.getMessage());
+        setErrorMessage(apiError.getDefaultMessage());
       });
   };
 
@@ -50,7 +53,7 @@ function LoginForm() {
   };
   return (
       <form className="form-cont" onSubmit={handleSubmit}>
-        { errorMessage.length > 0  && <div className="form-error-message">{errorMessage}</div>}
+        <div className={`error-message ${errorMessage.length > 0 ? 'active' : ''}`} >{errorMessage}</div>
         <FormFieldset
           id="loginInput"
           name="login"
@@ -69,7 +72,7 @@ function LoginForm() {
           changeHandler={handleChange}
           type={passwordVisible ? "text" : "password"}
         >
-          <button className="toggle-password" onClick={() => {setPasswordVisible(!passwordVisible)}}>{passwordVisible ? <IoMdEye color="white"/> : <IoMdEyeOff color="white"/>}</button>
+          <button className="toggle-password" onMouseDown={togglePassword} onMouseUp={togglePassword}>{passwordVisible ? <IoMdEye color="white"/> : <IoMdEyeOff color="white"/>}</button>
         </FormFieldset>
         <label htmlFor="remember" className="form-checkbox-label">
           Remember me

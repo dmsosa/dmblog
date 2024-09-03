@@ -3,7 +3,7 @@ import CommentAuthor from "./CommentAuthor";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import { Link, useParams } from "react-router-dom";
 import { TCommentData, postComment } from "../../service/commentService";
-import { errorHandler } from "../../service/errorHandler";
+import { createApiError } from "../../service/errorHandler";
 
 function CommentEditor({
   setCommentData,
@@ -26,7 +26,7 @@ function CommentEditor({
       .then((commentData) => {
         setCommentData(commentData);
       })
-      .catch((error) => errorHandler(error));
+      .catch((error) => createApiError(error));
   };
 
   return isAuth ? (
@@ -43,7 +43,7 @@ function CommentEditor({
         ></textarea>
         <div className="comment-footer">
           <CommentAuthor
-            image={loggedUser.image}
+            image={"loggedUser.image"}
             username={loggedUser.username}
           />
           <button className="btn btn-primary">Post comment</button>

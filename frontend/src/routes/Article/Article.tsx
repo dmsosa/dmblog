@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { TArticle } from "../../types/Article";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import { getArticle } from "../../service/articleService";
-import { errorHandler } from "../../service/errorHandler";
+import { createApiError } from "../../service/errorHandler";
 import { logoutUser } from "../../service/userService";
 import MDEditor from "@uiw/react-md-editor";
 import { AxiosError } from "axios";
@@ -60,8 +60,8 @@ function Article() {
         setArticle(article);
       })
       .catch((error) => {
-        errorHandler(error);
-        const status = error.response?.status;
+        const apiError = createApiError(error);
+        const status = apiError.getStatusCode();
         if (status === 406) {
           handleTokenExpired();
         } else if (status === 404) {

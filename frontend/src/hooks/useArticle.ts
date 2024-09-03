@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TArticleData, getArticles } from "../service/articleService";
 import { TAuthContext, useAuth } from "../context/AuthContext";
-import { errorHandler } from "../service/errorHandler";
+import { createApiError } from "../service/errorHandler";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { logoutUser } from "../service/userService";
@@ -36,8 +36,8 @@ function useArticle({
         setArticlesData(articleData);
       })
       .catch((error: AxiosError) => {
-        errorHandler(error);
-        const status = error.response?.status;
+        const apiError = createApiError(error);
+        const status = apiError.getStatusCode();
         if (status === 406) {
           alert("Token expired, please login again");
           setAuthState(logoutUser());
