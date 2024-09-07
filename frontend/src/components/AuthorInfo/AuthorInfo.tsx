@@ -4,7 +4,7 @@ import AuthorMeta from "./AuthorMeta";
 import { useEffect, useState } from "react";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import { getUserByUsername } from "../../service/userService";
-import { errorHandler } from "../../service/errorHandler";
+import { createApiError } from "../../service/errorHandler";
 
 function AuthorInfo() {
   const { state } = useLocation();
@@ -24,7 +24,7 @@ function AuthorInfo() {
         setAuthor(author);
       })
       .catch((error) => {
-        errorHandler(error);
+        createApiError(error);
         navigate("/not-found");
       })
       .finally(() => setLoading(false));

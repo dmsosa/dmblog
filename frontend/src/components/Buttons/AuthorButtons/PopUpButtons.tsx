@@ -4,7 +4,7 @@ import {
   putEmoji,
   putFontColor,
 } from "../../../service/articleService";
-import { errorHandler } from "../../../service/errorHandler";
+import { createApiError } from "../../../service/errorHandler";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
 import { TArticle } from "../../../types/Article";
 import EmojiPicker, {
@@ -62,9 +62,9 @@ export function PopUpColors({
       .then(() => {
         putFontColor({ slug, fontColor, headers })
           .then((art) => setArticleWithNewFields(art))
-          .catch((error) => errorHandler(error));
+          .catch((error) => createApiError(error));
       })
-      .catch((error) => errorHandler(error))
+      .catch((error) => createApiError(error))
       .finally(() => togglePopup());
   };
 
