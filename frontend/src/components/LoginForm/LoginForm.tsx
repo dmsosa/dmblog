@@ -40,7 +40,6 @@ function LoginForm() {
       .then((state) => {
         setAuthState(state);
         navigation("/dmblog");
-        window.location.reload();
       })
       .catch((e: AxiosError) => {
         const apiError = createApiError(e);

@@ -1,4 +1,72 @@
 //Form styles
+.terms-modal-outer {
+  opacity: 0;
+  display: none;
+  position: absolute;
+  z-index: 10000;
+  background-color: #11192795;
+  top: 0; bottom: 0; left: 0; right: 0;
+  transition: all 0.4s;
+  .terms-modal {
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    width: 80%;
+    height: 80%;
+    margin: auto;
+    overflow-y: scroll;
+    padding: 2rem;
+    background-color: #111927;
+    box-shadow: 0px 0px 5px 2px #555;
+    p {
+      margin: 0 auto;
+      margin-top: 4rem;
+      max-width: 80%;
+      text-align: center;
+    }
+    h4 {
+      margin-top: 2rem;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .terms-modal-btn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      border-radius: 2px;
+      font-weight: bold;
+      background-color: red;
+      color: white;
+      border: none;
+      transition: all 0.4s;
+      &:hover {
+        background-color: darkred;
+        outline: 1px solid white;
+      }
+      &:active {
+        background-color: lightcoral;
+      }
+    }
+  }
+}
+
+.terms-modal-input-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 80%;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+}
+.terms-modal-label {
+  cursor: pointer;
+  margin-left: 1rem;
+
+}
+
+.terms-modal-a {
+  transition: all 0.4s;
+}
 
 .auth-page {
   padding-top: 2rem;

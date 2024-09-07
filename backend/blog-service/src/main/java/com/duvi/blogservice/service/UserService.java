@@ -27,7 +27,7 @@ public interface UserService {
     UserResponseDTO createUser(RegisterDTO userDTO) throws EntityAlreadyExistsException;
     UserResponseDTO findUserById(Long userId) throws EntityDoesNotExistsException;
     UserResponseDTO findUserByUsername(String username) throws EntityDoesNotExistsException;
-    UserResponseDTO findUserByEmail(String email) throws EntityDoesNotExistsException;
+    User findUserByEmail(String email) throws EntityDoesNotExistsException;
     //Login look for Username and Email at once
     UserResponseDTO findUserByLogin(String login) throws EntityDoesNotExistsException;
     UserResponseDTO updateUser(String oldUsername, SetUserDTO userDTO) throws EntityAlreadyExistsException;

@@ -1,11 +1,27 @@
 function TermsModal() {
-
+  const toggleShow = () => {
+    const body = document.body;
+    const modal = document.getElementById("terms-modal-outer");
+    modal?.classList.toggle("show");
+    modal?.classList.toggle("sichtbar");
+    body.classList.toggle("nonscroll");
+    window.scrollTo(0,0);
+  }
   return (
     <>
-        <input id="terms" className="terms-modal-input" type="checkbox"/><label htmlFor="terms" className="terms-modal-label">Agree with the <a className="terms-modal-a">Terms and Conditions of Service</a></label>
-        <div className="terms-modal-outer">
-            <button className="terms-modal-btn">X</button>
+        <div className="terms-modal-input-wrap">
+            <label htmlFor="terms" className="checkbox-container">
+              <input id="terms" type="checkbox"/>
+              <span className="checkmark"></span>
+            </label>
+            <label htmlFor="terms" className="terms-modal-label">Agree with the 
+              <a className="terms-modal-a"
+              onClick={toggleShow}> Terms and Conditions of Service</a>
+            </label>
+        </div>
+        <div id="terms-modal-outer" className={`terms-modal-outer`}>
             <div className="terms-modal">
+                <button className="terms-modal-btn" onClick={toggleShow}>X</button>
                 <h1>Terms and Conditions of Service</h1>
                 <p>By accessing this website, you are agreeing to be bound by these website Terms and Conditions of Service, the Privacy Policy, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws. We may modify these Terms and Conditions at any time without notice to you by posting revised Terms and Conditions of Service. Your use of the website constitutes your binding acceptance of these Terms and Conditions of Service, including any modifications that we make. If you do not agree with any of these terms, you are prohibited from using or accessing this site. The materials contained in this website are protected by applicable copyright and trademark law.<br/>
                 The Service includes a combination of content that we create and that other third party content suppliers create. You understand that the Service are provided "AS IS", and that Copyandpasteemoji.com does not guarantee the accuracy, integrity or quality of any content available on the website. Copyandpasteemoji.com disclaims all responsibility and liability for the accuracy, availability, timeliness, security or reliability of the Service. We reserve the right to modify, suspend or discontinue the Service with or without notice at any time and without any liability to you.<br/>

@@ -3,8 +3,11 @@ import FeedProvider from "../context/FeedContext";
 import FeedToggler from "../components/FeedToggler";
 import TagList from "../components/TagList/TagList";
 import ContainerRow from "../components/ContainerRow";
+import { useEffect } from "react";
+import { TAuthContext, useAuth } from "../context/AuthContext";
 
 function Home() {
+
   return (
     <>
       <section className="bg-hero">

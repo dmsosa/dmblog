@@ -1,12 +1,15 @@
-import { FormEvent, MouseEvent, useState } from "react";
+import { FormEvent, MouseEvent, useEffect, useState } from "react";
 import FormFieldset from "../FormFieldset";
 import { useNavigate } from "react-router-dom";
-import { signUpUser } from "../../service/userService";
+import { getOAuth2User, signUpUser } from "../../service/userService";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import { checkRegisterErrors } from "../../helpers/helpers";
+import { ApiError } from "../../service/errorHandler";
 
 function SignUpForm({ onError }: { onError: (error: Error) => void }) {
-  const { setAuthState } = useAuth() as TAuthContext;
+  const { authState, setAuthState } = useAuth() as TAuthContext;
+  const { isAuth } = authState;
+  const [ oauth2Register, setOAuth2Register ] = useState(false);
   const navigate = useNavigate();
 
   //formState
@@ -38,12 +41,34 @@ function SignUpForm({ onError }: { onError: (error: Error) => void }) {
     signUpUser({ username, email, password })
       .then((loggedState) => {
         setAuthState(loggedState);
-        navigate("/dmblog");
+
       })
       .catch((error) => {
         onError(error);
       });
   };
+
+  useEffect(() => {
+    if (isAuth) { navigate("/dmblog")};
+    if (!oauth2Register) return;
+    getOAuth2User().then((authData) => { 
+      const oauth2User = authData.loggedUser;
+      if (oauth2User.password && oauth2User.password.length > 0) {
+        const headers = { "Authorization": `Bearer ${authData.token}`};
+
+        setAuthState({ headers, isAuth: true, loggedUser: oauth2User});
+        localStorage.setItem("loggedUser", JSON.stringify({ headers, isAuth: true, loggedUser: oauth2User}));
+        // window.location.reload();
+        // navigate("/dmblog");
+      } else {
+        setFormState({ 
+          username: oauth2User.username, 
+          email: oauth2User.email, 
+          password: "", 
+          confirmPassword: "" })
+      }
+      }).catch((error: ApiError) => console.log(error.getMessage(), error))
+  },  [username, email, password, confirmPassword] )
   return (
         <form id="reg-form" className="form-cont" onSubmit={handleSubmit}>
           <FormFieldset
@@ -91,6 +116,9 @@ function SignUpForm({ onError }: { onError: (error: Error) => void }) {
           <button type="submit" className="btn btn-primary form-btn" onClick={handleSubmit}>
             Sign up
           </button>
+          <a href="http://localhost:8082/api/users/oauth2/github">Github</a>
+          <a href="http://localhost:8082/api/users/oauth2/google">Google</a>
+          <a href="http://localhost:8082/api/users/oauth2/facebook" onClick={() => { setOAuth2Register(true)}}>Facebook</a>
           <button className="btn form-btn" onClick={comeBack}>
             Come back
           </button>

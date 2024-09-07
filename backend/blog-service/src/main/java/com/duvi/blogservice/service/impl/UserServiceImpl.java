@@ -82,12 +82,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO findUserByEmail(String email) throws EntityDoesNotExistsException {
+    public User findUserByEmail(String email) throws EntityDoesNotExistsException {
         Optional<User> optUser = userRepository.findByEmail(email);
         if (optUser.isEmpty()) {
             throw new EntityDoesNotExistsException("User with email '%s' do not exists!".formatted(email));
         }
-        return createDTO(optUser.get());
+        return optUser.get();
     }
 
     @Override
