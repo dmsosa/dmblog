@@ -34,6 +34,7 @@ function FooterForm() {
         >
           <fieldset>
             <FormFieldset
+              id="newsletter"
               title="Subscribe to our newsletter"
               type="email"
               name="newsletter"
@@ -51,6 +52,7 @@ function FooterForm() {
       <form className="footer-form show col-6">
         <fieldset>
           <FormFieldset
+            id="emailMessage"
             title="Send me a message"
             type="email"
             name="email message"

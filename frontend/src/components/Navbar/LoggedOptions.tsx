@@ -14,19 +14,19 @@ export function LoggedOptions({
       <NavItem
         icon="bi-globe"
         text="Profile"
-        url={`/dmblog/profile/${username}`}
+        url={`/profile/${username}`}
         onClick={handleClick}
       />
       <NavItem
         icon="bi-globe"
         text="New Article"
-        url="/dmblog/editor"
+        url="/editor"
         onClick={handleClick}
       />
       <NavItem
         icon="bi-globe"
         text="Settings"
-        url="/dmblog/settings"
+        url="/settings"
         onClick={handleClick}
       />
       <li className="nav-item">

@@ -39,7 +39,7 @@ function AuthorButtons({
     deleteArticle({ slug, headers })
       .then((message) => {
         alert(message);
-        navigate("/dmblog");
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);
@@ -51,7 +51,7 @@ function AuthorButtons({
       <Link
         className="nav-link col-3"
         state={{ title, body, description, tagList }}
-        to={`/dmblog/editor/${slug}`}
+        to={`/editor/${slug}`}
       >
         <button className="btn">Edit</button>
       </Link>

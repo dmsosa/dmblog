@@ -20,29 +20,29 @@ import Register from "./routes/Register.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthProvider>
+    <AuthProvider>
         <Routes>
           <Route element={<App />}>
-            <Route path="/dmblog" element={<Home />}>
+            <Route path="/" element={<Home />}>
               <Route index element={<HomeArticles />} />
             </Route>
-            <Route path="/dmblog/login" element={<Login />} />
-            <Route path="/dmblog/register" element={<Register />}></Route>
-            <Route path="/dmblog/editor" element={<ArticleEditor />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />}></Route>
+            <Route path="/editor" element={<ArticleEditor />}>
               <Route path=":slug" element={<ArticleEditor />} />
             </Route>
-            <Route path="/dmblog/article/:slug" element={<Article />}>
+            <Route path="/article/:slug" element={<Article />}>
               <Route index element={<CommentSection />} />
             </Route>
-            <Route path="/dmblog/profile/:username" element={<Profile />}>
+            <Route path="/profile/:username" element={<Profile />}>
               <Route index element={<ProfileArticles />} />
               <Route path="favorites" element={<ProfileFavArticles />} />
             </Route>
-            <Route path="/dmblog/settings" element={<Settings />}></Route>
+            <Route path="/settings" element={<Settings />}></Route>
             <Route path="*" element={<NotFound />}></Route>
           </Route>
         </Routes>
-      </AuthProvider>
+      </AuthProvider>      
     </BrowserRouter>
   </React.StrictMode>,
 );

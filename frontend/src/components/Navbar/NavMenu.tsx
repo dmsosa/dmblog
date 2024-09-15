@@ -21,6 +21,7 @@ function NavMenu() {
     document.body.classList.toggle("nonscroll");
   };
 
+
   return (
     <ul className="navbar-nav">
       {isAuth && loggedUser ? (

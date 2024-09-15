@@ -5,10 +5,9 @@ import {
   useEffect,
   useState,
 } from "react";
-import { getUser, logoutUser } from "../service/userService";
-import { createApiError } from "../service/errorHandler";
-import { AxiosError } from "axios";
 import { TUser } from "../types/User";
+import { getUser } from "../service/userService";
+import { ApiError } from "../service/errorHandler";
 
 export type TAuthState = {
   headers: { [key: string]: string } | null;
@@ -27,7 +26,7 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-let authState: TAuthState = {
+let initState: TAuthState = {
   headers: null,
   isAuth: false,
   loggedUser: {
@@ -53,31 +52,21 @@ let authState: TAuthState = {
 const loggedIn: string | null = localStorage.getItem("loggedUser");
 
 if (loggedIn) {
-  authState = JSON.parse(loggedIn);
+  initState = JSON.parse(loggedIn);
 }
 
 function AuthProvider({ children }: { children: ReactNode[] | ReactNode }) {
-  const [{ headers, isAuth, loggedUser }, setAuthState] = useState(authState);
+  const [authState, setAuthState] = useState(initState);
 
   useEffect(() => {
-    if (!headers || !isAuth) {
-      return;
-    }
+    if (!authState.headers || authState.isAuth) return;
 
-    getUser({ headers })
-      .then((loggedUser) => {
-        setAuthState((prev) => ({ ...prev, loggedUser }));
-      })
-      .catch((e: AxiosError) => {
-        createApiError(e);
-        console.log(
-          "Could not retrieve loggedUser from backend: " +
-            loggedUser +
-            "\nlogging out...",
-        );
-        setAuthState(logoutUser());
-      });
-  }, [headers, isAuth, loggedUser, setAuthState]);
+    getUser({ headers: authState.headers })
+    .then((loggedUser) => setAuthState({headers: authState.headers, isAuth: true, loggedUser}))
+    .catch((error: ApiError) => console.log(error.getDefaultMessage()))
+
+  }, [authState, setAuthState])
+
   return (
     <AuthContext.Provider value={{ authState, setAuthState }}>
       {children}

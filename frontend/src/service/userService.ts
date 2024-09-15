@@ -85,9 +85,11 @@ export async function loginUser({
     throw apiError;
   }
 }
+
 //Logout User
 export function logoutUser() {
   localStorage.removeItem("loggedUser");
+  instance.post("/logout");
   return {
     headers: null,
     isAuth: false,
@@ -119,12 +121,12 @@ export async function getUser({
   headers: object;
 }): Promise<TUser> {
   try {
-    const { data } = await instance.request({
+    const { data } : { data: TUser } = await instance.request({
       method: "GET",
       url: "/current",
       headers: headers,
     });
-    return data.loggedUser;
+    return data;
   } catch (error) {
     const apiError = createApiError(error as AxiosError);
     throw apiError;
@@ -180,25 +182,7 @@ export async function getUserById({
   }
 }
 
-//Get current User
-export async function getOAuth2User(): Promise<TAuthResponse> {
-  try {
-    const { data } : { data: TAuthResponse } = await instance.request({
-      method: "GET",
-      url: "/oauth2/check",
-    });
 
-    // if (data.token.length > 0) {
-    //   const headers = { "Authorization" : `Bearer ${data.token}`};
-    //   const loggedIn = { headers, isAuth: true, loggedUser: data.loggedUser };
-    //   localStorage.setItem("loggedUser", JSON.stringify(loggedIn));
-    // }
-    return data;
-  } catch (error) {
-    const apiError = createApiError(error as AxiosError);
-    throw apiError;
-  }
-}
 
 export async function updateUser({
   headers,

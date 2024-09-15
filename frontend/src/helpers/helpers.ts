@@ -45,7 +45,7 @@ export function checkRegisterErrors({ username, email, password, confirmPassword
     }
   }
   
-  return true;
+  return false;
 }
 
 
@@ -67,7 +67,7 @@ function createAndAppendErrorDiv(formId: string, fieldName: string, message: str
     "passwordMin": "Password must contain at least 4 characters",
     "passwordMax": "Password must contain at most 22 characters",
     "confirmPassword": "The passwords must be equal",
-    "specialCharacter": 'Must contain at least one special character \"~`! @#$%^&*()-_+={}[]|\;:"<>,./?\"\nThe special character must be EMBEDDED somewhere in the middle of the password, and not just be the first or the last character of the password string.',
+    "specialCharacter": 'Must contain at least one special character \"~`! @#$%^&*()-_+={}[]|\;:"<>,./?\"',
     "number": "Must contain at least one number",
     "uppercase": "Must contain at least one uppercase letter",
     "lowercase": "Must contain at least one lowercase letter",
@@ -111,7 +111,7 @@ function checkLengthError(field: string, value: string): string {
 
 function checkPasswordErrors(password: string, confirmPassword: string) : string[] {
   let passwordErrors = [];
-  const specialCharacter = /\w+[~`!@#$%^&*()\-_+=\\{}[\]|;:"<>,./?]+\w+/g
+  const specialCharacter = /[~`!@#$%^&*()\-_+=\\{}[\]|;:"<>,./?]+/g
   const number = /[^\s]*[0-9]+[^\s]*/g
   const uppercase = /[^\s]*[A-Z]+[^\s]*/g
   const lowercase = /[^\s]*[a-z]+[^\s]*/g
@@ -131,10 +131,8 @@ function checkPasswordErrors(password: string, confirmPassword: string) : string
   if (!password.match(lowercase)) {
     passwordErrors.push("lowercase");
   }
-  console.log("pass", passwordErrors)
   return passwordErrors;
 }
-
 
 
 //For field, checkLength

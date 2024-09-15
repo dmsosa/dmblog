@@ -15,6 +15,7 @@ export class ApiError {
   public message;
   private statusCode;
   private _globallyHandled: boolean = false;
+
   constructor(cause: AxiosError) {
     this.cause = cause;
     this.statusCode = cause.response ? cause.response.status : null;

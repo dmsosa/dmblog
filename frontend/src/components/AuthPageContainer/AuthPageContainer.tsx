@@ -14,13 +14,13 @@ function AuthPageContainer({
   message: string;
 }) {
   return (
-    <div className="container auth-page">
-      <div className="row auth-page-logo"><GiFishBucket fontSize={25}/></div>
-      <div className="row auth-page-title">{title}</div>
-      <div className="row auth-page-form">
+    <div className="container pt-5">
+      <div className="row auth-page-logo mb-5"><GiFishBucket fontSize={25}/></div>
+      <div className="row auth-page-title mb-5">{title}</div>
+      <div className="row auth-page-form mb-5">
           {children}
       </div>
-      <div className="row auth-page-link">
+      <div className="row pb-5">
         <button className="btn btn-info">
           <Link to={path}>{message}</Link>
         </button>

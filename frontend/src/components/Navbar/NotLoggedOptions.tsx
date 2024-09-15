@@ -10,19 +10,19 @@ export function NotLoggedOptions() {
       <NavItem
         icon="bi-globe"
         text="Login"
-        url="/dmblog/login"
+        url="/login"
         onClick={onClick}
       />
       <NavItem
         icon="bi-globe"
         text="Sign Up"
-        url="/dmblog/register"
+        url="/register"
         onClick={onClick}
       />
       <NavItem
         icon="bi-globe"
         text="About us"
-        url="/dmblog/more"
+        url="/more"
         onClick={onClick}
       />
     </>

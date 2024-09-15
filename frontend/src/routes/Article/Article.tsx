@@ -24,7 +24,6 @@ function Article() {
   const [article, setArticle] = useState<TArticle>(state || {});
   const [error, setError] = useState<string | null>(null);
   const { title, body, fontColor, backgroundColor, emoji } = article;
-  const [backgroundImage, setBackgroundImage] = useState("");
 
   //navigate and authState
   const navigate = useNavigate();
@@ -36,7 +35,7 @@ function Article() {
   const backgroundStyles = {
     color: fontColor || "#000D1C",
     backgroundColor: backgroundColor || "#99ff33",
-    backgroundImage: backgroundImage ? `url(${backgroundImage})` : "none",
+    backgroundImage: "none",
     backgroundPosition: "top",
     backgroundSize: "45%",
     backgroundRepeat: "no-repeat",

@@ -366,6 +366,35 @@
   cursor: pointer;
   z-index: 1;
 }
+
+//OAUTH FORM + REGISTRATION FORM + LOGIN FORM
+.oauth-form {
+  display: block;
+  padding: 5rem;
+  outline: red solid 1px;
+}
+.oauth-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+}
+.oauth-btn {
+  display: flex;
+  border: none;
+  outline: solid lightgreen 0.2rem;
+  background-color: #070a10;
+  padding: 0.25rem 0.85rem;
+  width: 100%;
+  max-width: 30rem;
+  gap: 2rem;
+  span {
+    font-size: 2rem;
+    color: lightgreen;
+  }
+}
 // sprites and bg-positions
 
 .select-item.selected,

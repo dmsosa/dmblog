@@ -99,8 +99,9 @@ function SettingsForm() {
           <fieldset>
             <div className="fieldset-images">
               <FormFieldset
+                id="profileImage"
                 title="Upload Image"
-                name="profileImage"
+                name="setProfileImage"
                 type="file"
                 changeHandler={handleFileChange}
               ></FormFieldset>
@@ -110,12 +111,14 @@ function SettingsForm() {
               />
             </div>
             <FormFieldset
+              id="backgroundImage"
               title="Background Image"
               type="file"
-              name="backgroundImage"
+              name="setBackgroundImage"
               changeHandler={handleFileChange}
             ></FormFieldset>
             <FormFieldset
+              id="setBackgroundColor"
               title="Background Color"
               type="color"
               name="backgroundColor"
@@ -123,6 +126,7 @@ function SettingsForm() {
               changeHandler={handleChange}
             ></FormFieldset>
             <FormFieldset
+              id="setUsername"
               title="Change username"
               name="username"
               value={username}
@@ -133,6 +137,7 @@ function SettingsForm() {
               maxLength={25}
             ></FormFieldset>
             <FormFieldset
+              id="setEmail"
               title="Change email address"
               name="email"
               value={email}

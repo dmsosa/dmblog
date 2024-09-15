@@ -1,31 +1,45 @@
 import { FormEvent, MouseEvent, useEffect, useState } from "react";
 import FormFieldset from "../FormFieldset";
 import { useNavigate } from "react-router-dom";
-import { getOAuth2User, signUpUser } from "../../service/userService";
-import { TAuthContext, useAuth } from "../../context/AuthContext";
+import { getUser, signUpUser } from "../../service/userService";
 import { checkRegisterErrors } from "../../helpers/helpers";
 import { ApiError } from "../../service/errorHandler";
+import { TAuthContext, useAuth } from "../../context/AuthContext";
 
-function SignUpForm({ onError }: { onError: (error: Error) => void }) {
+
+type TForm = {
+  username: string,
+  email: string,
+  password: string,
+  confirmPassword: string,
+}
+const initForm = { username : "", email: "", password: "", confirmPassword: "" };
+
+function SignUpForm({ setWithOAuth } : { 
+  setWithOAuth: React.Dispatch<React.SetStateAction<boolean>>
+}) {
   const { authState, setAuthState } = useAuth() as TAuthContext;
   const { isAuth } = authState;
-  const [ oauth2Register, setOAuth2Register ] = useState(false);
+  const urlParams = new URLSearchParams(window.location.search);
+  const  emailParam = urlParams.get("email");
+  const  usernameParam = urlParams.get("username");
+  if (emailParam) {
+    initForm.email = emailParam;
+  }
+  if (usernameParam) {
+    initForm.username = usernameParam;
+  }
+
+  const [ form, setForm ] = useState<TForm>(initForm);
+  const [errorMessage, setErrorMessage ] = useState("");
+  const { username, email, password, confirmPassword } = form;
+
   const navigate = useNavigate();
-
-  //formState
-  const [{ username, email, password, confirmPassword }, setFormState] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: ""
-  });
-
-
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    setFormState((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const comeBack = (e: MouseEvent<HTMLButtonElement>) => {
@@ -35,42 +49,53 @@ function SignUpForm({ onError }: { onError: (error: Error) => void }) {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    const termsAndConditions = document.getElementById("terms") as HTMLInputElement;
+    console.log(termsAndConditions)
+    if (!termsAndConditions.checked) {
+      setErrorMessage("before register, you must agree with the terms and conditions!");
+      return;
+    }
     if (checkRegisterErrors({ username, email, password, confirmPassword })) {
       return;
     }
     signUpUser({ username, email, password })
       .then((loggedState) => {
         setAuthState(loggedState);
-
+        navigate("/");
       })
-      .catch((error) => {
-        onError(error);
+      .catch((error: ApiError) => {
+        console.log(error, error.getMessage());
       });
   };
 
   useEffect(() => {
-    if (isAuth) { navigate("/dmblog")};
-    if (!oauth2Register) return;
-    getOAuth2User().then((authData) => { 
-      const oauth2User = authData.loggedUser;
-      if (oauth2User.password && oauth2User.password.length > 0) {
-        const headers = { "Authorization": `Bearer ${authData.token}`};
+    const token = urlParams.get("token");
 
-        setAuthState({ headers, isAuth: true, loggedUser: oauth2User});
-        localStorage.setItem("loggedUser", JSON.stringify({ headers, isAuth: true, loggedUser: oauth2User}));
-        // window.location.reload();
-        // navigate("/dmblog");
-      } else {
-        setFormState({ 
-          username: oauth2User.username, 
-          email: oauth2User.email, 
-          password: "", 
-          confirmPassword: "" })
-      }
-      }).catch((error: ApiError) => console.log(error.getMessage(), error))
-  },  [username, email, password, confirmPassword] )
+    if (!token || isAuth) return;
+
+    function handleToken() {
+      const headers = { "Authorization": "Bearer " + token };
+      getUser({ headers })
+      .then((loggedUser) => {
+        const loggedIn = { headers: headers, isAuth: true, loggedUser: loggedUser };
+        localStorage.setItem("loggedUser", JSON.stringify(loggedIn));
+        setAuthState(loggedIn);
+        navigate("/");
+      })
+      .catch((error: ApiError) => {
+        console.log(error.getDefaultMessage());
+      });
+    }
+    window.addEventListener("load", handleToken)
+    return () => {
+      window.removeEventListener("load", handleToken);
+    }
+
+  }, []);
+
   return (
         <form id="reg-form" className="form-cont" onSubmit={handleSubmit}>
+          <div className={`error-message ${errorMessage.length > 0 ? 'active': ''}`}>{errorMessage}</div>
           <FormFieldset
             id="reg-form-username"
             name="username"
@@ -116,12 +141,14 @@ function SignUpForm({ onError }: { onError: (error: Error) => void }) {
           <button type="submit" className="btn btn-primary form-btn" onClick={handleSubmit}>
             Sign up
           </button>
-          <a href="http://localhost:8082/api/users/oauth2/github">Github</a>
-          <a href="http://localhost:8082/api/users/oauth2/google">Google</a>
-          <a href="http://localhost:8082/api/users/oauth2/facebook" onClick={() => { setOAuth2Register(true)}}>Facebook</a>
           <button className="btn form-btn" onClick={comeBack}>
             Come back
           </button>
+          <div className="login-form-footer">
+              <p>or</p>
+              <hr></hr>
+              <div className="link" onClick={() => { setWithOAuth(true) }}>Continue with Facebook or GitHub</div>
+          </div>
         </form>
 
   );
