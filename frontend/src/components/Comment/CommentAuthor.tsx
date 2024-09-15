@@ -11,7 +11,7 @@ function CommentAuthor({
   return (
     <div className="comment-author">
       <Link to={`/dmblog/profile/${username}`}>
-        <Avatar image={image} username={username} />
+        <Avatar imageUrl={image} username={username} />
         <span>{username}</span>
       </Link>
     </div>

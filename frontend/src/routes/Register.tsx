@@ -1,21 +1,25 @@
 import { useState } from "react";
 import AuthPageContainer from "../components/AuthPageContainer";
-import SignUpForm from "../components/SignUpForm";
-import TermsModal from "../components/SignUpForm/TermsModal";
+import SignUpForm from "../components/Form/SignUpForm";
+import OAuth2Form from "../components/Form/OAuth2Form";
+import TermsModal from "../components/Form/TermsModal";
+
+
+
 
 function Register() {
-  const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const handleError = (error: Error) => {
-    setErrorMessage(error.message);
-  };
+  const [ withOAuth, setWithOAuth ] = useState(false);
+
   return (
+    withOAuth ?
+    <OAuth2Form setWithOAuth={setWithOAuth}/> :
     <AuthPageContainer
       title="Come to Duvi!"
-      message="already have an account?"
-      path="/dmblog/login"
+      message={ withOAuth ? "continue with email" : "already have an account?"}
+      path="/login"
     >
-      <SignUpForm onError={handleError}></SignUpForm>
+      <SignUpForm setWithOAuth={setWithOAuth}/>
       <TermsModal />
     </AuthPageContainer>
   );

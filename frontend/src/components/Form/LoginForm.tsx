@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../service/userService";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
-import { ChangeEvent, FormEvent,  MouseEvent,  useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import FormFieldset from "../FormFieldset";
 import { AxiosError } from "axios";
 import { createApiError } from "../../service/errorHandler";
@@ -12,7 +12,7 @@ type TLoginData = {
   login: string;
   password: string;
 };
-function LoginForm() {
+function LoginForm({ setWithOAuth }: { setWithOAuth: React.Dispatch<React.SetStateAction<boolean>> }) {
   const [{ login, password }, setLoginData] = useState<TLoginData>({
     login: "",
     password: "",
@@ -20,7 +20,7 @@ function LoginForm() {
   const [ passwordVisible, setPasswordVisible ] = useState(false);
   const [ errorMessage, setErrorMessage ] = useState("");
   const { setAuthState } = useAuth() as TAuthContext;
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
@@ -33,22 +33,19 @@ function LoginForm() {
   }
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const loginData = { login: login, password: password };
-
     loginUser(loginData)
-      .then((state) => {
-        setAuthState(state);
-        navigation("/dmblog");
+      .then((loggedState) => {
+        setAuthState(loggedState);
+        navigate("/");
       })
       .catch((e: AxiosError) => {
         const apiError = createApiError(e);
-        setErrorMessage(apiError.getDefaultMessage());
+        setErrorMessage(apiError.getCause()?.message || apiError.getDefaultMessage());
       });
   };
-
   const comeBack = () => {
-    navigation("/dmblog");
+    navigate("/");
   };
   return (
       <form className="form-cont" onSubmit={handleSubmit}>
@@ -84,9 +81,11 @@ function LoginForm() {
         <button className="btn form-btn" onClick={comeBack}>
           Come back
         </button>
-        <div className="form-footer">
-          <a className="form-footer-link">I forgot my password</a>
-        </div>
+        <div className="login-form-footer">
+              <p>or</p>
+              <hr></hr>
+              <div className="link" onClick={() => { setWithOAuth(true) }}>Continue with Facebook or GitHub</div>
+          </div>
       </form>
   );
 }

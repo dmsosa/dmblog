@@ -20,7 +20,7 @@ function ArticleMeta({
       <Link
         className="article-author"
         state={{ bio, followersCount, followingCount, imageUrl }}
-        to={`/dmblog/profile/${username}`}
+        to={`/profile/${username}`}
       >
         <Avatar username={username} imageUrl={imageUrl} />
         <p>{username}</p>

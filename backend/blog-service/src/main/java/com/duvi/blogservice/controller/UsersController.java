@@ -7,9 +7,7 @@ import com.duvi.blogservice.model.dto.*;
 import com.duvi.blogservice.model.exceptions.EntityAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
 import com.duvi.blogservice.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -19,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -27,8 +26,12 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 
 @RestController
@@ -208,39 +211,37 @@ public class UsersController {
         UserResponseDTO toUser = userService.unfollowUser(fromUsername, username);
         return new ResponseEntity<>(toUser, HttpStatus.OK);
     }
-    @GetMapping("/oauth2/{client}")
-    public void oauth2Provider(@PathVariable String client, HttpServletResponse response) throws EntityDoesNotExistsException {
+    @GetMapping("/oauth2/{clientProvider}")
+    public void oauth2ClientProvider(
+            @PathVariable String clientProvider,
+            HttpServletResponse response) throws EntityDoesNotExistsException {
+        try {
+            CommonOAuth2Provider oAuth2Provider = Arrays.stream(CommonOAuth2Provider.values()).filter(provider -> Objects.equals(provider.name(), clientProvider.toUpperCase())).toList().getFirst();
+        } catch (Exception e) {
+            throw new EntityDoesNotExistsException("OAuth2Provider can not be null and the given provider name does not exist!" );
+        }
 
         response.setStatus(302);
-        response.setHeader("Location", "/oauth2/authorization/" + client);
+        response.setHeader("Location", "/oauth2/authorization/" + clientProvider);
     }
     @GetMapping("/oauth2/redirect")
-    public void oauth2Redirect(OAuth2AuthenticationToken oauth2Token, HttpServletRequest request, HttpServletResponse response) throws EntityDoesNotExistsException {
-        HttpSession httpSession = request.getSession();
+    public RedirectView oauth2Redirect(OAuth2AuthenticationToken oauth2Token,
+                                       RedirectAttributes redirectAttributes)   {
+        String token;
         OAuth2User oauth2User = oauth2Token.getPrincipal();
-        httpSession.setAttribute("oauth2Principal", oauth2User);
-        response.setStatus(302);
-        response.setHeader("Location", "http://localhost:5173/dmblog/register");
-    }
-
-    @GetMapping("/oauth2/check")
-    public ResponseEntity<AuthResponseDTO> oauth2Check(HttpServletRequest request, HttpServletResponse response) throws EntityDoesNotExistsException {
-        HttpSession httpSession = request.getSession();
-        OAuth2User oauth2User = (OAuth2User) httpSession.getAttribute("oauth2Principal");
         String email = oauth2User.getAttribute("email");
-        String username = oauth2User.getAttribute("login");
-        UserResponseDTO userDTO;
-        String token = "";
+        String username = oauth2User.getAttribute("name");
         try {
             User user = userService.findUserByEmail(email);
-            userDTO = userService.createDTO(user);
             token = tokenService.generateToken(user);
-
-        } catch (EntityDoesNotExistsException exception) {
-            userDTO = new UserResponseDTO(null, username, email, "", "", "", "", "", null, null, null, null, null);
+            redirectAttributes.addAttribute("token", token);
+        } catch (EntityDoesNotExistsException ignored) {
         }
-        AuthResponseDTO authResponseDTO = new AuthResponseDTO(token, userDTO);
-        return new ResponseEntity<>(authResponseDTO, HttpStatus.OK);
+        redirectAttributes.addAttribute("email", email);
+        redirectAttributes.addAttribute("username", username);
+        return new RedirectView("http://localhost:5173/register");
     }
+
+
 
 }

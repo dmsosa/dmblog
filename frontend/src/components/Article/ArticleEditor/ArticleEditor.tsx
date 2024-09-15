@@ -7,7 +7,6 @@ import {
 } from "../../../service/articleService";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
-import { AxiosError } from "axios";
 import { TArticle } from "../../../types/Article";
 import MDEditor, { ContextStore } from "@uiw/react-md-editor";
 import ErrorMessages from "./ErrorMessages";
