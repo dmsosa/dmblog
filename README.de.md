@@ -1,61 +1,29 @@
 [![Readme Badge](https://img.shields.io/badge/lang-en-lightgreen?style=flat)](https://github.com/dmsosa/dmblog/blob/main/readme.md)
 
-# DmBlog  
+# DmBlog! :apple:  
 
 Dieses Projekt kommst aus [realworld von Thinkster](https://github.com/gothinkster/realworld) inspiriert 
 
 Implementation der "Realworld" Blog mit ein FrontEnd durch Vite, React, TypeScript und ein Backends Spring und PostgreSQL mitgemacht. Es hat mir geholfen, um viel mehr zu lernen.
+---
+
+## Inhaltsverzeichnis:
+
+1. [Tech Stack, Languages & Frameworks] (#das-frontend)
+2. [Wie es alles startet hat?]()
+3. [Was macht es Einz?]()
+4. [Frontend]()
+5. [Backend]()
+6. [Wie kann man dieses Projekt laufen?]()
 
 ---
 
-### Tech Stack, Languages & Frameworks:
 
-- Backend: 
-    - SpringBoot
-    - PostgreSQL
-- FrontEnd: 
-    - Vite (Build Tool)
-    - React
-    - TypeScript
-    - Bootstrap 5 (Styles)
-- Deployment:
-    - Docker
+## Tech Stack, Languages & Frameworks
 
----
+## Wie es alles startet hat?
 
-# Inhaltsverzeichnis:
-
-1. [Das FrontEnd] (#das-frontend)
-
-
-## Wie kann man dieses Projekt laufen?
-
-Um dieses projekt in deinem Lokale Machine zu laufen, folgen Sie die nachsten Schriffte an:
-
-#### Frontend:
-
-1. machen sie ein Pull dieses Repo: `git pull https://github.com/dmsosa/dmsosa.github.io.git`
-2. laufen Sie das command `npm run dev`
-3. Das Blog auf http://localhost:5173/ verfugbar sein sollte.
-
-#### Backend:
-
-1. gehen Sie zu das Ordner "blog-service" und laufen das command `mvnw spring-boot:run`, oder laufen Sie das Backend App. 
-
-2. Das App mit ein InMemory H2 Database funktioniert, aber du kannst es auch mit ein PostgreSQL Dateibank laufen, du muss nur deine eigene Beglaubigungsschreiben zu dem .env Datei einrichten
-
-3. Das Backend auf http://localhost:8082/ erreichber sein sollte.
-
-### Erklarungen: Wie es funktioniert?
-
-#### Backend:
-
-Ich gilt das Backend als besser erklart in einem separaten Repository, sonst wurde dieses Readme unnotig lang werden.
-
-das Backend repo finden man hier: [dmsosa-backend](https://github.com/dmsosa/dmblog-backend) 
-
-
-## Extra funktionen:
+## Was macht es Einz?:
 
 Auchwenn dieses Projekt bei Realworld Conduit Blog inspiriert ist, ich mochte etwas interessanter machen, also ich habe ein anderes Stil zu dem GUI gegeben, Bilder fur den Artikeln, Like zu den Kommentare, du kannst ein nutzer blockieren, ein Responsive Mobile Navbar... etc.
 
@@ -86,5 +54,21 @@ Das Bilder kann mann bewenden
 
 Das Backend zu Deploy:
 
-<a name="das-frontend"/>
-# Das FrontEnd
+## Frontend:
+
+1. machen sie ein Pull dieses Repo: `git pull https://github.com/dmsosa/dmsosa.github.io.git`
+2. laufen Sie das command `npm run dev`
+3. Das Blog auf http://localhost:5173/ verfugbar sein sollte.
+
+## Backend:
+
+1. gehen Sie zu das Ordner "blog-service" und laufen das command `mvnw spring-boot:run`, oder laufen Sie das Backend App. 
+
+2. Das App mit ein InMemory H2 Database funktioniert, aber du kannst es auch mit ein PostgreSQL Dateibank laufen, du muss nur deine eigene Beglaubigungsschreiben zu dem .env Datei einrichten
+
+3. Das Backend auf http://localhost:8082/ erreichber sein sollte.
+
+
+## Wie kann man dieses Projekt laufen?
+
+Um dieses projekt in deinem Lokale Machine zu laufen, folgen Sie die nachsten Schriffte an:
