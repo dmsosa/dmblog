@@ -1,26 +1,21 @@
 import { useEffect, useState } from "react";
 import { TArticleData, getArticles } from "../service/articleService";
-import { TAuthContext, useAuth } from "../context/AuthContext";
-import { createApiError } from "../service/errorHandler";
-import { useNavigate } from "react-router-dom";
-import { AxiosError } from "axios";
-import { logoutUser } from "../service/userService";
+import { ApiError } from "../service/errorHandler";
 
 function useArticle({
   location,
+  tags,
   username = null,
-  tagName,
+  initOffset = 0,
 }: {
   location: string;
+  tags: string[];
   username?: string | null;
-  tagName: string;
+  initOffset?: number;
 }) {
-  const navigate = useNavigate();
   //loading and headers
   const [isLoading, setLoading] = useState(true);
-  const { authState, setAuthState } = useAuth() as TAuthContext;
-  const { headers } = authState;
-
+  const [ offset, setOffset ] = useState(initOffset);
   //articles
   const [{ articles, articlesCount }, setArticlesData] = useState<TArticleData>(
     { articles: [], articlesCount: 0 },
@@ -30,26 +25,19 @@ function useArticle({
   useEffect(() => {
     setLoading(true);
     //get articles
-    getArticles({ location, tagName, headers, username })
+    getArticles({ location, tags, username, offset })
       .then((articleData) => {
-        console.log("Arts", articleData)
         setArticlesData(articleData);
       })
-      .catch((error: AxiosError) => {
-        const apiError = createApiError(error);
-        const status = apiError.getStatusCode();
-        if (status === 406) {
-          alert("Token expired, please login again");
-          setAuthState(logoutUser());
-          navigate("/login");
-        }
+      .catch((error: ApiError) => {
+        console.log(error.getMessage())
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [headers, location, tagName, username, navigate, setAuthState]);
+  }, [location, tags, username, offset ]);
 
-  return { articles, articlesCount, setArticlesData, isLoading };
+  return { articles, articlesCount, setArticlesData, isLoading, offset, setOffset };
 }
 
 export default useArticle;

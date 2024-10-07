@@ -8,9 +8,7 @@ import com.duvi.blogservice.model.exceptions.EntityAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
 import com.duvi.blogservice.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -38,19 +36,16 @@ import java.util.Objects;
 @RequestMapping("/api/users")
 public class UsersController {
 
-    private Environment env;
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private AuthenticationManager authenticationManager;
     private UserService userService;
     private TokenService tokenService;
 
     public UsersController(
-                            Environment env,
                             UserService userService,
                            AuthenticationManager authenticationManager,
                            TokenService tokenService
     ) {
-        this.env = env;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
@@ -75,12 +70,11 @@ public class UsersController {
             throw new EntityDoesNotExistsException("User with login '%s' do not exists!".formatted(loginDTO.login()));
         }
         UserResponseDTO loggedUser = userService.findUserByLogin(loginDTO.login());
-        var usernamePassword = new UsernamePasswordAuthenticationToken(loggedUser.username(), loginDTO.password());
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(loggedUser.username(), loginDTO.password());
         Authentication auth = authenticationManager.authenticate(usernamePassword);
-        User user = (User) auth.getPrincipal();
-        String token = tokenService.generateToken(user);
-        UserResponseDTO userResponseDTO = userService.createDTO(user);
-        AuthResponseDTO responseDTO = new AuthResponseDTO(token, userResponseDTO);
+
+        String token = tokenService.generateToken(loggedUser.username(), loggedUser.email());
+        AuthResponseDTO responseDTO = new AuthResponseDTO(token, loggedUser);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
@@ -91,7 +85,8 @@ public class UsersController {
         UserResponseDTO createdUser = userService.createUser(registerDTO);
         var authToken = new UsernamePasswordAuthenticationToken(createdUser.username(), registerDTO.password());
         Authentication auth = authenticationManager.authenticate(authToken);
-        String token = tokenService.generateToken((User) auth.getPrincipal());
+        User user = (User) auth.getPrincipal();
+        String token = tokenService.generateToken(user.getUsername(), user.getEmail());
         UserResponseDTO userResponseDTO = userService.createDTO((User) auth.getPrincipal());
         AuthResponseDTO responseDTO = new AuthResponseDTO(token, userResponseDTO);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
@@ -102,45 +97,38 @@ public class UsersController {
     //Redirect to our frontEnd with user info ready to sign up
 
     @GetMapping("/")
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers(@RequestHeader HttpHeaders headers) {
-        String token = headers.getFirst("Authorization");
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers(Authentication authentication) {
         List<UserResponseDTO> users = userService.getAllUsers();
-
-        if (token != null) {
-            token = token.replace("Bearer ", "");
-            String loggedUsername = tokenService.validateToken(token);
-            users = users.stream().map(
-                    userDTO -> userDTO.withFollowing(userService.isFollowing(userDTO.id(), loggedUsername))
+        if (Objects.nonNull(authentication) && authentication.isAuthenticated()) {
+            User authenticatedUser = (User) authentication.getPrincipal();
+            users = users.stream().map(userDTO ->
+                userDTO.withFollowing(
+                        userService.isFollowing(userDTO.id(), authenticatedUser.getUsername())
+                )
             ).toList();
-        };
+        }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
     @GetMapping("/find/{userId}")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long userId, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
-        String token = headers.getFirst("Authorization");
-        UserResponseDTO user = userService.findUserById(userId);
-
-        if (token != null) {
-            token = token.replace("Bearer ", "");
-            String loggedUsername = tokenService.validateToken(token);
-            user = user.withFollowing(userService.isFollowing(user.id(), loggedUsername));
-        }
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    @GetMapping("/{username}")
-    public ResponseEntity<UserResponseDTO> getUserByUsername(@PathVariable String username, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
-        String token = headers.getFirst("Authorization");
-        UserResponseDTO userResponseDTO = userService.findUserByUsername(username);
-
-        if (token != null) {
-            token = token.replace("Bearer ", "");
-            String loggedUsername = tokenService.validateToken(token);
-            userResponseDTO = userResponseDTO.withFollowing(userService.isFollowing(userResponseDTO.id(), loggedUsername));
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long userId, Authentication authentication) throws EntityDoesNotExistsException {
+        UserResponseDTO userResponseDTO = userService.findUserById(userId);
+        if (Objects.nonNull(authentication) && authentication.isAuthenticated()) {
+            User authenticatedUser = (User) authentication.getPrincipal();
+            userResponseDTO = userResponseDTO.withFollowing(userService.isFollowing(userResponseDTO.id(), authenticatedUser.getUsername()));
         }
         return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
-    @PutMapping(value = "/", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+
+    @GetMapping("/{username}")
+    public ResponseEntity<UserResponseDTO> getUserByUsername(@PathVariable String username, Authentication authentication) throws EntityDoesNotExistsException {
+        UserResponseDTO userResponseDTO = userService.findUserByUsername(username);
+        if (Objects.nonNull(authentication) && authentication.isAuthenticated()) {
+            User authenticatedUser = (User) authentication.getPrincipal();
+            userResponseDTO = userResponseDTO.withFollowing(userService.isFollowing(userResponseDTO.id(), authenticatedUser.getUsername()));
+        }
+        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
+    }
+    @PutMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<AuthResponseDTO> updateUser(
             @RequestParam("username") String username,
             @RequestParam("email") String email,
@@ -151,65 +139,66 @@ public class UsersController {
             @RequestParam("backgroundColor") String backgroundColor,
             @RequestHeader HttpHeaders headers ) throws EntityAlreadyExistsException {
 
-        SetUserDTO newUserDTO = new SetUserDTO(username, email, bio, image, backgroundImage, icon, backgroundColor);
+        SetUserDTO updatedUserDTO = new SetUserDTO(username, email, bio, image, backgroundImage, icon, backgroundColor);
         String token = headers.getFirst("Authorization").replace("Bearer ", "");
 
         String oldUsername = tokenService.validateToken(token);
+        UserResponseDTO userDTO = userService.updateUser(oldUsername, updatedUserDTO);
 
-        UserResponseDTO userResponseDTO = userService.updateUser(oldUsername, newUserDTO);
+        Authentication oldAuthentication = SecurityContextHolder.getContext().getAuthentication();
+        User authenticatedUser = (User) oldAuthentication.getPrincipal();
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User principal = (User) authentication.getPrincipal();
-        principal.setUsername(newUserDTO.username());
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(authenticatedUser.getUsername(), authenticatedUser.getPassword());
+        Authentication newAuthentication = authenticationManager.authenticate(auth);
 
-        String newToken = tokenService.generateToken(principal);
+        SecurityContextHolder.getContext().setAuthentication(newAuthentication);
 
-        AuthResponseDTO authResponse = new AuthResponseDTO(newToken, userResponseDTO);
+        String newToken = tokenService.generateToken(userDTO.username(), userDTO.email());
+        AuthResponseDTO authResponse = new AuthResponseDTO(newToken, userDTO);
 
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
     @GetMapping("/followers/{userId}")
-    public ResponseEntity<List<UserResponseDTO>> getFollowersOf(@PathVariable Long userId, @RequestHeader HttpHeaders headers) {
-        String token = headers.getFirst("Authorization");
+    public ResponseEntity<List<UserResponseDTO>> getFollowersOf(@PathVariable Long userId, Authentication authentication) {
         List<UserResponseDTO> followers = userService.findFollowersOf(userId);
-
-        if (token != null) {
-            token = token.replace("Bearer ", "");
-            String loggedUsername = tokenService.validateToken(token);
-            followers = followers.stream().map( follower ->
-                    follower.withFollowing(userService.isFollowing(follower.id(), loggedUsername))).toList();
+        if (Objects.nonNull(authentication) && authentication.isAuthenticated()) {
+            User authenticatedUser = (User) authentication.getPrincipal();
+            followers = followers.stream().map(userDTO ->
+                    userDTO.withFollowing(
+                            userService.isFollowing(userDTO.id(), authenticatedUser.getUsername())
+                    )
+            ).toList();
         }
-
         return new ResponseEntity<>(followers, HttpStatus.OK);
     }
     @GetMapping("/following/{userId}")
-    public ResponseEntity<List<UserResponseDTO>> getFollowingOf(@PathVariable Long userId, @RequestHeader HttpHeaders headers) {
-        String token = headers.getFirst("Authorization");
+    public ResponseEntity<List<UserResponseDTO>> getFollowingOf(@PathVariable Long userId, Authentication authentication) {
         List<UserResponseDTO> following = userService.findFollowingOf(userId);
-        if (token != null) {
-            token = token.replace("Bearer ", "");
-            String loggedUsername = tokenService.validateToken(token);
-            following = following.stream().map( follow ->
-                    follow.withFollowing(userService.isFollowing(follow.id(), loggedUsername))).toList();
+        if (Objects.nonNull(authentication) && authentication.isAuthenticated()) {
+            User authenticatedUser = (User) authentication.getPrincipal();
+            following = following.stream().map(userDTO ->
+                    userDTO.withFollowing(
+                            userService.isFollowing(userDTO.id(), authenticatedUser.getUsername())
+                    )
+            ).toList();
         }
-
         return new ResponseEntity<>(following, HttpStatus.OK);
     }
 
 
     @PostMapping("/follow/{username}")
-    public ResponseEntity<UserResponseDTO> followUser(@PathVariable String username, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
-        String token = headers.getFirst("Authorization").replace("Bearer ", "");
-        String fromUsername = tokenService.validateToken(token);
-        UserResponseDTO toUser = userService.followUser(fromUsername, username);
-        return new ResponseEntity<>(toUser, HttpStatus.OK);
+    public ResponseEntity<UserResponseDTO> followUser(@PathVariable String username, Authentication authentication) throws EntityDoesNotExistsException {
+        User currentUser = (User) authentication.getPrincipal();
+        UserResponseDTO userDTO = userService.followUser(username, currentUser.getUsername());
+
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
     @DeleteMapping("/follow/{username}")
-    public ResponseEntity<UserResponseDTO> unfollowUser(@PathVariable String username, @RequestHeader HttpHeaders headers) throws EntityDoesNotExistsException {
-        String token = headers.getFirst("Authorization").replace("Bearer ", "");
-        String fromUsername = tokenService.validateToken(token);
-        UserResponseDTO toUser = userService.unfollowUser(fromUsername, username);
-        return new ResponseEntity<>(toUser, HttpStatus.OK);
+    public ResponseEntity<UserResponseDTO> unfollowUser(@PathVariable String username, Authentication authentication) throws EntityDoesNotExistsException {
+        User currentUser = (User) authentication.getPrincipal();
+        UserResponseDTO userDTO = userService.unfollowUser(username, currentUser.getUsername());
+
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
     @GetMapping("/oauth2/{clientProvider}")
     public void oauth2ClientProvider(
@@ -232,10 +221,11 @@ public class UsersController {
         String email = oauth2User.getAttribute("email");
         String username = oauth2User.getAttribute("name");
         try {
-            User user = userService.findUserByEmail(email);
-            token = tokenService.generateToken(user);
+            UserResponseDTO userDTO = userService.findUserByEmail(email);
+            token = tokenService.generateToken(userDTO.username(), userDTO.email());
             redirectAttributes.addAttribute("token", token);
-        } catch (EntityDoesNotExistsException ignored) {
+        } catch (EntityDoesNotExistsException e) {
+            //ignore
         }
         redirectAttributes.addAttribute("email", email);
         redirectAttributes.addAttribute("username", username);

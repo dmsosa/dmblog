@@ -1,49 +1,30 @@
 import { useState } from "react";
-import AuthorInfo from "../../components/AuthorInfo";
-import ContainerRow from "../../components/ContainerRow";
-import NavItem from "../../components/NavItem";
-import { Outlet, useLocation } from "react-router-dom";
+import AuthorInfo from "../../components/Profile/AuthorInfo";
+import { useParams } from "react-router-dom";
+import TagsProvider from "../../context/TagsContext";
+import TagsContainer from "../../components/TagsContainer.tsx/TagsContainer";
+import ArticlesPreview from "../../components/ArticlesPreview/ArticlesPreview";
 
-type Ttoggle = "articles" | "favs";
+type Ttoggle = "author" | "favs";
 function Profile() {
-  const { state } = useLocation();
-  const [toggle, setToggle] = useState<Ttoggle>("articles");
+  const { username } = useParams();
+  const [toggle, setToggle] = useState<Ttoggle>("author");
 
-  const changeToggle = () => {
-    if (toggle === "articles") {
-      setToggle("favs");
-    } else {
-      setToggle("articles");
-    }
-  };
   return (
-    <div className="profile-page">
-      <div className="profile-info">
-        <ContainerRow>
-          <AuthorInfo />
-        </ContainerRow>
+    <div className="container profile-container">
+      {/* AuthorInfo has its own rows inside */}
+      <AuthorInfo />
+      <div className="row">
+        <i className="bi bi-airplane-fill"></i>
+        <button onClick={() => { setToggle("author")}}>Written Articles</button>
+        <button onClick={() => { setToggle("favs")}}>Favorite Articles</button>
       </div>
-      <ContainerRow>
-        <div className="profile-toggler">
-          <ul>
-            <NavItem
-              text="Articles"
-              url=""
-              state={state}
-              activeClass={toggle === "articles"}
-              onClick={changeToggle}
-            />
-            <NavItem
-              text="Favorite Articles"
-              url="favorites"
-              state={state}
-              activeClass={toggle === "favs"}
-              onClick={changeToggle}
-            />
-          </ul>
-        </div>
-        <Outlet />
-      </ContainerRow>
+      <div className="row">
+        <TagsProvider>
+          <TagsContainer/>
+          <ArticlesPreview location={toggle} username={username}/>
+        </TagsProvider>  
+      </div>
     </div>
   );
 }

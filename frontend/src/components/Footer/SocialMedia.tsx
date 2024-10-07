@@ -1,28 +1,20 @@
-import { DiGithubAlt } from "react-icons/di";
-import { FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 
 function SocialMedia() {
-  return (
-    <div className="footer-col col-12 socialmedia">
-      <ul>
-        <li>
-          <a>
-            <DiGithubAlt size={40} />
-          </a>
-        </li>
-        <li>
-          <a>
-            <FaInstagram size={40} />
-          </a>
-        </li>{" "}
-        <li>
-          <a>
-            <FaLinkedin size={40} />
-          </a>
-        </li>
-      </ul>
-    </div>
-  );
-}
-
-export default SocialMedia;
+    return (
+        <>
+        <h1>Social Media</h1>
+        <ul>
+            <li><a href="https://www.facebook.com/profile.php?id=100082576217258"><FaFacebook/>Facebook</a></li>
+            <li><a href="https://github.com/dmsosa"><FaGithub/>GitHub</a></li>
+            <li><a href="https://www.instagram.com/duvi_official/?hl=de"><FaInstagram/>Instagram</a></li>
+            <li><a href="https://www.linkedin.com/in/durian-sosa-807147241/"><FaLinkedin/>LinkedIn</a></li>
+        </ul>
+        </>
+    );
+  }
+  
+  export default SocialMedia;

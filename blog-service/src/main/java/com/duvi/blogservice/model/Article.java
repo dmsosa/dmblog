@@ -27,13 +27,13 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne( cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "author_id")
     private User author;
     private String title;
     private String body;
     private String description;
     private String slug;
-    private String imageURL;
+    private String imageUrl;
     private String backgroundColor;
     private String fontColor;
     private String emoji;

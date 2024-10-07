@@ -3,7 +3,7 @@ import { TAuthContext, useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { CiFacebook } from "react-icons/ci";
 import { FaGithub } from "react-icons/fa";
-import { GiFishBucket } from "react-icons/gi";
+import apple from "../../assets/img/profile/apple.svg";
 
 
 function OAuth2Form({ setWithOAuth } : { 
@@ -25,13 +25,14 @@ function OAuth2Form({ setWithOAuth } : {
         if (isAuth) { navigate("/")};
     }, [isAuth]);
     return (
-        <div className="container">
-            <div className="row auth-page-logo mb-5 pt-5"><GiFishBucket fontSize={25}/></div>
-            <div className="row oauth-buttons mb-5">
-                <button onClick={handleClick} className="oauth-btn oauth-btn-facebook"><div className="oauth-btn-logo"><CiFacebook color="white"/></div><span>Continue with Facebook</span></button>
-                <button onClick={handleClick} className="oauth-btn oauth-btn-github"><div className="oauth-btn-logo"><FaGithub color="white"/></div><span>Continue with GitHub</span></button>
+        <div className="auth-page-container container pt-5">
+            <div className="row auth-page-logo mb-5 pt-5"><img src={apple} alt="dmblog's logo"></img></div>
+            <div className="row auth-page-title mb-5"><h1>Continue with OAuth2</h1></div>
+            <div className="row auth-page-options mb-5">
+                <button onClick={handleClick} className="auth-option auth-option-facebook"><CiFacebook color="white" size={"5rem"}/><span>Continue with Facebook</span></button>
+                <button onClick={handleClick} className="auth-option auth-option-github"><FaGithub color="white" size={"5rem"}/><span>Continue with GitHub</span></button>
             </div>
-            <div className="row reg-form-footer">
+            <div className="row form-footer">
                 <p>or</p>
                 <hr></hr>
                 <div className="link" onClick={() => { setWithOAuth(false) }}>Continue with Email</div>

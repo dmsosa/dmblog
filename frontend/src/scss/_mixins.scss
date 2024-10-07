@@ -1,0 +1,26 @@
+@mixin btn-styles($bg, $color, $bghover, $chover, $outlinecolor) {
+  &:not(:disabled), &:active {
+    background-color: $bg;
+    border: none;
+    color: $color;
+    padding: 0.5rem 1rem;
+    transition: all ease-in 0.2s;
+  }
+
+  &:hover {
+    background-color: $bghover;
+    color: $chover;
+    border: none;
+    outline: 0.4rem solid;
+    outline-color: $outlinecolor;
+  }
+
+  &:focus {
+    background-color: $bghover;
+    color: $chover;
+    border: none;
+    outline: 0.7rem solid;
+    outline-color: $outlinecolor;
+    box-shadow: none;
+  }
+}

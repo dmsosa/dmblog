@@ -33,6 +33,15 @@ public class GlobalExceptionHandler implements ErrorController {
         ApiError apiError = new ApiError(Collections.singletonList(error));
         return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @PutMapping("/error")
+    public ResponseEntity<ApiError> putErrorHandler(HttpServletRequest request, HttpServletResponse response) throws Throwable {
+        if (request.getAttribute(RequestDispatcher.ERROR_EXCEPTION) != null) {
+            throw (Throwable) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+        }
+        ObjectError error = new ObjectError("Unknown Error during filter chain", request.toString());
+        ApiError apiError = new ApiError(Collections.singletonList(error));
+        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler
     public ResponseEntity<ApiError> exceptionHandler(Exception exception, WebRequest request) {

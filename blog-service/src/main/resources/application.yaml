@@ -1,5 +1,3 @@
-#datasource: h2
-datasource: postgres
 server:
   port: 8082
 api:
@@ -7,30 +5,34 @@ api:
     token:
       secret: ${JWT_SECRET:secret}
       issuer: ${JWT_ISSUER:myessen}
-
+aws:
+  accessKeyId: ${AWS_ACCESS_KEY_ID}
+  secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+  sessionToken: ${AWS_SESSION_TOKEN}
 #Spring config
 spring:
+  servlet:
+    multipart:
+      max-file-size: 500KB
+      max-request-size: 500KB
+  profiles:
+    active: prod
 # Import .env file as if it were a .properties file
   config:
     import: optional:classpath:.env[.properties]
   application:
     name: blog-service
 ############################################################################################
-#H2 database, in memory **You can uncomment this to switch to a H2 in memory database**
-#  datasource:
-#     url: jdbc:h2:mem:demo
-#     username: sa
-#     password: password
-#     driverClassName: org.h2.Driver
-#  h2:
-#     console:
-#       enabled: true
-############################################################################################
+#H2 database, in memory
   datasource:
-    url: ${POSTGRES_URL}
-    username: postgres
-    password: ${POSTGRES_PASSWORD}
-    driverClassName: org.postgresql.Driver
+     vendor: h2
+     url: jdbc:h2:mem:demo
+     username: sa
+     password: password
+     driverClassName: org.h2.Driver
+  h2:
+     console:
+       enabled: true
   jpa:
     properties:
       hibernate:
@@ -56,15 +58,14 @@ logging:
     org.hibernate.sql: TRACE
     org.springframework.security: TRACE
 
-
 ---
-#for prod profile, we use a postgres database running in a docker container
-datasource: postgres
+#for prod profile
 spring:
   config:
     activate:
       on-profile: prod
   datasource:
+    vendor: postgres
     url: ${POSTGRES_URL}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}

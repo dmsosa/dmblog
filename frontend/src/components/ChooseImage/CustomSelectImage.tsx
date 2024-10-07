@@ -25,7 +25,7 @@ function CustomSelectImage({
   icon: string;
   changeHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
 }) {
-  const [currentIcon, setCurrentIcon] = useState(icon);
+  const [ currentIcon, setCurrentIcon ] = useState(icon);
 
   const handleToggle = (e: MouseEvent<HTMLDivElement>) => {
     const customSelect = e.currentTarget.closest(

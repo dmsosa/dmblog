@@ -26,27 +26,29 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
+const initUser = {
+  id: null,
+  username: "",
+  email: "",
+  password: "",
+  bio: "",
+  imageUrl: "",
+  backgroundImageUrl: "",
+  icon: "apple",
+  backgroundColor: "#DFFF00",
+  followersCount: null,
+  followingCount: null,
+  followers: null,
+  following: null,
+  createdAt: null,
+  updatedAt: null,
+  isFollowing: false,
+}
+
 let initState: TAuthState = {
   headers: null,
   isAuth: false,
-  loggedUser: {
-    id: null,
-    username: "",
-    email: "",
-    password: "",
-    bio: "",
-    imageUrl: "",
-    backgroundImageUrl: "",
-    icon: "apple",
-    backgroundColor: "#DFFF00",
-    followersCount: null,
-    followingCount: null,
-    followers: null,
-    following: null,
-    createdAt: null,
-    updatedAt: null,
-    isFollowing: false,
-  },
+  loggedUser: initUser,
 };
 
 const loggedIn: string | null = localStorage.getItem("loggedUser");
@@ -63,7 +65,13 @@ function AuthProvider({ children }: { children: ReactNode[] | ReactNode }) {
 
     getUser({ headers: authState.headers })
     .then((loggedUser) => setAuthState({headers: authState.headers, isAuth: true, loggedUser}))
-    .catch((error: ApiError) => console.log(error.getDefaultMessage()))
+    .catch((error: ApiError) => {
+      if (error.getStatusCode() === 406) {
+        alert("Token expired, you have to login again!");
+        setAuthState(initState);
+      }
+      console.log(error.getDefaultMessage())
+    })
 
   }, [authState, setAuthState])
 

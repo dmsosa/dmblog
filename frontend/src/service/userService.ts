@@ -103,8 +103,8 @@ export function logoutUser() {
       backgroundImageUrl: "",
       icon: "apple",
       backgroundColor: "#DFFF00",
-      followersCount: null,
-      followingCount: null,
+      followersCount: 0,
+      followingCount: 0,
       followers: null,
       following: null,
       createdAt: null,
@@ -135,20 +135,15 @@ export async function getUser({
 
 //Get  User By Username
 export async function getUserByUsername({
-  headers,
   username,
 }: {
-  headers?: object | null;
   username: string;
 }): Promise<TUser> {
   try {
-    if (!headers) {
-      headers = {};
-    }
+
     const { data } = await instance.request({
       method: "GET",
       url: `/${username}`,
-      headers: headers,
     });
     return data;
   } catch (error) {
@@ -159,20 +154,15 @@ export async function getUserByUsername({
 
 //Get  User By Id
 export async function getUserById({
-  headers,
   userId,
 }: {
-  headers?: object | null;
   userId: number | null;
 }): Promise<TUser> {
   try {
-    if (!headers) {
-      headers = {};
-    }
+
     const { data } = await instance.request({
       method: "GET",
       url: `/find/${userId}`,
-      headers: headers,
     });
 
     return data;
@@ -194,7 +184,7 @@ export async function updateUser({
   icon,
   backgroundColor,
 }: {
-  headers: { [key: string]: string } | null;
+  headers: { [key: string]: string };
   username: string;
   email: string;
   bio: string;
@@ -204,9 +194,6 @@ export async function updateUser({
   backgroundColor: string;
 }): Promise<TAuthState> {
   try {
-    if (!headers) {
-      headers = {};
-    }
 
     const formData = new FormData();
     formData.append("username", username);
@@ -224,7 +211,7 @@ export async function updateUser({
     }
 
     const { data }: { data: TAuthResponse } = await instance.request({
-      url: "/",
+      url: "",
       headers: headers,
       method: "PUT",
       data: formData,
@@ -270,20 +257,14 @@ export async function toggleFollow({
 }
 
 export async function getFollowersOf({
-  headers,
   userId,
 }: {
-  headers: object | null;
-  userId: number | null;
+  userId: number;
 }): Promise<TUser[]> {
   try {
-    if (!headers) {
-      headers = {};
-    }
     const { data } = await instance.request({
       method: "GET",
       url: `/followers/${userId}`,
-      headers: headers,
     });
     return data;
   } catch (error) {
@@ -293,25 +274,29 @@ export async function getFollowersOf({
 }
 
 export async function getFollowingOf({
-  headers,
   userId,
 }: {
   headers: object | null;
   userId: number | null;
 }): Promise<TUser[]> {
   try {
-    if (!headers) {
-      headers = {};
-    }
+
 
     const { data } = await instance.request({
       method: "GET",
       url: `/following/${userId}`,
-      headers: headers,
     });
     return data;
   } catch (error) {
     const apiError = createApiError(error as AxiosError);
     throw apiError;
   }
+}
+
+export async function deleteUser({ headers, username } : { headers: object, username: string }): Promise<void> {
+  return instance.request({
+    method: "DELETE",
+    url: `/${username}`,
+    headers: headers
+  })
 }

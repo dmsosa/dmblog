@@ -25,15 +25,15 @@ public class Comment {
     @JsonIgnore
     private Article article;
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "author_id")
     @JsonIgnore
-    private User user;
+    private User author;
     private String body;
     private LocalDateTime postedAt;
     private LocalDateTime updatedAt;
 
-    public Comment(User user, Article article, String body) {
-        this.user = user;
+    public Comment(User author, Article article, String body) {
+        this.author = author;
         this.article = article;
         this.body = body;
         this.postedAt = LocalDateTime.now();

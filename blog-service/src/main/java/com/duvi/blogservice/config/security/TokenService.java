@@ -26,19 +26,46 @@ public class TokenService {
     @Value("${api.security.token.issuer}")
     private String issuer;
 
-    public String generateToken(User user) throws RuntimeException {
+    public String generateToken(String subject) throws RuntimeException {
         Algorithm algorithm = Algorithm.HMAC256(secret);
         try {
             return JWT.create()
                     .withIssuedAt(Instant.now())
                     .withExpiresAt(generateExpirationDate())
-                    .withSubject(user.getUsername())
+                    .withSubject(subject)
                     .withIssuer(issuer)
                     .sign(algorithm);
         } catch (JWTCreationException e) {
             throw new RuntimeException("An exception ocurred while creating the JWT", e);
         }
-
+    }
+    public String generateToken(String subject, String emailClaim) throws RuntimeException {
+        Algorithm algorithm = Algorithm.HMAC256(secret);
+        try {
+            return JWT.create()
+                    .withIssuedAt(Instant.now())
+                    .withExpiresAt(generateExpirationDate())
+                    .withSubject(subject)
+                    .withClaim("email", emailClaim)
+                    .withIssuer(issuer)
+                    .sign(algorithm);
+        } catch (JWTCreationException e) {
+            throw new RuntimeException("An exception ocurred while creating the JWT", e);
+        }
+    }
+    public String generateToken(String subject, String emailClaim, Instant expirationDate) throws RuntimeException {
+        Algorithm algorithm = Algorithm.HMAC256(secret);
+        try {
+            return JWT.create()
+                    .withIssuedAt(Instant.now())
+                    .withExpiresAt(expirationDate)
+                    .withSubject(subject)
+                    .withClaim("email", emailClaim)
+                    .withIssuer(issuer)
+                    .sign(algorithm);
+        } catch (JWTCreationException e) {
+            throw new RuntimeException("An exception ocurred while creating the JWT", e);
+        }
     }
 
     public String validateToken(String token) {
@@ -70,10 +97,10 @@ public class TokenService {
             throw(e);
         }
     }
+
     private Instant generateExpirationDate() {
         return LocalDateTime.now().plusHours(10).toInstant(ZoneOffset.of("+00:00"));
     }
-
 
 
 }

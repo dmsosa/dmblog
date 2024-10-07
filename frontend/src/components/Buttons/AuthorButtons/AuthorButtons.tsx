@@ -2,41 +2,30 @@ import { Link, useNavigate } from "react-router-dom";
 import { TAuthContext, useAuth } from "../../../context/AuthContext";
 import { deleteArticle } from "../../../service/articleService";
 import { TArticle } from "../../../types/Article";
-import { PopUpColors, PopUpEmojis } from "./PopUpButtons";
+import BackgroundPopUp from "../PopUpButtons/BackgroundPopUp";
+import FontColorPopUp from "../PopUpButtons/FontColorPopUp";
+import EmojisPopUp from "../PopUpButtons/EmojisPopUp";
 
 function AuthorButtons({
-  title,
-  body,
-  description,
-  tagList,
-  slug,
-  fontColor,
-  backgroundColor,
-  setArticleWithNewFields,
+  article,
+  handleFieldChange
 }: {
-  title: string;
-  body: string;
-  description: string;
-  tagList: string[];
-  slug: string;
-  fontColor: string | null;
-  backgroundColor: string | null;
-  emoji: string | null;
-  setArticleWithNewFields: (article: TArticle) => void;
+  article: TArticle;
+  handleFieldChange: (article: TArticle) => void;
 }) {
   const { authState } = useAuth() as TAuthContext;
-  const { headers, isAuth } = authState;
+  const  headers  = authState.headers as object;
   const navigate = useNavigate();
 
   const handleDelete = () => {
-    if (!isAuth) return alert("You need to login first!");
-    if (slug.length < 1)
-      return console.log(`Article with slug ${slug} does not exists!`);
+    if (!headers) return alert("You need to login first!");
+    if (article.slug.length < 1)
+      return console.log(`Article with slug ${article.slug} does not exists!`);
     const confirm = window.confirm("Are you sure to delete?");
     if (!confirm) {
       return;
     }
-    deleteArticle({ slug, headers })
+    deleteArticle({ slug: article.slug, headers })
       .then((message) => {
         alert(message);
         navigate("/");
@@ -47,28 +36,35 @@ function AuthorButtons({
   };
 
   return (
-    <div className="author-buttons row gx-5">
-      <Link
-        className="nav-link col-3"
-        state={{ title, body, description, tagList }}
-        to={`/editor/${slug}`}
-      >
-        <button className="btn">Edit</button>
-      </Link>
-      <PopUpEmojis
-        slug={slug}
-        setArticleWithNewFields={setArticleWithNewFields}
-      />
-      <PopUpColors
-        slug={slug}
-        backgroundColor={backgroundColor}
-        fontColor={fontColor}
-        setArticleWithNewFields={setArticleWithNewFields}
-      />
-      <button className="btn btn-danger col-3" onClick={handleDelete}>
-        Delete
-      </button>
-    </div>
+          <>
+            <Link
+            className="btn btn-edit"
+            state={article}
+            to={`/editor/${article.slug}`}
+            >
+              Edit
+            </Link>
+            <BackgroundPopUp 
+            headers={headers}
+            slug={article.slug}
+            backgroundColor={article.backgroundColor}
+            handleBackgroundColorChange={handleFieldChange}
+            />
+            <FontColorPopUp 
+            headers={headers}
+            slug={article.slug}
+            fontColor={article.fontColor}
+            handleFontColorChange={handleFieldChange}
+            />
+            <EmojisPopUp 
+            headers={headers}
+            slug={article.slug}
+            handleEmojiChange={handleFieldChange}
+            />
+            <button className="btn btn-danger col-3" onClick={handleDelete}>
+              Delete
+            </button>
+          </>
   );
 }
 

@@ -1,3 +1,0 @@
-ALTER TABLE users RENAME COLUMN image TO image_url;
-ALTER TABLE users ADD COLUMN IF NOT EXISTS background_image_url TEXT;
-ALTER TABLE users ADD COLUMN IF NOT EXISTS icon TEXT;

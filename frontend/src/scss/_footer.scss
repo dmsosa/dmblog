@@ -1,0 +1,46 @@
+//footer styles
+
+footer {
+  width: 100%;
+  margin: 0;
+  padding: 3rem 1rem;
+  background-color: #000d1c;
+  color: whitesmoke;
+  .footer-brand {
+    margin-bottom: 2.5rem;
+    a {
+      span {
+        vertical-align: middle;
+        color: #51ff00;
+        font-weight: bold;
+        font-size: 2rem;
+        padding-left: 1rem;
+      }
+    }
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      a {
+        font-size: 1.7rem;
+        font-weight: bold;
+        span {
+          font-weight: normal;
+        }
+      }
+      svg {
+        margin-right: 1rem;
+      }
+    }
+  }
+  h1 {
+    padding-top: 0.5rem;
+    margin-bottom: 2.5rem;
+    color: #51ff00;
+    font-weight: bold;
+  }
+
+}
+

@@ -1,9 +1,6 @@
 package com.duvi.blogservice.repository;
 
-import com.duvi.blogservice.model.relations.ArticleTag;
-import com.duvi.blogservice.model.relations.ArticleUser;
-import com.duvi.blogservice.model.relations.ArticleUserId;
-import com.duvi.blogservice.model.relations.UserFollower;
+import com.duvi.blogservice.model.relations.*;
 import com.duvi.blogservice.repository.relations.ArticleTagRepository;
 import com.duvi.blogservice.repository.relations.ArticleUserRepository;
 import com.duvi.blogservice.repository.relations.UserFollowerRepository;
@@ -12,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,8 +42,15 @@ public class RelationRepositoryTest {
 
     @Test
     public void whenRelationThenGetEntities() {
-        ArticleUserId id = new ArticleUserId(1L, 2L);
-        Optional<ArticleUser> relation = favsRepository.findById(id);
+        UserFollowerId id = new UserFollowerId(1L, 2L);
+        Optional<UserFollower> relation = followerRepository.findById(id);
         assertFalse(relation.isEmpty());
+    }
+
+    @Test
+    public void testFindList() {
+        Long userId = 1L;
+        List<UserFollower> followerList = followerRepository.findByUserId(userId);
+        assertFalse(followerList.isEmpty());
     }
 }

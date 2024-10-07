@@ -79,7 +79,7 @@ public class User implements UserDetails {
     private Set<UserFollower> followers;
 
         //Comments
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "author")
     @JsonIgnore
     private Set<Comment> comments;
 

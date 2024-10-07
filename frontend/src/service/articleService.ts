@@ -19,35 +19,40 @@ export type TArticleData = {
 type TEndpoint = {
   [key: string]: string;
 };
+
+
+//OFFNETE ENDPUNKTE
+
+
 //Get articles
 export async function getArticles({
   location,
-  tagName,
+  tags,
   limit = 3,
   offset = 0,
   username,
-  headers,
 }: {
   location: string;
-  tagName?: string | null;
+  tags: string[];
   limit?: number;
   offset?: number;
   username?: string | null;
-  headers: object | null;
 }): Promise<TArticleData> {
+  let tagList = '';
+  for ( let i = 0 ; i < tags.length ; i++ ) {
+    if (i === 0) {
+      tagList = tags[i];
+    } else {
+      tagList = "," + tags[i];
+    }
+  }
   const endpoint: TEndpoint = {
-    global: `/global?limit=${limit}&offset=${offset}`,
-    favs: `/favs?username=${username}&limit=${limit}&offset=${offset}`,
-    tags: `/tags?limit=${limit}&offset=${offset}&tag=${tagName}`,
-    profile: `/?author${username}&limit=${limit}&offset=${offset}`,
+    global: `/global?limit=${limit}&offset=${offset}` + `${tags.length > 0 ? `tags=${tagList}` : ''}`,
+    favs: `/favs?username=${username}&limit=${limit}&offset=${offset}` + `${tags.length > 0 ? `tags=${tagList}` : ''}`,
+    author: `/author?username=${username}&limit=${limit}&offset=${offset}` + `${tags.length > 0 ? `tags=${tagList}` : ''}`,
   };
   try {
-    if (!headers) {
-      headers = {};
-    }
-    const { data } = await instance.get(endpoint[location], {
-      headers: headers,
-    });
+    const { data } = await instance.get(endpoint[location]);
 
     return data;
   } catch (error) {
@@ -55,6 +60,27 @@ export async function getArticles({
     throw apiError;
   }
 }
+
+//Get article by slug
+export async function getArticle({
+  slug,
+}: {
+  slug: string;
+}): Promise<TArticle> {
+  try {
+    const { data }: { data: TArticle } = await instance.request({ method: "GET", params: { "slug": slug }});
+
+    getTagsOf({ slug })
+      .then((tagList) => (data.tagList = tagList))
+      .catch((error) => console.log(error));
+    return data;
+  } catch (error) {
+    const apiError = createApiError(error as AxiosError);
+    throw apiError;
+  }
+}
+
+//GESCHLOSSENE ENDPUNKTE
 
 //toggleFavs
 export async function toggleFavs({
@@ -88,7 +114,7 @@ export async function putArticle({
 }: {
   formData: FormData;
   artSlug: string | null;
-  headers: object | null;
+  headers: object;
 }): Promise<TArticle> {
   try {
 
@@ -97,7 +123,7 @@ export async function putArticle({
     const { data } = await instance.request({
       method: artSlug ? "PUT" : "POST",
       params: artSlug ? { "slug": artSlug } : { "slug": slugify(title) },
-      headers: {...headers, 'Content-Type': 'multipart/form-data'} || {},
+      headers: {...headers, 'Content-Type': 'multipart/form-data'},
       data: formData,
     });
     return data;
@@ -108,35 +134,13 @@ export async function putArticle({
 }
 
 
-//Get article by slug
-export async function getArticle({
-  slug,
-}: {
-  slug: string;
-}): Promise<TArticle> {
-  try {
-    const { data }: { data: TArticle } = await instance.request({ method: "GET", params: { "slug": slug }});
-
-    getTagsOf({ slug })
-      .then((tagList) => (data.tagList = tagList))
-      .catch((error) => console.log(error));
-    return data;
-  } catch (error) {
-    const apiError = createApiError(error as AxiosError);
-    throw apiError;
-  }
-}
-
 export async function deleteArticle({
   slug,
   headers,
 }: {
   slug: string;
-  headers: object | null;
+  headers: object;
 }): Promise<string> {
-  if (!headers) {
-    headers = {};
-  }
   try {
     const { data } = await instance.request({
       params: { "slug": slug },
@@ -158,11 +162,9 @@ export async function putBackgroundColor({
 }: {
   slug: string;
   backgroundColor: string | null;
-  headers: object | null;
+  headers: object;
 }): Promise<TArticle> {
-  if (!headers) {
-    headers = {};
-  }
+
   try {
     const { data } = await instance.request({
       url: `/color/${slug}`,
@@ -183,11 +185,8 @@ export async function putFontColor({
 }: {
   slug: string;
   fontColor: string | null;
-  headers: object | null;
+  headers: object;
 }): Promise<TArticle> {
-  if (!headers) {
-    headers = {};
-  }
   try {
     const { data } = await instance.request({
       url: `/color/${slug}`,
@@ -209,11 +208,8 @@ export async function putEmoji({
 }: {
   slug: string;
   emoji: string;
-  headers: object | null;
+  headers: object;
 }): Promise<TArticle> {
-  if (!headers) {
-    headers = {};
-  }
   try {
     const { data } = await instance.request({
       url: `/emoji/${slug}`,

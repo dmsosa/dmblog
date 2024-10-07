@@ -1,9 +1,7 @@
 import ReactPaginate from "react-paginate";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
-
 import { TArticleData, getArticles } from "../../../service/articleService";
-import { TAuthContext, useAuth } from "../../../context/AuthContext";
 
 type selectedItem = {
   selected: number;
@@ -11,24 +9,20 @@ type selectedItem = {
 function ArticlePagination({
   articlesCount,
   username,
-  tagName,
-  location,
+  tags,
   updateArticles,
 }: {
   articlesCount: number;
   username?: string | null;
-  tagName?: string | null;
-  location: string;
+  tags: string[];
   updateArticles: React.Dispatch<React.SetStateAction<TArticleData>>;
 }) {
   const pageCount = Math.ceil(articlesCount / 3);
-  const { authState } = useAuth() as TAuthContext;
-  const { headers } = authState;
 
   const handlePageChange = (event: selectedItem) => {
     const page = event.selected;
 
-    getArticles({ headers, location, offset: page, username, tagName })
+    getArticles({  location: "global", offset: page, username, tags })
       .then((articleData: TArticleData) => {
         updateArticles(articleData);
       })

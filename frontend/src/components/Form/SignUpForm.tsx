@@ -144,10 +144,10 @@ function SignUpForm({ setWithOAuth } : {
           <button className="btn form-btn" onClick={comeBack}>
             Come back
           </button>
-          <div className="login-form-footer">
-              <p>or</p>
-              <hr></hr>
-              <div className="link" onClick={() => { setWithOAuth(true) }}>Continue with Facebook or GitHub</div>
+          <div className="form-footer">
+            <p>or</p>
+            <hr></hr>
+            <div className="link" onClick={() => { setWithOAuth(true) }}>Continue with Facebook or GitHub</div>
           </div>
         </form>
 

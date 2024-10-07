@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 public class FlywayConfig {
-    @Value("${datasource}")
+    @Value("${spring.datasource.vendor}")
     private String datasource;
 
     @Bean
@@ -20,5 +20,10 @@ public class FlywayConfig {
         return configuration -> configuration
                 .locations("classpath:/db/migration/%s".formatted(datasource))
                 .baselineOnMigrate(true);
+    }
+
+    @Bean
+    FlywayMigrationStrategy migrationStrategy() {
+        return flyway -> flyway.migrate();
     }
 }

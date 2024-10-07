@@ -1,4 +1,4 @@
-import BrandLogo from "../Logos/BrandLogo";
+import BrandLogo from "./BrandLogo";
 import NavItem from "../NavItem";
 import DropdownItem from "./DropdownItem";
 
@@ -9,7 +9,7 @@ function NavbarLarge() {
   };
   return (
     <section className="nav-menu bg-color-blue-nav d-none d-lg-block ">
-      <nav className="navbar navbar-expand-lg px-5 py-0">
+      <nav className="navbar navbar-expand-lg">
         <BrandLogo />
         <div className="collapse navbar-collapse initiated" id="navbarMenu">
           <ul className="navbar-nav w-100">

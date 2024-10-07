@@ -75,17 +75,19 @@ function LoginForm({ setWithOAuth }: { setWithOAuth: React.Dispatch<React.SetSta
           <input type="checkbox" id="remember" />
           <span className="checkbox-span checkmark"></span>
         </label>
-        <button type="submit" className="btn btn-primary form-btn">
-          Login
-        </button>
-        <button className="btn form-btn" onClick={comeBack}>
-          Come back
-        </button>
-        <div className="login-form-footer">
-              <p>or</p>
-              <hr></hr>
-              <div className="link" onClick={() => { setWithOAuth(true) }}>Continue with Facebook or GitHub</div>
-          </div>
+        <div className="form-buttons">
+          <button type="submit" className="btn btn-primary form-btn">
+            Login
+          </button>    
+          <button className="btn" onClick={comeBack}>
+            Come back
+          </button>
+        </div>
+        <div className="form-footer">
+            <p>or</p>
+            <hr></hr>
+            <div className="link" onClick={() => { setWithOAuth(true) }}>Continue with Facebook or GitHub</div>
+        </div>
       </form>
   );
 }

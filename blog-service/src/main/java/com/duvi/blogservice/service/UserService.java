@@ -27,15 +27,15 @@ public interface UserService {
     UserResponseDTO createUser(RegisterDTO userDTO) throws EntityAlreadyExistsException;
     UserResponseDTO findUserById(Long userId) throws EntityDoesNotExistsException;
     UserResponseDTO findUserByUsername(String username) throws EntityDoesNotExistsException;
-    User findUserByEmail(String email) throws EntityDoesNotExistsException;
+    UserResponseDTO findUserByEmail(String email) throws EntityDoesNotExistsException;
     //Login look for Username and Email at once
     UserResponseDTO findUserByLogin(String login) throws EntityDoesNotExistsException;
     UserResponseDTO updateUser(String oldUsername, SetUserDTO userDTO) throws EntityAlreadyExistsException;
     void deleteUser(Long userId) throws EntityDoesNotExistsException;
 
     //Operations with Followers
-    UserResponseDTO followUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException;
-    UserResponseDTO unfollowUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException;
+    UserResponseDTO followUser(String toUsername, String fromUsername) throws EntityDoesNotExistsException;
+    UserResponseDTO unfollowUser(String toUsername, String fromUsername) throws EntityDoesNotExistsException;
     public Integer findFollowersCount(Long userId);
 
     public List<UserResponseDTO> findFollowersOf(Long userId);

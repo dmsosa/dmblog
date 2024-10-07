@@ -1,10 +1,14 @@
 CREATE TABLE IF NOT EXISTS articles (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    body TEXT NOT NULL,
-    description VARCHAR(2000),
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    author_id INTEGER NOT NULL,
     title VARCHAR(50) NOT NULL UNIQUE,
-    slug TEXT,
-    created_at DATE,
-    updated_at DATE
+    body TEXT NOT NULL,
+    description VARCHAR(5000),
+    slug VARCHAR(60),
+    image_url TEXT,
+    background_color TEXT DEFAULT '#29e65b',
+    font_color TEXT DEFAULT '#000000',
+    emoji TEXT,
+    created_at DATE DEFAULT CURRENT_DATE,
+    updated_at DATE DEFAULT CURRENT_DATE
 );

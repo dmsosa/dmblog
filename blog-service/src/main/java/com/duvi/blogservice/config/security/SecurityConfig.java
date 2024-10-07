@@ -53,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/articles/email").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/articles/images/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/error").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(
@@ -78,7 +79,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return   configuration.getAuthenticationManager();
+        return  configuration.getAuthenticationManager();
 
     }
 

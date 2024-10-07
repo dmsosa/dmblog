@@ -1,32 +1,24 @@
-import { Outlet } from "react-router-dom";
-import FeedProvider from "../context/FeedContext";
-import FeedToggler from "../components/FeedToggler";
-import TagList from "../components/TagList/TagList";
-import ContainerRow from "../components/ContainerRow";
+
+import ArticlesPreview from "../components/ArticlesPreview/ArticlesPreview.tsx";
+import TagsContainer from "../components/TagsContainer.tsx/TagsContainer.tsx";
+import TagsProvider from "../context/TagsContext.tsx";
 
 function Home() {
 
   return (
-    <>
-      <section className="bg-hero">
-        <ContainerRow>
-          <div className="banner-quote">
-            <h1>"Genie ist 1% Inspiration und 99% Transpiration"</h1>
+      <div className="container bg-hero">
+        <div className="row banner-quote">
+          <h1>"Genie ist 1% Inspiration und 99% Transpiration"</h1>
+        </div>
+        <div className="row">
+          <div className="col pagination-col">
+            <TagsProvider>
+              <TagsContainer/>
+              <ArticlesPreview location="global"/>
+            </TagsProvider>            
           </div>
-        </ContainerRow>
-        <ContainerRow addClass={"page"}>
-          <div className="row row-cols-2 page-feed">
-            <FeedProvider>
-              <div className="col-8 cont-feed">
-                <FeedToggler />
-                <Outlet />
-              </div>
-              <TagList />
-            </FeedProvider>
-          </div>
-        </ContainerRow>
-      </section>
-    </>
+        </div>
+      </div>
   );
 }
 

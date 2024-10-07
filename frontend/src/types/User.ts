@@ -8,8 +8,8 @@ export type TUser = {
   icon: string;
   backgroundColor: string;
   bio: string;
-  followersCount: number | null;
-  followingCount: number | null;
+  followersCount: number;
+  followingCount: number;
   followers: TUser[] | null;
   following: TUser[] | null;
   createdAt: Date | null;

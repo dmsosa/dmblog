@@ -8,10 +8,16 @@ import com.duvi.blogservice.model.dto.UserResponseDTO;
 import com.duvi.blogservice.model.exceptions.EntityAlreadyExistsException;
 import com.duvi.blogservice.model.exceptions.EntityDoesNotExistsException;
 import com.duvi.blogservice.model.relations.UserFollower;
+import com.duvi.blogservice.model.relations.UserFollowerId;
 import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.repository.relations.UserFollowerRepository;
-import com.duvi.blogservice.service.AmazonS3Service;
+import com.duvi.blogservice.service.StorageService;
 import com.duvi.blogservice.service.UserService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +30,15 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private UserFollowerRepository followersRepository;
-    private AmazonS3Service s3Service;
+    private StorageService storageService;
 
     public UserServiceImpl(
             UserRepository userRepository,
             UserFollowerRepository followersRepository,
-            AmazonS3Service s3Service) {
+            StorageService storageService) {
         this.userRepository = userRepository;
         this.followersRepository = followersRepository;
-        this.s3Service = s3Service;
+        this.storageService = storageService;
     }
 
     //Check following
@@ -60,8 +66,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponseDTO> getAllUsers() {
         List<User> userList = userRepository.findAll();
-        List<UserResponseDTO> userResponseDTOS = userList.stream().map(this::createDTO).toList();
-        return userResponseDTOS;
+        return  userList.stream().map(this::createDTO).toList();
     }
     @Override
     public UserResponseDTO findUserById(Long userId) throws EntityDoesNotExistsException {
@@ -79,15 +84,17 @@ public class UserServiceImpl implements UserService {
             throw new EntityDoesNotExistsException("User with username '%s' do not exists!".formatted(username));
         }
         return createDTO(optUser.get());
+
     }
 
     @Override
-    public User findUserByEmail(String email) throws EntityDoesNotExistsException {
+    public UserResponseDTO findUserByEmail(String email) throws EntityDoesNotExistsException {
         Optional<User> optUser = userRepository.findByEmail(email);
         if (optUser.isEmpty()) {
             throw new EntityDoesNotExistsException("User with email '%s' do not exists!".formatted(email));
         }
-        return optUser.get();
+        return createDTO(optUser.get());
+
     }
 
     @Override
@@ -100,7 +107,7 @@ public class UserServiceImpl implements UserService {
         if (optUser.isEmpty()) {
             optUser = userRepository.findByUsername(login);
         }
-        return createDTO(optUser.get());
+       return createDTO(optUser.get());
     }
 
     @Override
@@ -130,12 +137,13 @@ public class UserServiceImpl implements UserService {
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(register.password());
 
+        String defaultImageUrl = storageService.findUrl("icon", "apple.svg");
         User createdUser = new User();
         createdUser.setUsername(register.username());
         createdUser.setEmail(register.email());
         createdUser.setPassword(encryptedPassword);
         createdUser.setBio("Ich bin ein neuer Benutzer der Dmblog!");
-        createdUser.setImageUrl("");
+        createdUser.setImageUrl(defaultImageUrl);
         createdUser.setBackgroundImageUrl("");
         createdUser.setBackgroundColor("#DFFF00");
         createdUser.setRole(UserRole.USER);
@@ -160,19 +168,19 @@ public class UserServiceImpl implements UserService {
         String backgroundImageUrl = "";
 
         if (userDTO.image() != null) {
-            imageUrl = s3Service.uploadUserImage(userDTO.image(), "profile", userDTO.username());
+            imageUrl = storageService.uploadUserImage(userDTO.image(), "profile", userDTO.username());
         } else {
-            imageUrl = s3Service.findIconUrl(userDTO.icon());
+            imageUrl = storageService.findUrl("icon", userDTO.icon() + ".svg");
         }
         if (userDTO.backgroundImage() != null) {
-            backgroundImageUrl = s3Service.uploadUserImage(userDTO.backgroundImage(), "background", userDTO.username());
+            backgroundImageUrl = storageService.uploadUserImage(userDTO.backgroundImage(), "background", userDTO.username());
         }
 
         if (!oldUser.getImageUrl().contains(userDTO.icon())) {
-            s3Service.deleteUserImage("profile", oldUser.getUsername());
+            storageService.deleteUserImage("profile", oldUser.getUsername());
         }
         if (!oldUser.getBackgroundImageUrl().isEmpty()) {
-            s3Service.deleteUserImage("background", oldUser.getUsername());
+            storageService.deleteUserImage("background", oldUser.getUsername());
         }
 
         oldUser.setUsername(userDTO.username());
@@ -195,31 +203,34 @@ public class UserServiceImpl implements UserService {
 
     //Operations with Followers
     @Override
-    public UserResponseDTO followUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException {
+    public UserResponseDTO followUser(String toUsername, String fromUsername) throws EntityDoesNotExistsException {
         if (!userRepository.existsByUsername(toUsername)) {
-            throw new EntityDoesNotExistsException("User with username %s do not exists!".formatted(toUsername));
+            throw new EntityDoesNotExistsException("User with username '%s' do not exists!".formatted(toUsername));
         }
         User userFrom = userRepository.findByUsername(fromUsername).get();
         User userTo = userRepository.findByUsername(toUsername).get();
-        UserFollower newRelation = new UserFollower(userTo, userFrom);
-        followersRepository.save(newRelation);
-        return createDTO(userRepository.findByUsername(toUsername).get()).withFollowing(isFollowing(userTo.getId(), fromUsername));
+        UserFollowerId relationId = new UserFollowerId(userTo.getId(), userFrom.getId());
+        Optional<UserFollower> relation = followersRepository.findById(relationId);
+        if (relation.isEmpty()) {
+            UserFollower saveRelation = new UserFollower(userTo, userFrom);
+            followersRepository.save(saveRelation);
+        }
+        return createDTO(userTo).withFollowing(true);
     }
 
     @Override
-    public UserResponseDTO unfollowUser(String fromUsername, String toUsername) throws EntityDoesNotExistsException {
+    public UserResponseDTO unfollowUser(String toUsername, String fromUsername) throws EntityDoesNotExistsException  {
         if (!userRepository.existsByUsername(toUsername)) {
-            throw new EntityDoesNotExistsException("User with username %s do not exists!".formatted(toUsername));
+            throw new EntityDoesNotExistsException("User with username '%s' do not exists!".formatted(toUsername));
         }
+        User userFrom = userRepository.findByUsername(fromUsername).get();
         User userTo = userRepository.findByUsername(toUsername).get();
-        List<UserFollower> relations = followersRepository.findByUserId(userTo.getId());
-        List<UserFollower> relation = relations.stream().filter(rel ->
-                Objects.equals(rel.getFollower().getUsername(), fromUsername)).toList();
 
-        if (!relation.isEmpty()) {
-            followersRepository.delete(relation.getFirst());
-        }
-        return createDTO(userRepository.findByUsername(toUsername).get()).withFollowing(isFollowing(userTo.getId(), fromUsername));
+        UserFollowerId relationId = new UserFollowerId(userTo.getId(), userFrom.getId());
+        Optional<UserFollower> relation = followersRepository.findById(relationId);
+
+        relation.ifPresent(userFollower -> followersRepository.delete(userFollower));
+        return createDTO(userTo).withFollowing(false);
     }
     @Override
     public Integer findFollowersCount(Long userId) {
@@ -229,8 +240,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponseDTO> findFollowersOf(Long userId) {
         List<UserFollower> userFollowerList = followersRepository.findByUserId(userId);
-        List<User> followersList = userFollowerList.stream().map(UserFollower::getFollower).toList();
-        return followersList.stream().map(this::createDTO).toList();
+        List<UserResponseDTO> followersList;
+
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+
+
+        if (authentication.isAuthenticated()) {
+            User userFrom = (User) authentication.getPrincipal();
+            followersList = userFollowerList.stream().map(rel -> {
+                User user = rel.getUser();
+                UserResponseDTO userDTO = createDTO(user);
+                return userDTO.withFollowing(isFollowing(user.getId(), userFrom.getUsername()));
+            }).toList();
+        } else {
+            followersList = userFollowerList.stream().map(rel -> {
+                User user = rel.getUser();
+                return createDTO(user);
+            }).toList();
+        }
+
+        return followersList;
     }
 
     @Override
@@ -240,8 +270,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponseDTO> findFollowingOf(Long userId) {
         List<UserFollower> userFollowerList = followersRepository.findByFollowerId(userId);
-        List<User> followingList = userFollowerList.stream().map(UserFollower::getUser).toList();
-        return followingList.stream().map(this::createDTO).toList();
+        List<UserResponseDTO> followingList;
+
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+
+        if (authentication.isAuthenticated()) {
+            User userFrom = (User) authentication.getPrincipal();
+            followingList = userFollowerList.stream().map(rel -> {
+                User user = rel.getUser();
+                UserResponseDTO userDTO = createDTO(user);
+                return userDTO.withFollowing(isFollowing(user.getId(), userFrom.getUsername()));
+            }).toList();
+        } else {
+            followingList = userFollowerList.stream().map(rel -> {
+                User user = rel.getUser();
+                return createDTO(user);
+            }).toList();
+        }
+
+        return followingList;
     }
 
 }

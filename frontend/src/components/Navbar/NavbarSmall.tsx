@@ -1,15 +1,19 @@
-import BrandLogo from "../Logos/BrandLogo";
+import BrandLogo from "./BrandLogo";
 import NavMenu from "./NavMenu";
+import { Collapse } from "react-bootstrap";
+
 function NavbarSmall() {
   const nonScrollBody = () => {
     document.body.classList.toggle("nonscroll");
   };
   return (
     <section className="nav-menu bg-color-blue-nav p-0 d-lg-none">
-      <nav className="navbar navbar-expand-lg px-3 navbar-mobile">
+      <nav className="navbar navbar-expand-lg navbar-mobile">
         <BrandLogo />
-        <div className="nav-mobile-toggle">
-          <button
+        <Collapse>
+        <div>Option 1</div>
+        </Collapse>
+        {/* <button
             className="navbar-toggler nav-main-collapse d-inline-flex"
             type="button"
             data-bs-toggle="collapse"
@@ -20,17 +24,13 @@ function NavbarSmall() {
             onClick={nonScrollBody}
           >
             <span className="navbar-toggler-icon"></span>
-          </button>
-        </div>
+        </button>
         <div
-          className="collapse navbar-collapse navbar-collapse-mobile"
+          className="collapse navbar-collapse"
           id="navbarSupportedContent"
         >
-          <nav className="navbar">
-            <BrandLogo />
-          </nav>
           <NavMenu />
-        </div>
+        </div> */}
       </nav>
     </section>
   );

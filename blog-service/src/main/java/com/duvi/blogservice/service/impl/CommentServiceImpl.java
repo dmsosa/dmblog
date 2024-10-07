@@ -37,8 +37,8 @@ public class CommentServiceImpl implements CommentService {
         return new CommentDTO(
                 comment.getId(),
                 comment.getArticle().getId(),
-                comment.getUser().getImageUrl(),
-                comment.getUser().getUsername(),
+                comment.getAuthor().getImageUrl(),
+                comment.getAuthor().getUsername(),
                 comment.getBody(),
                 comment.getPostedAt(),
                 comment.getUpdatedAt()
@@ -91,7 +91,7 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentDTO> getCommentOfUser(String username) throws EntityDoesNotExistsException {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty()) { throw new EntityDoesNotExistsException("User with username %s can not post a comment since it does not exists!".formatted(username)); }
-        List<Comment> commentList = commentRepository.findByUserId(user.get().getId());
+        List<Comment> commentList = commentRepository.findByAuthorId(user.get().getId());
         return commentList.stream().map(this::createDTO).toList();
     }
 
@@ -99,7 +99,7 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentDTO> getCommentOfUser(Long userId) throws EntityDoesNotExistsException {
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) { throw new EntityDoesNotExistsException(userId); }
-        List<Comment> commentList = commentRepository.findByUserId(userId);
+        List<Comment> commentList = commentRepository.findByAuthorId(userId);
         return commentList.stream().map(this::createDTO).toList();
     }
 

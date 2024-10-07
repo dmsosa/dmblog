@@ -20,9 +20,10 @@ import com.duvi.blogservice.repository.TagRepository;
 import com.duvi.blogservice.repository.UserRepository;
 import com.duvi.blogservice.repository.relations.ArticleTagRepository;
 import com.duvi.blogservice.repository.relations.ArticleUserRepository;
-import com.duvi.blogservice.service.AmazonS3Service;
+import com.duvi.blogservice.service.StorageService;
 import com.duvi.blogservice.service.ArticleService;
 import com.duvi.blogservice.service.CommentService;
+import com.duvi.blogservice.service.StorageService;
 import com.duvi.blogservice.service.UserService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
@@ -40,7 +41,7 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleTagRepository catsRepository;
     private TagRepository tagRepository;
     private UserService userService;
-    private AmazonS3Service awsService;
+    private StorageService storageService;
 
     public ArticleServiceImpl(ArticleRepository articleRepository,
                               UserRepository userRepository,
@@ -198,9 +199,9 @@ public class ArticleServiceImpl implements ArticleService {
         String imageURL = "";
 
         if (!Objects.isNull(articleDTO.image())) {
-            imageURL = awsService.uploadArticleImage(articleDTO.image(), articleDTO.slug());
+            imageURL = storageService.uploadArticleImage(articleDTO.image(), articleDTO.slug());
         }
-        oldArticle.setImageURL(imageURL);
+        oldArticle.setImageUrl(imageURL);
         oldArticle.setUpdatedAt(LocalDateTime.now());
 
         return createDTO(articleRepository.save(oldArticle));

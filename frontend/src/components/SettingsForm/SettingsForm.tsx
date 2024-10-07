@@ -2,10 +2,10 @@ import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { TAuthContext, useAuth } from "../../context/AuthContext";
 import FormFieldset from "../FormFieldset";
 import { updateUser } from "../../service/userService";
-import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import CustomSelectImage from "../ChooseImage/CustomSelectImage";
 import Avatar from "../Avatar";
+import { ApiError } from "../../service/errorHandler";
 
 function SettingsForm() {
   const navigate = useNavigate();
@@ -74,8 +74,12 @@ function SettingsForm() {
       .then((loggedIn) => {
         setAuthState(loggedIn);
       })
-      .catch((error: AxiosError) => {
+      .catch((error: ApiError) => {
         setErrorMessage(error.message);
+        if (error.getStatusCode() === 406 ) {
+          alert("Token expired, you have to login again!");
+          navigate("/login");
+        }
       })
       .finally(() => {
         setActive(false);
@@ -83,96 +87,101 @@ function SettingsForm() {
   };
 
   const comeBack = () => {
-    navigate("/dmblog");
+    navigate("/");
   };
   return (
-    <>
-      {errorMessage && (
+    <div className="container">
+      <div className="row">      
+        {errorMessage && (
         <div className="col">
           <h1>Error!</h1>
           <p>{errorMessage}</p>
         </div>
-      )}
-      <div className="col">
-        <Avatar imageUrl={imageUrl} username={username} />
-        <form className="form-cont" onSubmit={handleSubmit}>
-          <fieldset>
-            <div className="fieldset-images">
+        )}
+      </div>
+      <div className="row">
+        <div className="col">
+          <Avatar imageUrl={imageUrl} username={username} />
+          <form className="form-cont" onSubmit={handleSubmit}>
+            <fieldset>
+              <legend>User</legend>
+              <div className="fieldset-images">
+                <FormFieldset
+                  id="profileImage"
+                  title="Upload Image"
+                  name="setProfileImage"
+                  type="file"
+                  changeHandler={handleFileChange}
+                ></FormFieldset>
+                <CustomSelectImage
+                  icon={icon}
+                  changeHandler={handleCustomSelectClick}
+                />
+              </div>
               <FormFieldset
-                id="profileImage"
-                title="Upload Image"
-                name="setProfileImage"
+                id="backgroundImage"
+                title="Background Image"
                 type="file"
+                name="setBackgroundImage"
                 changeHandler={handleFileChange}
               ></FormFieldset>
-              <CustomSelectImage
-                icon={icon}
-                changeHandler={handleCustomSelectClick}
-              />
-            </div>
-            <FormFieldset
-              id="backgroundImage"
-              title="Background Image"
-              type="file"
-              name="setBackgroundImage"
-              changeHandler={handleFileChange}
-            ></FormFieldset>
-            <FormFieldset
-              id="setBackgroundColor"
-              title="Background Color"
-              type="color"
-              name="backgroundColor"
-              value={backgroundColor}
-              changeHandler={handleChange}
-            ></FormFieldset>
-            <FormFieldset
-              id="setUsername"
-              title="Change username"
-              name="username"
-              value={username}
-              placeholder="Your username"
-              changeHandler={handleChange}
-              type="text"
-              minLength={3}
-              maxLength={25}
-            ></FormFieldset>
-            <FormFieldset
-              id="setEmail"
-              title="Change email address"
-              name="email"
-              value={email}
-              placeholder="Your email address"
-              changeHandler={handleChange}
-              type="email"
-            ></FormFieldset>
-            <fieldset>
-              <textarea
-                className="form-bio"
-                rows={4}
-                placeholder="Brief biography about yourself"
-                name="bio"
-                value={bio}
-                onChange={handleChange}
-                minLength={10}
-                maxLength={30000}
-              ></textarea>
+              <FormFieldset
+                id="setBackgroundColor"
+                title="Background Color"
+                type="color"
+                name="backgroundColor"
+                value={backgroundColor}
+                changeHandler={handleChange}
+              ></FormFieldset>
+              <FormFieldset
+                id="setUsername"
+                title="Change username"
+                name="username"
+                value={username}
+                placeholder="Your username"
+                changeHandler={handleChange}
+                type="text"
+                minLength={3}
+                maxLength={25}
+              ></FormFieldset>
+              <FormFieldset
+                id="setEmail"
+                title="Change email address"
+                name="email"
+                value={email}
+                placeholder="Your email address"
+                changeHandler={handleChange}
+                type="email"
+              ></FormFieldset>
+              <fieldset>
+                <textarea
+                  className="form-bio"
+                  rows={4}
+                  placeholder="Brief biography about yourself"
+                  name="bio"
+                  value={bio}
+                  onChange={handleChange}
+                  minLength={10}
+                  maxLength={30000}
+                ></textarea>
+              </fieldset>
             </fieldset>
-          </fieldset>
-          <div className="form-btns">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={!active}
-            >
-              Save changes
-            </button>
-            <button className="btn" onClick={comeBack}>
-              Come back
-            </button>
-          </div>
-        </form>
+            <div className="form-btns">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={!active}
+              >
+                Save changes
+              </button>
+              <button className="btn" onClick={comeBack}>
+                Come back
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 

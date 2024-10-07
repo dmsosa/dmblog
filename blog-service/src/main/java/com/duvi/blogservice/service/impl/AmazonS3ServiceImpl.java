@@ -1,7 +1,6 @@
 package com.duvi.blogservice.service.impl;
 
-import com.duvi.blogservice.model.exceptions.ImageException;
-import com.duvi.blogservice.service.AmazonS3Service;
+import com.duvi.blogservice.service.StorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class AmazonS3ServiceImpl implements AmazonS3Service {
+public class AmazonS3ServiceImpl implements StorageService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final String BUCKET_NAME = "dmblogbucket";
@@ -82,8 +81,8 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     }
 
     @Override
-    public String findIconUrl(String icon) {
-        String objectKey = "profile/" + icon + ".svg";
+    public String findUrl(String folder, String name) {
+        String objectKey = folder + "/" + name;
         GetUrlRequest getUrlRequest = GetUrlRequest.builder()
                 .bucket(BUCKET_NAME)
                 .key(objectKey)

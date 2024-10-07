@@ -1,1 +1,1 @@
-export { default } from "./ArticleMeta";
+export { default } from "./ArticleSection";
