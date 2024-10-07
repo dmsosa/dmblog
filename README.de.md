@@ -23,7 +23,43 @@ Implementation der "Realworld" Blog mit ein FrontEnd durch Vite, React, TypeScri
 
 ## Wie es alles startet hat?
 
+<<<<<<< HEAD
 ## Was macht es Einz?:
+=======
+# Inhaltsverzeichnis:
+
+1. 
+
+
+## Wie kann man dieses Projekt laufen?
+
+Um dieses projekt in deinem Lokale Machine zu laufen, folgen Sie die nachsten Schriffte an:
+
+#### Frontend:
+
+1. machen sie ein Pull dieses Repo: `git pull https://github.com/dmsosa/dmsosa.github.io.git`
+2. laufen Sie das command `npm run dev`
+3. Das Blog auf http://localhost:5173/ verfugbar sein sollte.
+
+#### Backend:
+
+1. gehen Sie zu das Ordner "blog-service" und laufen das command `mvnw spring-boot:run`, oder laufen Sie das Backend App. 
+
+2. Das App mit ein InMemory H2 Database funktioniert, aber du kannst es auch mit ein PostgreSQL Dateibank laufen, du muss nur deine eigene Beglaubigungsschreiben zu dem .env Datei einrichten
+
+3. Das Backend auf http://localhost:8082/ erreichber sein sollte.
+
+### Erklarungen: Wie es funktioniert?
+
+#### Backend:
+
+Ich gilt das Backend als besser erklart in einem separaten Repository, sonst wurde dieses Readme unnotig lang werden.
+
+das Backend repo finden man hier: [dmsosa-backend](https://github.com/dmsosa/dmblog-backend) 
+
+
+## Extra funktionen:
+>>>>>>> b4572a7d4b7bc765345364b8eef75a090323767c
 
 Auchwenn dieses Projekt bei Realworld Conduit Blog inspiriert ist, ich mochte etwas interessanter machen, also ich habe ein anderes Stil zu dem GUI gegeben, Bilder fur den Artikeln, Like zu den Kommentare, du kannst ein nutzer blockieren, ein Responsive Mobile Navbar... etc.
 
@@ -54,6 +90,7 @@ Das Bilder kann mann bewenden
 
 Das Backend zu Deploy:
 
+<<<<<<< HEAD
 ## Frontend:
 
 1. machen sie ein Pull dieses Repo: `git pull https://github.com/dmsosa/dmsosa.github.io.git`
@@ -72,3 +109,7 @@ Das Backend zu Deploy:
 ## Wie kann man dieses Projekt laufen?
 
 Um dieses projekt in deinem Lokale Machine zu laufen, folgen Sie die nachsten Schriffte an:
+=======
+<a name="das-frontend"/>
+# Das FrontEnd
+>>>>>>> b4572a7d4b7bc765345364b8eef75a090323767c
