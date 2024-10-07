@@ -9,13 +9,13 @@ Implementation der "Realworld" Blog mit ein FrontEnd durch Vite, React, TypeScri
 
 ## Inhaltsverzeichnis:
 
-1. [Tech Stack, Languages & Frameworks](https://github.com/dmsosa/dmblog/blob/main/README.de.md#tech-stack-languages--frameworks)
-2. [Wie es alles startet hat?](https://github.com/dmsosa/dmblog/blob/main/README.de.md#wie-es-alles-startet-hat?)
-3. [Was macht es Einz?](https://github.com/dmsosa/dmblog/blob/main/README.de.md#was-macht-es-einz?)
-4. [Frontend](https://github.com/dmsosa/dmblog/blob/main/README.de.md#frontend)
-5. [Backend](https://github.com/dmsosa/dmblog/blob/main/README.de.md#backend)
-6. [Laufen Das Projekt](https://github.com/dmsosa/dmblog/blob/main/README.de.md#laufen)
-7. [Deploy mit Docker](https://github.com/dmsosa/dmblog/blob/main/README.de.md#deploy-mit-docker)
+* [Tech Stack, Languages & Frameworks](https://github.com/dmsosa/dmblog/blob/main/README.de.md#tech-stack-languages--frameworks)
+* [Wie es alles startet hat?](https://github.com/dmsosa/dmblog/blob/main/README.de.md#wie-es-alles-startet-hat?)
+* [Was macht es Einz?](https://github.com/dmsosa/dmblog/blob/main/README.de.md#was-macht-es-einz?)
+* [Frontend](https://github.com/dmsosa/dmblog/blob/main/README.de.md#frontend)
+* [Backend](https://github.com/dmsosa/dmblog/blob/main/README.de.md#backend)
+* [Laufen Das Projekt](https://github.com/dmsosa/dmblog/blob/main/README.de.md#laufen)
+* [Deploy mit Docker](https://github.com/dmsosa/dmblog/blob/main/README.de.md#deploy-mit-docker)
 
 ---
 
