@@ -1,33 +1,52 @@
 [![Readme Badge](https://img.shields.io/badge/lang-en-lightgreen?style=flat)](https://github.com/dmsosa/dmblog/blob/main/readme.md)
 
-# DmBlog; 
+# DmBlog  
 
-### Dieses Projekt kommst aus [realworld von Thinkster](https://github.com/gothinkster/realworld) inspiriert 
+Dieses Projekt kommst aus [realworld von Thinkster](https://github.com/gothinkster/realworld) inspiriert 
 
-Implementation der "Realworld" Blog mit ein FrontEnd durch Vite, React, TypeScript und ein Backend durch Spring und PostgreSQL gemacht. Es hat mir geholfen, um viel mehr zu lernen.
----
-##### Tech Stack:
-Spring, PostgreSQL, TypeScript, React, Vite
-enthalt auch Docker
+Implementation der "Realworld" Blog mit ein FrontEnd durch Vite, React, TypeScript und ein Backends Spring und PostgreSQL mitgemacht. Es hat mir geholfen, um viel mehr zu lernen.
+
 ---
 
-#### Wie kann man dieses Projekt laufen?
+### Tech Stack, Languages & Frameworks:
 
-Um dieses projekt zu laufen, folgen die nachsten Schriffte:
+- Backend: 
+    - SpringBoot
+    - PostgreSQL
+- FrontEnd: 
+    - Vite (Build Tool)
+    - React
+    - TypeScript
+    - Bootstrap 5 (Styles)
+- Deployment:
+    - Docker
+
+---
+
+# Inhaltsverzeichnis:
+
+1. [Das FrontEnd] (#das-frontend)
+
+
+## Wie kann man dieses Projekt laufen?
+
+Um dieses projekt in deinem Lokale Machine zu laufen, folgen Sie die nachsten Schriffte an:
 
 #### Frontend:
 
 1. machen sie ein Pull dieses Repo: `git pull https://github.com/dmsosa/dmsosa.github.io.git`
 2. laufen Sie das command `npm run dev`
-3. Das Seite in die addresse http://localhost:5173/ verfugbar sein sollte
+3. Das Blog auf http://localhost:5173/ verfugbar sein sollte.
 
 #### Backend:
 
-1. gehen Sie zu das Ordner "backend/blog-service" und laufen das command `mvnw spring-boot:run`, oder laufen Sie das Backend App. 
-2. Das App mit ein InMemory H2 Database funktioniert, aber du kannst es auch mit ein PostgreSQL Dateibank laufen, du muss nur deine eigene Beglaubigungsschreiben zu dem .env Datei
-3. Go ahead!
+1. gehen Sie zu das Ordner "blog-service" und laufen das command `mvnw spring-boot:run`, oder laufen Sie das Backend App. 
 
-### Erklarung: Wie es funktioniert?
+2. Das App mit ein InMemory H2 Database funktioniert, aber du kannst es auch mit ein PostgreSQL Dateibank laufen, du muss nur deine eigene Beglaubigungsschreiben zu dem .env Datei einrichten
+
+3. Das Backend auf http://localhost:8082/ erreichber sein sollte.
+
+### Erklarungen: Wie es funktioniert?
 
 #### Backend:
 
@@ -67,4 +86,5 @@ Das Bilder kann mann bewenden
 
 Das Backend zu Deploy:
 
-
+<a name="das-frontend"/>
+# Das FrontEnd
