@@ -25,7 +25,7 @@ Implementation der "Realworld" Blog mit ein FrontEnd durch Vite, React, TypeScri
 
 # Inhaltsverzeichnis:
 
-1. [Das FrontEnd] (#das-frontend)
+1. 
 
 
 ## Wie kann man dieses Projekt laufen?
