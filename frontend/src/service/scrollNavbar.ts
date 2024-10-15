@@ -2,7 +2,7 @@ function scrollNavbar() {
   const scrollUp = "scroll-up";
   const scrollDown = "scroll-down";
   let lastScroll = 0;
-  const header = document.querySelector("div.sticky-header");
+  const header = document.querySelector(".sticky-header");
 
   window.addEventListener("scroll", () => {
     const currentScroll = window.scrollY;

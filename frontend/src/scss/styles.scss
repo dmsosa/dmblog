@@ -21,8 +21,8 @@ $primary: #51ff00;
 $secondary: #00ffa6;
 $success: #7952b3;
 $btn-font-weight: bold;
-$btn-hover-bg-shade-amount: 50%;
-$btn-hover-bg-tint-amount: 50%;
+$btn-hover-bg-shade-amount: 40%;
+$btn-hover-bg-tint-amount: 68%;
 $btn-active-bg-shade-amount: 0%;
 $btn-active-bg-tint-amount:  0%;
 $navbar-padding-x: 1.6rem;
@@ -30,7 +30,7 @@ $navbar-padding-y: 0.750rem;
 $navbar-brand-font-size: 1.8rem;
 $navbar-toggler-padding-x: 0.25rem;
 $navbar-toggler-padding-x: 0.25rem;
-$navbar-toggler-border-radius: 0;
+$navbar-toggler-border-radius: 5px;
 
 
 
@@ -98,6 +98,7 @@ $bootstrap-icons-font-dir: "../../../node_modules/bootstrap-icons/font/fonts";
 @import "./profile";
 @import "./form";
 @import "./footer";
+@import "./notfound";
 
 // Allgemeine Stillen - General Styles
 
@@ -107,11 +108,13 @@ html {
 
 }
 
+
 body {
   margin: 0rem;
   font-size: 1.7rem;
   font-weight: 400;
   line-height: 1.5;
+  overflow-x: hidden;
 }
 
 .main {
@@ -123,11 +126,69 @@ body {
       #112233 90%
     )
     no-repeat fixed;
-  padding-top: 8.2rem;
+  padding-top: 10vh;
   color: white;
+  min-height: calc(100vh - 30vh);
 }
+
+.bg-hero {
+  position: relative;
+  height: 195px;
+  background: linear-gradient(to top, #143f00 2%, #112233 2% 22%, transparent 22%), linear-gradient(-45deg, #112233 5%, #51ff00 5% 10%, #111927 10% 15%, #111927 85% 90%, #51ff00 90% 95%, #112233 95%);  h1 {
+    color: #51ff00;
+    position: absolute;
+    font-size: 6.5rem;
+    font-weight: bolder;
+    font-style: italic;
+    width: fit-content;
+    height: fit-content;
+    top: -60px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    user-select: none;
+
+  }
+  p {
+    position: absolute;
+    top: 25px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+    font-weight: bold;
+    font-style: italic;
+    font-family: "consolas";
+    font-size: 10px;
+    user-select: none;
+  }
+  .btn.btn-dark {
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    top: 150px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    font-size: 12px;
+
+  }
+}
+
 a {
   text-decoration: none;
+  color: white;
+  transition: color 0.4s;
+  &:hover {
+    color: var(--bs-link-color);
+  }
+}
+h1 {
+  color: inherit;
 }
 
 .bg-color-blue-nav,
@@ -142,7 +203,9 @@ a {
 .nonscroll {
   overflow: hidden !important;
 }
-
+.height-100vh {
+  height: 100vh;
+}
 .show {
   display: block !important;
 }
@@ -206,6 +269,7 @@ input[type="checkbox"] {
   --bs-btn-focus-box-shadow: 0 0 0 0.25rem rgba(var(--bs-btn-focus-shadow-rgb), .5);
   background-image: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, outline 0.15s ease-in-out;
+  
   &:active {
     outline-width: 0.4rem;
     outline-color: var(--bs-btn-border-color);
@@ -262,6 +326,8 @@ input[type="checkbox"] {
   animation: x-square-clockwise 3s ease-in-out 0.5s infinite alternate;
 }
 
+
+
 //Custom scrollbar
 /* width */
 ::-webkit-scrollbar {
@@ -281,4 +347,28 @@ input[type="checkbox"] {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #04080d;
+}
+
+@media screen and (min-width: 768px) {
+  .bg-hero {
+      height: 225px;
+      transition: all 0.4s;
+      background: linear-gradient(to top, #143f00 2%, #112233 2% 30%, transparent 30%), linear-gradient(-45deg, #112233 5%, #51ff00 5% 10%, #111927 10% 15%, #111927 85% 90%, #51ff00 90% 95%, #112233 95%);
+      h1 {
+        font-size: 8.5rem;
+        transition: all 0.4s;
+
+      }
+      p {
+        top: 45px;
+        font-size: 1.2rem;
+        transition: all 0.4s;
+      }
+      .btn.btn-dark {
+        top: 155px;
+        font-size: 21px;
+        transition: all 0.4s;
+
+      }
+  }
 }

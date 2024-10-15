@@ -2,6 +2,7 @@ import { MouseEvent, useState } from "react";
 import { TUser } from "../../types/User";
 import { toggleFollow } from "../../service/userService";
 import { ApiError } from "../../service/errorHandler";
+import { Button } from "react-bootstrap";
 
 function FollowButton({
   headers,
@@ -46,17 +47,7 @@ function FollowButton({
       Following
     </button> :
     <>
-<button type="button" className="btn">Def</button>
-<button type="button" className="btn btn-primary">Primary</button>
-<button type="button" className="btn btn-secondary">Secondary</button>
-<button type="button" className="btn btn-success">Success</button>
-<button type="button" className="btn btn-danger">Danger</button>
-<button type="button" className="btn btn-warning">Warning</button>
-<button type="button" className="btn btn-info">Info</button>
-<button type="button" className="btn btn-light">Light</button>
-<button type="button" className="btn btn-dark">Dark</button>
-
-<button type="button" className="btn btn-link">Link</button>
+      <Button variant="primary">Follow</Button>
     </>
 
   

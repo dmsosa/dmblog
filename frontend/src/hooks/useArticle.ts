@@ -5,11 +5,13 @@ import { ApiError } from "../service/errorHandler";
 function useArticle({
   location,
   tags,
+  searchString = null,
   username = null,
   initOffset = 0,
 }: {
   location: string;
   tags: string[];
+  searchString?: string | null;
   username?: string | null;
   initOffset?: number;
 }) {
@@ -25,7 +27,7 @@ function useArticle({
   useEffect(() => {
     setLoading(true);
     //get articles
-    getArticles({ location, tags, username, offset })
+    getArticles({ location, tags, searchString, username, offset })
       .then((articleData) => {
         setArticlesData(articleData);
       })
@@ -35,7 +37,7 @@ function useArticle({
       .finally(() => {
         setLoading(false);
       });
-  }, [location, tags, username, offset ]);
+  }, [location, tags, searchString, username, offset ]);
 
   return { articles, articlesCount, setArticlesData, isLoading, offset, setOffset };
 }

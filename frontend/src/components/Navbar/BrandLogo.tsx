@@ -7,7 +7,7 @@ function BrandLogo() {
     navigate(import.meta.env.BASE_URL);
   };
   return (
-    <a className="navbar-brand text-primary fw-bold" role="button" onClick={goHome}><img src={apple} className="align-middle"/>dmsosa</a>
+    <a className="navbar-brand text-primary fw-bold align-middle" role="button" onClick={goHome}><img src={apple}/>dmsosa</a>
   );
 }
 

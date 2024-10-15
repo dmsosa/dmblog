@@ -1,3 +1,26 @@
+
+.search-container {
+  h1 {
+    text-align: center;
+  }
+  form {
+    input.search-input {
+      background-color: #111927;
+      color: #ddd;
+      border-radius: 5px;
+      border: solid #000d1c 0.2rem;
+      padding: 0;
+      line-height: 0;
+    }
+  }
+}
+
+.articles-preview-container {
+  h1.search-count {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+}
 //Article preview
 .articles-preview-row {
   .article-item {
@@ -107,47 +130,6 @@
   outline: yellowgreen 0.1rem solid;
   border-radius: 1rem;
   text-align: center;
-}
-
-.cont.tech-banner-cont {
-  align-items: center;
-  text-align: center;
-  justify-content: center;
-}
-.cont-three .cont {
-  box-shadow: 0.25rem 0.25rem 0 #34a200;
-  margin: 0 0.5rem 2.5rem;
-}
-.cont-three .cont .cont-header {
-  text-align: center;
-}
-.cont-three .cont .cont-content {
-  padding: 1rem;
-}
-
-.banner-quote {
-  background-color: hsl(90, 100%, 60%);
-  width: 70%;
-  margin: 7rem auto;
-  text-align: center;
-  border-radius: 0.5rem;
-  box-shadow: 1rem 1rem 0 #eee;
-}
-.banner-quote h1 {
-  text-decoration: none;
-  color: black;
-  font-size: 3rem;
-  font-style: italic;
-}
-
-.cont.tech-banner-cont {
-  background-color: #000d1c;
-  box-shadow: 0.5rem 0.5rem 1rem #34a200;
-  padding: 1rem;
-}
-
-.tech-banner {
-  margin: 0 auto;
 }
 
 //Article page

@@ -7,9 +7,9 @@ type selectedItem = {
     selected: number;
 };
 
-function ArticlesPreview({ location, username = null }: { location: string, username?: string | null }) {
+function ArticlesPreview({ location, searchString, username = null }: { location: string, searchString?: string | null, username?: string | null }) {
     const { tags } = useTags() as TTagsContext;
-    const { isLoading, articles, articlesCount, setArticlesData, offset, setOffset } = useArticle({location, tags, username});
+    const { isLoading, articles, articlesCount, setArticlesData, offset, setOffset } = useArticle({location, tags, searchString, username});
     const pageCount = Math.ceil(articlesCount / 3);
 
     const getArticlesForPage = (event: selectedItem) => {
@@ -20,6 +20,7 @@ function ArticlesPreview({ location, username = null }: { location: string, user
         <div>Loading articles</div>
         :
         <div className="articles-preview-container container">
+            <h1 className="search-count">{`${articlesCount} Articles found${searchString ? ` for ${searchString}!`:"!"}`}</h1>
             <div className="row articles-preview-row">
                 <ArticlesList articles={articles} setArticlesData={setArticlesData} />
             </div>
@@ -46,6 +47,7 @@ function ArticlesPreview({ location, username = null }: { location: string, user
                 />
             </div>
         </div>
+        
     )
 }
 

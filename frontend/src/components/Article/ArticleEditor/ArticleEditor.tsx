@@ -60,7 +60,7 @@ function ArticleEditor() {
     const redirect = () => {
       navigate("/dmblog", { replace: true, state: null });
     };
-    if (!isAuth) {
+    if (!isAuth || !headers) {
       alert("You need to login first!");
       return redirect();
     };
@@ -159,7 +159,7 @@ function ArticleEditor() {
     putArticle({
       formData,
       artSlug: slug || null,
-      headers,
+      headers: headers as object,
     })
     .then((article: TArticle) => {
       navigate(`/dmblog/article/${article.slug}`);
@@ -171,11 +171,11 @@ function ArticleEditor() {
   return (
     <>
       {errorMessages.length > 0 && (
-        <div className="col">
+        <div className="row">
           <h1>Error!</h1>
         </div>
       )}
-      <div className="col">
+      <div className="row">
         <form className="article-form" onSubmit={handleSubmit}>
           <fieldset>
             <ErrorMessages errorList={errorMessages} />

@@ -184,6 +184,48 @@ public class BlogController {
 
 
     //More operations with articles
+
+    //Get by Title
+    @GetMapping("/search/{searchString}")
+    public ResponseEntity<ArticleListDTO> getArticlesBySearch(
+            @PathVariable String searchString,
+            @RequestParam(required = false) Integer limit,
+            @RequestParam(required = false) Integer offset,
+            Authentication authentication) throws EntityDoesNotExistsException {
+
+        List<ArticleResponseDTO> articleList = articleService.getArticlesBySearch(searchString);
+        Integer count = articleList.size();
+
+        //if there is loggedUser, check favorite articles
+        if (Objects.nonNull(authentication) && authentication.isAuthenticated()) {
+            User loggedUser = (User) authentication.getPrincipal();
+            //if loggedUser, check Fav articles
+            articleList = articleList.stream().map( article ->
+                    article.withFav(articleService.checkFav(article.id(), loggedUser.getUsername()))
+            ).toList();
+
+
+            //if loggedUser, check if following the author(s) of the article(s)
+            articleList = articleList.stream().map(
+                    article ->
+                            article.withAuthor(article.author().withFollowing(userService.isFollowing(article.author().id(), loggedUser.getUsername())))
+            ).toList();
+        }
+
+        //if there is offset, the lists of articles is shorter
+        if (limit != null && offset != null) {
+            Integer initOffset = offset*limit;
+            Integer endOffset = initOffset + limit;
+            if (endOffset > count) {
+                articleList = articleList.subList(initOffset, count);
+            } else {
+                articleList = articleList.subList(initOffset, endOffset);
+            }
+        }
+
+        return new ResponseEntity<>(new ArticleListDTO(count, articleList), HttpStatus.OK);
+    }
+
     //Set backgroundColor
     @PostMapping("/edit")
     public ResponseEntity<ArticleResponseDTO> setField(

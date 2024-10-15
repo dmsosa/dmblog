@@ -4,11 +4,12 @@
 
 //sticky and scroll effects
 .sticky-header {
+  height: 10vh;
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 10000;
-  transition: 1s ease-in-out;
+  transition: 0.7s ease-in-out;
 }
 .nav-shadow {
   box-shadow: 0px 1px 5px 1px #0008;
@@ -25,75 +26,35 @@
 .navbar-toggler {
   border: none;
   &:focus {
-    box-shadow: 0 0 0 1px #51ff00 ;
+    box-shadow: 0 0 0 2px #51ff00 ;
+  }
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
   }
 }
 
 
-.nav-item.dropdown {
-  ul {
-    display: none;
-    top: 100%;
-    left: -3rem;
-    position: absolute;
-    padding: 0;
-    background-color: #111927;
-    border: #000d1c solid 0.2rem;
-    border-radius: 0;
-    text-align: right;
-    &.show {
-      display: block;
-    }
-  }
-
-  .nav-item {
-    font-size: 1.7rem;
-    margin: 0;
-    border-radius: 0;
-    border-bottom: solid #000d1c 0.2rem;
-    .nav-link {
-      color: white;
-    }
-  }
-}
-
-//mobile nav a.k.a navbar small
-
-
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-}
-.nav-mobile-toggle {
-  z-index: 1000;
-}
-
-.navbar-collapse-mobile {
-  margin: 0;
+.navbar-collapse {
   height: 100vh;
-  background-color: #000d1c;
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  flex-direction: row;
-  visibility: hidden;
+  overflow: hidden;
+  display: block !important;
+  max-height: 0;
+  transition: max-height 0.4s ease-in-out;
   &.show {
-    visibility: visible;
-  }
-  .navbar-nav {
-    padding: 1rem;
-    flex-direction: column;
-    flex-grow: 1;
-    height: calc(100vh - 8.2rem);
-    width: 100%;
-    li.nav-item {
-      padding: 1rem;
-      border-radius: 0;
-    }
+    max-height: 100vh;
+    transition: max-height 0.4s ease-out;
   }
 }
-
 // Navbar Elements
 // Navbar-brand, Nav-item und Nav-link
+
+
+
+@media (min-width: 768px) {
+  .navbar-expand-md .navbar-collapse {
+    height: fit-content !important;
+    max-height: fit-content;
+  }
+}
 
 

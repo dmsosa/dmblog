@@ -25,7 +25,10 @@ public interface ArticleService {
 
     //Basic CRUD Operations
     List<ArticleResponseDTO> getArticlesSorted();
+    List<ArticleResponseDTO> getArticlesBySearch(String searchString);
+    boolean matchSearch(Article article, String searchString);
     List<ArticleResponseDTO> getArticles() ;
+
     ArticleResponseDTO createArticle(SetArticleDTO articleDTO) throws EntityAlreadyExistsException, EntityDoesNotExistsException;
     ArticleResponseDTO getArticleBySlug(String slug) throws EntityDoesNotExistsException;
     ArticleResponseDTO getArticleById(Long id) throws EntityDoesNotExistsException;

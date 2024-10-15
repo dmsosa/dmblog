@@ -111,6 +111,18 @@ public class ArticleServiceImpl implements ArticleService {
         return articleList.stream().map(article -> createDTO(article)).toList();
     }
     @Override
+    public List<ArticleResponseDTO> getArticlesBySearch(String searchString){
+        List<Article> articleList = articleRepository.findAll();
+        List<Article> searchResults = articleList.stream().filter(article -> this.matchSearch(article, searchString)).toList();
+        return searchResults.stream().map(this::createDTO).toList();
+    }
+    @Override
+    public boolean matchSearch(Article article, String search) {
+        return Objects.equals(search, "null") || article.getTitle().toLowerCase().contains(search.toLowerCase())
+                || article.getBody().toLowerCase().contains(search.toLowerCase())
+                || article.getDescription().toLowerCase().contains(search.toLowerCase());
+    }
+    @Override
     public List<ArticleResponseDTO> getArticles()  {
         List<Article> articleList = articleRepository.findAll();
         return articleList.stream().map(article -> createDTO(article)).toList();

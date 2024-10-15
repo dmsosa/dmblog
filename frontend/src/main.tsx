@@ -12,6 +12,8 @@ import NotFound from "./routes/NotFound.tsx";
 import Profile from "./routes/Profile/Profile.tsx";
 import Settings from "./routes/Settings.tsx";
 import Register from "./routes/Register.tsx";
+import "./assets/css/styles.css"
+import SearchArticles from "./routes/SearchArticles.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -29,6 +31,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route index element={<CommentSection />} />
             </Route>
             <Route path="/user/:username" element={<Profile />}>
+            </Route>
+            <Route path="/articles" element={<SearchArticles />}>
+            </Route>
+            <Route path="/articles/:search" element={<SearchArticles />}>
             </Route>
             <Route path="/settings" element={<Settings />}></Route>
             <Route path="*" element={<NotFound />}></Route>

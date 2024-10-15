@@ -6,10 +6,10 @@ import Footer from "./components/Footer/Footer";
 function App() {
   return (
     <React.Fragment>
-      <header className="header">
+      <header>
         <Navbar />
       </header>
-      <main className="main">
+      <main className="main container-fluid px-0">
         <Outlet />
       </main>
       <footer className="footer">

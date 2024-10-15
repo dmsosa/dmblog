@@ -8,6 +8,10 @@ function HomeArticles() {
     location: "global",
     tags,
   });
+
+  const handleTag = () => {
+    setTags([])
+  }
   return isLoading ? (
     <div>
       <em>Is Loading</em>
@@ -21,7 +25,7 @@ function HomeArticles() {
       />
     </>
   ) : (
-    <div>
+    <div onClick={handleTag}>
       <em>No articles found</em>
     </div>
   );

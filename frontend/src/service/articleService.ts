@@ -30,12 +30,14 @@ export async function getArticles({
   tags,
   limit = 3,
   offset = 0,
+  searchString,
   username,
 }: {
   location: string;
   tags: string[];
   limit?: number;
   offset?: number;
+  searchString?: string | null;
   username?: string | null;
 }): Promise<TArticleData> {
   let tagList = '';
@@ -48,6 +50,7 @@ export async function getArticles({
   }
   const endpoint: TEndpoint = {
     global: `/global?limit=${limit}&offset=${offset}` + `${tags.length > 0 ? `tags=${tagList}` : ''}`,
+    search: `/search/${searchString}?limit=${limit}&offset=${offset}`,
     favs: `/favs?username=${username}&limit=${limit}&offset=${offset}` + `${tags.length > 0 ? `tags=${tagList}` : ''}`,
     author: `/author?username=${username}&limit=${limit}&offset=${offset}` + `${tags.length > 0 ? `tags=${tagList}` : ''}`,
   };

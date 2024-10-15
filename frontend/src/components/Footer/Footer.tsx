@@ -6,8 +6,8 @@ import TechStack from "./TechStack";
 
 function Footer() {
   return (
-    <div className="container">
-      <div className="row row-cols-2 row-cols-md-4 gy-5 gx-md-5 gy-md-0">
+    <div className="container fs-5">
+      <div className="row row-cols-2 row-cols-md-4 gy-2 gx-md-5 d-flex flex-wrap">
         <div className="col">
           <BrandFooter />
         </div>
@@ -27,11 +27,13 @@ function Footer() {
           <TechStack />
         </div>
       </div>
-      <div className="row text-center">
-        <a href="https://github.com/dmsosa/dmblog"><FaGithub size={"5rem"}/> Source code</a>
-      </div>
-      <div className="row text-center mt-5">
-        <h3>&#169; 2024 dmsosa </h3>
+      <div className="row w-75 w-md-25 m-auto d-flex justify-content-between mt-3">
+        <div className="col">
+          <a href="https://github.com/dmsosa/dmblog"><FaGithub size={"1.7rem"}/> Source code</a>
+        </div>
+        <div className="col">
+          <h5>&#169; 2024 dmsosa </h5>
+        </div>
       </div>
     </div>
   );
