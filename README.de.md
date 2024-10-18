@@ -5,16 +5,18 @@
 Dieses Projekt kommst aus [realworld von Thinkster](https://github.com/gothinkster/realworld) inspiriert 
 
 Implementation der "Realworld" Blog mit ein FrontEnd durch Vite, React, TypeScript und ein Backends Spring und PostgreSQL mitgemacht. Es hat mir geholfen, um viel mehr zu lernen.
+
 ---
 
 ## Inhaltsverzeichnis:
 
-1. [Tech Stack, Languages & Frameworks] (#das-frontend)
-2. [Wie es alles startet hat?]()
-3. [Was macht es Einz?]()
-4. [Frontend]()
-5. [Backend]()
-6. [Wie kann man dieses Projekt laufen?]()
+* [Tech Stack, Languages & Frameworks](https://github.com/dmsosa/dmblog/blob/main/README.de.md#tech-stack-languages--frameworks)
+* [Wie es alles startet hat?](https://github.com/dmsosa/dmblog/blob/main/README.de.md#wie-es-alles-startet-hat?)
+* [Was macht es Einz?](https://github.com/dmsosa/dmblog/blob/main/README.de.md#was-macht-es-einz?)
+* [Frontend](https://github.com/dmsosa/dmblog/blob/main/README.de.md#frontend)
+* [Backend](https://github.com/dmsosa/dmblog/blob/main/README.de.md#backend)
+* [Laufen Das Projekt](https://github.com/dmsosa/dmblog/blob/main/README.de.md#laufen)
+* [Deploy mit Docker](https://github.com/dmsosa/dmblog/blob/main/README.de.md#deploy-mit-docker)
 
 ---
 
@@ -54,7 +56,6 @@ Das Bilder kann mann bewenden
 
 Das Backend zu Deploy:
 
-<<<<<<< HEAD
 ## Frontend:
 
 1. machen sie ein Pull dieses Repo: `git pull https://github.com/dmsosa/dmsosa.github.io.git`
@@ -70,10 +71,10 @@ Das Backend zu Deploy:
 3. Das Backend auf http://localhost:8082/ erreichber sein sollte.
 
 
-## Wie kann man dieses Projekt laufen?
+## Laufen Das Projekt
 
 Um dieses projekt in deinem Lokale Machine zu laufen, folgen Sie die nachsten Schriffte an:
-=======
-<a name="das-frontend"/>
-# Das FrontEnd
->>>>>>> b4572a7d4b7bc765345364b8eef75a090323767c
+
+## Deploy mit Docker
+
+Um dieses projekt in deinem Lokale Machine zu laufen, folgen Sie die nachsten Schriffte an:
