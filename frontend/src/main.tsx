@@ -22,21 +22,22 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route element={<App />}>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />}></Route>
-            <Route path="/editor" element={<ArticleEditor />}>
+            <Route path="/dmblog/" element={<Home />} />
+            <Route path="/dmblog/login" element={<Login />} />
+            <Route path="/dmblog/register" element={<Register />}></Route>
+            <Route path="/dmblog/editor" element={<ArticleEditor />}>
               <Route path=":slug" element={<ArticleEditor />} />
             </Route>
-            <Route path="/article/:slug" element={<Article />}>
+            <Route path="/dmblog/article/:slug" element={<Article />}>
               <Route index element={<CommentSection />} />
             </Route>
-            <Route path="/user/:username" element={<Profile />}>
+            <Route path="/dmblog/user/:username" element={<Profile />}>
             </Route>
-            <Route path="/articles" element={<SearchArticles />}>
+            <Route path="/dmblog/articles" element={<SearchArticles />}>
             </Route>
-            <Route path="/articles/:search" element={<SearchArticles />}>
+            <Route path="/dmblog/articles/:search" element={<SearchArticles />}>
             </Route>
-            <Route path="/settings" element={<Settings />}></Route>
+            <Route path="/dmblog/settings" element={<Settings />}></Route>
             <Route path="*" element={<NotFound />}></Route>
           </Route>
         </Routes>
